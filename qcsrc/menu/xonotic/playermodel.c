@@ -180,6 +180,14 @@ float XonoticPlayerModelSelector_keyDown(entity me, float key, float ascii, floa
 {
 	switch(key)
 	{
+		case K_KP_LEFTARROW:
+		case K_LEFTARROW:
+			PlayerModelSelector_Prev_Click(world, me);
+			return 1;
+		case K_KP_RIGHTARROW:
+		case K_RIGHTARROW:
+			PlayerModelSelector_Next_Click(world, me);
+			return 1;
 		default:
 			if (key == K_MWHEELUP || ascii == '+')
 			{
