@@ -191,12 +191,14 @@ float XonoticPlayerModelSelector_keyDown(entity me, float key, float ascii, floa
 		default:
 			if (key == K_MWHEELUP || ascii == '+')
 			{
-				me.setZoom(me, -2, (key == K_MWHEELUP));
+				me.drag_setStartPos(me, '0.5 0.25 0');
+				me.setZoom(me, -2, TRUE);
 				return 1;
 			}
 			else if (key == K_MWHEELDOWN || ascii == '-')
 			{
-				me.setZoom(me, -1/2, (key == K_MWHEELDOWN));
+				me.drag_setStartPos(me, '0.5 0.25 0');
+				me.setZoom(me, -1/2, TRUE);
 				return 1;
 			}
 			return SUPER(XonoticScreenshotViewerDialog).keyDown(me, key, ascii, shift);
