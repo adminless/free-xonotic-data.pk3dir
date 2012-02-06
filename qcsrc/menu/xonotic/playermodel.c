@@ -25,6 +25,7 @@ CLASS(XonoticPlayerModelSelector) EXTENDS(XonoticImage)
 	ATTRIB(XonoticPlayerModelSelector, bufModels, float, -1)
 	ATTRIB(XonoticPlayerModelSelector, numModels, float, -1)
 	ATTRIB(XonoticPlayerModelSelector, idxModels, float, -1)
+	ATTRIB(XonoticPlayerModelSelector, showText, float, 1)
 ENDCLASS(XonoticPlayerModelSelector)
 entity makeXonoticPlayerModelSelector();
 void PlayerModelSelector_Next_Click(entity btn, entity me);
@@ -188,6 +189,11 @@ float XonoticPlayerModelSelector_keyDown(entity me, float key, float ascii, floa
 		case K_RIGHTARROW:
 			PlayerModelSelector_Next_Click(world, me);
 			return 1;
+		case K_KP_ENTER:
+		case K_ENTER:
+		case K_SPACE:
+			me.showText = !me.showText;
+			return 1;
 		default:
 			if (key == K_MWHEELUP || ascii == '+')
 			{
@@ -232,6 +238,10 @@ void XonoticPlayerModelSelector_draw(entity me)
 	}
 
 	SUPER(XonoticPlayerModelSelector).draw(me);
+
+	if(!me.showText)
+		return;
+
 	// draw text on the image, handle \n in the description
 	draw_CenterText('0.5 0 0', me.currentModelTitle, me.realFontSize * (me.titleFontSize / me.fontSize), SKINCOLOR_MODELTITLE, SKINALPHA_MODELTITLE, FALSE);
 
