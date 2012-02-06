@@ -3,6 +3,11 @@ CLASS(XonoticPlayerModelSelector) EXTENDS(XonoticImage)
 	METHOD(XonoticPlayerModelSelector, configureXonoticPlayerModelSelector, void(entity))
 	METHOD(XonoticPlayerModelSelector, loadCvars, void(entity))
 	METHOD(XonoticPlayerModelSelector, saveCvars, void(entity))
+	ATTRIB(XonoticPlayerModelSelector, focusable, float, 1) // mousePress and mouseDrag work only if focusable is set
+	METHOD(XonoticPlayerModelSelector, mousePress, float(entity, vector))
+	METHOD(XonoticPlayerModelSelector, mouseDrag, float(entity, vector))
+	METHOD(XonoticPlayerModelSelector, mouseMove, float(entity, vector))
+	METHOD(XonoticPlayerModelSelector, keyDown, float(entity me, float key, float ascii, float shift))
 	METHOD(XonoticPlayerModelSelector, draw, void(entity))
 	METHOD(XonoticPlayerModelSelector, resizeNotify, void(entity, vector, vector, vector, vector))
 	ATTRIB(XonoticPlayerModelSelector, currentModel, string, string_null)
@@ -51,7 +56,9 @@ void XonoticPlayerModelSelector_configureXonoticPlayerModelSelector(entity me)
 	if (glob < 0)
 		return;
 
-	me.configureXonoticImage(me, string_null, -1);
+	me.configureXonoticImage(me, string_null, -2);
+	me.zoomMax = 1.5; // remove this
+	me.initZoom(me);
 
 	sortbuf = buf_create();
 	for(i = 0; i < search_getsize(glob); ++i)
@@ -141,6 +148,8 @@ void XonoticPlayerModelSelector_go(entity me, float d)
 		me.src = "nopreview_player";
 	else
 		me.src = me.currentModelImage;
+
+	// me.setZoom(me, 0, FALSE); // same zoom level and position of the image while browsing
 	me.updateAspect(me);
 }
 
@@ -165,6 +174,40 @@ void XonoticPlayerModelSelector_saveCvars(entity me)
 	// we can't immediately apply here because of flood control
 	cvar_set("_cl_playermodel", me.currentModel);
 	cvar_set("_cl_playerskin", ftos(me.currentSkin));
+}
+
+float XonoticPlayerModelSelector_keyDown(entity me, float key, float ascii, float shift)
+{
+	switch(key)
+	{
+		default:
+			if (key == K_MWHEELUP || ascii == '+')
+			{
+				me.setZoom(me, -2, (key == K_MWHEELUP));
+				return 1;
+			}
+			else if (key == K_MWHEELDOWN || ascii == '-')
+			{
+				me.setZoom(me, -1/2, (key == K_MWHEELDOWN));
+				return 1;
+			}
+			return SUPER(XonoticScreenshotViewerDialog).keyDown(me, key, ascii, shift);
+	}
+}
+
+float XonoticPlayerModelSelector_mousePress(entity me, vector coords)
+{
+	return me.drag_setStartPos(me, coords);
+}
+
+float XonoticPlayerModelSelector_mouseDrag(entity me, vector coords)
+{
+	return me.drag(me, coords);
+}
+
+float XonoticPlayerModelSelector_mouseMove(entity me, vector coords)
+{
+	return me.drag_setStartPos(me, coords);
 }
 
 void XonoticPlayerModelSelector_draw(entity me)
