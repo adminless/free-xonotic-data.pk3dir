@@ -80,6 +80,16 @@ void XonoticPlayerSettingsTab_fill(entity me)
 			me.gotoRC(me, r + i * m, 0.4);
 			me.TDNoMargin(me, m, 0.2, e = makeXonoticColorButton(2, 1, i), '0 1 0');
 		}
+	me.gotoRC(me, me.rows - 4, 0);
+		me.TDempty(me, 2.7);
+		me.TD(me, 1, 0.3, e = makeXonoticButton("+", '0 0 0'));
+			e.onClick = PlayerModelSelector_ZoomIn_Click;
+			e.onClickEntity = pms;
+	me.TR(me);
+		me.TDempty(me, 2.7);
+		me.TD(me, 1, 0.3, e = makeXonoticButton("-", '0 0 0'));
+			e.onClick = PlayerModelSelector_ZoomOut_Click;
+			e.onClickEntity = pms;
 
 
 	// crosshair_enabled: 0 = no crosshair options, 1 = no crosshair selection, but everything else enabled, 2 = all crosshair options enabled

@@ -30,6 +30,8 @@ ENDCLASS(XonoticPlayerModelSelector)
 entity makeXonoticPlayerModelSelector();
 void PlayerModelSelector_Next_Click(entity btn, entity me);
 void PlayerModelSelector_Prev_Click(entity btn, entity me);
+void PlayerModelSelector_ZoomIn_Click(entity btn, entity me);
+void PlayerModelSelector_ZoomOut_Click(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -170,6 +172,18 @@ void PlayerModelSelector_Prev_Click(entity btn, entity me)
 	me.saveCvars(me);
 }
 
+void PlayerModelSelector_ZoomIn_Click(entity btn, entity me)
+{
+	me.drag_setStartPos(me, '0.5 0.25 0');
+	me.setZoom(me, -2, TRUE);
+}
+
+void PlayerModelSelector_ZoomOut_Click(entity btn, entity me)
+{
+	me.drag_setStartPos(me, '0.5 0.25 0');
+	me.setZoom(me, -1/2, TRUE);
+}
+
 void XonoticPlayerModelSelector_saveCvars(entity me)
 {
 	// we can't immediately apply here because of flood control
@@ -197,14 +211,12 @@ float XonoticPlayerModelSelector_keyDown(entity me, float key, float ascii, floa
 		default:
 			if (key == K_MWHEELUP || ascii == '+')
 			{
-				me.drag_setStartPos(me, '0.5 0.25 0');
-				me.setZoom(me, -2, TRUE);
+				PlayerModelSelector_ZoomIn_Click(world, me);
 				return 1;
 			}
 			else if (key == K_MWHEELDOWN || ascii == '-')
 			{
-				me.drag_setStartPos(me, '0.5 0.25 0');
-				me.setZoom(me, -1/2, TRUE);
+				PlayerModelSelector_ZoomOut_Click(world, me);
 				return 1;
 			}
 			return SUPER(XonoticScreenshotViewerDialog).keyDown(me, key, ascii, shift);
