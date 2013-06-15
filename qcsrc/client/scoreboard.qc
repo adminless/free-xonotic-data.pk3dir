@@ -20,6 +20,7 @@ string TranslateScoresLabel(string l)
 		case "bctime": return CTX(_("SCO^bctime"));
 		case "caps": return CTX(_("SCO^caps"));
 		case "captime": return CTX(_("SCO^captime"));
+		case "dmg": return CTX(_("SCO^dmg"));
 		case "deaths": return CTX(_("SCO^deaths"));
 		case "destroyed": return CTX(_("SCO^destroyed"));
 		case "drops": return CTX(_("SCO^drops"));
@@ -263,6 +264,7 @@ void Cmd_HUD_Help()
 	print(_("^3suicides^7                 Number of suicides\n"));
 	print(_("^3frags^7                    kills - suicides\n"));
 	print(_("^3kd^7                       The kill-death ratio\n"));
+	print(_("^3dmg^7                      The total damage done\n"));
 	print(_("^3caps^7                     How often a flag (CTF) or a key (KeyHunt) was captured\n"));
 	print(_("^3pickups^7                  How often a flag (CTF) or a key (KeyHunt) or a ball (Keepaway) was picked up\n"));
 	print(_("^3captime^7                  Time of fastest cap (CTF)\n"));
@@ -393,6 +395,8 @@ void Cmd_HUD_SetFields(float argc)
 		} else if(str == "|") {
 			hud_field[hud_num_fields] = SP_SEPARATOR;
 			have_separator = 1;
+		} else if(str == "dmg") {
+			hud_field[hud_num_fields] = SP_DMG;
 		} else {
 			for(j = 0; j < MAX_SCORE; ++j)
 				if(str == strtolower(scores_label[j]))
