@@ -55,8 +55,6 @@ float gametype;
 #define SP_PL -6
 #define SP_FRAGS -7
 
-#define SP_DMG -9
-
 #define SP_SEPARATOR -100
 
 float hud_field[MAX_HUD_FIELDS + 1];

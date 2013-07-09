@@ -497,13 +497,12 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	self.dmg_save = self.dmg_save + save;//max(save - 10, 0);
 	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
 	self.dmg_inflictor = inflictor;
-
-	#define SP_DMG -9
 	
 	if(g_ca && self != attacker && IS_PLAYER(attacker))
 		PlayerTeamScore_Add(attacker, SP_SCORE, ST_SCORE, (damage - excess) * autocvar_g_ca_damage2score_multiplier);
-	else if(self != attacker && IS_PLAYER(attacker)) 
-		PlayerScore_Add(attacker, SP_DMG, 20);
+
+	if(self != attacker && IS_PLAYER(attacker)) 
+		PlayerScore_Add(attacker, SP_DMG, damage);
 
 	float abot, vbot, awep;
 	abot = (IS_BOT_CLIENT(attacker));

@@ -586,6 +586,13 @@ string HUD_GetField(entity pl, float field)
 				str = sprintf("%.1f", num/denom);
 			return str;
 
+		case SP_DMG:
+			num = pl.(scores[SP_DMG]);
+			denom = 1000;
+			
+			str = sprintf("%.1f k", num/denom);
+			return str;
+			
 		default:
 			tmp = pl.(scores[field]);
 			f = scores_flags[field];
