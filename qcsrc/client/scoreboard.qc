@@ -22,6 +22,8 @@ string TranslateScoresLabel(string l)
 		case "captime": return CTX(_("SCO^captime"));
 		case "deaths": return CTX(_("SCO^deaths"));
 		case "destroyed": return CTX(_("SCO^destroyed"));
+		case "dmg": return CTX(_("SCO^dmg"));
+		case "dmgtaken": return CTX(_("SCO^dmgtaken"));
 		case "drops": return CTX(_("SCO^drops"));
 		case "faults": return CTX(_("SCO^faults"));
 		case "fckills": return CTX(_("SCO^fckills"));
@@ -36,6 +38,7 @@ string TranslateScoresLabel(string l)
 		case "lives": return CTX(_("SCO^lives"));
 		case "losses": return CTX(_("SCO^losses"));
 		case "name": return CTX(_("SCO^name"));
+		case "netdmg": return CTX(_("SCO^netdmg"));
 		case "nick": return CTX(_("SCO^nick"));
 		case "objectives": return CTX(_("SCO^objectives"));
 		case "pickups": return CTX(_("SCO^pickups"));
@@ -263,6 +266,9 @@ void Cmd_HUD_Help()
 	print(_("^3suicides^7                 Number of suicides\n"));
 	print(_("^3frags^7                    kills - suicides\n"));
 	print(_("^3kd^7                       The kill-death ratio\n"));
+	print(_("^3dmg^7                      The total damage done\n"));
+	print(_("^3dmgtaken^7                 The total damage taken\n"));
+	print(_("^3netdmg^7                   Damage done - damage taken\n"));
 	print(_("^3caps^7                     How often a flag (CTF) or a key (KeyHunt) was captured\n"));
 	print(_("^3pickups^7                  How often a flag (CTF) or a key (KeyHunt) or a ball (Keepaway) was picked up\n"));
 	print(_("^3captime^7                  Time of fastest cap (CTF)\n"));
@@ -394,6 +400,12 @@ void Cmd_HUD_SetFields(float argc)
 		} else if(str == "|") {
 			hud_field[hud_num_fields] = SP_SEPARATOR;
 			have_separator = 1;
+		} else if(str == "dmg") {
+			hud_field[hud_num_fields] = SP_DMG;
+		} else if(str == "dmgtaken") {
+			hud_field[hud_num_fields] = SP_DMGTAKEN;
+		} else if(str == "netdmg") {
+			hud_field[hud_num_fields] = SP_NETDMG;
 		} else {
 			for(j = 0; j < MAX_SCORE; ++j)
 				if(str == strtolower(scores_label[j]))
@@ -581,6 +593,27 @@ string HUD_GetField(entity pl, float field)
 				str = sprintf("%.1f", num/denom);
 			} else
 				str = sprintf("%.1f", num/denom);
+			return str;
+
+		case SP_DMG:
+			num = pl.(scores[SP_DMG]);
+			denom = 1000;
+			
+			str = sprintf("%.1f k", num/denom);
+			return str;
+			
+		case SP_DMGTAKEN:
+			num = pl.(scores[SP_DMGTAKEN]);
+			denom = 1000;
+			
+			str = sprintf("%.1f k", num/denom);
+			return str; 
+		
+		case SP_NETDMG:
+			num = pl.(scores[SP_DMG]);
+			denom = pl.(scores[SP_DMGTAKEN]);
+			
+			str = sprintf("%.1f k", (num-denom)/1000);
 			return str;
 
 		default:
