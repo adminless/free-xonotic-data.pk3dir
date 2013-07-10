@@ -503,6 +503,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 	if(self != attacker && IS_PLAYER(attacker)) 
 		PlayerScore_Add(attacker, SP_DMG, damage);
+		
+	if(self != frag_target && IS_PLAYER(frag_target)) 
+		PlayerScore_Add(frag_target, SP_DMGTAKEN, damage_take);
 
 	float abot, vbot, awep;
 	abot = (IS_BOT_CLIENT(attacker));
