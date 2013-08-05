@@ -442,7 +442,7 @@ void Cmd_HUD_SetFields(float argc)
 			hud_title[0] = strzone(TranslateScoresLabel("name"));
 			hud_field[0] = SP_NAME;
 			++hud_num_fields;
-			print(sprintf(_("fixed missing field '%s'\n"), "name"));
+			print("fixed missing field 'name'\n");
 
 			if(!have_separator)
 			{
@@ -457,7 +457,7 @@ void Cmd_HUD_SetFields(float argc)
 				hud_field[1] = SP_SEPARATOR;
 				hud_size[1] = stringwidth("|", FALSE, hud_fontsize);
 				++hud_num_fields;
-				print(sprintf(_("fixed missing field '%s'\n"), "|"));
+				print("fixed missing field '|'\n");
 			}
 		}
 		else if(!have_separator)
@@ -467,7 +467,7 @@ void Cmd_HUD_SetFields(float argc)
 			hud_size[hud_num_fields] = stringwidth("|", FALSE, hud_fontsize);
 			hud_field[hud_num_fields] = SP_SEPARATOR;
 			++hud_num_fields;
-			print(sprintf(_("fixed missing field '%s'\n"), "|"));
+			print("fixed missing field '|'\n");
 		}
 		if(!have_secondary)
 		{
@@ -476,7 +476,7 @@ void Cmd_HUD_SetFields(float argc)
 			hud_size[hud_num_fields] = stringwidth(hud_title[hud_num_fields], FALSE, hud_fontsize);
 			hud_field[hud_num_fields] = ps_secondary;
 			++hud_num_fields;
-			print(sprintf(_("fixed missing field '%s'\n"), scores_label[ps_secondary]));
+			print(sprintf("fixed missing field '%s'\n", scores_label[ps_secondary]));
 		}
 		if(!have_primary)
 		{
@@ -485,7 +485,7 @@ void Cmd_HUD_SetFields(float argc)
 			hud_size[hud_num_fields] = stringwidth(hud_title[hud_num_fields], FALSE, hud_fontsize);
 			hud_field[hud_num_fields] = ps_primary;
 			++hud_num_fields;
-			print(sprintf(_("fixed missing field '%s'\n"), scores_label[ps_primary]));
+			print(sprintf("fixed missing field '%s'\n", scores_label[ps_primary]));
 		}
 	}
 
@@ -947,7 +947,6 @@ float HUD_WouldDrawScoreboard() {
 	return 0;
 }
 
-float g_minstagib;
 float average_accuracy;
 vector HUD_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 {
@@ -962,6 +961,7 @@ vector HUD_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 	float fontsize = height * 1/3;
 	float weapon_height = height * 2/3;
 	float weapon_width = sbwidth / weapon_cnt;
+	float g_minstagib = 0;
 
 	drawstring(pos, sprintf(_("Accuracy stats (average %d%%)"), average_accuracy), hud_fontsize, '1 1 1', scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 	pos_y += 1.25 * hud_fontsize_y + autocvar_scoreboard_border_thickness;

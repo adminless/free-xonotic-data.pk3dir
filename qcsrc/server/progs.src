@@ -15,6 +15,7 @@ sys-post.qh
 ../common/constants.qh
 ../common/teams.qh
 ../common/util.qh
+../common/test.qh
 ../common/counting.qh
 ../common/items.qh
 ../common/explosion_equation.qh
@@ -80,6 +81,8 @@ w_electro.qh
 w_laser.qh
 
 scores.qh
+
+spawnpoints.qh
 
 ipban.qh
 
@@ -197,6 +200,8 @@ vehicles/vehicles.qh
 
 scores.qc
 
+spawnpoints.qc
+
 portals.qc
 
 target_spawn.qc
@@ -242,6 +247,7 @@ mutators/mutator_spawn_near_teammate.qc
 mutators/mutator_physical_items.qc
 mutators/sandbox.qc
 mutators/mutator_superspec.qc
+mutators/mutator_minstagib.qc
 mutators/mutator_touchexplode.qc
 
 ../warpzonelib/anglestransform.qc
@@ -251,6 +257,7 @@ mutators/mutator_touchexplode.qc
 ../warpzonelib/server.qc
 
 ../common/animdecide.qc
+../common/test.qc
 ../common/util.qc
 ../common/notifications.qc
 
