@@ -460,11 +460,11 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 					{
 						if(deathtype == DEATH_FALL)
 							PlayerSound(playersound_fall, CH_PAIN, VOICETYPE_PLAYERSOUND);
-						else if(self.health > 75) // TODO make a "gentle" version?
+						else if(self.health + (self.armorvalue/100*60) > 75) // TODO make a "gentle" version?
 							PlayerSound(playersound_pain100, CH_PAIN, VOICETYPE_PLAYERSOUND);
-						else if(self.health > 50)
+						else if(self.health + (self.armorvalue/100*60) > 50)
 							PlayerSound(playersound_pain75, CH_PAIN, VOICETYPE_PLAYERSOUND);
-						else if(self.health > 25)
+						else if(self.health + (self.armorvalue/100*60) > 25)
 							PlayerSound(playersound_pain50, CH_PAIN, VOICETYPE_PLAYERSOUND);
 						else
 							PlayerSound(playersound_pain25, CH_PAIN, VOICETYPE_PLAYERSOUND);
