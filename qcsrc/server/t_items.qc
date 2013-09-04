@@ -277,18 +277,12 @@ float have_pickup_item(void)
 			return TRUE;
 		if(autocvar_g_powerups == 0)
 			return FALSE;
-		if(g_ca)
-			return FALSE;
-		if(g_arena)
-			return FALSE;
 	}
 	else
 	{
 		if(autocvar_g_pickup_items > 0)
 			return TRUE;
 		if(autocvar_g_pickup_items == 0)
-			return FALSE;
-		if(g_ca)
 			return FALSE;
 		if(g_weaponarena)
 			if(!WEPSET_EMPTY_E(self) || (self.items & IT_AMMO))
@@ -1165,12 +1159,9 @@ void weapon_defaultspawnfunc(float wpn)
 
 		if(e.spawnflags & WEP_FLAG_MUTATORBLOCKED)
 		{
-			print("Attempted to spawn a mutator-blocked weapon; these guns will in the future require a mutator\n");
-			/*
 			objerror("Attempted to spawn a mutator-blocked weapon rejected");
 			startitem_failed = TRUE;
 			return;
-			*/
 		}
 
 		s = W_Apply_Weaponreplace(e.netname);
