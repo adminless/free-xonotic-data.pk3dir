@@ -325,11 +325,13 @@ entity SelectSpawnPoint (float anypoint)
 			mindist = 100;
 		firstspot = Spawn_FilterOutBadSpots(firstspot, mindist, teamcheck);
 
-		// stupid spawn system
-		if (random() == autocvar_g_spawn_furthest)
-			spot = Spawn_WeightedPoint(firstspot, 1, 5000, 5); // chooses a far far away spawnpoint
-		else
+        // there is 50/50 chance of choosing a random spot or the furthest spot
+        // (this means that roughly every other spawn will be furthest, so you
+        // usually won't get fragged at spawn twice in a row)
+		if (random() > autocvar_g_spawn_furthest)
 			spot = Spawn_WeightedPoint(firstspot, 1, 1, 1);
+		else
+			spot = Spawn_WeightedPoint(firstspot, 1, 5000, 5); // chooses a far far away spawnpoint
 	}
 
 	if (!spot)
