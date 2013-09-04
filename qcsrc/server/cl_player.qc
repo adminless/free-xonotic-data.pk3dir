@@ -485,7 +485,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
 	self.dmg_inflictor = inflictor;
 
-<<<<<<< HEAD
 	if(self != attacker)
 	{
 		float realdmg = damage - excess;
@@ -502,8 +501,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			PlayerScore_Add(frag_target, SP_DMGTAKEN, realdmg);
 	}
 	
-=======
->>>>>>> master
 	float abot, vbot, awep;
 	abot = (IS_BOT_CLIENT(attacker));
 	vbot = (IS_BOT_CLIENT(self));
