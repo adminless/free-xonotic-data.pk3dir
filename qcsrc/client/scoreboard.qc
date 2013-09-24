@@ -40,6 +40,7 @@ string TranslateScoresLabel(string l)
 		case "name": return CTX(_("SCO^name"));
 		case "net": return CTX(_("SCO^net"));
 		case "netdmg": return CTX(_("SCO^netdmg"));
+		case "sum": return CTX(_("SCO^sum"));
 		case "nick": return CTX(_("SCO^nick"));
 		case "objectives": return CTX(_("SCO^objectives"));
 		case "pickups": return CTX(_("SCO^pickups"));
@@ -271,6 +272,7 @@ void Cmd_HUD_Help()
 	print(_("^3dmgtaken^7                 The total damage taken\n"));
 	print(_("^3netdmg^7                   Damage done - damage taken\n"));
 	print(_("^3net^7                      frags - deaths\n"));
+	print(_("^3sum^7                      frags - deaths\n"));
 	print(_("^3caps^7                     How often a flag (CTF) or a key (KeyHunt) was captured\n"));
 	print(_("^3pickups^7                  How often a flag (CTF) or a key (KeyHunt) or a ball (Keepaway) was picked up\n"));
 	print(_("^3captime^7                  Time of fastest cap (CTF)\n"));
@@ -396,8 +398,8 @@ void Cmd_HUD_SetFields(float argc)
 			hud_field[hud_num_fields] = SP_PL;
 		} else if(str == "kd" || str == "kdr" || str == "kdratio" || str == "k/d") {
 			hud_field[hud_num_fields] = SP_KDRATIO;
-		} else if(str == "net" || str == "net" || str == "net" || str == "f-d") {
-			hud_field[hud_num_fields] = SP_NET;
+		} else if(str == "sum" || str == "diff" || str == "f-d") {
+			hud_field[hud_num_fields] = SP_SUM;
 		} else if(str == "name" || str == "nick") {
 			hud_field[hud_num_fields] = SP_NAME;
 			have_name = 1;
@@ -599,7 +601,7 @@ string HUD_GetField(entity pl, float field)
 				str = sprintf("%.1f", num/denom);
 			return str;
 			
-		case SP_NET:
+		case SP_SUM:
 			f = pl.(scores[SP_KILLS]);
 			f -= pl.(scores[SP_DEATHS]);
 
