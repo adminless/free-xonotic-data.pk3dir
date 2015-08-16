@@ -5,6 +5,7 @@
 #define TOPICS(X) \
     X(NEW(GametypeSource),  _("Gametypes"), "gametype_dm") \
     X(NEW(MapSource),       _("Maps"),      "gametype_ctf") \
+    if (cvar("developer")) X(NEW(DebugSource), _("Debug"), "gametype_ons") \
     /**/
 CLASS(TopicSource, DataSource)
     .string icon, name;
@@ -31,6 +32,39 @@ CLASS(TopicSource, DataSource)
         return i;
     }
 ENDCLASS(TopicSource)
+
+CLASS(DebugSource, DataSource)
+    .string name, icon;
+    ATTRIB(DebugSource, entryName, .string, name)
+    ATTRIB(DebugSource, entryIcon, .string, icon)
+    .entity chain;
+    METHOD(DebugSource, getEntry, entity(int))
+    entity DebugSource_getEntry(int i) {
+        int idx = 0;
+        entity e;
+        for (e = findchainfloat(instanceOfObject, true); e; e = e.chain) {
+            if (e.classname == "vtbl") continue;
+            if (e.instanceOfItem) continue;
+            if (idx++ == i) break;
+        }
+        static entity entry;
+        if (!entry) entry = new(entry);
+        entry.name = sprintf("entity %i", e);
+        entry.icon = "";
+        return entry;
+    }
+    METHOD(DebugSource, reload, int(string))
+    int DebugSource_reload(string filter) {
+        int idx = 0;
+        entity e;
+        for (e = findchainfloat(instanceOfObject, true); e; e = e.chain) {
+            if (e.classname == "vtbl") continue;
+            if (e.instanceOfItem) continue;
+            idx++;
+        }
+        return idx;
+    }
+ENDCLASS(DebugSource)
 
 #include "../../common/mapinfo.qh"
 CLASS(GametypeSource, DataSource)
