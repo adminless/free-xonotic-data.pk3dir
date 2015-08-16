@@ -18,12 +18,10 @@ CLASS(XonoticTopicList, XonoticListBox)
     METHOD(XonoticTopicList, setSelected, void(entity, int))
 
     ATTRIB(XonoticTopicList, source, DataSource, NULL)
-    ATTRIB(XonoticTopicList, listener, entity, NULL)
 
-    CONSTRUCTOR(XonoticTopicList, DataSource _source, entity _listener) {
+    CONSTRUCTOR(XonoticTopicList, DataSource _source) {
     	CONSTRUCT(XonoticTopicList);
     	this.source = _source;
-    	this.listener = _listener;
     	this.nItems = _source.reload("");
     	this.configureXonoticListBox(this);
     }
@@ -62,13 +60,6 @@ bool XonoticTopicList_keyDown(entity this, float scan, float ascii, float shift)
 {
     if (scan == K_ENTER || scan == K_KP_ENTER) {
         m_play_click_sound(MENU_SOUND_EXECUTE);
-        entity l = this.listener;
-        if (l) {
-        	void(entity) func = l.topicSelectNotify;
-        	if (func) {
-        		func(l);
-        	}
-        }
         return true;
     }
     return super.keyDown(this, scan, ascii, shift);
@@ -91,12 +82,6 @@ void XonoticTopicList_resizeNotify(entity this, vector relOrigin, vector relSize
 void XonoticTopicList_setSelected(entity this, int i)
 {
     super.setSelected(this, i);
-    entity l = this.listener;
-	if (l) {
-		void(entity) func = l.topicChangeNotify;
-		if (func) {
-			func(l);
-		}
-	}
+    this.onChange(this, this.onChangeEntity);
 }
 #endif

@@ -23,6 +23,7 @@ CLASS(XonoticEntryList, XonoticListBox)
     METHOD(XonoticEntryList, keyDown, float(entity, float, float, float))
     METHOD(XonoticEntryList, refilter, void(entity))
     METHOD(XonoticEntryList, resizeNotify, void(entity, vector, vector, vector, vector))
+    METHOD(XonoticEntryList, setSelected, void(entity, int))
 
     ATTRIB(XonoticEntryList, source, DataSource, NULL)
 
@@ -117,5 +118,11 @@ void XonoticEntryList_resizeNotify(entity this, vector relOrigin, vector relSize
     this.columnPreviewSize = this.itemAbsSize.y / this.itemAbsSize.x * 4 / 3;
     this.columnNameOrigin = this.columnPreviewOrigin + this.columnPreviewSize + this.realFontSize.x;
     this.columnNameSize = 1 - this.columnPreviewSize - 2 * this.realFontSize.x;
+}
+
+void XonoticEntryList_setSelected(entity this, int i)
+{
+    super.setSelected(this, i);
+    this.onChange(this, this.onChangeEntity);
 }
 #endif

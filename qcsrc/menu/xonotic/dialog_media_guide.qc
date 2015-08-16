@@ -93,17 +93,19 @@ ENDCLASS(MapSource)
 
 #include "dialog_media_guide_topics.qc"
 #include "dialog_media_guide_entries.qc"
+#include "dialog_media_guide_description.qc"
 #include "tab.qc"
 CLASS(XonoticGuideTab, XonoticTab)
     ATTRIB(XonoticGuideTab, rows, float, 21)
     ATTRIB(XonoticGuideTab, columns, float, 6)
 	ATTRIB(XonoticGuideTab, intendedWidth, float, 1)
     METHOD(XonoticGuideTab, fill, void(entity))
-    METHOD(XonoticGuideTab, topicChangeNotify, void(entity))
-    METHOD(XonoticGuideTab, topicSelectNotify, void(entity))
+    METHOD(XonoticGuideTab, topicChangeNotify, void(entity, entity))
+    METHOD(XonoticGuideTab, entryChangeNotify, void(entity, entity))
 
-    ATTRIB(XonoticGuideTab, topicList, entity, NEW(XonoticTopicList, NEW(TopicSource), this))
+    ATTRIB(XonoticGuideTab, topicList, entity, NEW(XonoticTopicList, NEW(TopicSource)))
     ATTRIB(XonoticGuideTab, entryList, entity, NEW(XonoticEntryList, NULL))
+    ATTRIB(XonoticGuideTab, descriptionPane, entity, NEW(XonoticGuideDescription))
 
     INIT(XonoticGuideTab) {
         this.configureDialog(this);
@@ -116,32 +118,44 @@ ENDCLASS(XonoticGuideTab)
 void XonoticGuideTab_fill(entity this)
 {
     entity topics = this.topicList;
+        topics.onChange = XonoticGuideTab_topicChangeNotify;
+        topics.onChangeEntity = this;
     entity entries = this.entryList;
+        entries.onChange = XonoticGuideTab_entryChangeNotify;
+        entries.onChangeEntity = this;
     entity filter = entries.stringFilterBox = makeXonoticInputBox(false, string_null);
         filter.keyDown = MapList_StringFilterBox_keyDown;
         filter.onChange = MapList_StringFilterBox_Change;
         filter.onChangeEntity = entries;
     entries.controlledTextbox = filter;
+    entity description = this.descriptionPane;
 
-    this.gotoRC(this, 0, 0);
-        this.TD(this, 1, 3 / 2, makeXonoticHeaderLabel(_("Topic")));
+    int
+    col = 0, width = 1.5;
+    this.gotoRC(this, 0, col);
+        this.TD(this, 1, width, makeXonoticHeaderLabel(_("Topic")));
     this.TR(this);
-        this.TD(this, this.rows - 1, 3 / 2, topics);
+        this.TD(this, this.rows - 1, width, topics);
 
-    this.gotoRC(this, 0, 3 / 2);
-        this.setFirstColumn(this, this.currentColumn);
-        this.TD(this, 1, 2, makeXonoticHeaderLabel(_("Entry")));
+    col += width, width = 2;
+    this.gotoRC(this, 0, col); this.setFirstColumn(this, this.currentColumn);
+        this.TD(this, 1, width, makeXonoticHeaderLabel(_("Entry")));
     this.TR(this);
-        this.TD(this, this.rows - 1 - 1, 2, entries);
-
-    this.gotoRC(this, this.rows - 1, this.firstColumn);
+        this.TD(this, this.rows - 1 - 1, width, entries);
+    this.gotoRC(this, this.rows - 1, col);
         this.TD(this, 1, 0.3, makeXonoticTextLabel(0, _("Filter:")));
-        this.TD(this, 1, 2 - 0.3, filter);
+        this.TD(this, 1, width - 0.3, filter);
 
-    this.topicChangeNotify(this);
+    col += width, width = 2.5;
+    this.gotoRC(this, 0, col); this.setFirstColumn(this, this.currentColumn);
+        this.TD(this, 1, width, makeXonoticHeaderLabel(_("Description")));
+    this.TR(this);
+        this.TD(this, this.rows - 1, width, description);
+
+    this.topicChangeNotify(topics, this);
 }
 
-void XonoticGuideTab_topicChangeNotify(entity this)
+void XonoticGuideTab_topicChangeNotify(entity, entity this)
 {
     entity topics = this.topicList;
     entity entries = this.entryList;
@@ -155,7 +169,11 @@ void XonoticGuideTab_topicChangeNotify(entity this)
     entries.refilter(entries);
 }
 
-void XonoticGuideTab_topicSelectNotify(entity this) { this.setFocus(this, this.entryList); }
+void XonoticGuideTab_entryChangeNotify(entity, entity this)
+{
+    entity desc = this.descriptionPane;
+    desc.setDescription(desc, sprintf("item %.0f\n", this.entryList.selectedItem));
+}
 
 entity MapSource_getEntry(int i)
 {
