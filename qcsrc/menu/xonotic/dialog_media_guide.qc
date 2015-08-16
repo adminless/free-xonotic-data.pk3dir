@@ -37,6 +37,7 @@ CLASS(DebugSource, DataSource)
     .string name, icon;
     ATTRIB(DebugSource, entryName, .string, name)
     ATTRIB(DebugSource, entryIcon, .string, icon)
+    string DebugSource_activeFilter = "";
     .entity chain;
     METHOD(DebugSource, getEntry, entity(int))
     entity DebugSource_getEntry(int i) {
@@ -45,6 +46,7 @@ CLASS(DebugSource, DataSource)
         for (e = findchainfloat(instanceOfObject, true); e; e = e.chain) {
             if (e.classname == "vtbl") continue;
             if (e.instanceOfItem) continue;
+            if (strstrofs(sprintf("entity %i", e), DebugSource_activeFilter, 0) < 0) continue;
             if (idx++ == i) break;
         }
         static entity entry;
@@ -55,11 +57,13 @@ CLASS(DebugSource, DataSource)
     }
     METHOD(DebugSource, reload, int(string))
     int DebugSource_reload(string filter) {
+        DebugSource_activeFilter = filter;
         int idx = 0;
         entity e;
         for (e = findchainfloat(instanceOfObject, true); e; e = e.chain) {
             if (e.classname == "vtbl") continue;
             if (e.instanceOfItem) continue;
+            if (strstrofs(sprintf("entity %i", e), DebugSource_activeFilter, 0) < 0) continue;
             idx++;
         }
         return idx;
