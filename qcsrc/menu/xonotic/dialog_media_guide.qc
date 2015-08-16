@@ -1,5 +1,24 @@
 #ifndef DIALOG_MEDIA_GUIDE_H
 #define DIALOG_MEDIA_GUIDE_H
+#include "datasource.qc"
+CLASS(TopicSource, DataSource)
+    .string mdl, message;
+    ATTRIB(TopicSource, entryIcon, .string, mdl)
+    ATTRIB(TopicSource, entryName, .string, message)
+    METHOD(TopicSource, getEntry, entity(int))
+    METHOD(TopicSource, reload, int(string))
+    METHOD(TopicSource, destroy, void(entity))
+ENDCLASS(TopicSource)
+
+CLASS(MapSource, DataSource)
+    .string icon, name;
+    ATTRIB(MapSource, entryIcon, .string, icon)
+    ATTRIB(MapSource, entryName, .string, name)
+    METHOD(MapSource, getEntry, entity(int))
+    METHOD(MapSource, indexOf, int(string))
+    METHOD(MapSource, reload, int(string))
+ENDCLASS(MapSource)
+
 #include "dialog_media_guide_topics.qc"
 #include "dialog_media_guide_entries.qc"
 #include "tab.qc"
@@ -10,20 +29,13 @@ CLASS(XonoticGuideTab, XonoticTab)
     METHOD(XonoticGuideTab, topicChangeNotify, void(entity))
     METHOD(XonoticGuideTab, topicSelectNotify, void(entity))
 
-	entity Topics_get(int i);
-	int Topics_reload(string filter);
-	.string mdl, message;
-    ATTRIB(XonoticGuideTab, topicList, entity, NEW(XonoticTopicList, Topics_get, func_null, Topics_reload, mdl, message, func_null, this))
+    ATTRIB(XonoticGuideTab, topicSource, entity, NEW(TopicSource))
+    ATTRIB(XonoticGuideTab, mapSource, entity, NEW(MapSource))
 
-    entity XonoticGuideTab_maps_get(int i);
-    int XonoticGuideTab_maps_indexOf(string s);
-    int XonoticGuideTab_maps_reload(string s);
-    void XonoticGuideTab_maps_destroy(entity this);
-    .string icon, name;
-    ATTRIB(XonoticGuideTab, entryList, entity, NEW(XonoticEntryList, XonoticGuideTab_maps_get, XonoticGuideTab_maps_indexOf, XonoticGuideTab_maps_reload, icon, name, XonoticGuideTab_maps_destroy))
+    ATTRIB(XonoticGuideTab, topicList, entity, NEW(XonoticTopicList, this.topicSource, "gametype_", this))
+    ATTRIB(XonoticGuideTab, entryList, entity, NEW(XonoticEntryList, this.mapSource))
 
     INIT(XonoticGuideTab) {
-    	this.topicList.entryIconPrefix = "gametype_";
         this.configureDialog(this);
     }
 ENDCLASS(XonoticGuideTab)
@@ -67,11 +79,11 @@ void XonoticGuideTab_topicChangeNotify(entity this)
 
 void XonoticGuideTab_topicSelectNotify(entity this) { this.setFocus(this, this.entryList); }
 
-entity Topics_get(int i) { return MAPINFO_TYPES[i]; }
+entity TopicSource_getEntry(int i) { return MAPINFO_TYPES[i]; }
 
-int Topics_reload(string filter) { return MAPINFO_TYPE_COUNT; }
+int TopicSource_reload(string filter) { return MAPINFO_TYPE_COUNT; }
 
-entity XonoticGuideTab_maps_get(int i)
+entity MapSource_getEntry(int i)
 {
     if (!MapInfo_Get_ByID(i)) return NULL;
     static entity e;
@@ -84,19 +96,19 @@ entity XonoticGuideTab_maps_get(int i)
     return e;
 }
 
-int XonoticGuideTab_maps_indexOf(string s)
+int MapSource_indexOf(string s)
 {
     MapInfo_FindName(s);
     return MapInfo_FindName_firstResult;
 }
 
-int XonoticGuideTab_maps_reload(string s)
+int MapSource_reload(string s)
 {
     MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 0, 0, 0);
     if (s) MapInfo_FilterString(s);
     return MapInfo_count;
 }
 
-void XonoticGuideTab_maps_destroy(entity this) { MapInfo_Shutdown(); }
+void MapSource_destroy(entity this) { MapInfo_Shutdown(); }
 
 #endif

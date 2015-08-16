@@ -1,5 +1,6 @@
 #ifndef DIALOG_MEDIA_GUIDE_TOPICS_H
 #define DIALOG_MEDIA_GUIDE_TOPICS_H
+#include "datasource.qc"
 #include "listbox.qc"
 CLASS(XonoticTopicList, XonoticListBox)
     ATTRIB(XonoticTopicList, columnIconOrigin, float, 0)
@@ -16,24 +17,17 @@ CLASS(XonoticTopicList, XonoticListBox)
     METHOD(XonoticTopicList, resizeNotify, void(entity, vector, vector, vector, vector))
     METHOD(XonoticTopicList, setSelected, void(entity, int))
 
-    INIT(XonoticTopicList) {
-        this.configureXonoticListBox(this);
-    }
-
-    .string stringfield_null;
-    ATTRIB(XonoticTopicList, entries, entity(int), func_null)
+    ATTRIB(XonoticTopicList, source, DataSource, NULL)
     ATTRIB(XonoticTopicList, entryIconPrefix, string, "")
-    ATTRIB(XonoticTopicList, entryIcon, .string, stringfield_null)
-    ATTRIB(XonoticTopicList, entryName, .string, stringfield_null)
     ATTRIB(XonoticTopicList, listener, entity, NULL)
 
-    CONSTRUCTOR(XonoticTopicList, entity(int) _entries, int _indexOf(string), int _reload(string), .string _entryIcon, .string _entryName, void _destroy(entity), entity _listener) {
+    CONSTRUCTOR(XonoticTopicList, DataSource _source, string _entryIconPrefix, entity _listener) {
     	CONSTRUCT(XonoticTopicList);
-    	this.entries = _entries;
-    	this.nItems = _reload("");
-    	this.entryIcon = _entryIcon;
-    	this.entryName = _entryName;
+    	this.source = _source;
+    	this.entryIconPrefix = _entryIconPrefix;
     	this.listener = _listener;
+    	this.nItems = _source.reload("");
+    	this.configureXonoticListBox(this);
     }
 ENDCLASS(XonoticTopicList)
 #endif
@@ -53,9 +47,9 @@ void XonoticTopicList_drawListBoxItem(entity this, int i, vector absSize, bool i
         this.focusedItemAlpha = getFadedAlpha(this.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, this.focusedItemAlpha);
     }
-    entity entry = this.entries(i);
-    string icon = strcat(this.entryIconPrefix, entry.(this.entryIcon));
-    string name = entry.(this.entryName);
+    entity entry = this.source.getEntry(i);
+    string icon = strcat(this.entryIconPrefix, entry.(this.source.entryIcon));
+    string name = entry.(this.source.entryName);
     draw_Picture(this.columnIconOrigin * eX, icon, this.columnIconSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
     vector save_fontscale = draw_fontscale;
     float f = draw_CondensedFontFactor(name, false, this.realFontSize, 1);

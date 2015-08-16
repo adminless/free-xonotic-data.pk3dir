@@ -1,5 +1,6 @@
 #ifndef DIALOG_MEDIA_GUIDE_ENTRIES_H
 #define DIALOG_MEDIA_GUIDE_ENTRIES_H
+#include "datasource.qc"
 #include "listbox.qc"
 CLASS(XonoticEntryList, XonoticListBox)
     ATTRIB(XonoticEntryList, alphaBG, float, 0)
@@ -23,26 +24,12 @@ CLASS(XonoticEntryList, XonoticListBox)
     METHOD(XonoticEntryList, refilter, void(entity))
     METHOD(XonoticEntryList, resizeNotify, void(entity, vector, vector, vector, vector))
 
-    INIT(XonoticEntryList) {
-        this.configureXonoticListBox(this);
-    }
+    ATTRIB(XonoticEntryList, source, DataSource, NULL)
 
-    .string stringfield_null;
-    ATTRIB(XonoticEntryList, destroy, void(entity), func_null)
-    ATTRIB(XonoticEntryList, entries, void(int), func_null)
-    ATTRIB(XonoticEntryList, entryIcon, .string, stringfield_null)
-    ATTRIB(XonoticEntryList, entryName, .string, stringfield_null)
-    ATTRIB(XonoticEntryList, indexOf, int(string), func_null)
-    ATTRIB(XonoticEntryList, reload, int(string), func_null)
-
-    CONSTRUCTOR(XonoticEntryList, entity _entries(int), int _indexOf(string), int _reload(string), .string _entryIcon, .string _entryName, void _destroy(entity)) {
+    CONSTRUCTOR(XonoticEntryList, DataSource _source) {
         CONSTRUCT(XonoticEntryList);
-        this.entries = _entries;
-        this.indexOf = _indexOf;
-        this.reload = _reload;
-        this.entryIcon = _entryIcon;
-        this.entryName = _entryName;
-        this.destroy = _destroy;
+        this.source = _source;
+        this.configureXonoticListBox(this);
         this.refilter(this);
     }
 
@@ -53,7 +40,7 @@ ENDCLASS(XonoticEntryList)
 
 void XonoticEntryList_drawListBoxItem(entity this, int i, vector absSize, bool isSelected, bool isFocused)
 {
-    entity e = this.entries(i);
+    entity e = this.source.getEntry(i);
     if (!e) return;
 
     if (isSelected) {
@@ -62,8 +49,8 @@ void XonoticEntryList_drawListBoxItem(entity this, int i, vector absSize, bool i
         this.focusedItemAlpha = getFadedAlpha(this.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, this.focusedItemAlpha);
     }
-    string s = draw_TextShortenToWidth(strdecolorize(e.(this.entryName)), this.columnNameSize, 0, this.realFontSize);
-    draw_Picture(this.columnPreviewOrigin * eX, e.(this.entryIcon), this.columnPreviewSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
+    string s = draw_TextShortenToWidth(strdecolorize(e.(this.source.entryName)), this.columnNameSize, 0, this.realFontSize);
+    draw_Picture(this.columnPreviewOrigin * eX, e.(this.source.entryIcon), this.columnPreviewSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
     draw_Text(this.realUpperMargin1 * eY + (this.columnNameOrigin + 0.00 * (this.columnNameSize - draw_TextWidth(s, 0, this.realFontSize))) * eX, s, this.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
 }
 
@@ -78,7 +65,7 @@ float XonoticEntryList_keyDown(entity this, float scan, float ascii, float shift
             this.typeToSearchString = strzone(save);
             this.typeToSearchTime = time + 0.5;
             if (strlen(this.typeToSearchString)) {
-                int idx = this.indexOf(this.typeToSearchString);
+                int idx = this.source.indexOf(this.typeToSearchString);
                 if (idx >= 0) this.setSelected(this, idx);
             }
         }
@@ -88,7 +75,7 @@ float XonoticEntryList_keyDown(entity this, float scan, float ascii, float shift
         if (this.typeToSearchString) strunzone(this.typeToSearchString);
         this.typeToSearchString = strzone(save);
         this.typeToSearchTime = time + 0.5;
-        int idx = this.indexOf(this.typeToSearchString);
+        int idx = this.source.indexOf(this.typeToSearchString);
         if (idx >= 0) this.setSelected(this, idx);
     } else if (shift & S_CTRL && scan == 'f') {
         this.parent.setFocus(this.parent, this.stringFilterBox);
@@ -103,9 +90,9 @@ float XonoticEntryList_keyDown(entity this, float scan, float ascii, float shift
 
 void XonoticEntryList_refilter(entity this)
 {
-    this.nItems = this.reload(this.stringFilter);
+    this.nItems = this.source.reload(this.stringFilter);
     for (int i = 0, n = this.nItems; i < n; ++i) {
-        draw_PreloadPicture(this.entries(i).(this.entryIcon));
+        draw_PreloadPicture(this.source.getEntry(i).(this.source.entryIcon));
     }
 }
 
