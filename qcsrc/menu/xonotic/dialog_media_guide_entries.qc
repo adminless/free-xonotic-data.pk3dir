@@ -62,8 +62,8 @@ void XonoticEntryList_drawListBoxItem(entity this, int i, vector absSize, bool i
         this.focusedItemAlpha = getFadedAlpha(this.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, this.focusedItemAlpha);
     }
-    string s = draw_TextShortenToWidth(strdecolorize(e.name), this.columnNameSize, 0, this.realFontSize);
-    draw_Picture(this.columnPreviewOrigin * eX, e.icon, this.columnPreviewSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
+    string s = draw_TextShortenToWidth(strdecolorize(e.(this.entryName)), this.columnNameSize, 0, this.realFontSize);
+    draw_Picture(this.columnPreviewOrigin * eX, e.(this.entryIcon), this.columnPreviewSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
     draw_Text(this.realUpperMargin1 * eY + (this.columnNameOrigin + 0.00 * (this.columnNameSize - draw_TextWidth(s, 0, this.realFontSize))) * eX, s, this.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
 }
 
@@ -105,7 +105,7 @@ void XonoticEntryList_refilter(entity this)
 {
     this.nItems = this.reload(this.stringFilter);
     for (int i = 0, n = this.nItems; i < n; ++i) {
-        draw_PreloadPicture(this.entries(i).icon);
+        draw_PreloadPicture(this.entries(i).(this.entryIcon));
     }
 }
 
