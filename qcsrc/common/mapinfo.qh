@@ -28,7 +28,6 @@ CLASS(Gametype, Object)
         this.team = gteamplay;
         this.model2 = defaults;
         this.gametype_description = gdescription;
-        return this;
     }
 ENDCLASS(Gametype)
 

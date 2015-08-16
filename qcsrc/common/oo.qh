@@ -47,7 +47,8 @@ entity __spawn(string _classname, string _sourceFile, int _sourceLine) {
     OVERLOAD(spawn##cname, this, ##__VA_ARGS__)
 
 #define CONSTRUCTOR(cname, ...) \
-    cname OVERLOAD(spawn##cname, cname this, __VA_ARGS__)
+    cname OVERLOAD(spawn##cname, cname this, __VA_ARGS__) { return = this; } \
+    [[accumulate]] cname OVERLOAD(spawn##cname, cname this, __VA_ARGS__)
 
 .string vtblname;
 .entity vtblbase;
@@ -110,6 +111,7 @@ ACCUMULATE_FUNCTION(__static_init, RegisterClasses)
     [[last]] INIT(cname) { return this; }
 
 #define SUPER(cname) (cname##_vtbl.vtblbase)
+#define super (this.vtblbase.vtblbase)
 
 #define spawn_static(this)
 #define spawn_1(this)
