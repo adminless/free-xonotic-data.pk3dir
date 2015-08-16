@@ -1,14 +1,48 @@
 #ifndef DIALOG_MEDIA_GUIDE_H
 #define DIALOG_MEDIA_GUIDE_H
 #include "datasource.qc"
+
+#define TOPICS(X) \
+    X(NEW(GametypeSource),  _("Gametypes"), "gametype_dm") \
+    X(NEW(MapSource),       _("Maps"),      "gametype_ctf") \
+    /**/
 CLASS(TopicSource, DataSource)
-    .string mdl, message;
-    ATTRIB(TopicSource, entryIcon, .string, mdl)
-    ATTRIB(TopicSource, entryName, .string, message)
+    .string icon, name;
+    ATTRIB(TopicSource, entryIcon, .string, icon)
+    ATTRIB(TopicSource, entryName, .string, name)
     METHOD(TopicSource, getEntry, entity(int))
+    entity TopicSource_getEntry(int i) {
+        static entity e;
+        if (!e) e = new(entry);
+        int idx = 0;
+        .string en = name, ei = icon;
+        #define TOPIC(src, name, icon) if (idx++ == i) { e.(en) = name; e.(ei) = icon; return e; }
+        TOPICS(TOPIC)
+        #undef TOPIC
+        e.en = "undefined"; e.ei = "undefined";
+        return e;
+    }
     METHOD(TopicSource, reload, int(string))
-    METHOD(TopicSource, destroy, void(entity))
+    int TopicSource_reload(string filter) {
+        int i = 0;
+        #define TOPIC(src, name, icon) i++;
+        TOPICS(TOPIC)
+        #undef TOPIC
+        return i;
+    }
 ENDCLASS(TopicSource)
+
+#include "../../common/mapinfo.qh"
+CLASS(GametypeSource, DataSource)
+    .string mdl, message;
+    ATTRIB(GametypeSource, entryName, .string, message)
+    ATTRIB(GametypeSource, entryIcon, .string, mdl)
+    ATTRIB(GametypeSource, entryIconPrefix, string, "gametype_")
+    METHOD(GametypeSource, getEntry, entity(int))
+    entity GametypeSource_getEntry(int i) { return MAPINFO_TYPES[i]; }
+    METHOD(GametypeSource, reload, int(string))
+    int GametypeSource_reload(string filter) { return MAPINFO_TYPE_COUNT; }
+ENDCLASS(GametypeSource)
 
 CLASS(MapSource, DataSource)
     .string icon, name;
@@ -29,11 +63,8 @@ CLASS(XonoticGuideTab, XonoticTab)
     METHOD(XonoticGuideTab, topicChangeNotify, void(entity))
     METHOD(XonoticGuideTab, topicSelectNotify, void(entity))
 
-    ATTRIB(XonoticGuideTab, topicSource, entity, NEW(TopicSource))
-    ATTRIB(XonoticGuideTab, mapSource, entity, NEW(MapSource))
-
-    ATTRIB(XonoticGuideTab, topicList, entity, NEW(XonoticTopicList, this.topicSource, "gametype_", this))
-    ATTRIB(XonoticGuideTab, entryList, entity, NEW(XonoticEntryList, this.mapSource))
+    ATTRIB(XonoticGuideTab, topicList, entity, NEW(XonoticTopicList, NEW(TopicSource), this))
+    ATTRIB(XonoticGuideTab, entryList, entity, NEW(XonoticEntryList, NULL))
 
     INIT(XonoticGuideTab) {
         this.configureDialog(this);
@@ -73,15 +104,19 @@ void XonoticGuideTab_fill(entity this)
 
 void XonoticGuideTab_topicChangeNotify(entity this)
 {
+    entity topics = this.topicList;
     entity entries = this.entryList;
+    int i = topics.selectedItem;
+    int idx = 0;
+    entity found = NULL;
+    #define TOPIC(src, name, icon) if (idx++ == i) { static entity e; if (!e) e = src; found = e; break; }
+    do { TOPICS(TOPIC); } while (0);
+    #undef TOPIC
+    entries.source = found;
     entries.refilter(entries);
 }
 
 void XonoticGuideTab_topicSelectNotify(entity this) { this.setFocus(this, this.entryList); }
-
-entity TopicSource_getEntry(int i) { return MAPINFO_TYPES[i]; }
-
-int TopicSource_reload(string filter) { return MAPINFO_TYPE_COUNT; }
 
 entity MapSource_getEntry(int i)
 {

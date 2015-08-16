@@ -18,13 +18,11 @@ CLASS(XonoticTopicList, XonoticListBox)
     METHOD(XonoticTopicList, setSelected, void(entity, int))
 
     ATTRIB(XonoticTopicList, source, DataSource, NULL)
-    ATTRIB(XonoticTopicList, entryIconPrefix, string, "")
     ATTRIB(XonoticTopicList, listener, entity, NULL)
 
-    CONSTRUCTOR(XonoticTopicList, DataSource _source, string _entryIconPrefix, entity _listener) {
+    CONSTRUCTOR(XonoticTopicList, DataSource _source, entity _listener) {
     	CONSTRUCT(XonoticTopicList);
     	this.source = _source;
-    	this.entryIconPrefix = _entryIconPrefix;
     	this.listener = _listener;
     	this.nItems = _source.reload("");
     	this.configureXonoticListBox(this);
@@ -48,7 +46,7 @@ void XonoticTopicList_drawListBoxItem(entity this, int i, vector absSize, bool i
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, this.focusedItemAlpha);
     }
     entity entry = this.source.getEntry(i);
-    string icon = strcat(this.entryIconPrefix, entry.(this.source.entryIcon));
+    string icon = strcat(this.source.entryIconPrefix, entry.(this.source.entryIcon));
     string name = entry.(this.source.entryName);
     draw_Picture(this.columnIconOrigin * eX, icon, this.columnIconSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
     vector save_fontscale = draw_fontscale;

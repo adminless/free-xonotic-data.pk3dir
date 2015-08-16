@@ -40,8 +40,9 @@ ENDCLASS(XonoticEntryList)
 
 void XonoticEntryList_drawListBoxItem(entity this, int i, vector absSize, bool isSelected, bool isFocused)
 {
-    entity e = this.source.getEntry(i);
-    if (!e) return;
+    if (!this.source) return;
+    entity entry = this.source.getEntry(i);
+    if (!entry) return;
 
     if (isSelected) {
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
@@ -49,8 +50,10 @@ void XonoticEntryList_drawListBoxItem(entity this, int i, vector absSize, bool i
         this.focusedItemAlpha = getFadedAlpha(this.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, this.focusedItemAlpha);
     }
-    string s = draw_TextShortenToWidth(strdecolorize(e.(this.source.entryName)), this.columnNameSize, 0, this.realFontSize);
-    draw_Picture(this.columnPreviewOrigin * eX, e.(this.source.entryIcon), this.columnPreviewSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
+    string icon = strcat(this.source.entryIconPrefix, entry.(this.source.entryIcon));
+    string name = entry.(this.source.entryName);
+    string s = draw_TextShortenToWidth(strdecolorize(name), this.columnNameSize, 0, this.realFontSize);
+    draw_Picture(this.columnPreviewOrigin * eX, icon, this.columnPreviewSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
     draw_Text(this.realUpperMargin1 * eY + (this.columnNameOrigin + 0.00 * (this.columnNameSize - draw_TextWidth(s, 0, this.realFontSize))) * eX, s, this.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
 }
 
@@ -90,6 +93,10 @@ float XonoticEntryList_keyDown(entity this, float scan, float ascii, float shift
 
 void XonoticEntryList_refilter(entity this)
 {
+    if (!this.source) {
+        this.nItems = 0;
+        return;
+    }
     this.nItems = this.source.reload(this.stringFilter);
     for (int i = 0, n = this.nItems; i < n; ++i) {
         draw_PreloadPicture(this.source.getEntry(i).(this.source.entryIcon));
