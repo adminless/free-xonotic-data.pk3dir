@@ -53,10 +53,7 @@ CLASS(DebugSource, DataSource)
             if (strstrofs(sprintf("entity %i", e), DebugSource_activeFilter, 0) < 0) continue;
             if (idx++ == i) break;
         }
-        if (returns) {
-            if (e.display) e.display(e, returns);
-            else returns(sprintf("entity %i", e), "");
-        }
+        if (returns) e.display(e, returns);
         return e;
     }
     METHOD(DebugSource, reload, int(string))
@@ -196,7 +193,7 @@ void XonoticGuideTab_entryChangeNotify(entity, entity this)
     entity desc = this.descriptionPane;
     entity entries = this.entryList;
     entity e = entries.source.getEntry(entries.selectedItem, func_null);
-    string s = e.describe ? e.describe(e) : _("No description");
+    string s = e.describe(e);
     if (cvar("developer")) { s = sprintf("entity %i\n%s", e, s); }
     desc.setDescription(desc, s);
 }
