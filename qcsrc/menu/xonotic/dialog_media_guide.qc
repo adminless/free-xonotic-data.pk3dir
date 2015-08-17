@@ -4,6 +4,7 @@
 
 #define TOPICS(X) \
     X(NEW(GametypeSource),  _("Gametypes"), "gametype_dm") \
+    X(NEW(ItemSource),      _("Items"),     "gametype_kh") \
     X(NEW(MapSource),       _("Maps"),      "gametype_ctf") \
     if (cvar("developer")) X(NEW(DebugSource), _("Debug"), "gametype_ons") \
     /**/
@@ -81,6 +82,18 @@ CLASS(GametypeSource, DataSource)
     METHOD(GametypeSource, reload, int(string))
     int GametypeSource_reload(string filter) { return MAPINFO_TYPE_COUNT; }
 ENDCLASS(GametypeSource)
+
+#include "../../common/items/all.qh"
+CLASS(ItemSource, DataSource)
+    METHOD(ItemSource, getEntry, entity(int, void(string, string)))
+    entity ItemSource_getEntry(int i, void(string, string) returns) {
+        entity e = ITEMS[i];
+        if (returns) e.display(e, returns);
+        return e;
+    }
+    METHOD(ItemSource, reload, int(string))
+    int ItemSource_reload(string filter) { return ITEM_COUNT; }
+ENDCLASS(ItemSource)
 
 CLASS(MapSource, DataSource)
     METHOD(MapSource, getEntry, entity(int, void(string, string)))
