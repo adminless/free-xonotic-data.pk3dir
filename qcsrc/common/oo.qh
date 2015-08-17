@@ -118,7 +118,9 @@ STATIC_INIT(RegisterClasses) { RegisterClasses(); }
 #define _vtbl NULL
 CLASS(Object, );
     METHOD(Object, describe, string(entity this))
+    string Object_describe(entity) { return string_null; }
     METHOD(Object, display, void(entity this, void(string name, string icon) returns))
+    void Object_display(entity, void(string, string)) { }
 ENDCLASS(Object)
 #undef spawn_static
 #undef spawn_1
