@@ -5,6 +5,7 @@
 #define TOPICS(X) \
     X(NEW(GametypeSource),  _("Gametypes"), "gametype_dm") \
     X(NEW(ItemSource),      _("Items"),     "gametype_kh") \
+    X(NEW(BuffSource),      _("Buffs"),     "gametype_dom") \
     X(NEW(MapSource),       _("Maps"),      "gametype_ctf") \
     if (cvar("developer")) X(NEW(DebugSource), _("Debug"), "gametype_ons") \
     /**/
@@ -94,6 +95,18 @@ CLASS(ItemSource, DataSource)
     METHOD(ItemSource, reload, int(string))
     int ItemSource_reload(string filter) { return ITEM_COUNT; }
 ENDCLASS(ItemSource)
+
+#include "../../common/buffs.qh"
+CLASS(BuffSource, DataSource)
+    METHOD(BuffSource, getEntry, entity(int, void(string, string)))
+    entity BuffSource_getEntry(int i, void(string, string) returns) {
+        entity e = BUFFS[i];
+        if (returns) e.display(e, returns);
+        return e;
+    }
+    METHOD(BuffSource, reload, int(string))
+    int BuffSource_reload(string filter) { return BUFFS_COUNT; }
+ENDCLASS(BuffSource)
 
 CLASS(MapSource, DataSource)
     METHOD(MapSource, getEntry, entity(int, void(string, string)))
