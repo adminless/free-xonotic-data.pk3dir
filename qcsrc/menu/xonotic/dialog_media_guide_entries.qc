@@ -4,10 +4,6 @@
 #include "listbox.qc"
 CLASS(XonoticEntryList, XonoticListBox)
     ATTRIB(XonoticEntryList, alphaBG, float, 0)
-    ATTRIB(XonoticEntryList, columnNameOrigin, float, 0)
-    ATTRIB(XonoticEntryList, columnNameSize, float, 0)
-    ATTRIB(XonoticEntryList, columnPreviewOrigin, float, 0)
-    ATTRIB(XonoticEntryList, columnPreviewSize, float, 0)
     ATTRIB(XonoticEntryList, itemAbsSize, vector, '0 0 0')
     ATTRIB(XonoticEntryList, origin, vector, '0 0 0')
     ATTRIB(XonoticEntryList, realFontSize, vector, '0 0 0')
@@ -57,9 +53,15 @@ void XonoticEntryList_drawListBoxItem(entity this, int i, vector absSize, bool i
         this.focusedItemAlpha = getFadedAlpha(this.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, this.focusedItemAlpha);
     }
-    draw_Picture(this.columnPreviewOrigin * eX, icon, this.columnPreviewSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
-    string s = draw_TextShortenToWidth(strdecolorize(name), this.columnNameSize, 0, this.realFontSize);
-    draw_Text(this.realUpperMargin1 * eY + this.columnNameOrigin * eX, s, this.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
+    vector sz = draw_PictureSize(icon);
+    if (!sz) sz = '1 1 0';
+    float szr = sz.x / sz.y;
+    if (strstrofs(icon, "map", 0) >= 0) szr = 4 / 3;
+    float asr = this.itemAbsSize.x / this.itemAbsSize.y;
+    sz.y = 1; sz.x = szr / asr;
+    draw_Picture('0 0 0', icon, sz, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
+    string s = draw_TextShortenToWidth(strdecolorize(name), 1 - sz.x - 2 * this.realFontSize.x, 0, this.realFontSize);
+    draw_Text(this.realUpperMargin1 * eY + (sz.x + 0.5 * this.realFontSize.x) * eX, s, this.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
 }
 
 float XonoticEntryList_keyDown(entity this, float scan, float ascii, float shift)
@@ -115,11 +117,6 @@ void XonoticEntryList_resizeNotify(entity this, vector relOrigin, vector relSize
     this.realFontSize_x = this.fontSize / (this.itemAbsSize_x = (absSize.x * (1 - this.controlWidth)));
     this.realUpperMargin1 = 0.5 * (1 - 2.5 * this.realFontSize.y);
     this.realUpperMargin2 = this.realUpperMargin1 + 1.5 * this.realFontSize.y;
-
-    this.columnPreviewOrigin = 0;
-    this.columnPreviewSize = this.itemAbsSize.y / this.itemAbsSize.x * 4 / 3;
-    this.columnNameOrigin = this.columnPreviewOrigin + this.columnPreviewSize + this.realFontSize.x;
-    this.columnNameSize = 1 - this.columnPreviewSize - 2 * this.realFontSize.x;
 }
 
 void XonoticEntryList_setSelected(entity this, int i)

@@ -129,7 +129,7 @@ CLASS(Object, );
         return s;
     }
     METHOD(Object, display, void(entity this, void(string name, string icon) returns))
-    void Object_display(entity this, void(string name, string icon) returns) { returns(sprintf("entity %i", this), "nopreview_menuskin"); }
+    void Object_display(entity this, void(string name, string icon) returns) { returns(sprintf("entity %i", this), "nopreview_map"); }
 ENDCLASS(Object)
 #undef spawn_static
 #undef spawn_1
