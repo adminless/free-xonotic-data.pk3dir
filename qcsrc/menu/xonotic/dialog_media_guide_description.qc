@@ -33,10 +33,13 @@ CLASS(XonoticGuideDescription, XonoticListBox)
         string currentWrapped = this.descriptionWrapped;
         if (currentWrapped) strunzone(currentWrapped);
         string wrapped = "";
-        for (getWrappedLine_remaining = desc; getWrappedLine_remaining; ) {
-            // FIXME: calculate this
-            string s = getWrappedLine(1.275, this.realFontSize, draw_TextWidth_WithColors);
-            wrapped = sprintf("%s\n%s", wrapped, s);
+        for (int i = 0, n = tokenizebyseparator(desc, "\n"); i < n; ++i) {
+            string line = "";
+            for (getWrappedLine_remaining = argv(i); getWrappedLine_remaining; ) {
+                string s = getWrappedLine(1, this.realFontSize, draw_TextWidth_WithColors);
+                line = sprintf("%s\n%s", line, s);
+            }
+            wrapped = strcat(wrapped, line);
         }
         this.descriptionWrapped = strzone(wrapped);
 
