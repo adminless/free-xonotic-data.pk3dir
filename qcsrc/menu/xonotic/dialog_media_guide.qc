@@ -8,61 +8,60 @@
     if (cvar("developer")) X(NEW(DebugSource), _("Debug"), "gametype_ons") \
     /**/
 CLASS(TopicSource, DataSource)
-    .string icon, name;
-    ATTRIB(TopicSource, entryIcon, .string, icon)
-    ATTRIB(TopicSource, entryName, .string, name)
-    METHOD(TopicSource, getEntry, entity(int))
-    entity TopicSource_getEntry(int i) {
-        static entity e;
-        if (!e) e = new(entry);
+    METHOD(TopicSource, getEntry, entity(int, void(string, string)))
+    entity TopicSource_getEntry(int i, void(string, string) returns) {
         int idx = 0;
-        .string en = name, ei = icon;
-        #define TOPIC(src, name, icon) if (idx++ == i) { e.(en) = name; e.(ei) = icon; return e; }
-        TOPICS(TOPIC)
+        #define TOPIC(src, name, icon) if (idx++ == i) { if (returns) returns(name, icon); return DataSource_true; }
+        TOPICS(TOPIC);
         #undef TOPIC
-        e.en = "undefined"; e.ei = "undefined";
-        return e;
+        if (returns) returns("undefined", "undefined");
+        return DataSource_false;
     }
     METHOD(TopicSource, reload, int(string))
     int TopicSource_reload(string filter) {
-        int i = 0;
-        #define TOPIC(src, name, icon) i++;
-        TOPICS(TOPIC)
+        int n = 0;
+        #define TOPIC(src, name, icon) n++;
+        TOPICS(TOPIC);
         #undef TOPIC
-        return i;
+        return n;
     }
 ENDCLASS(TopicSource)
 
 CLASS(DebugSource, DataSource)
-    .string name, icon;
-    ATTRIB(DebugSource, entryName, .string, name)
-    ATTRIB(DebugSource, entryIcon, .string, icon)
+    .entity nextdebug;
+    entity find_debug() {
+        entity head = NULL, tail = NULL;
+        for (entity it = NULL; (it = nextent(it)); ) {
+            if (!it.instanceOfObject) continue;
+            if (it.instanceOfItem) continue;
+            if (it.classname == "vtbl") continue;
+            if (!tail) {
+                tail = head = it;
+            } else {
+                tail.nextdebug = it;
+                tail = it;
+            }
+        }
+        return head;
+    }
     string DebugSource_activeFilter = "";
-    .entity chain;
-    METHOD(DebugSource, getEntry, entity(int))
-    entity DebugSource_getEntry(int i) {
+    METHOD(DebugSource, getEntry, entity(int, void(string, string)))
+    entity DebugSource_getEntry(int i, void(string, string) returns) {
         int idx = 0;
         entity e;
-        for (e = findchainfloat(instanceOfObject, true); e; e = e.chain) {
-            if (e.classname == "vtbl") continue;
-            if (e.instanceOfItem) continue;
+        for (e = find_debug(); e; e = e.nextdebug) {
             if (strstrofs(sprintf("entity %i", e), DebugSource_activeFilter, 0) < 0) continue;
             if (idx++ == i) break;
         }
-        static entity entry;
-        if (!entry) entry = new(entry);
-        entry.name = sprintf("entity %i", e);
-        entry.icon = "";
-        return entry;
+        if (returns) returns(sprintf("entity %i", e), "");
+        return e;
     }
     METHOD(DebugSource, reload, int(string))
     int DebugSource_reload(string filter) {
         DebugSource_activeFilter = filter;
         int idx = 0;
         entity e;
-        for (e = findchainfloat(instanceOfObject, true); e; e = e.chain) {
-            if (e.classname == "vtbl") continue;
-            if (e.instanceOfItem) continue;
+        for (e = find_debug(); e; e = e.nextdebug) {
             if (strstrofs(sprintf("entity %i", e), DebugSource_activeFilter, 0) < 0) continue;
             idx++;
         }
@@ -73,22 +72,42 @@ ENDCLASS(DebugSource)
 #include "../../common/mapinfo.qh"
 CLASS(GametypeSource, DataSource)
     .string mdl, message;
-    ATTRIB(GametypeSource, entryName, .string, message)
-    ATTRIB(GametypeSource, entryIcon, .string, mdl)
-    ATTRIB(GametypeSource, entryIconPrefix, string, "gametype_")
-    METHOD(GametypeSource, getEntry, entity(int))
-    entity GametypeSource_getEntry(int i) { return MAPINFO_TYPES[i]; }
+    METHOD(GametypeSource, getEntry, entity(int, void(string, string)))
+    entity GametypeSource_getEntry(int i, void(string, string) returns) {
+        entity e = MAPINFO_TYPES[i];
+        if (returns) returns(e.message, strcat("gametype_", e.mdl));
+        return e;
+    }
     METHOD(GametypeSource, reload, int(string))
     int GametypeSource_reload(string filter) { return MAPINFO_TYPE_COUNT; }
 ENDCLASS(GametypeSource)
 
 CLASS(MapSource, DataSource)
-    .string icon, name;
-    ATTRIB(MapSource, entryIcon, .string, icon)
-    ATTRIB(MapSource, entryName, .string, name)
-    METHOD(MapSource, getEntry, entity(int))
+    METHOD(MapSource, getEntry, entity(int, void(string, string)))
+    entity MapSource_getEntry(int i, void(string, string) returns)
+    {
+        if (!MapInfo_Get_ByID(i)) return DataSource_false;
+        string path = strcat("/maps/", MapInfo_Map_bspname);
+        string img = draw_PictureSize(path) ? path : "nopreview_map";
+        if (returns) returns(MapInfo_Map_titlestring, img);
+        MapInfo_ClearTemps();
+        return DataSource_true;
+    }
     METHOD(MapSource, indexOf, int(string))
+    int MapSource_indexOf(string s)
+    {
+        MapInfo_FindName(s);
+        return MapInfo_FindName_firstResult;
+    }
     METHOD(MapSource, reload, int(string))
+    int MapSource_reload(string s)
+    {
+        MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 0, 0, 0);
+        if (s) MapInfo_FilterString(s);
+        return MapInfo_count;
+    }
+    METHOD(MapSource, destroy, void(entity))
+    void MapSource_destroy(entity this) { MapInfo_Shutdown(); }
 ENDCLASS(MapSource)
 
 #include "dialog_media_guide_topics.qc"
@@ -167,40 +186,18 @@ void XonoticGuideTab_topicChangeNotify(entity, entity this)
     #undef TOPIC
     entries.source = found;
     entries.refilter(entries);
+    entries.setSelected(entries, 0);
 }
 
 void XonoticGuideTab_entryChangeNotify(entity, entity this)
 {
     entity desc = this.descriptionPane;
-    desc.setDescription(desc, sprintf("item %.0f\n", this.entryList.selectedItem));
+    entity entries = this.entryList;
+    entity e = entries.source.getEntry(entries.selectedItem, func_null);
+    string s = e.description;
+    string s2 = s ? s : _("No description");
+    if (cvar("developer")) { if (!s) s2 = sprintf("entity %i\n%s", e, s2); }
+    desc.setDescription(desc, s2);
 }
-
-entity MapSource_getEntry(int i)
-{
-    if (!MapInfo_Get_ByID(i)) return NULL;
-    static entity e;
-    if (!e) e = new(entry);
-    e.name = MapInfo_Map_titlestring;
-    string path = strcat("/maps/", MapInfo_Map_bspname);
-    string img = draw_PictureSize(path) ? path : "nopreview_map";
-    e.icon = img;
-    MapInfo_ClearTemps();
-    return e;
-}
-
-int MapSource_indexOf(string s)
-{
-    MapInfo_FindName(s);
-    return MapInfo_FindName_firstResult;
-}
-
-int MapSource_reload(string s)
-{
-    MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 0, 0, 0);
-    if (s) MapInfo_FilterString(s);
-    return MapInfo_count;
-}
-
-void MapSource_destroy(entity this) { MapInfo_Shutdown(); }
 
 #endif

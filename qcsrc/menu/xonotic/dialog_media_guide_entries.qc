@@ -39,48 +39,48 @@ ENDCLASS(XonoticEntryList)
 
 #ifdef IMPLEMENTATION
 
+string XonoticEntryList_cb_name, XonoticEntryList_cb_icon;
+void XonoticEntryList_cb(string _name, string _icon) {
+    XonoticEntryList_cb_name = _name;
+    XonoticEntryList_cb_icon = _icon;
+}
+
 void XonoticEntryList_drawListBoxItem(entity this, int i, vector absSize, bool isSelected, bool isFocused)
 {
     if (!this.source) return;
-    entity entry = this.source.getEntry(i);
-    if (!entry) return;
-
+    if (!this.source.getEntry(i, XonoticEntryList_cb)) return;
+    string name = XonoticEntryList_cb_name;
+    string icon = XonoticEntryList_cb_icon;
     if (isSelected) {
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
     } else if (isFocused) {
         this.focusedItemAlpha = getFadedAlpha(this.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, this.focusedItemAlpha);
     }
-    string icon = strcat(this.source.entryIconPrefix, entry.(this.source.entryIcon));
-    string name = entry.(this.source.entryName);
-    string s = draw_TextShortenToWidth(strdecolorize(name), this.columnNameSize, 0, this.realFontSize);
     draw_Picture(this.columnPreviewOrigin * eX, icon, this.columnPreviewSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
-    draw_Text(this.realUpperMargin1 * eY + (this.columnNameOrigin + 0.00 * (this.columnNameSize - draw_TextWidth(s, 0, this.realFontSize))) * eX, s, this.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
+    string s = draw_TextShortenToWidth(strdecolorize(name), this.columnNameSize, 0, this.realFontSize);
+    draw_Text(this.realUpperMargin1 * eY + this.columnNameOrigin * eX, s, this.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
 }
 
 float XonoticEntryList_keyDown(entity this, float scan, float ascii, float shift)
 {
     if (this.nItems <= 0) {
         return super.keyDown(this, scan, ascii, shift);
-    } else if (scan == K_BACKSPACE) {
-        if (time < this.typeToSearchTime) {
-            string save = substring(this.typeToSearchString, 0, strlen(this.typeToSearchString) - 1);
-            if (this.typeToSearchString) strunzone(this.typeToSearchString);
-            this.typeToSearchString = strzone(save);
-            this.typeToSearchTime = time + 0.5;
-            if (strlen(this.typeToSearchString)) {
-                int idx = this.source.indexOf(this.typeToSearchString);
-                if (idx >= 0) this.setSelected(this, idx);
-            }
+    } else if ((ascii >= 32 || scan == K_BACKSPACE) && this.source.indexOf) {
+        string save;
+        if (scan == K_BACKSPACE) {
+            save = substring(this.typeToSearchString, 0, strlen(this.typeToSearchString) - 1);
+        } else {
+            string ch = chr(ascii);
+            save = (time > this.typeToSearchTime) ? ch : strcat(this.typeToSearchString, ch);
         }
-    } else if (ascii >= 32 && ascii != 127) {
-        string ch = chr(ascii);
-        string save = (time > this.typeToSearchTime) ? ch : strcat(this.typeToSearchString, ch);
         if (this.typeToSearchString) strunzone(this.typeToSearchString);
         this.typeToSearchString = strzone(save);
         this.typeToSearchTime = time + 0.5;
-        int idx = this.source.indexOf(this.typeToSearchString);
-        if (idx >= 0) this.setSelected(this, idx);
+        if (strlen(this.typeToSearchString)) {
+            int idx = this.source.indexOf(this.typeToSearchString);
+            if (idx >= 0) this.setSelected(this, idx);
+        }
     } else if (shift & S_CTRL && scan == 'f') {
         this.parent.setFocus(this.parent, this.stringFilterBox);
     } else if (shift & S_CTRL && scan == 'u') {
@@ -100,7 +100,9 @@ void XonoticEntryList_refilter(entity this)
     }
     this.nItems = this.source.reload(this.stringFilter);
     for (int i = 0, n = this.nItems; i < n; ++i) {
-        draw_PreloadPicture(this.source.getEntry(i).(this.source.entryIcon));
+        if (this.source.getEntry(i, XonoticEntryList_cb)) {
+            draw_PreloadPicture(XonoticEntryList_cb_icon);
+        }
     }
 }
 

@@ -35,17 +35,24 @@ void XonoticTopicList_clickListBoxItem(entity this, float i, vector where)
     m_play_click_sound(MENU_SOUND_SELECT);
 }
 
+string XonoticTopicList_cb_name, XonoticTopicList_cb_icon;
+void XonoticTopicList_cb(string _name, string _icon) {
+    XonoticTopicList_cb_name = _name;
+    XonoticTopicList_cb_icon = _icon;
+}
+
 void XonoticTopicList_drawListBoxItem(entity this, int i, vector absSize, bool isSelected, bool isFocused)
 {
+    if (!this.source) return;
+    if (!this.source.getEntry(i, XonoticTopicList_cb)) return;
+    string icon = XonoticTopicList_cb_icon;
+    string name = XonoticTopicList_cb_name;
     if (isSelected) {
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
     } else if (isFocused) {
         this.focusedItemAlpha = getFadedAlpha(this.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
         draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, this.focusedItemAlpha);
     }
-    entity entry = this.source.getEntry(i);
-    string icon = strcat(this.source.entryIconPrefix, entry.(this.source.entryIcon));
-    string name = entry.(this.source.entryName);
     draw_Picture(this.columnIconOrigin * eX, icon, this.columnIconSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
     vector save_fontscale = draw_fontscale;
     float f = draw_CondensedFontFactor(name, false, this.realFontSize, 1);

@@ -54,7 +54,7 @@ entity __spawn(string _classname, string _sourceFile, int _sourceLine) {
 .entity vtblbase;
 
 void RegisterClasses() { }
-ACCUMULATE_FUNCTION(__static_init, RegisterClasses)
+STATIC_INIT(RegisterClasses) { RegisterClasses(); }
 
 #define VTBL(cname, base) \
     INIT_STATIC(cname); \
@@ -116,7 +116,9 @@ ACCUMULATE_FUNCTION(__static_init, RegisterClasses)
 #define spawn_static(this)
 #define spawn_1(this)
 #define _vtbl NULL
-CLASS(Object, ); ENDCLASS(Object)
+CLASS(Object, );
+    ATTRIB(Object, description, string, string_null)
+ENDCLASS(Object)
 #undef spawn_static
 #undef spawn_1
 #undef _vtbl
