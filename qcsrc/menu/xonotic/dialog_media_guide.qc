@@ -6,6 +6,7 @@
     X(NEW(GametypeSource),  _("Gametypes"), "gametype_dm") \
     X(NEW(ItemSource),      _("Items"),     "gametype_kh") \
     X(NEW(BuffSource),      _("Buffs"),     "gametype_dom") \
+    X(NEW(NadeSource),      _("Nades"),     "gametype_ft") \
     X(NEW(MapSource),       _("Maps"),      "gametype_ctf") \
     if (cvar("developer")) X(NEW(DebugSource), _("Debug"), "gametype_ons") \
     /**/
@@ -107,6 +108,18 @@ CLASS(BuffSource, DataSource)
     METHOD(BuffSource, reload, int(string))
     int BuffSource_reload(string filter) { return BUFFS_COUNT; }
 ENDCLASS(BuffSource)
+
+#include "../../common/nades.qh"
+CLASS(NadeSource, DataSource)
+    METHOD(NadeSource, getEntry, entity(int, void(string, string)))
+    entity NadeSource_getEntry(int i, void(string, string) returns) {
+        entity e = NADES[i];
+        if (returns) e.display(e, returns);
+        return e;
+    }
+    METHOD(NadeSource, reload, int(string))
+    int NadeSource_reload(string filter) { return NADES_COUNT; }
+ENDCLASS(NadeSource)
 
 CLASS(MapSource, DataSource)
     METHOD(MapSource, getEntry, entity(int, void(string, string)))
