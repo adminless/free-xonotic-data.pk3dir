@@ -34,6 +34,7 @@ CLASS(DebugSource, DataSource)
         for (entity it = NULL; (it = nextent(it)); ) {
             if (!it.instanceOfObject) continue;
             if (it.instanceOfItem) continue;
+            if (it.classname == "Object") continue;
             if (it.classname == "vtbl") continue;
             if (!tail) {
                 tail = head = it;

@@ -16,7 +16,7 @@ CLASS(DataSource, Object)
     entity DataSource_true;
     entity DataSource_false;
     INIT_STATIC(DataSource) {
-        DataSource_true = new(dummy);
+        DataSource_true = NEW(Object);
         DataSource_false = NULL;
     }
 ENDCLASS(DataSource)

@@ -118,7 +118,16 @@ STATIC_INIT(RegisterClasses) { RegisterClasses(); }
 #define _vtbl NULL
 CLASS(Object, );
     METHOD(Object, describe, string(entity this))
-    string Object_describe(entity this) { return _("No description"); }
+    string Object_describe(entity this) {
+        string s = _("No description");
+        if (cvar("developer")) {
+            for (int i = 0, n = numentityfields(); i < n; ++i) {
+                string value = getentityfieldstring(i, this);
+                if (value != "") s = sprintf("%s\n%s = %s", s, entityfieldname(i), value);
+            }
+    	}
+        return s;
+    }
     METHOD(Object, display, void(entity this, void(string name, string icon) returns))
     void Object_display(entity this, void(string name, string icon) returns) { returns(sprintf("entity %i", this), "nopreview_menuskin"); }
 ENDCLASS(Object)
