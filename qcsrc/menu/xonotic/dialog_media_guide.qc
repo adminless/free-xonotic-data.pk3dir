@@ -53,7 +53,10 @@ CLASS(DebugSource, DataSource)
             if (strstrofs(sprintf("entity %i", e), DebugSource_activeFilter, 0) < 0) continue;
             if (idx++ == i) break;
         }
-        if (returns) returns(sprintf("entity %i", e), "");
+        if (returns) {
+            if (e.display) e.display(e, returns);
+            else returns(sprintf("entity %i", e), "");
+        }
         return e;
     }
     METHOD(DebugSource, reload, int(string))
@@ -71,11 +74,10 @@ ENDCLASS(DebugSource)
 
 #include "../../common/mapinfo.qh"
 CLASS(GametypeSource, DataSource)
-    .string mdl, message;
     METHOD(GametypeSource, getEntry, entity(int, void(string, string)))
     entity GametypeSource_getEntry(int i, void(string, string) returns) {
         entity e = MAPINFO_TYPES[i];
-        if (returns) returns(e.message, strcat("gametype_", e.mdl));
+        if (returns) e.display(e, returns);
         return e;
     }
     METHOD(GametypeSource, reload, int(string))
@@ -194,10 +196,9 @@ void XonoticGuideTab_entryChangeNotify(entity, entity this)
     entity desc = this.descriptionPane;
     entity entries = this.entryList;
     entity e = entries.source.getEntry(entries.selectedItem, func_null);
-    string s = e.description;
-    string s2 = s ? s : _("No description");
-    if (cvar("developer")) { if (!s) s2 = sprintf("entity %i\n%s", e, s2); }
-    desc.setDescription(desc, s2);
+    string s = e.describe ? e.describe(e) : _("No description");
+    if (cvar("developer")) { s = sprintf("entity %i\n%s", e, s); }
+    desc.setDescription(desc, s);
 }
 
 #endif
