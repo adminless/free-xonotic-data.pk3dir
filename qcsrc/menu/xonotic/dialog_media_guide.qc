@@ -4,6 +4,7 @@
 
 #define TOPICS(X) \
     X(NEW(GametypeSource),  _("Gametypes"), "gametype_dm") \
+    X(NEW(WeaponSource),    _("Weapons"),   "gametype_ka") \
     X(NEW(ItemSource),      _("Items"),     "gametype_kh") \
     X(NEW(BuffSource),      _("Buffs"),     "gametype_dom") \
     X(NEW(NadeSource),      _("Nades"),     "gametype_ft") \
@@ -120,6 +121,18 @@ CLASS(NadeSource, DataSource)
     METHOD(NadeSource, reload, int(string))
     int NadeSource_reload(string filter) { return NADES_COUNT; }
 ENDCLASS(NadeSource)
+
+#include "../../common/weapons/all.qh"
+CLASS(WeaponSource, DataSource)
+    METHOD(WeaponSource, getEntry, entity(int, void(string, string)))
+    entity WeaponSource_getEntry(int i, void(string, string) returns) {
+        entity e = weapon_info[i];
+        if (returns) e.display(e, returns);
+        return e;
+    }
+    METHOD(WeaponSource, reload, int(string))
+    int WeaponSource_reload(string filter) { return WEP_COUNT; }
+ENDCLASS(WeaponSource)
 
 CLASS(MapSource, DataSource)
     METHOD(MapSource, getEntry, entity(int, void(string, string)))
