@@ -44,6 +44,7 @@ weapons/projectile.qc // TODO
 
 ../common/animdecide.qc
 ../common/buffs.qc
+../common/effects.qc
 ../common/mapinfo.qc
 ../common/movetypes/include.qc
 ../common/nades.qc
@@ -77,3 +78,5 @@ weapons/projectile.qc // TODO
 ../warpzonelib/common.qc
 ../warpzonelib/mathlib.qc
 ../warpzonelib/util_server.qc
+
+../../mod/client/progs.inc

@@ -162,11 +162,7 @@ void bumb_gunner_exit(float _exitflag)
 	self.hud            = HUD_NORMAL;
 	self.switchweapon   = self.vehicle.switchweapon;
 
-    vh_player = self;
-    vh_vehicle = self.vehicle;
-    MUTATOR_CALLHOOK(VehicleExit);
-    self = vh_player;
-    self.vehicle = vh_vehicle;
+    MUTATOR_CALLHOOK(VehicleExit, self, self.vehicle);
 
 	self.vehicle.vehicle_hudmodel.viewmodelforclient = self.vehicle;
 
@@ -250,11 +246,7 @@ float bumb_gunner_enter()
 
 	CSQCVehicleSetup(other, other.hud);
 
-    vh_player = other;
-    vh_vehicle = _gun;
-    MUTATOR_CALLHOOK(VehicleEnter);
-    other = vh_player;
-    _gun = vh_vehicle;
+    MUTATOR_CALLHOOK(VehicleEnter, other, _gun);
 
 	return true;
 }
@@ -474,7 +466,7 @@ float bumb_pilot_frame()
 					if((teamplay && trace_ent.team == pilot.team) || !teamplay)
 					{
 
-						if(trace_ent.vehicle_flags & VHF_ISVEHICLE)
+						if(IS_VEHICLE(trace_ent))
 						{
 							if(autocvar_g_vehicle_bumblebee_healgun_sps && trace_ent.vehicle_health <= trace_ent.tur_health)
 								trace_ent.vehicle_shield = min(trace_ent.vehicle_shield + autocvar_g_vehicle_bumblebee_healgun_sps * frametime, trace_ent.tur_head.tur_health);
@@ -492,7 +484,7 @@ float bumb_pilot_frame()
 
 							trace_ent.health = min(trace_ent.health + autocvar_g_vehicle_bumblebee_healgun_hps * frametime, autocvar_g_vehicle_bumblebee_healgun_hmax);
 						}
-						else if(trace_ent.turrcaps_flags & TFL_TURRCAPS_ISTURRET)
+						else if(IS_TURRET(trace_ent))
 						{
 							if(trace_ent.health  <= trace_ent.tur_health && autocvar_g_vehicle_bumblebee_healgun_hps)
 								trace_ent.health = min(trace_ent.health + autocvar_g_vehicle_bumblebee_healgun_hps * frametime, trace_ent.tur_health);
@@ -630,7 +622,7 @@ void bumb_blowup()
 				 DEATH_VH_BUMB_DEATH, world);
 
 	sound(self, CH_SHOTS, "weapons/rocket_impact.wav", VOL_BASE, ATTEN_NORM);
-	pointparticles(particleeffectnum("explosion_large"), randomvec() * 80 + (self.origin + '0 0 100'), '0 0 0', 1);
+	Send_Effect("explosion_large", randomvec() * 80 + (self.origin + '0 0 100'), '0 0 0', 1);
 
 	if(self.owner.deadflag == DEAD_DYING)
 		self.owner.deadflag = DEAD_DEAD;
@@ -646,7 +638,7 @@ void bumb_diethink()
 	if(random() < 0.1)
 	{
 		sound(self, CH_SHOTS, "weapons/rocket_impact.wav", VOL_BASE, ATTEN_NORM);
-		pointparticles(particleeffectnum("explosion_small"), randomvec() * 80 + (self.origin + '0 0 100'), '0 0 0', 1);
+		Send_Effect("explosion_small", randomvec() * 80 + (self.origin + '0 0 100'), '0 0 0', 1);
 	}
 
 	self.nextthink = time + 0.1;
@@ -694,7 +686,7 @@ void bumb_die()
 	_body.owner = self;
 	_body.enemy = self.enemy;
 
-	pointparticles(particleeffectnum("explosion_medium"), findbetterlocation(self.origin, 16), '0 0 0', 1);
+	Send_Effect("explosion_medium", findbetterlocation(self.origin, 16), '0 0 0', 1);
 
 	self.health			= 0;
 	self.event_damage	= func_null;
