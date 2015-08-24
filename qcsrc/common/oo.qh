@@ -98,7 +98,8 @@ STATIC_INIT(RegisterClasses) { RegisterClasses(); }
 #define METHOD(cname, name, prototype)      \
     class(cname) .prototype name;           \
     prototype cname##_##name;               \
-    INIT_STATIC(cname) { this.name = cname##_##name; }
+    INIT_STATIC(cname) { this.name = cname##_##name; } \
+    prototype cname##_##name
 
 #define ATTRIB(cname, name, type, val)      \
     class(cname) .type name;                \
@@ -117,8 +118,7 @@ STATIC_INIT(RegisterClasses) { RegisterClasses(); }
 #define spawn_1(this)
 #define _vtbl NULL
 CLASS(Object, );
-    METHOD(Object, describe, string(entity this))
-    string Object_describe(entity this) {
+    METHOD(Object, describe, string(entity this)) {
         string s = _("No description");
         if (cvar("developer")) {
             for (int i = 0, n = numentityfields(); i < n; ++i) {
@@ -128,8 +128,9 @@ CLASS(Object, );
     	}
         return s;
     }
-    METHOD(Object, display, void(entity this, void(string name, string icon) returns))
-    void Object_display(entity this, void(string name, string icon) returns) { returns(sprintf("entity %i", this), "nopreview_map"); }
+    METHOD(Object, display, void(entity this, void(string name, string icon) returns)) {
+        returns(sprintf("entity %i", this), "nopreview_map");
+    }
 ENDCLASS(Object)
 #undef spawn_static
 #undef spawn_1

@@ -12,8 +12,7 @@
     if (cvar("developer")) X(NEW(DebugSource), _("Debug"), "gametype_ons") \
     /**/
 CLASS(TopicSource, DataSource)
-    METHOD(TopicSource, getEntry, entity(int, void(string, string)))
-    entity TopicSource_getEntry(int i, void(string, string) returns) {
+    METHOD(TopicSource, getEntry, entity(int i, void(string, string) returns)) {
         int idx = 0;
         #define TOPIC(src, name, icon) if (idx++ == i) { if (returns) returns(name, icon); return DataSource_true; }
         TOPICS(TOPIC);
@@ -21,8 +20,7 @@ CLASS(TopicSource, DataSource)
         if (returns) returns("undefined", "undefined");
         return DataSource_false;
     }
-    METHOD(TopicSource, reload, int(string))
-    int TopicSource_reload(string filter) {
+    METHOD(TopicSource, reload, int(string filter)) {
         int n = 0;
         #define TOPIC(src, name, icon) n++;
         TOPICS(TOPIC);
@@ -50,8 +48,7 @@ CLASS(DebugSource, DataSource)
         return head;
     }
     string DebugSource_activeFilter = "";
-    METHOD(DebugSource, getEntry, entity(int, void(string, string)))
-    entity DebugSource_getEntry(int i, void(string, string) returns) {
+    METHOD(DebugSource, getEntry, entity(int i, void(string, string) returns)) {
         int idx = 0;
         entity e;
         for (e = find_debug(); e; e = e.nextdebug) {
@@ -61,8 +58,7 @@ CLASS(DebugSource, DataSource)
         if (returns) e.display(e, returns);
         return e;
     }
-    METHOD(DebugSource, reload, int(string))
-    int DebugSource_reload(string filter) {
+    METHOD(DebugSource, reload, int(string filter)) {
         DebugSource_activeFilter = filter;
         int idx = 0;
         entity e;
@@ -76,68 +72,56 @@ ENDCLASS(DebugSource)
 
 #include "../../common/mapinfo.qh"
 CLASS(GametypeSource, DataSource)
-    METHOD(GametypeSource, getEntry, entity(int, void(string, string)))
-    entity GametypeSource_getEntry(int i, void(string, string) returns) {
+    METHOD(GametypeSource, getEntry, entity(int i, void(string, string) returns)) {
         entity e = MAPINFO_TYPES[i];
         if (returns) e.display(e, returns);
         return e;
     }
-    METHOD(GametypeSource, reload, int(string))
-    int GametypeSource_reload(string filter) { return MAPINFO_TYPE_COUNT; }
+    METHOD(GametypeSource, reload, int(string filter)) { return MAPINFO_TYPE_COUNT; }
 ENDCLASS(GametypeSource)
 
 #include "../../common/items/all.qh"
 CLASS(ItemSource, DataSource)
-    METHOD(ItemSource, getEntry, entity(int, void(string, string)))
-    entity ItemSource_getEntry(int i, void(string, string) returns) {
+    METHOD(ItemSource, getEntry, entity(int i, void(string, string) returns)) {
         entity e = ITEMS[i];
         if (returns) e.display(e, returns);
         return e;
     }
-    METHOD(ItemSource, reload, int(string))
-    int ItemSource_reload(string filter) { return ITEM_COUNT; }
+    METHOD(ItemSource, reload, int(string filter)) { return ITEM_COUNT; }
 ENDCLASS(ItemSource)
 
 #include "../../common/buffs.qh"
 CLASS(BuffSource, DataSource)
-    METHOD(BuffSource, getEntry, entity(int, void(string, string)))
-    entity BuffSource_getEntry(int i, void(string, string) returns) {
+    METHOD(BuffSource, getEntry, entity(int i, void(string, string) returns)) {
         entity e = BUFFS[i];
         if (returns) e.display(e, returns);
         return e;
     }
-    METHOD(BuffSource, reload, int(string))
-    int BuffSource_reload(string filter) { return BUFFS_COUNT; }
+    METHOD(BuffSource, reload, int(string filter)) { return BUFFS_COUNT; }
 ENDCLASS(BuffSource)
 
 #include "../../common/nades.qh"
 CLASS(NadeSource, DataSource)
-    METHOD(NadeSource, getEntry, entity(int, void(string, string)))
-    entity NadeSource_getEntry(int i, void(string, string) returns) {
+    METHOD(NadeSource, getEntry, entity(int i, void(string, string) returns)) {
         entity e = NADES[i];
         if (returns) e.display(e, returns);
         return e;
     }
-    METHOD(NadeSource, reload, int(string))
-    int NadeSource_reload(string filter) { return NADES_COUNT; }
+    METHOD(NadeSource, reload, int(string filter)) { return NADES_COUNT; }
 ENDCLASS(NadeSource)
 
 #include "../../common/weapons/all.qh"
 CLASS(WeaponSource, DataSource)
-    METHOD(WeaponSource, getEntry, entity(int, void(string, string)))
-    entity WeaponSource_getEntry(int i, void(string, string) returns) {
+    METHOD(WeaponSource, getEntry, entity(int i, void(string, string) returns)) {
         entity e = weapon_info[i];
         if (returns) e.display(e, returns);
         return e;
     }
-    METHOD(WeaponSource, reload, int(string))
-    int WeaponSource_reload(string filter) { return WEP_COUNT; }
+    METHOD(WeaponSource, reload, int(string filter)) { return WEP_COUNT; }
 ENDCLASS(WeaponSource)
 
 CLASS(MapSource, DataSource)
-    METHOD(MapSource, getEntry, entity(int, void(string, string)))
-    entity MapSource_getEntry(int i, void(string, string) returns)
-    {
+    METHOD(MapSource, getEntry, entity(int i, void(string, string) returns)) {
         if (!MapInfo_Get_ByID(i)) return DataSource_false;
         string path = strcat("/maps/", MapInfo_Map_bspname);
         string img = draw_PictureSize(path) ? path : "nopreview_map";
@@ -145,21 +129,16 @@ CLASS(MapSource, DataSource)
         MapInfo_ClearTemps();
         return DataSource_true;
     }
-    METHOD(MapSource, indexOf, int(string))
-    int MapSource_indexOf(string s)
-    {
+    METHOD(MapSource, indexOf, int(string s)) {
         MapInfo_FindName(s);
         return MapInfo_FindName_firstResult;
     }
-    METHOD(MapSource, reload, int(string))
-    int MapSource_reload(string s)
-    {
+    METHOD(MapSource, reload, int(string s)) {
         MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 0, 0, 0);
         if (s) MapInfo_FilterString(s);
         return MapInfo_count;
     }
-    METHOD(MapSource, destroy, void(entity))
-    void MapSource_destroy(entity this) { MapInfo_Shutdown(); }
+    METHOD(MapSource, destroy, void(entity this)) { MapInfo_Shutdown(); }
 ENDCLASS(MapSource)
 
 #include "dialog_media_guide_topics.qc"
@@ -170,9 +149,9 @@ CLASS(XonoticGuideTab, XonoticTab)
     ATTRIB(XonoticGuideTab, rows, float, 21)
     ATTRIB(XonoticGuideTab, columns, float, 6)
 	ATTRIB(XonoticGuideTab, intendedWidth, float, 1)
-    METHOD(XonoticGuideTab, fill, void(entity))
-    METHOD(XonoticGuideTab, topicChangeNotify, void(entity, entity))
-    METHOD(XonoticGuideTab, entryChangeNotify, void(entity, entity))
+    METHOD(XonoticGuideTab, fill, void(entity));
+    METHOD(XonoticGuideTab, topicChangeNotify, void(entity, entity));
+    METHOD(XonoticGuideTab, entryChangeNotify, void(entity, entity));
 
     ATTRIB(XonoticGuideTab, topicList, entity, NEW(XonoticTopicList, NEW(TopicSource)))
     ATTRIB(XonoticGuideTab, entryList, entity, NEW(XonoticEntryList, NULL))

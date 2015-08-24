@@ -6,13 +6,13 @@ CLASS(DataSource, Object)
      * returns `DataSource_false` if out of bounds
      * otherwise returns an entity or `DataSource_true`
      */
-    METHOD(DataSource, getEntry, entity(int i, void(string name, string icon) returns))
+    METHOD(DataSource, getEntry, entity(int i, void(string name, string icon) returns));
     /** return the index of the first match for `find`. optional */
-    METHOD(DataSource, indexOf, int(string find))
+    METHOD(DataSource, indexOf, int(string find));
     /** reload all entries matching `filter` returning how many matches were found */
-    METHOD(DataSource, reload, int(string filter))
+    METHOD(DataSource, reload, int(string filter));
     /** cleanup on shutdown. optional */
-    METHOD(DataSource, destroy, void(entity))
+    METHOD(DataSource, destroy, void(entity));
     entity DataSource_true;
     entity DataSource_false;
     INIT_STATIC(DataSource) {

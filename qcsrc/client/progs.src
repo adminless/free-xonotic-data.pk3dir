@@ -7,9 +7,11 @@
 announcer.qc
 bgmscript.qc
 casings.qc
+controlpoint.qc
 csqcmodel_hooks.qc
 damage.qc
 effects.qc
+generator.qc
 gibs.qc
 hook.qc
 hud.qc
@@ -28,7 +30,6 @@ scoreboard.qc
 shownames.qc
 sortlist.qc
 teamradar.qc
-tturrets.qc
 tuba.qc
 t_items.qc
 view.qc
@@ -36,9 +37,6 @@ wall.qc
 waypointsprites.qc
 
 command/all.qc
-
-vehicles/bumblebee.qc
-vehicles/all.qc
 
 weapons/projectile.qc // TODO
 
@@ -60,10 +58,13 @@ weapons/projectile.qc // TODO
 ../common/viewloc.qc
 
 ../common/items/all.qc
-
 ../common/monsters/all.qc
+../common/mutators/all.qc
+../common/vehicles/all.qc
+../common/weapons/all.qc
 
-../common/weapons/all.qc // TODO
+../common/turrets/cl_turrets.qc
+../common/turrets/turrets.qc
 
 ../common/triggers/include.qc
 

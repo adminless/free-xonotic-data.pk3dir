@@ -8,8 +8,9 @@
 #include "noise.qh"
 #include "scoreboard.qh"
 #include "shownames.qh"
-#include "vehicles/all.qh"
 #include "waypointsprites.qh"
+
+#include "mutators/events.qh"
 
 #include "../common/constants.qh"
 #include "../common/mapinfo.qh"
@@ -405,8 +406,6 @@ const float CAMERA_CHASE = 2;
 float reticle_type;
 string reticle_image;
 string NextFrameCommand;
-void CSQC_SPIDER_HUD();
-void CSQC_RAPTOR_HUD();
 
 vector freeze_org, freeze_ang;
 entity nightvision_noise, nightvision_noise2;
@@ -439,6 +438,8 @@ bool WantEventchase()
 		return true;
 	if(spectatee_status >= 0)
 	{
+		if(hud != HUD_NORMAL && (autocvar_cl_eventchase_vehicle || spectatee_status > 0))
+			return true;
 		if(autocvar_cl_eventchase_nexball && gametype == MAPINFO_TYPE_NEXBALL && !(WepSet_GetFromStat() & WepSet_FromWeapon(WEP_PORTO.m_id)))
 			return true;
 		if(autocvar_cl_eventchase_death && (getstati(STAT_HEALTH) <= 0))
@@ -802,6 +803,8 @@ void UpdateCrosshair()
 		wcross_alpha_prev = wcross_alpha;
 		wcross_color_prev = wcross_color;
 
+		MUTATOR_CALLHOOK(UpdateCrosshair);
+
 		wcross_scale *= 1 - autocvar__menu_alpha;
 		wcross_alpha *= 1 - autocvar__menu_alpha;
 		wcross_size = draw_getimagesize(wcross_name) * wcross_scale;
@@ -1007,6 +1010,8 @@ const int BUTTON_3 = 4;
 const int BUTTON_4 = 8;
 float cl_notice_run();
 float prev_myteam;
+int lasthud;
+float vh_notice_time;
 void CSQC_UpdateView(float w, float h)
 {
 	entity e;
@@ -1021,6 +1026,11 @@ void CSQC_UpdateView(float w, float h)
 	++framecount;
 
 	hud = getstati(STAT_HUD);
+
+	if(hud != HUD_NORMAL && lasthud == HUD_NORMAL)
+		vh_notice_time = time + autocvar_cl_vehicles_notify_time;
+
+	lasthud = hud;
 
 	if(autocvar__hud_showbinds_reload) // menu can set this one
 	{
@@ -1102,18 +1112,41 @@ void CSQC_UpdateView(float w, float h)
 	// event chase camera
 	if(autocvar_chase_active <= 0) // greater than 0 means it's enabled manually, and this code is skipped
 	{
-		if(WantEventchase())
+		float vehicle_chase = (hud != HUD_NORMAL && (autocvar_cl_eventchase_vehicle || spectatee_status > 0));
+		float ons_roundlost = (gametype == MAPINFO_TYPE_ONSLAUGHT && getstati(STAT_ROUNDLOST));
+		entity gen = world;
+
+		if(ons_roundlost)
+		{
+			entity e;
+			for(e = world; (e = find(e, classname, "onslaught_generator")); )
+			{
+				if(e.health <= 0)
+				{
+					gen = e;
+					break;
+				}
+			}
+			if(!gen)
+				ons_roundlost = FALSE; // don't enforce the 3rd person camera if there is no dead generator to show
+		}
+		if(WantEventchase() || (!autocvar_cl_orthoview && ons_roundlost))
 		{
 			eventchase_running = true;
 
 			// make special vector since we can't use view_origin (It is one frame old as of this code, it gets set later with the results this code makes.)
 			vector current_view_origin = (csqcplayer ? csqcplayer.origin : pmove_org);
+			if(ons_roundlost) { current_view_origin = gen.origin; }
 
 			// detect maximum viewoffset and use it
-			if(autocvar_cl_eventchase_viewoffset)
+			vector view_offset = autocvar_cl_eventchase_viewoffset;
+			if(vehicle_chase && autocvar_cl_eventchase_vehicle_viewoffset) { view_offset = autocvar_cl_eventchase_vehicle_viewoffset; }
+			if(ons_roundlost) { view_offset = autocvar_cl_eventchase_generator_viewoffset; }
+
+			if(view_offset)
 			{
-				WarpZone_TraceLine(current_view_origin, current_view_origin + autocvar_cl_eventchase_viewoffset + ('0 0 1' * autocvar_cl_eventchase_maxs.z), MOVE_WORLDONLY, self);
-				if(trace_fraction == 1) { current_view_origin += autocvar_cl_eventchase_viewoffset; }
+				WarpZone_TraceLine(current_view_origin, current_view_origin + view_offset + ('0 0 1' * autocvar_cl_eventchase_maxs.z), MOVE_WORLDONLY, self);
+				if(trace_fraction == 1) { current_view_origin += view_offset; }
 				else { current_view_origin.z += max(0, (trace_endpos.z - current_view_origin.z) - autocvar_cl_eventchase_maxs.z); }
 			}
 
@@ -1123,10 +1156,14 @@ void CSQC_UpdateView(float w, float h)
 			if(!autocvar_chase_active) { cvar_set("chase_active", "-1"); }
 
 			// make the camera smooth back
-			if(autocvar_cl_eventchase_speed && eventchase_current_distance < autocvar_cl_eventchase_distance)
-				eventchase_current_distance += autocvar_cl_eventchase_speed * (autocvar_cl_eventchase_distance - eventchase_current_distance) * frametime; // slow down the further we get
-			else if(eventchase_current_distance != autocvar_cl_eventchase_distance)
-				eventchase_current_distance = autocvar_cl_eventchase_distance;
+			float chase_distance = autocvar_cl_eventchase_distance;
+			if(vehicle_chase && autocvar_cl_eventchase_vehicle_distance) { chase_distance = autocvar_cl_eventchase_vehicle_distance; }
+			if(ons_roundlost) { chase_distance = autocvar_cl_eventchase_generator_distance; }
+
+			if(autocvar_cl_eventchase_speed && eventchase_current_distance < chase_distance)
+				eventchase_current_distance += autocvar_cl_eventchase_speed * (chase_distance - eventchase_current_distance) * frametime; // slow down the further we get
+			else if(eventchase_current_distance != chase_distance)
+				eventchase_current_distance = chase_distance;
 
 			makevectors(view_angles);
 
@@ -1798,20 +1835,14 @@ void CSQC_UpdateView(float w, float h)
 
 	if(autocvar__hud_configure)
 		HUD_Panel_Mouse();
+	else
+		HUD_Radar_Mouse();
 
     if(hud && !intermission)
-    {
-        if(hud == HUD_SPIDERBOT)
-            CSQC_SPIDER_HUD();
-        else if(hud == HUD_WAKIZASHI)
-            CSQC_WAKIZASHI_HUD();
-        else if(hud == HUD_RAPTOR)
-            CSQC_RAPTOR_HUD();
-        else if(hud == HUD_BUMBLEBEE)
-            CSQC_BUMBLE_HUD();
-        else if(hud == HUD_BUMBLEBEE_GUN)
-            CSQC_BUMBLE_GUN_HUD();
-    }
+    if(hud == HUD_BUMBLEBEE_GUN)
+    	CSQC_BUMBLE_GUN_HUD();
+    else
+		VEH_ACTION(hud, VR_HUD);
 
 	cl_notice_run();
 

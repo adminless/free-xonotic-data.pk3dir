@@ -15,11 +15,11 @@ CLASS(XonoticEntryList, XonoticListBox)
     ATTRIB(XonoticEntryList, typeToSearchString, string, string_null)
     ATTRIB(XonoticEntryList, typeToSearchTime, float, 0)
 
-    METHOD(XonoticEntryList, drawListBoxItem, void(entity, int, vector, bool, bool))
-    METHOD(XonoticEntryList, keyDown, float(entity, float, float, float))
-    METHOD(XonoticEntryList, refilter, void(entity))
-    METHOD(XonoticEntryList, resizeNotify, void(entity, vector, vector, vector, vector))
-    METHOD(XonoticEntryList, setSelected, void(entity, int))
+    METHOD(XonoticEntryList, drawListBoxItem, void(entity, int, vector, bool, bool));
+    METHOD(XonoticEntryList, keyDown, float(entity, float, float, float));
+    METHOD(XonoticEntryList, refilter, void(entity));
+    METHOD(XonoticEntryList, resizeNotify, void(entity, vector, vector, vector, vector));
+    METHOD(XonoticEntryList, setSelected, void(entity, int));
 
     ATTRIB(XonoticEntryList, source, DataSource, NULL)
 

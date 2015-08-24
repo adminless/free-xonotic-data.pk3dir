@@ -11,11 +11,11 @@ CLASS(XonoticTopicList, XonoticListBox)
     ATTRIB(XonoticTopicList, realUpperMargin, float, 0)
     ATTRIB(XonoticTopicList, rowsPerItem, float, 3)
 
-    METHOD(XonoticTopicList, clickListBoxItem, void(entity, float, vector))
-    METHOD(XonoticTopicList, drawListBoxItem, void(entity, int, vector, bool, bool))
-    METHOD(XonoticTopicList, keyDown, bool(entity, float, float, float))
-    METHOD(XonoticTopicList, resizeNotify, void(entity, vector, vector, vector, vector))
-    METHOD(XonoticTopicList, setSelected, void(entity, int))
+    METHOD(XonoticTopicList, clickListBoxItem, void(entity, float, vector));
+    METHOD(XonoticTopicList, drawListBoxItem, void(entity, int, vector, bool, bool));
+    METHOD(XonoticTopicList, keyDown, bool(entity, float, float, float));
+    METHOD(XonoticTopicList, resizeNotify, void(entity, vector, vector, vector, vector));
+    METHOD(XonoticTopicList, setSelected, void(entity, int));
 
     ATTRIB(XonoticTopicList, source, DataSource, NULL)
 

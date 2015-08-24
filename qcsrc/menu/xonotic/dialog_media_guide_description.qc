@@ -5,12 +5,10 @@ CLASS(XonoticGuideDescription, XonoticListBox)
 	ATTRIB(XonoticGuideDescription, rowsPerItem, float, 1)
 	ATTRIB(XonoticGuideDescription, selectionDoesntMatter, bool, true)
 
-    METHOD(XonoticGuideDescription, setDescription, void(entity, string))
+    METHOD(XonoticGuideDescription, setDescription, void(entity, string));
     ATTRIB(XonoticGuideDescription, description, string, string_null)
 
-	METHOD(XonoticGuideDescription, resizeNotify, void(entity, vector, vector, vector, vector))
-    void XonoticGuideDescription_resizeNotify(entity this, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
-    {
+	METHOD(XonoticGuideDescription, resizeNotify, void(entity this, vector relOrigin, vector relSize, vector absOrigin, vector absSize)) {
         super.resizeNotify(this, relOrigin, relSize, absOrigin, absSize);
 
         this.realFontSize_y = this.fontSize / (absSize.y * this.itemHeight);
@@ -46,9 +44,7 @@ CLASS(XonoticGuideDescription, XonoticListBox)
         this.nItems = tokenizebyseparator(wrapped, "\n");
     }
 
-    METHOD(XonoticGuideDescription, drawListBoxItem, void(entity, int, vector, bool, bool))
-    void XonoticGuideDescription_drawListBoxItem(entity this, int i, vector absSize, bool isSelected, bool isFocused)
-    {
+    METHOD(XonoticGuideDescription, drawListBoxItem, void(entity this, int i, vector absSize, bool isSelected, bool isFocused)) {
         tokenizebyseparator(this.descriptionWrapped, "\n");
         draw_Text(this.realUpperMargin * eY, argv(i), this.realFontSize, '1 1 1', 1, 0);
     }
