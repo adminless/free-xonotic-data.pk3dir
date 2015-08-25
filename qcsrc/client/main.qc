@@ -155,6 +155,8 @@ void CSQC_Init(void)
 	CALL_ACCUMULATED_FUNCTION(RegisterHUD_Panels);
 	CALL_ACCUMULATED_FUNCTION(RegisterEffects);
 
+	initialize_minigames();
+
 	WaypointSprite_Load();
 
 	// precaches
@@ -229,6 +231,9 @@ void Shutdown(void)
 		if (!(calledhooks & HOOK_END))
 			localcmd("\ncl_hook_gameend\n");
 	}
+
+	deactivate_minigame();
+	HUD_MinigameMenu_Close();
 }
 
 .float has_team;
@@ -376,6 +381,9 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 		return true;
 
 	if (MapVote_InputEvent(bInputType, nPrimary, nSecondary))
+		return true;
+
+	if (HUD_Minigame_InputEvent(bInputType, nPrimary, nSecondary))
 		return true;
 
 	if(menu_visible && menu_action)
@@ -845,6 +853,12 @@ void CSQC_Ent_Update(float bIsNewEntity)
 	self.enttype = t;
 	switch(t)
 	{
+		case ENT_CLIENT_MUTATOR: {
+			int mutID = ReadMutator();
+			if (!MUTATOR_CALLHOOK(CSQC_Ent_Update, mutID, bIsNewEntity))
+			error(sprintf("Unknown mutator type in CSQC_Ent_Update (mutID: %d, edict: %d, classname: %s)\n", mutID, num_for_edict(self), self.classname));
+			break;
+		}
 		case ENT_CLIENT_ENTCS: Ent_ReadEntCS(); break;
 		case ENT_CLIENT_SCORES: Ent_ReadPlayerScore(); break;
 		case ENT_CLIENT_TEAMSCORES: Ent_ReadTeamScore(); break;
@@ -853,7 +867,6 @@ void CSQC_Ent_Update(float bIsNewEntity)
 		case ENT_CLIENT_LASER: Ent_Laser(); break;
 		case ENT_CLIENT_NAGGER: Ent_Nagger(); break;
 		case ENT_CLIENT_ELIMINATEDPLAYERS: Ent_EliminatedPlayers(); break;
-		case ENT_CLIENT_WAYPOINT: Ent_WaypointSprite(); break;
 		case ENT_CLIENT_RADARLINK: Ent_RadarLink(); break;
 		case ENT_CLIENT_PROJECTILE: Ent_Projectile(); break;
 		case ENT_CLIENT_GIBSPLASH: Ent_GibSplash(bIsNewEntity); break;
@@ -886,6 +899,7 @@ void CSQC_Ent_Update(float bIsNewEntity)
 		case ENT_CLIENT_SPAWNEVENT: Ent_ReadSpawnEvent(bIsNewEntity); break;
 		case ENT_CLIENT_NOTIFICATION: Read_Notification(bIsNewEntity); break;
 		case ENT_CLIENT_HEALING_ORB: ent_healer(); break;
+		case ENT_CLIENT_MINIGAME: ent_read_minigame(); break;
 		case ENT_CLIENT_VIEWLOC: ent_viewloc(); break;
 		case ENT_CLIENT_VIEWLOC_TRIGGER: ent_viewloc_trigger(); break;
 		case ENT_CLIENT_LADDER: ent_func_ladder(); break;

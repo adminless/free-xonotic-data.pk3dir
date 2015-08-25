@@ -357,6 +357,15 @@ void reset_map(float dorespawn)
 
 	MUTATOR_CALLHOOK(reset_map_global);
 
+	// ALL the times need to be reset before .reset()ing each item
+	// since Item_Reset schedules respawn of superweapons and powerups
+	for(self = world; (self = nextent(self)); )
+	if(IS_NOT_A_CLIENT(self))
+	{
+		if(self.reset)
+			Item_ItemsTime_SetTime(self, 0);
+	}
+
 	for(self = world; (self = nextent(self)); )
 	if(IS_NOT_A_CLIENT(self))
 	{
@@ -383,6 +392,8 @@ void reset_map(float dorespawn)
 			continue;
 		}
 	}
+
+	Item_ItemsTime_SetTimesForAllPlayers();
 
 	FOR_EACH_PLAYER(self)
 	if(self.frozen)
@@ -461,8 +472,6 @@ void ReadyRestart_force()
 
 	// disable the warmup global for the server
 	warmup_stage = 0; // once the game is restarted the game is in match stage
-
-	Item_ItemsTime_ResetTimes();
 
 	// reset the .ready status of all players (also spectators)
 	FOR_EACH_REALCLIENT(tmp_player) { tmp_player.ready = 0; }
