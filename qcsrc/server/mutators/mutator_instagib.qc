@@ -42,6 +42,14 @@ void instagib_ammocheck()
 		instagib_stop_countdown(self);
 	else if (self.ammo_cells > 0 || (self.items & IT_UNLIMITED_WEAPON_AMMO) || (self.flags & FL_GODMODE))
 		instagib_stop_countdown(self);
+	else if(autocvar_g_rm && autocvar_g_rm_laser)
+	{
+		if(!self.instagib_needammo)
+		{
+			Send_Notification(NOTIF_ONE, self, MSG_CENTER, CENTER_INSTAGIB_DOWNGRADE);
+			self.instagib_needammo = true;
+		}
+	}
 	else
 	{
 		self.instagib_needammo = true;
@@ -241,12 +249,17 @@ MUTATOR_HOOKFUNCTION(instagib_PlayerDamage)
 
 	if(IS_PLAYER(frag_target))
 	{
-		if ((frag_deathtype == DEATH_FALL)  ||
-			(frag_deathtype == DEATH_DROWN) ||
-			(frag_deathtype == DEATH_SLIME) ||
-			(frag_deathtype == DEATH_LAVA))
+		if(frag_deathtype == DEATH_FALL)
+			frag_damage = 0; // never count fall damage
+
+		if(!autocvar_g_instagib_damagedbycontents)
+		switch(frag_deathtype)
 		{
-			frag_damage = 0;
+			case DEATH_DROWN:
+			case DEATH_SLIME:
+			case DEATH_LAVA:
+				frag_damage = 0;
+				break;
 		}
 
 		if(IS_PLAYER(frag_attacker))
@@ -327,11 +340,13 @@ MUTATOR_HOOKFUNCTION(instagib_FilterItem)
 
 	if(self.weapon == WEP_DEVASTATOR.m_id || self.weapon == WEP_VORTEX.m_id)
 	{
-		entity e = spawn();
+		entity e = spawn(), oldself;
 		setorigin(e, self.origin);
-		entity oldself;
 		oldself = self;
 		self = e;
+		self.noalign = oldself.noalign;
+		self.cnt = oldself.cnt;
+		self.team = oldself.team;
 		spawnfunc_item_minst_cells();
 		self = oldself;
 		return true;
