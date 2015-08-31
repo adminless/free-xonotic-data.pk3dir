@@ -8,6 +8,8 @@
     X(NEW(ItemSource),      _("Items"),     "gametype_kh") \
     X(NEW(BuffSource),      _("Buffs"),     "gametype_dom") \
     X(NEW(NadeSource),      _("Nades"),     "gametype_ft") \
+    X(NEW(MonsterSource),   _("Monsters"),  "gametype_lms") \
+    X(NEW(VehicleSource),   _("Vehicles"),  "gametype_rc") \
     X(NEW(MapSource),       _("Maps"),      "gametype_ctf") \
     if (cvar("developer")) X(NEW(DebugSource), _("Debug"), "gametype_ons") \
     /**/
@@ -36,6 +38,8 @@ CLASS(DebugSource, DataSource)
         for (entity it = NULL; (it = nextent(it)); ) {
             if (!it.instanceOfObject) continue;
             if (it.instanceOfItem) continue;
+            if (it.instanceOfAnimHost) continue;
+            if (it.instanceOfDataSource) continue;
             if (it.classname == "Object") continue;
             if (it.classname == "vtbl") continue;
             if (!tail) {
@@ -70,55 +74,36 @@ CLASS(DebugSource, DataSource)
     }
 ENDCLASS(DebugSource)
 
+#define REGISTRY_SOURCE(id, arr, count) \
+CLASS(id, DataSource) \
+    METHOD(id, getEntry, entity(int i, void(string, string) returns)) { \
+        entity e = arr[i]; \
+        if (returns) e.display(e, returns); \
+        return e; \
+    } \
+    METHOD(id, reload, int(string filter)) { return count; } \
+ENDCLASS(id)
+
 #include "../../common/mapinfo.qh"
-CLASS(GametypeSource, DataSource)
-    METHOD(GametypeSource, getEntry, entity(int i, void(string, string) returns)) {
-        entity e = MAPINFO_TYPES[i];
-        if (returns) e.display(e, returns);
-        return e;
-    }
-    METHOD(GametypeSource, reload, int(string filter)) { return MAPINFO_TYPE_COUNT; }
-ENDCLASS(GametypeSource)
+REGISTRY_SOURCE(GametypeSource, MAPINFO_TYPES, MAPINFO_TYPE_COUNT)
 
 #include "../../common/items/all.qh"
-CLASS(ItemSource, DataSource)
-    METHOD(ItemSource, getEntry, entity(int i, void(string, string) returns)) {
-        entity e = ITEMS[i];
-        if (returns) e.display(e, returns);
-        return e;
-    }
-    METHOD(ItemSource, reload, int(string filter)) { return ITEM_COUNT; }
-ENDCLASS(ItemSource)
+REGISTRY_SOURCE(ItemSource, ITEMS, ITEM_COUNT)
 
 #include "../../common/buffs.qh"
-CLASS(BuffSource, DataSource)
-    METHOD(BuffSource, getEntry, entity(int i, void(string, string) returns)) {
-        entity e = BUFFS[i];
-        if (returns) e.display(e, returns);
-        return e;
-    }
-    METHOD(BuffSource, reload, int(string filter)) { return BUFFS_COUNT; }
-ENDCLASS(BuffSource)
+REGISTRY_SOURCE(BuffSource, BUFFS, BUFFS_COUNT)
 
 #include "../../common/nades.qh"
-CLASS(NadeSource, DataSource)
-    METHOD(NadeSource, getEntry, entity(int i, void(string, string) returns)) {
-        entity e = NADES[i];
-        if (returns) e.display(e, returns);
-        return e;
-    }
-    METHOD(NadeSource, reload, int(string filter)) { return NADES_COUNT; }
-ENDCLASS(NadeSource)
+REGISTRY_SOURCE(NadeSource, NADES, NADES_COUNT)
 
 #include "../../common/weapons/all.qh"
-CLASS(WeaponSource, DataSource)
-    METHOD(WeaponSource, getEntry, entity(int i, void(string, string) returns)) {
-        entity e = weapon_info[i];
-        if (returns) e.display(e, returns);
-        return e;
-    }
-    METHOD(WeaponSource, reload, int(string filter)) { return WEP_COUNT; }
-ENDCLASS(WeaponSource)
+REGISTRY_SOURCE(WeaponSource, weapon_info, WEP_COUNT)
+
+#include "../../common/monsters/all.qh"
+REGISTRY_SOURCE(MonsterSource, monster_info, MON_COUNT)
+
+#include "../../common/vehicles/all.qh"
+REGISTRY_SOURCE(VehicleSource, vehicle_info, VEH_COUNT)
 
 CLASS(MapSource, DataSource)
     METHOD(MapSource, getEntry, entity(int i, void(string, string) returns)) {
