@@ -23,6 +23,7 @@
 #include "../common/items/all.qc"
 #include "../common/monsters/all.qc"
 #include "../common/mutators/all.qc"
+#include "../common/turrets/all.qc"
 #include "../common/vehicles/all.qc"
 #include "../common/weapons/all.qc"
 

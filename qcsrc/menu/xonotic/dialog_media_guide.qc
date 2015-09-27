@@ -10,7 +10,7 @@
     X(NEW(NadeSource),      _("Nades"),     "gametype_ft") \
     X(NEW(MonsterSource),   _("Monsters"),  "gametype_lms") \
     X(NEW(VehicleSource),   _("Vehicles"),  "gametype_rc") \
-    X(NEW(VehicleSource),   _("Turrets"),   "gametype_as") \
+    X(NEW(TurretSource),    _("Turrets"),   "gametype_as") \
     X(NEW(MutatorSource),   _("Mutators"),  "gametype_nb") \
     X(NEW(MapSource),       _("Maps"),      "gametype_ctf") \
     if (cvar("developer")) X(NEW(DebugSource), _("Debug"), "gametype_ons") \
@@ -106,6 +106,9 @@ REGISTRY_SOURCE(MonsterSource, monster_info, MON_COUNT)
 
 #include "../../common/vehicles/all.qh"
 REGISTRY_SOURCE(VehicleSource, vehicle_info, VEH_COUNT)
+
+#include "../../common/turrets/all.qh"
+REGISTRY_SOURCE(TurretSource, turret_info, TUR_COUNT)
 
 #include "../../common/mutators/base.qh"
 REGISTRY_SOURCE(MutatorSource, MUTATORS, MUTATORS_COUNT)
