@@ -48,7 +48,7 @@ RPC_SETTINGS(WEP_ADD_CVAR, WEP_ADD_PROP)
 void spawnfunc_weapon_rpc() { weapon_defaultspawnfunc(WEP_RPC.m_id); }
 
 void W_RocketPropelledChainsaw_Explode()
-{
+{SELFPARAM();
 	self.event_damage = func_null;
 	self.takedamage = DAMAGE_NO;
 
@@ -58,7 +58,7 @@ void W_RocketPropelledChainsaw_Explode()
 }
 
 void W_RocketPropelledChainsaw_Touch (void)
-{
+{SELFPARAM();
 	if(WarpZone_Projectile_Touch())
 		if(wasfreed(self))
 			return;
@@ -67,7 +67,7 @@ void W_RocketPropelledChainsaw_Touch (void)
 }
 
 void W_RocketPropelledChainsaw_Damage (entity inflictor, entity attacker, float damage, int deathtype, vector hitloc, vector force)
-{
+{SELFPARAM();
 	if (self.health <= 0)
 		return;
 
@@ -81,7 +81,7 @@ void W_RocketPropelledChainsaw_Damage (entity inflictor, entity attacker, float 
 }
 
 void W_RocketPropelledChainsaw_Think()
-{
+{SELFPARAM();
 	if(self.cnt <= time)
 	{
 		remove(self);
@@ -103,12 +103,12 @@ void W_RocketPropelledChainsaw_Think()
 }
 
 void W_RocketPropelledChainsaw_Attack (void)
-{
+{SELFPARAM();
 	entity missile = spawn(); //WarpZone_RefSys_SpawnSameRefSys(self);
 	entity flash = spawn ();
 
 	W_DecreaseAmmo(WEP_CVAR(rpc, ammo));
-	W_SetupShot_ProjectileSize (self, '-3 -3 -3', '3 3 3', false, 5, W_Sound("rocket_fire"), CH_WEAPON_A, WEP_CVAR(rpc, damage));
+	W_SetupShot_ProjectileSize (self, '-3 -3 -3', '3 3 3', false, 5, SND(ROCKET_FIRE), CH_WEAPON_A, WEP_CVAR(rpc, damage));
 	Send_Effect(EFFECT_ROCKET_MUZZLEFLASH, w_shotorg, w_shotdir * 1000, 1);
 	PROJECTILE_MAKETRIGGER(missile);
 
@@ -138,7 +138,7 @@ void W_RocketPropelledChainsaw_Attack (void)
 
 	CSQCProjectile(missile, true, PROJECTILE_RPC, false);
 
-	setmodel(flash, "models/flash.md3"); // precision set below
+	setmodel(flash, MDL_RPC_MUZZLEFLASH); // precision set below
 	SUB_SetFade (flash, time, 0.1);
 	flash.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 	W_AttachToShotorg(flash, '5 0 0');
@@ -148,7 +148,7 @@ void W_RocketPropelledChainsaw_Attack (void)
 }
 
 bool W_RocketPropelledChainsaw(int req)
-{
+{SELFPARAM();
 	float ammo_amount = false;
 	switch(req)
 	{
@@ -182,11 +182,6 @@ bool W_RocketPropelledChainsaw(int req)
 		}
 		case WR_INIT:
 		{
-			precache_model ("models/flash.md3");
-			precache_model(W_Model("g_ok_rl.md3"));
-			precache_model(W_Model("v_ok_rl.md3"));
-			precache_model(W_Model("h_ok_rl.iqm"));
-			precache_sound (W_Sound("rocket_fire"));
 			RPC_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
 		}
@@ -207,7 +202,7 @@ bool W_RocketPropelledChainsaw(int req)
 		}
 		case WR_RELOAD:
 		{
-			W_Reload(WEP_CVAR(rpc, ammo), W_Sound("reload"));
+			W_Reload(WEP_CVAR(rpc, ammo), SND(RELOAD));
 			return true;
 		}
 		case WR_SUICIDEMESSAGE:
@@ -234,7 +229,7 @@ bool W_RocketPropelledChainsaw(int req)
 
 #ifdef CSQC
 bool W_RocketPropelledChainsaw(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:
@@ -243,13 +238,12 @@ bool W_RocketPropelledChainsaw(int req)
 			org2 = w_org + w_backoff * 12;
 			pointparticles(particleeffectnum(EFFECT_ROCKET_EXPLODE), org2, '0 0 0', 1);
 			if(!w_issilent)
-				sound(self, CH_SHOTS, W_Sound("rocket_impact"), VOL_BASE, ATTEN_NORM);
+				sound(self, CH_SHOTS, SND_ROCKET_IMPACT, VOL_BASE, ATTEN_NORM);
 
 			return true;
 		}
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("rocket_impact"));
 			return true;
 		}
 		case WR_ZOOMRETICLE:

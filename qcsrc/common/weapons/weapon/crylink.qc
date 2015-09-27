@@ -107,7 +107,7 @@ void W_Crylink_Dequeue(entity e)
 }
 
 void W_Crylink_Reset(void)
-{
+{SELFPARAM();
 	W_Crylink_Dequeue(self);
 	remove(self);
 }
@@ -224,7 +224,7 @@ vector W_Crylink_LinkJoin(entity e, float jspeed)
 }
 
 void W_Crylink_LinkJoinEffect_Think(void)
-{
+{SELFPARAM();
 	// is there at least 2 projectiles very close?
 	entity e, p;
 	float n;
@@ -289,7 +289,7 @@ float W_Crylink_Touch_WouldHitFriendly(entity projectile, float rad)
 
 // NO bounce protection, as bounces are limited!
 void W_Crylink_Touch(void)
-{
+{SELFPARAM();
 	float finalhit;
 	float f;
 	float isprimary = !(self.projectiledeathtype & HITTYPE_SECONDARY);
@@ -334,13 +334,13 @@ void W_Crylink_Touch(void)
 }
 
 void W_Crylink_Fadethink(void)
-{
+{SELFPARAM();
 	W_Crylink_Dequeue(self);
 	remove(self);
 }
 
 void W_Crylink_Attack(void)
-{
+{SELFPARAM();
 	float counter, shots;
 	entity proj, prevproj, firstproj;
 	vector s;
@@ -354,7 +354,7 @@ void W_Crylink_Attack(void)
 	if(WEP_CVAR_PRI(crylink, joinexplode))
 		maxdmg += WEP_CVAR_PRI(crylink, joinexplode_damage);
 
-	W_SetupShot(self, false, 2, W_Sound("crylink_fire"), CH_WEAPON_A, maxdmg);
+	W_SetupShot(self, false, 2, SND(CRYLINK_FIRE), CH_WEAPON_A, maxdmg);
 	forward = v_forward;
 	right = v_right;
 	up = v_up;
@@ -449,7 +449,7 @@ void W_Crylink_Attack(void)
 }
 
 void W_Crylink_Attack2(void)
-{
+{SELFPARAM();
 	float counter, shots;
 	entity proj, prevproj, firstproj;
 	vector s;
@@ -463,7 +463,7 @@ void W_Crylink_Attack2(void)
 	if(WEP_CVAR_SEC(crylink, joinexplode))
 		maxdmg += WEP_CVAR_SEC(crylink, joinexplode_damage);
 
-	W_SetupShot(self, false, 2, W_Sound("crylink_fire2"), CH_WEAPON_A, maxdmg);
+	W_SetupShot(self, false, 2, SND(CRYLINK_FIRE2), CH_WEAPON_A, maxdmg);
 	forward = v_forward;
 	right = v_right;
 	up = v_up;
@@ -565,7 +565,7 @@ void W_Crylink_Attack2(void)
 }
 
 bool W_Crylink(int req)
-{
+{SELFPARAM();
 	float ammo_amount;
 	switch(req)
 	{
@@ -638,12 +638,6 @@ bool W_Crylink(int req)
 		}
 		case WR_INIT:
 		{
-			precache_model(W_Model("g_crylink.md3"));
-			precache_model(W_Model("v_crylink.md3"));
-			precache_model(W_Model("h_crylink.iqm"));
-			precache_sound(W_Sound("crylink_fire"));
-			precache_sound(W_Sound("crylink_fire2"));
-			precache_sound(W_Sound("crylink_linkjoin"));
 			CRYLINK_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
 		}
@@ -674,7 +668,7 @@ bool W_Crylink(int req)
 		}
 		case WR_RELOAD:
 		{
-			W_Reload(min(WEP_CVAR_PRI(crylink, ammo), WEP_CVAR_SEC(crylink, ammo)), W_Sound("reload"));
+			W_Reload(min(WEP_CVAR_PRI(crylink, ammo), WEP_CVAR_SEC(crylink, ammo)), SND(RELOAD));
 			return true;
 		}
 		case WR_SUICIDEMESSAGE:
@@ -691,7 +685,7 @@ bool W_Crylink(int req)
 #endif
 #ifdef CSQC
 bool W_Crylink(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:
@@ -702,21 +696,19 @@ bool W_Crylink(int req)
 			{
 				pointparticles(particleeffectnum(EFFECT_CRYLINK_IMPACT2), org2, '0 0 0', 1);
 				if(!w_issilent)
-					sound(self, CH_SHOTS, W_Sound("crylink_impact2"), VOL_BASE, ATTN_NORM);
+					sound(self, CH_SHOTS, SND_CRYLINK_IMPACT2, VOL_BASE, ATTN_NORM);
 			}
 			else
 			{
 				pointparticles(particleeffectnum(EFFECT_CRYLINK_IMPACT), org2, '0 0 0', 1);
 				if(!w_issilent)
-					sound(self, CH_SHOTS, W_Sound("crylink_impact"), VOL_BASE, ATTN_NORM);
+					sound(self, CH_SHOTS, SND_CRYLINK_IMPACT, VOL_BASE, ATTN_NORM);
 			}
 
 			return true;
 		}
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("crylink_impact2"));
-			precache_sound(W_Sound("crylink_impact"));
 			return true;
 		}
 		case WR_ZOOMRETICLE:

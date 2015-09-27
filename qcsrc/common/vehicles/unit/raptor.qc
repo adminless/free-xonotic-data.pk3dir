@@ -96,13 +96,13 @@ vector autocvar_g_vehicle_raptor_bouncepain;
 .entity bomb2;
 
 float raptor_altitude(float amax)
-{
+{SELFPARAM();
 	tracebox(self.origin, self.mins, self.maxs, self.origin - ('0 0 1' * amax), MOVE_WORLDONLY, self);
 	return vlen(self.origin - trace_endpos);
 }
 
 void raptor_bomblet_boom()
-{
+{SELFPARAM();
 	RadiusDamage (self, self.realowner, autocvar_g_vehicle_raptor_bomblet_damage,
 									autocvar_g_vehicle_raptor_bomblet_edgedamage,
 									autocvar_g_vehicle_raptor_bomblet_radius, world, world,
@@ -111,7 +111,7 @@ void raptor_bomblet_boom()
 }
 
 void raptor_bomblet_touch()
-{
+{SELFPARAM();
 	if(other == self.owner)
 		return;
 
@@ -121,7 +121,7 @@ void raptor_bomblet_touch()
 }
 
 void raptor_bomb_burst()
-{
+{SELFPARAM();
 	if(self.cnt > time)
 	if(autocvar_g_vehicle_raptor_bomblet_alt)
 	{
@@ -160,7 +160,7 @@ void raptor_bomb_burst()
 }
 
 void raptor_bombdrop()
-{
+{SELFPARAM();
 	entity bomb_1, bomb_2;
 
 	bomb_1 = spawn();
@@ -194,15 +194,15 @@ void raptor_bombdrop()
 
 
 void raptor_fire_cannon(entity gun, string tagname)
-{
-	vehicles_projectile(EFFECT_RAPTOR_MUZZLEFLASH.eent_eff_name, W_Sound("lasergun_fire"),
+{SELFPARAM();
+	vehicles_projectile(EFFECT_RAPTOR_MUZZLEFLASH.eent_eff_name, SND(LASERGUN_FIRE),
 						   gettaginfo(gun, gettagindex(gun, tagname)), normalize(v_forward + randomvec() * autocvar_g_vehicle_raptor_cannon_spread) * autocvar_g_vehicle_raptor_cannon_speed,
 						   autocvar_g_vehicle_raptor_cannon_damage, autocvar_g_vehicle_raptor_cannon_radius, autocvar_g_vehicle_raptor_cannon_force,  0,
 						   DEATH_VH_RAPT_CANNON, PROJECTILE_RAPTORCANNON, 0, true, true, self.owner);
 }
 
 void raptor_land()
-{
+{SELFPARAM();
 	float hgt;
 
 	hgt = raptor_altitude(512);
@@ -226,11 +226,11 @@ void raptor_land()
 
 	self.nextthink  = time;
 
-	CSQCMODEL_AUTOUPDATE();
+	CSQCMODEL_AUTOUPDATE(self);
 }
 
 void raptor_exit(float eject)
-{
+{SELFPARAM();
 	vector spot;
 	self.tur_head.exteriormodeltoclient = world;
 
@@ -277,19 +277,19 @@ void raptor_exit(float eject)
 }
 
 void raptor_flare_touch()
-{
+{SELFPARAM();
 	remove(self);
 }
 
 void raptor_flare_damage(entity inflictor, entity attacker, float damage, int deathtype, vector hitloc, vector force)
-{
+{SELFPARAM();
 	self.health -= damage;
 	if(self.health <= 0)
 		remove(self);
 }
 
 void raptor_flare_think()
-{
+{SELFPARAM();
 	self.nextthink = time + 0.1;
 	entity _missile = findchainentity(enemy, self.owner);
 	while(_missile)
@@ -306,7 +306,7 @@ void raptor_flare_think()
 }
 
 float raptor_frame()
-{
+{SELFPARAM();
 	entity player, raptor;
 	float ftmp = 0;
 	vector df;
@@ -320,7 +320,7 @@ float raptor_frame()
 
 	player = self;
 	raptor = self.vehicle;
-	self   = raptor;
+	setself(raptor);
 
 	vehicles_painframe();
 	/*
@@ -334,22 +334,22 @@ float raptor_frame()
 	if(self.sound_nexttime < time)
 	{
 		self.sound_nexttime = time + 7.955812;
-		//sound (self.tur_head, CH_TRIGGER_SINGLE, "vehicles/raptor_fly.wav", 1 - ftmp,   ATTEN_NORM );
-		sound (self, CH_TRIGGER_SINGLE, "vehicles/raptor_speed.wav", 1, ATTEN_NORM);
+		//sound (self.tur_head, CH_TRIGGER_SINGLE, SND_VEH_RAPTOR_FLY, 1 - ftmp,   ATTEN_NORM );
+		sound (self, CH_TRIGGER_SINGLE, SND_VEH_RAPTOR_SPEED, 1, ATTEN_NORM);
 		self.wait = ftmp;
 	}
 	/*
 	else if(fabs(ftmp - self.wait) > 0.2)
 	{
-		sound (self.tur_head, CH_TRIGGER_SINGLE, "", 1 - ftmp,   ATTEN_NORM );
-		sound (self, CH_TRIGGER_SINGLE, "", ftmp, ATTEN_NORM);
+		sound (self.tur_head, CH_TRIGGER_SINGLE, SND_Null, 1 - ftmp,   ATTEN_NORM );
+		sound (self, CH_TRIGGER_SINGLE, SND_Null, ftmp, ATTEN_NORM);
 		self.wait = ftmp;
 	}
 	*/
 
 	if(raptor.deadflag != DEAD_NO)
 	{
-		self = player;
+		setself(player);
 		player.BUTTON_ATCK = player.BUTTON_ATCK2 = 0;
 		return 1;
 	}
@@ -588,7 +588,7 @@ float raptor_frame()
 			for(i = 0; i < 3; ++i)
 			{
 			_flare = spawn();
-			setmodel(_flare, "models/runematch/rune.mdl");
+			setmodel(_flare, MDL_VEH_RAPTOR_FLARE);
 			_flare.effects = EF_LOWPRECISION | EF_FLAME;
 			_flare.scale = 0.5;
 			setorigin(_flare, self.origin - '0 0 16');
@@ -629,7 +629,7 @@ float raptor_frame()
 		}
 
 		if(_incomming)
-			sound(self, CH_PAIN_SINGLE, "vehicles/missile_alarm.wav", VOL_BASE, ATTEN_NONE);
+			sound(self, CH_PAIN_SINGLE, SND_VEH_MISSILE_ALARM, VOL_BASE, ATTEN_NONE);
 
 		self.bomb1.cnt = time + 1;
 	}
@@ -642,26 +642,26 @@ float raptor_frame()
 
 	player.BUTTON_ATCK = player.BUTTON_ATCK2 = player.BUTTON_CROUCH = 0;
 
-	self = player;
+	setself(player);
 	return 1;
 }
 
 float raptor_takeoff()
-{
+{SELFPARAM();
 	entity player, raptor;
 
 	player = self;
 	raptor = self.vehicle;
-	self   = raptor;
+	setself(raptor);
 
 	self.nextthink = time;
-	CSQCMODEL_AUTOUPDATE();
+	CSQCMODEL_AUTOUPDATE(self);
 	self.nextthink = 0; // will this work?
 
 	if(self.sound_nexttime < time)
 	{
 		self.sound_nexttime = time + 7.955812; //soundlength("vehicles/raptor_fly.wav");
-		sound (self, CH_TRIGGER_SINGLE, "vehicles/raptor_speed.wav", VOL_VEHICLEENGINE, ATTEN_NORM);
+		sound (self, CH_TRIGGER_SINGLE, SND_VEH_RAPTOR_SPEED, VOL_VEHICLEENGINE, ATTEN_NORM);
 	}
 
 	// Takeoff sequense
@@ -698,12 +698,12 @@ float raptor_takeoff()
 		VEHICLE_UPDATE_PLAYER(player, shield, raptor);
 
 	player.BUTTON_ATCK = player.BUTTON_ATCK2 = player.BUTTON_CROUCH = 0;
-	self = player;
+	setself(player);
 	return 1;
 }
 
 void raptor_blowup()
-{
+{SELFPARAM();
 	self.deadflag	= DEAD_DEAD;
 	self.vehicle_exit(VHEF_NORMAL);
 	RadiusDamage (self, self.enemy, 250, 15, 250, world, world, 250, DEATH_VH_RAPT_DEATH, world);
@@ -721,31 +721,31 @@ void raptor_blowup()
 }
 
 void raptor_diethink()
-{
+{SELFPARAM();
 	if(time >= self.wait)
 		self.think = raptor_blowup;
 
 	if(random() < 0.05)
 	{
-		sound (self, CH_SHOTS, W_Sound("rocket_impact"), VOL_BASE, ATTEN_NORM);
+		sound (self, CH_SHOTS, SND_ROCKET_IMPACT, VOL_BASE, ATTEN_NORM);
 		Send_Effect(EFFECT_EXPLOSION_SMALL, randomvec() * 80 + (self.origin + '0 0 100'), '0 0 0', 1);
 	}
 	self.nextthink = time;
 
-	CSQCMODEL_AUTOUPDATE();
+	CSQCMODEL_AUTOUPDATE(self);
 }
 
 // If we dont do this ever now and then, the raptors rotors
 // stop working, presumably due to angle overflow. cute.
 void raptor_rotor_anglefix()
-{
+{SELFPARAM();
 	self.gun1.angles_y = anglemods(self.gun1.angles_y);
 	self.gun2.angles_y = anglemods(self.gun2.angles_y);
 	self.nextthink = time + 15;
 }
 
 float raptor_impulse(float _imp)
-{
+{SELFPARAM();
 	switch(_imp)
 	{
 		case 1:
@@ -790,13 +790,13 @@ float raptor_impulse(float _imp)
 }
 
 void spawnfunc_vehicle_raptor()
-{
+{SELFPARAM();
 	if(!autocvar_g_vehicle_raptor) { remove(self); return; }
 	if(!vehicle_initialize(VEH_RAPTOR, false)) { remove(self); return; }
 }
 
 float v_raptor(float req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case VR_IMPACT:
@@ -872,11 +872,11 @@ float v_raptor(float req)
 				self.gun1  = spawn();
 				self.gun2  = spawn();
 
-				setmodel(self.bomb1,"models/vehicles/clusterbomb_folded.md3");
-				setmodel(self.bomb2,"models/vehicles/clusterbomb_folded.md3");
-				setmodel(self.gun1, "models/vehicles/raptor_gun.dpm");
-				setmodel(self.gun2, "models/vehicles/raptor_gun.dpm");
-				setmodel(self.tur_head, "models/vehicles/raptor_body.dpm");
+				setmodel(self.bomb1, MDL_VEH_RAPTOR_CB_FOLDED);
+				setmodel(self.bomb2, MDL_VEH_RAPTOR_CB_FOLDED);
+				setmodel(self.gun1, MDL_VEH_RAPTOR_GUN);
+				setmodel(self.gun2, MDL_VEH_RAPTOR_GUN);
+				setmodel(self.tur_head, MDL_VEH_RAPTOR_TAIL);
 
 				setattachment(self.bomb1, self, "bombmount_left");
 				setattachment(self.bomb2, self, "bombmount_right");
@@ -903,7 +903,7 @@ float v_raptor(float req)
 
 				spinner = spawn();
 				spinner.owner = self;
-				setmodel(spinner,"models/vehicles/spinner.dpm");
+				setmodel(spinner, MDL_VEH_RAPTOR_PROP);
 				setattachment(spinner, self, "engine_left");
 				spinner.movetype = MOVETYPE_NOCLIP;
 				spinner.avelocity = '0 90 0';
@@ -911,7 +911,7 @@ float v_raptor(float req)
 
 				spinner = spawn();
 				spinner.owner = self;
-				setmodel(spinner,"models/vehicles/spinner.dpm");
+				setmodel(spinner, MDL_VEH_RAPTOR_PROP);
 				setattachment(spinner, self, "engine_right");
 				spinner.movetype = MOVETYPE_NOCLIP;
 				spinner.avelocity = '0 -90 0';
@@ -969,17 +969,6 @@ float v_raptor(float req)
 		}
 		case VR_PRECACHE:
 		{
-			precache_model ("models/vehicles/raptor.dpm");
-			precache_model ("models/vehicles/raptor_gun.dpm");
-			precache_model ("models/vehicles/spinner.dpm");
-			precache_model ("models/vehicles/raptor_cockpit.dpm");
-			precache_model ("models/vehicles/clusterbomb_folded.md3");
-			precache_model ("models/vehicles/raptor_body.dpm");
-
-			precache_sound ("vehicles/raptor_fly.wav");
-			precache_sound ("vehicles/raptor_speed.wav");
-			precache_sound ("vehicles/missile_alarm.wav");
-
 			return true;
 		}
 	}
@@ -991,7 +980,7 @@ float v_raptor(float req)
 #ifdef CSQC
 
 void RaptorCBShellfragDraw()
-{
+{SELFPARAM();
 	if(wasfreed(self))
 		return;
 
@@ -1007,11 +996,11 @@ void RaptorCBShellfragDraw()
 }
 
 void RaptorCBShellfragToss(vector _org, vector _vel, vector _ang)
-{
+{SELFPARAM();
 	entity sfrag;
 
 	sfrag = spawn();
-	setmodel(sfrag, "models/vehicles/clusterbomb_fragment.md3");
+	setmodel(sfrag, MDL_VEH_RAPTOR_CB_FRAGMENT);
 	setorigin(sfrag, _org);
 
 	sfrag.move_movetype = MOVETYPE_BOUNCE;

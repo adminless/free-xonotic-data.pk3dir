@@ -8,4 +8,7 @@
 
 #include "../dpdefs/csprogsdefs.qh"
 
+#include "../common/models/models.qh"
+#include "../common/sounds/sounds.qh"
+
 #endif

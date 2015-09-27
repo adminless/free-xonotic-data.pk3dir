@@ -14,19 +14,19 @@ REGISTER_TURRET(
 .float fireflag;
 
 float turret_phaser_firecheck()
-{
+{SELFPARAM();
     if (self.fireflag != 0) return 0;
     return turret_firecheck();
 }
 
 void beam_think()
-{
+{SELFPARAM();
     if ((time > self.cnt) || (self.owner.deadflag != DEAD_NO))
     {
         self.owner.attack_finished_single = time + self.owner.shot_refire;
         self.owner.fireflag = 2;
         self.owner.tur_head.frame = 10;
-        sound (self, CH_SHOTS_SINGLE, "misc/null.wav", VOL_BASE, ATTEN_NORM);
+        sound (self, CH_SHOTS_SINGLE, SND_Null, VOL_BASE, ATTEN_NORM);
         remove(self);
         return;
     }
@@ -36,33 +36,31 @@ void beam_think()
     if (time - self.shot_spread > 0)
     {
         self.shot_spread = time + 2;
-        sound (self, CH_SHOTS_SINGLE, "turrets/phaser.wav", VOL_BASE, ATTEN_NORM);
+        sound (self, CH_SHOTS_SINGLE, SND_TUR_PHASER, VOL_BASE, ATTEN_NORM);
     }
 
 
     self.nextthink = time + self.ticrate;
 
     self.owner.attack_finished_single = time + frametime;
-    entity oldself;
-    oldself = self;
-    self = self.owner;
+    setself(self.owner);
     FireImoBeam (   self.tur_shotorg,
                     self.tur_shotorg + self.tur_shotdir_updated * self.target_range,
                     '-1 -1 -1' * self.shot_radius,
                     '1 1 1' * self.shot_radius,
                     self.shot_force,
-                    oldself.shot_dmg,
+                    this.shot_dmg,
                     0.75,
                     DEATH_TURRET_PHASER);
-    self = oldself;
+    setself(this);
     self.scale = vlen(self.owner.tur_shotorg - trace_endpos) / 256;
 
 }
 
-void spawnfunc_turret_phaser() { if(!turret_initialize(TUR_PHASER)) remove(self); }
+void spawnfunc_turret_phaser() { SELFPARAM(); if(!turret_initialize(TUR_PHASER)) remove(self); }
 
 float t_phaser(float req)
-{
+{SELFPARAM();
     switch(req)
     {
         case TR_ATTACK:
@@ -71,7 +69,7 @@ float t_phaser(float req)
 
             beam = spawn();
             beam.ticrate = 0.1; //autocvar_sys_ticrate;
-            setmodel(beam,"models/turrets/phaser_beam.md3");
+            setmodel(beam, MDL_TUR_PHASER_BEAM);
             beam.effects = EF_LOWPRECISION;
             beam.solid = SOLID_NOT;
             beam.think = beam_think;
@@ -85,7 +83,7 @@ float t_phaser(float req)
             beam.enemy = self.enemy;
             beam.bot_dodge = true;
             beam.bot_dodgerating = beam.shot_dmg;
-            sound (beam, CH_SHOTS_SINGLE, "turrets/phaser.wav", VOL_BASE, ATTEN_NORM);
+            sound (beam, CH_SHOTS_SINGLE, SND_TUR_PHASER, VOL_BASE, ATTEN_NORM);
             self.fireflag = 1;
 
             beam.attack_finished_single = self.attack_finished_single;
@@ -93,7 +91,7 @@ float t_phaser(float req)
 
             setattachment(beam,self.tur_head,"tag_fire");
 
-            soundat (self, trace_endpos, CH_SHOTS, W_Sound("neximpact"), VOL_BASE, ATTEN_NORM);
+            soundat (self, trace_endpos, CH_SHOTS, SND(NEXIMPACT), VOL_BASE, ATTEN_NORM);
 
             if (self.tur_head.frame == 0)
                 self.tur_head.frame = 1;
@@ -139,10 +137,6 @@ float t_phaser(float req)
         }
         case TR_PRECACHE:
         {
-            precache_model ("models/turrets/base.md3");
-            precache_model ("models/turrets/phaser.md3");
-            precache_model ("models/turrets/phaser_beam.md3");
-            precache_sound ("turrets/phaser.wav");
             return true;
         }
     }

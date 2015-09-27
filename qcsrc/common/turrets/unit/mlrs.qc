@@ -11,10 +11,10 @@ REGISTER_TURRET(
 );
 #else
 #ifdef SVQC
-void spawnfunc_turret_mlrs() { if(!turret_initialize(TUR_MLRS)) remove(self); }
+void spawnfunc_turret_mlrs() { SELFPARAM(); if(!turret_initialize(TUR_MLRS)) remove(self); }
 
 float t_mlrs(float req)
-{
+{SELFPARAM();
     switch(req)
     {
         case TR_ATTACK:
@@ -22,7 +22,7 @@ float t_mlrs(float req)
             entity missile;
 
             turret_tag_fire_update();
-            missile = turret_projectile(W_Sound("rocket_fire"), 6, 10, DEATH_TURRET_MLRS, PROJECTILE_ROCKET, TRUE, TRUE);
+            missile = turret_projectile(SND(ROCKET_FIRE), 6, 10, DEATH_TURRET_MLRS, PROJECTILE_ROCKET, TRUE, TRUE);
             missile.nextthink = time + max(self.tur_impacttime,(self.shot_radius * 2) / self.shot_speed);
             missile.missile_flags = MIF_SPLASH;
             te_explosion (missile.origin);
@@ -58,8 +58,6 @@ float t_mlrs(float req)
         }
         case TR_PRECACHE:
         {
-            precache_model ("models/turrets/base.md3");
-            precache_model ("models/turrets/mlrs.md3");
             return true;
         }
     }

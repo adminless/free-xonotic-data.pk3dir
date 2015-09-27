@@ -60,7 +60,7 @@ void spawnfunc_weapon_mortar(void) { weapon_defaultspawnfunc(WEP_MORTAR.m_id); }
 void spawnfunc_weapon_grenadelauncher(void) { spawnfunc_weapon_mortar(); }
 
 void W_Mortar_Grenade_Explode(void)
-{
+{SELFPARAM();
 	if(other.takedamage == DAMAGE_AIM)
 		if(IS_PLAYER(other))
 			if(DIFF_TEAM(self.realowner, other))
@@ -80,7 +80,7 @@ void W_Mortar_Grenade_Explode(void)
 }
 
 void W_Mortar_Grenade_Explode2(void)
-{
+{SELFPARAM();
 	if(other.takedamage == DAMAGE_AIM)
 		if(IS_PLAYER(other))
 			if(DIFF_TEAM(self.realowner, other))
@@ -101,7 +101,7 @@ void W_Mortar_Grenade_Explode2(void)
 
 
 void W_Mortar_Grenade_Damage(entity inflictor, entity attacker, float damage, int deathtype, vector hitloc, vector force)
-{
+{SELFPARAM();
 	if(self.health <= 0)
 		return;
 
@@ -115,7 +115,7 @@ void W_Mortar_Grenade_Damage(entity inflictor, entity attacker, float damage, in
 }
 
 void W_Mortar_Grenade_Think1(void)
-{
+{SELFPARAM();
 	self.nextthink = time;
 	if(time > self.cnt)
 	{
@@ -129,7 +129,7 @@ void W_Mortar_Grenade_Think1(void)
 }
 
 void W_Mortar_Grenade_Touch1(void)
-{
+{SELFPARAM();
 	PROJECTILE_TOUCH;
 	if(other.takedamage == DAMAGE_AIM || WEP_CVAR_PRI(mortar, type) == 0) // always explode when hitting a player, or if normal mortar projectile
 	{
@@ -137,27 +137,14 @@ void W_Mortar_Grenade_Touch1(void)
 	}
 	else if(WEP_CVAR_PRI(mortar, type) == 1) // bounce
 	{
-		float r;
-		r = random() * 6;
-		if(r < 1)
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce1"), VOL_BASE, ATTN_NORM);
-		else if(r < 2)
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce2"), VOL_BASE, ATTN_NORM);
-		else if(r < 3)
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce3"), VOL_BASE, ATTN_NORM);
-		else if(r < 4)
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce4"), VOL_BASE, ATTN_NORM);
-		else if(r < 5)
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce5"), VOL_BASE, ATTN_NORM);
-		else
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce6"), VOL_BASE, ATTN_NORM);
+		spamsound(self, CH_SHOTS, SND(GRENADE_BOUNCE_RANDOM()), VOL_BASE, ATTN_NORM);
 		Send_Effect(EFFECT_HAGAR_BOUNCE, self.origin, self.velocity, 1);
 		self.projectiledeathtype |= HITTYPE_BOUNCE;
 		self.gl_bouncecnt += 1;
 	}
 	else if(WEP_CVAR_PRI(mortar, type) == 2 && (!other || (other.takedamage != DAMAGE_AIM && other.movetype == MOVETYPE_NONE))) // stick
 	{
-		spamsound(self, CH_SHOTS, W_Sound("grenade_stick"), VOL_BASE, ATTN_NORM);
+		spamsound(self, CH_SHOTS, SND(GRENADE_STICK), VOL_BASE, ATTN_NORM);
 
 		// let it stick whereever it is
 		self.oldvelocity = self.velocity;
@@ -174,7 +161,7 @@ void W_Mortar_Grenade_Touch1(void)
 }
 
 void W_Mortar_Grenade_Touch2(void)
-{
+{SELFPARAM();
 	PROJECTILE_TOUCH;
 	if(other.takedamage == DAMAGE_AIM || WEP_CVAR_SEC(mortar, type) == 0) // always explode when hitting a player, or if normal mortar projectile
 	{
@@ -182,20 +169,7 @@ void W_Mortar_Grenade_Touch2(void)
 	}
 	else if(WEP_CVAR_SEC(mortar, type) == 1) // bounce
 	{
-		float r;
-		r = random() * 6;
-		if(r < 1)
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce1"), VOL_BASE, ATTN_NORM);
-		else if(r < 2)
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce2"), VOL_BASE, ATTN_NORM);
-		else if(r < 3)
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce3"), VOL_BASE, ATTN_NORM);
-		else if(r < 4)
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce4"), VOL_BASE, ATTN_NORM);
-		else if(r < 5)
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce5"), VOL_BASE, ATTN_NORM);
-		else
-			spamsound(self, CH_SHOTS, W_Sound("grenade_bounce6"), VOL_BASE, ATTN_NORM);
+		spamsound(self, CH_SHOTS, SND(GRENADE_BOUNCE_RANDOM()), VOL_BASE, ATTN_NORM);
 		Send_Effect(EFFECT_HAGAR_BOUNCE, self.origin, self.velocity, 1);
 		self.projectiledeathtype |= HITTYPE_BOUNCE;
 		self.gl_bouncecnt += 1;
@@ -206,7 +180,7 @@ void W_Mortar_Grenade_Touch2(void)
 	}
 	else if(WEP_CVAR_SEC(mortar, type) == 2 && (!other || (other.takedamage != DAMAGE_AIM && other.movetype == MOVETYPE_NONE))) // stick
 	{
-		spamsound(self, CH_SHOTS, W_Sound("grenade_stick"), VOL_BASE, ATTN_NORM);
+		spamsound(self, CH_SHOTS, SND(GRENADE_STICK), VOL_BASE, ATTN_NORM);
 
 		// let it stick whereever it is
 		self.oldvelocity = self.velocity;
@@ -223,12 +197,12 @@ void W_Mortar_Grenade_Touch2(void)
 }
 
 void W_Mortar_Attack(void)
-{
+{SELFPARAM();
 	entity gren;
 
 	W_DecreaseAmmo(WEP_CVAR_PRI(mortar, ammo));
 
-	W_SetupShot_ProjectileSize(self, '-3 -3 -3', '3 3 3', false, 4, W_Sound("grenade_fire"), CH_WEAPON_A, WEP_CVAR_PRI(mortar, damage));
+	W_SetupShot_ProjectileSize(self, '-3 -3 -3', '3 3 3', false, 4, SND(GRENADE_FIRE), CH_WEAPON_A, WEP_CVAR_PRI(mortar, damage));
 	w_shotdir = v_forward; // no TrueAim for grenades please
 
 	Send_Effect(EFFECT_GRENADE_MUZZLEFLASH, w_shotorg, w_shotdir * 1000, 1);
@@ -272,12 +246,12 @@ void W_Mortar_Attack(void)
 }
 
 void W_Mortar_Attack2(void)
-{
+{SELFPARAM();
 	entity gren;
 
 	W_DecreaseAmmo(WEP_CVAR_SEC(mortar, ammo));
 
-	W_SetupShot_ProjectileSize(self, '-3 -3 -3', '3 3 3', false, 4, W_Sound("grenade_fire"), CH_WEAPON_A, WEP_CVAR_SEC(mortar, damage));
+	W_SetupShot_ProjectileSize(self, '-3 -3 -3', '3 3 3', false, 4, SND(GRENADE_FIRE), CH_WEAPON_A, WEP_CVAR_SEC(mortar, damage));
 	w_shotdir = v_forward; // no TrueAim for grenades please
 
 	Send_Effect(EFFECT_GRENADE_MUZZLEFLASH, w_shotorg, w_shotdir * 1000, 1);
@@ -321,7 +295,7 @@ void W_Mortar_Attack2(void)
 
 .float bot_secondary_grenademooth;
 bool W_Mortar(int req)
-{
+{SELFPARAM();
 	entity nade;
 	float nadefound;
 	float ammo_amount;
@@ -392,7 +366,7 @@ bool W_Mortar(int req)
 						}
 					}
 					if(nadefound)
-						sound(self, CH_WEAPON_B, W_Sound("rocket_det"), VOL_BASE, ATTN_NORM);
+						sound(self, CH_WEAPON_B, SND_ROCKET_DET, VOL_BASE, ATTN_NORM);
 				}
 				else if(weapon_prepareattack(1, WEP_CVAR_SEC(mortar, refire)))
 				{
@@ -405,17 +379,6 @@ bool W_Mortar(int req)
 		}
 		case WR_INIT:
 		{
-			precache_model(W_Model("g_gl.md3"));
-			precache_model(W_Model("v_gl.md3"));
-			precache_model(W_Model("h_gl.iqm"));
-			precache_sound(W_Sound("grenade_bounce1"));
-			precache_sound(W_Sound("grenade_bounce2"));
-			precache_sound(W_Sound("grenade_bounce3"));
-			precache_sound(W_Sound("grenade_bounce4"));
-			precache_sound(W_Sound("grenade_bounce5"));
-			precache_sound(W_Sound("grenade_bounce6"));
-			precache_sound(W_Sound("grenade_stick"));
-			precache_sound(W_Sound("grenade_fire"));
 			MORTAR_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
 		}
@@ -438,7 +401,7 @@ bool W_Mortar(int req)
 		}
 		case WR_RELOAD:
 		{
-			W_Reload(min(WEP_CVAR_PRI(mortar, ammo), WEP_CVAR_SEC(mortar, ammo)), W_Sound("reload")); // WEAPONTODO
+			W_Reload(min(WEP_CVAR_PRI(mortar, ammo), WEP_CVAR_SEC(mortar, ammo)), SND(RELOAD)); // WEAPONTODO
 			return true;
 		}
 		case WR_SUICIDEMESSAGE:
@@ -461,7 +424,7 @@ bool W_Mortar(int req)
 #endif
 #ifdef CSQC
 bool W_Mortar(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:
@@ -470,13 +433,12 @@ bool W_Mortar(int req)
 			org2 = w_org + w_backoff * 12;
 			pointparticles(particleeffectnum(EFFECT_GRENADE_EXPLODE), org2, '0 0 0', 1);
 			if(!w_issilent)
-				sound(self, CH_SHOTS, W_Sound("grenade_impact"), VOL_BASE, ATTN_NORM);
+				sound(self, CH_SHOTS, SND_GRENADE_IMPACT, VOL_BASE, ATTN_NORM);
 
 			return true;
 		}
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("grenade_impact"));
 			return true;
 		}
 		case WR_ZOOMRETICLE:

@@ -117,7 +117,7 @@ void W_Electro_TriggerCombo(vector org, float rad, entity own)
 }
 
 void W_Electro_ExplodeCombo(void)
-{
+{SELFPARAM();
 	W_Electro_TriggerCombo(self.origin, WEP_CVAR(electro, combo_comboradius), self.realowner);
 
 	self.event_damage = func_null;
@@ -139,7 +139,7 @@ void W_Electro_ExplodeCombo(void)
 }
 
 void W_Electro_Explode(void)
-{
+{SELFPARAM();
 	if(other.takedamage == DAMAGE_AIM)
 		if(IS_PLAYER(other))
 			if(DIFF_TEAM(self.realowner, other))
@@ -192,7 +192,7 @@ void W_Electro_TouchExplode(void)
 }
 
 void W_Electro_Bolt_Think(void)
-{
+{SELFPARAM();
 	if(time >= self.ltime)
 	{
 		self.use();
@@ -244,7 +244,7 @@ void W_Electro_Bolt_Think(void)
 }
 
 void W_Electro_Attack_Bolt(void)
-{
+{SELFPARAM();
 	entity proj;
 
 	W_DecreaseAmmo(WEP_CVAR_PRI(electro, ammo));
@@ -255,7 +255,7 @@ void W_Electro_Attack_Bolt(void)
 		'0 0 -3',
 		false,
 		2,
-		W_Sound("electro_fire"),
+		SND(ELECTRO_FIRE),
 		CH_WEAPON_A,
 		WEP_CVAR_PRI(electro, damage)
 	);
@@ -289,20 +289,20 @@ void W_Electro_Attack_Bolt(void)
 }
 
 void W_Electro_Orb_Touch(void)
-{
+{SELFPARAM();
 	PROJECTILE_TOUCH;
 	if(other.takedamage == DAMAGE_AIM)
 		{ if(WEP_CVAR_SEC(electro, touchexplode)) { W_Electro_Explode(); } }
 	else
 	{
 		//UpdateCSQCProjectile(self);
-		spamsound(self, CH_SHOTS, W_Sound("electro_bounce"), VOL_BASE, ATTEN_NORM);
+		spamsound(self, CH_SHOTS, SND(ELECTRO_BOUNCE), VOL_BASE, ATTEN_NORM);
 		self.projectiledeathtype |= HITTYPE_BOUNCE;
 	}
 }
 
 void W_Electro_Orb_Damage(entity inflictor, entity attacker, float damage, int deathtype, vector hitloc, vector force)
-{
+{SELFPARAM();
 	if(self.health <= 0)
 		return;
 
@@ -344,7 +344,7 @@ void W_Electro_Orb_Damage(entity inflictor, entity attacker, float damage, int d
 }
 
 void W_Electro_Attack_Orb(void)
-{
+{SELFPARAM();
 	W_DecreaseAmmo(WEP_CVAR_SEC(electro, ammo));
 
 	W_SetupShot_ProjectileSize(
@@ -353,7 +353,7 @@ void W_Electro_Attack_Orb(void)
 		'0 0 -4',
 		false,
 		2,
-		W_Sound("electro_fire2"),
+		SND(ELECTRO_FIRE2),
 		CH_WEAPON_A,
 		WEP_CVAR_SEC(electro, damage)
 	);
@@ -395,7 +395,7 @@ void W_Electro_Attack_Orb(void)
 	entity p2;
 	p2 = spawn();
 	copyentity(proj, p2);
-	setmodel(p2, "models/ebomb.mdl");
+	setmodel(p2, MDL_PROJECTILE_ELECTRO);
 	setsize(p2, proj.mins, proj.maxs);
 #endif
 
@@ -405,7 +405,7 @@ void W_Electro_Attack_Orb(void)
 }
 
 void W_Electro_CheckAttack(void)
-{
+{SELFPARAM();
 	if(self.electro_count > 1)
 	if(self.BUTTON_ATCK2)
 	if(weapon_prepareattack(1, -1))
@@ -421,7 +421,7 @@ void W_Electro_CheckAttack(void)
 
 .float bot_secondary_electromooth;
 bool W_Electro(int req)
-{
+{SELFPARAM();
 	float ammo_amount;
 	switch(req)
 	{
@@ -498,14 +498,6 @@ bool W_Electro(int req)
 		}
 		case WR_INIT:
 		{
-			precache_model(W_Model("g_electro.md3"));
-			precache_model(W_Model("v_electro.md3"));
-			precache_model(W_Model("h_electro.iqm"));
-			precache_sound(W_Sound("electro_bounce"));
-			precache_sound(W_Sound("electro_fire"));
-			precache_sound(W_Sound("electro_fire2"));
-			precache_sound(W_Sound("electro_impact"));
-			precache_sound(W_Sound("electro_impact_combo"));
 			ELECTRO_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
 		}
@@ -541,7 +533,7 @@ bool W_Electro(int req)
 		}
 		case WR_RELOAD:
 		{
-			W_Reload(min(WEP_CVAR_PRI(electro, ammo), WEP_CVAR_SEC(electro, ammo)), W_Sound("reload"));
+			W_Reload(min(WEP_CVAR_PRI(electro, ammo), WEP_CVAR_SEC(electro, ammo)), SND(RELOAD));
 			return true;
 		}
 		case WR_SUICIDEMESSAGE:
@@ -571,7 +563,7 @@ bool W_Electro(int req)
 #endif
 #ifdef CSQC
 bool W_Electro(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:
@@ -582,7 +574,7 @@ bool W_Electro(int req)
 			{
 				pointparticles(particleeffectnum(EFFECT_ELECTRO_BALLEXPLODE), org2, '0 0 0', 1);
 				if(!w_issilent)
-					sound(self, CH_SHOTS, W_Sound("electro_impact"), VOL_BASE, ATTEN_NORM);
+					sound(self, CH_SHOTS, SND_ELECTRO_IMPACT, VOL_BASE, ATTEN_NORM);
 			}
 			else
 			{
@@ -591,13 +583,13 @@ bool W_Electro(int req)
 					// this is sent as "primary (w_deathtype & HITTYPE_BOUNCE)" to distinguish it from (w_deathtype & HITTYPE_SECONDARY) bounced balls
 					pointparticles(particleeffectnum(EFFECT_ELECTRO_COMBO), org2, '0 0 0', 1);
 					if(!w_issilent)
-						sound(self, CH_SHOTS, W_Sound("electro_impact_combo"), VOL_BASE, ATTEN_NORM);
+						sound(self, CH_SHOTS, SND_ELECTRO_IMPACT_COMBO, VOL_BASE, ATTEN_NORM);
 				}
 				else
 				{
 					pointparticles(particleeffectnum(EFFECT_ELECTRO_IMPACT), org2, '0 0 0', 1);
 					if(!w_issilent)
-						sound(self, CH_SHOTS, W_Sound("electro_impact"), VOL_BASE, ATTEN_NORM);
+						sound(self, CH_SHOTS, SND_ELECTRO_IMPACT, VOL_BASE, ATTEN_NORM);
 				}
 			}
 
@@ -605,8 +597,6 @@ bool W_Electro(int req)
 		}
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("electro_impact"));
-			precache_sound(W_Sound("electro_impact_combo"));
 			return true;
 		}
 		case WR_ZOOMRETICLE:

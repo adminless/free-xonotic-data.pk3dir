@@ -66,7 +66,7 @@ void spawnfunc_weapon_devastator(void) { weapon_defaultspawnfunc(WEP_DEVASTATOR.
 void spawnfunc_weapon_rocketlauncher(void) { spawnfunc_weapon_devastator(); }
 
 void W_Devastator_Unregister(void)
-{
+{SELFPARAM();
 	if(self.realowner && self.realowner.lastrocket == self)
 	{
 		self.realowner.lastrocket = world;
@@ -75,7 +75,7 @@ void W_Devastator_Unregister(void)
 }
 
 void W_Devastator_Explode(void)
-{
+{SELFPARAM();
 	W_Devastator_Unregister();
 
 	if(other.takedamage == DAMAGE_AIM)
@@ -115,7 +115,7 @@ void W_Devastator_Explode(void)
 }
 
 void W_Devastator_DoRemoteExplode(void)
-{
+{SELFPARAM();
 	W_Devastator_Unregister();
 
 	self.event_damage = func_null;
@@ -194,7 +194,7 @@ void W_Devastator_DoRemoteExplode(void)
 }
 
 void W_Devastator_RemoteExplode(void)
-{
+{SELFPARAM();
 	if(self.realowner.deadflag == DEAD_NO)
 	if(self.realowner.lastrocket)
 	{
@@ -242,7 +242,7 @@ vector W_Devastator_SteerTo(vector thisdir, vector goaldir, float maxturn_cos)
 //   normalize(0)
 
 void W_Devastator_Think(void)
-{
+{SELFPARAM();
 	vector desireddir, olddir, newdir, desiredorigin, goal;
 	float velspeed, f;
 	self.nextthink = time;
@@ -295,7 +295,7 @@ void W_Devastator_Think(void)
 			{
 				Send_Effect(EFFECT_ROCKET_GUIDE, self.origin, self.velocity, 1);
 				// TODO add a better sound here
-				sound(self.realowner, CH_WEAPON_B, W_Sound("rocket_mode"), VOL_BASE, ATTN_NORM);
+				sound(self.realowner, CH_WEAPON_B, SND_ROCKET_MODE, VOL_BASE, ATTN_NORM);
 				self.count = 1;
 			}
 		}
@@ -309,7 +309,7 @@ void W_Devastator_Think(void)
 }
 
 void W_Devastator_Touch(void)
-{
+{SELFPARAM();
 	if(WarpZone_Projectile_Touch())
 	{
 		if(wasfreed(self))
@@ -321,7 +321,7 @@ void W_Devastator_Touch(void)
 }
 
 void W_Devastator_Damage(entity inflictor, entity attacker, float damage, int deathtype, vector hitloc, vector force)
-{
+{SELFPARAM();
 	if(self.health <= 0)
 		return;
 
@@ -336,13 +336,13 @@ void W_Devastator_Damage(entity inflictor, entity attacker, float damage, int de
 }
 
 void W_Devastator_Attack(void)
-{
+{SELFPARAM();
 	entity missile;
 	entity flash;
 
 	W_DecreaseAmmo(WEP_CVAR(devastator, ammo));
 
-	W_SetupShot_ProjectileSize(self, '-3 -3 -3', '3 3 3', false, 5, W_Sound("rocket_fire"), CH_WEAPON_A, WEP_CVAR(devastator, damage));
+	W_SetupShot_ProjectileSize(self, '-3 -3 -3', '3 3 3', false, 5, SND(ROCKET_FIRE), CH_WEAPON_A, WEP_CVAR(devastator, damage));
 	Send_Effect(EFFECT_ROCKET_MUZZLEFLASH, w_shotorg, w_shotdir * 1000, 1);
 
 	missile = WarpZone_RefSys_SpawnSameRefSys(self);
@@ -383,7 +383,7 @@ void W_Devastator_Attack(void)
 
 	// muzzle flash for 1st person view
 	flash = spawn();
-	setmodel(flash, "models/flash.md3"); // precision set below
+	setmodel(flash, MDL_DEVASTATOR_MUZZLEFLASH); // precision set below
 	SUB_SetFade(flash, time, 0.1);
 	flash.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 	W_AttachToShotorg(flash, '5 0 0');
@@ -393,7 +393,7 @@ void W_Devastator_Attack(void)
 }
 
 bool W_Devastator(int req)
-{
+{SELFPARAM();
 	entity rock;
 	float rockfound;
 	float ammo_amount;
@@ -559,7 +559,7 @@ bool W_Devastator(int req)
 						}
 					}
 					if(rockfound)
-						sound(self, CH_WEAPON_B, W_Sound("rocket_det"), VOL_BASE, ATTN_NORM);
+						sound(self, CH_WEAPON_B, SND_ROCKET_DET, VOL_BASE, ATTN_NORM);
 				}
 			}
 
@@ -567,16 +567,6 @@ bool W_Devastator(int req)
 		}
 		case WR_INIT:
 		{
-			//if(autocvar_sv_precacheweapons)
-			//{
-				precache_model("models/flash.md3");
-				precache_model(W_Model("g_rl.md3"));
-				precache_model(W_Model("v_rl.md3"));
-				precache_model(W_Model("h_rl.iqm"));
-				precache_sound(W_Sound("rocket_det"));
-				precache_sound(W_Sound("rocket_fire"));
-				precache_sound(W_Sound("rocket_mode"));
-			//}
 			DEVASTATOR_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
 		}
@@ -637,7 +627,7 @@ bool W_Devastator(int req)
 		}
 		case WR_RELOAD:
 		{
-			W_Reload(WEP_CVAR(devastator, ammo), W_Sound("reload"));
+			W_Reload(WEP_CVAR(devastator, ammo), SND(RELOAD));
 			return true;
 		}
 		case WR_SUICIDEMESSAGE:
@@ -657,7 +647,7 @@ bool W_Devastator(int req)
 #endif
 #ifdef CSQC
 bool W_Devastator(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:
@@ -666,13 +656,12 @@ bool W_Devastator(int req)
 			org2 = w_org + w_backoff * 12;
 			pointparticles(particleeffectnum(EFFECT_ROCKET_EXPLODE), org2, '0 0 0', 1);
 			if(!w_issilent)
-				sound(self, CH_SHOTS, W_Sound("rocket_impact"), VOL_BASE, ATTN_NORM);
+				sound(self, CH_SHOTS, SND_ROCKET_IMPACT, VOL_BASE, ATTN_NORM);
 
 			return true;
 		}
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("rocket_impact"));
 			return true;
 		}
 		case WR_ZOOMRETICLE:

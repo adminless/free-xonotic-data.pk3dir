@@ -23,7 +23,7 @@ REGISTER_VEHICLE_SIMPLE(
 
 #ifdef IMPLEMENTATION
 #ifdef SVQC
-#include "../../effects.qh"
+#include "../../effects/effects.qh"
 #include "../../triggers/trigger/impulse.qh"
 
 bool autocvar_g_vehicle_racer;
@@ -111,7 +111,7 @@ vector autocvar_g_vehicle_racer_bouncepain;
 var vector racer_force_from_tag(string tag_name, float spring_length, float max_power);
 
 void racer_align4point(float _delta)
-{
+{SELFPARAM();
 	vector push_vector;
 	float fl_push, fr_push, bl_push, br_push;
 
@@ -169,12 +169,12 @@ void racer_align4point(float _delta)
 }
 
 void racer_fire_cannon(string tagname)
-{
+{SELFPARAM();
 	vector v;
 	entity bolt;
 
 	v = gettaginfo(self, gettagindex(self, tagname));
-	bolt = vehicles_projectile(EFFECT_RACER_MUZZLEFLASH.eent_eff_name, W_Sound("lasergun_fire"),
+	bolt = vehicles_projectile(EFFECT_RACER_MUZZLEFLASH.eent_eff_name, SND(LASERGUN_FIRE),
 						   v, normalize(v_forward + randomvec() * autocvar_g_vehicle_racer_cannon_spread) * autocvar_g_vehicle_racer_cannon_speed,
 						   autocvar_g_vehicle_racer_cannon_damage, autocvar_g_vehicle_racer_cannon_radius, autocvar_g_vehicle_racer_cannon_force,  0,
 						   DEATH_VH_WAKI_GUN, PROJECTILE_WAKICANNON, 0, true, true, self.owner);
@@ -186,7 +186,7 @@ void racer_fire_cannon(string tagname)
 }
 
 void racer_rocket_groundhugger()
-{
+{SELFPARAM();
 	vector olddir, newdir;
 	float oldvel, newvel;
 
@@ -238,7 +238,7 @@ void racer_rocket_groundhugger()
 }
 
 void racer_rocket_tracker()
-{
+{SELFPARAM();
 	vector olddir, newdir;
 	float oldvel, newvel;
 
@@ -290,9 +290,9 @@ void racer_rocket_tracker()
 }
 
 void racer_fire_rocket(string tagname, entity trg)
-{
+{SELFPARAM();
 	vector v = gettaginfo(self, gettagindex(self, tagname));
-	entity rocket = vehicles_projectile(EFFECT_RACER_ROCKETLAUNCH.eent_eff_name, W_Sound("rocket_fire"),
+	entity rocket = vehicles_projectile(EFFECT_RACER_ROCKETLAUNCH.eent_eff_name, SND(ROCKET_FIRE),
 						   v, v_forward * autocvar_g_vehicle_racer_rocket_speed,
 						   autocvar_g_vehicle_racer_rocket_damage, autocvar_g_vehicle_racer_rocket_radius, autocvar_g_vehicle_racer_rocket_force, 3,
 						   DEATH_VH_WAKI_ROCKET, PROJECTILE_WAKIROCKET, 20, false, false, self.owner);
@@ -310,7 +310,7 @@ void racer_fire_rocket(string tagname, entity trg)
 }
 
 float racer_frame()
-{
+{SELFPARAM();
 	entity player, racer;
 	vector df;
 	float ftmp;
@@ -324,7 +324,7 @@ float racer_frame()
 
 	player  = self;
 	racer   = self.vehicle;
-	self	= racer;
+	setself(racer);
 
 	vehicles_painframe();
 
@@ -333,7 +333,7 @@ float racer_frame()
 
 	if(racer.deadflag != DEAD_NO)
 	{
-		self = player;
+		setself(player);
 		player.BUTTON_ATCK = player.BUTTON_ATCK2 = 0;
 		return 1;
 	}
@@ -385,7 +385,7 @@ float racer_frame()
 		{
 			self.sounds = 1;
 			self.sound_nexttime = time + 10.922667; //soundlength("vehicles/racer_move.wav");
-			sound (self, CH_TRIGGER_SINGLE, "vehicles/racer_move.wav", VOL_VEHICLEENGINE, ATTEN_NORM);
+			sound (self, CH_TRIGGER_SINGLE, SND_VEH_RACER_MOVE, VOL_VEHICLEENGINE, ATTEN_NORM);
 		}
 #endif
 	}
@@ -396,7 +396,7 @@ float racer_frame()
 		{
 			self.sounds = 0;
 			self.sound_nexttime = time + 11.888604; //soundlength("vehicles/racer_idle.wav");
-			sound (self, CH_TRIGGER_SINGLE, "vehicles/racer_idle.wav", VOL_VEHICLEENGINE, ATTEN_NORM);
+			sound (self, CH_TRIGGER_SINGLE, SND_VEH_RACER_IDLE, VOL_VEHICLEENGINE, ATTEN_NORM);
 		}
 	}
 #endif
@@ -435,14 +435,14 @@ float racer_frame()
 		if(racer.strength_finished < time)
 		{
 			racer.strength_finished = time + 10.922667; //soundlength("vehicles/racer_boost.wav");
-			sound (racer.tur_head, CH_TRIGGER_SINGLE, "vehicles/racer_boost.wav", VOL_VEHICLEENGINE, ATTEN_NORM);
+			sound (racer.tur_head, CH_TRIGGER_SINGLE, SND_VEH_RACER_BOOST, VOL_VEHICLEENGINE, ATTEN_NORM);
 		}
 #endif
 	}
 	else
 	{
 		racer.strength_finished = 0;
-		sound (racer.tur_head, CH_TRIGGER_SINGLE, "misc/null.wav", VOL_VEHICLEENGINE, ATTEN_NORM);
+		sound (racer.tur_head, CH_TRIGGER_SINGLE, SND_Null, VOL_VEHICLEENGINE, ATTEN_NORM);
 	}
 
 	if(cont == CONTENT_WATER || cont == CONTENT_LAVA || cont == CONTENT_SLIME)
@@ -545,12 +545,12 @@ float racer_frame()
 	setorigin(player,racer.origin + '0 0 32');
 	player.velocity = racer.velocity;
 
-	self = player;
+	setself(player);
 	return 1;
 }
 
 void racer_think()
-{
+{SELFPARAM();
 	self.nextthink = time;
 
 	float pushdeltatime = time - self.lastpushtime;
@@ -579,17 +579,17 @@ void racer_think()
 	self.angles_x *= 1 - (autocvar_g_vehicle_racer_anglestabilizer * pushdeltatime);
 	self.angles_z *= 1 - (autocvar_g_vehicle_racer_anglestabilizer * pushdeltatime);
 
-	CSQCMODEL_AUTOUPDATE();
+	CSQCMODEL_AUTOUPDATE(self);
 }
 
 void racer_exit(float eject)
-{
+{SELFPARAM();
 	vector spot;
 
 	self.think	  = racer_think;
 	self.nextthink  = time;
 	self.movetype   = MOVETYPE_BOUNCE;
-	sound (self.tur_head, CH_TRIGGER_SINGLE, "misc/null.wav", VOL_VEHICLEENGINE, ATTEN_NORM);
+	sound (self.tur_head, CH_TRIGGER_SINGLE, SND_Null, VOL_VEHICLEENGINE, ATTEN_NORM);
 
 	if(!self.owner)
 		return;
@@ -627,7 +627,7 @@ void racer_exit(float eject)
 }
 
 void racer_blowup()
-{
+{SELFPARAM();
 	self.deadflag	= DEAD_DEAD;
 	self.vehicle_exit(VHEF_NORMAL);
 
@@ -650,17 +650,17 @@ void racer_blowup()
 }
 
 void racer_blowup_think()
-{
+{SELFPARAM();
 	self.nextthink = time;
 
 	if(time >= self.delay)
 		racer_blowup();
 
-	CSQCMODEL_AUTOUPDATE();
+	CSQCMODEL_AUTOUPDATE(self);
 }
 
 void racer_deadtouch()
-{
+{SELFPARAM();
 	self.avelocity_x *= 0.7;
 	self.cnt -= 1;
 	if(self.cnt <= 0)
@@ -668,7 +668,7 @@ void racer_deadtouch()
 }
 
 void spawnfunc_vehicle_racer()
-{
+{SELFPARAM();
 	if(!autocvar_g_vehicle_racer) { remove(self); return; }
 	if(!vehicle_initialize(VEH_RACER, false)) { remove(self); return; }
 }
@@ -678,7 +678,7 @@ void spawnfunc_vehicle_racer()
 #ifdef CSQC
 #if 0
 void racer_draw()
-{
+{SELFPARAM();
 	float pushdeltatime = time - self.lastpushtime;
 	if (pushdeltatime > 0.15) pushdeltatime = 0;
 	self.lastpushtime = time;
@@ -711,7 +711,7 @@ void racer_draw()
 #endif
 
 bool v_racer(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case VR_IMPACT:
@@ -856,20 +856,6 @@ bool v_racer(int req)
 
 		case VR_PRECACHE:
 		{
-		#ifdef SVQC
-			precache_sound (W_Sound("lasergun_fire"));
-			precache_sound (W_Sound("rocket_fire"));
-
-			precache_sound ("vehicles/racer_idle.wav");
-			precache_sound ("vehicles/racer_move.wav");
-			precache_sound ("vehicles/racer_boost.wav");
-
-			precache_model ("models/vhshield.md3");
-		#endif
-		#ifndef MENUQC
-			precache_model ("models/vehicles/wakizashi.dpm");
-			precache_model ("models/vehicles/wakizashi_cockpit.dpm");
-		#endif
 			return true;
 		}
 	}

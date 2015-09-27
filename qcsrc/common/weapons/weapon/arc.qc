@@ -129,7 +129,7 @@ vector Draw_ArcBeam_callback_last_bottom; // NOTE: in same coordinate system as 
 void spawnfunc_weapon_arc(void) { weapon_defaultspawnfunc(WEP_ARC.m_id); }
 
 float W_Arc_Beam_Send(entity to, int sf)
-{
+{SELFPARAM();
 	WriteByte(MSG_ENTITY, ENT_CLIENT_ARC_BEAM);
 
 	// Truncate information when this beam is displayed to the owner client
@@ -213,7 +213,7 @@ void Arc_Player_SetHeat(entity player)
 }
 
 void W_Arc_Beam_Think(void)
-{
+{SELFPARAM();
 	if(self != self.owner.arc_beam)
 	{
 		remove(self);
@@ -267,20 +267,19 @@ void W_Arc_Beam_Think(void)
 			{
 				Send_Effect_("arc_overheat",
 					self.beam_start, self.beam_wantdir, 1 );
-				sound(self, CH_WEAPON_A, W_Sound("arc_stop"), VOL_BASE, ATTN_NORM);
+				sound(self, CH_WEAPON_A, SND_ARC_STOP, VOL_BASE, ATTN_NORM);
 			}
 		}
 
 		if(self == self.owner.arc_beam) { self.owner.arc_beam = world; }
-		entity oldself = self;
-		self = self.owner;
+		setself(self.owner);
 		if(!WEP_ACTION(WEP_ARC.m_id, WR_CHECKAMMO1) && !WEP_ACTION(WEP_ARC.m_id, WR_CHECKAMMO2))
 		if(!(self.items & IT_UNLIMITED_WEAPON_AMMO))
 		{
 			// note: this doesn't force the switch
 			W_SwitchToOtherWeapon(self);
 		}
-		self = oldself;
+		setself(this);
 		remove(self);
 		return;
 	}
@@ -576,11 +575,11 @@ void W_Arc_Beam_Think(void)
 }
 
 void W_Arc_Beam(float burst)
-{
+{SELFPARAM();
 
 	// only play fire sound if 1 sec has passed since player let go the fire button
 	if(time - self.beam_prev > 1)
-		sound(self, CH_WEAPON_A, W_Sound("arc_fire"), VOL_BASE, ATTN_NORM);
+		sound(self, CH_WEAPON_A, SND_ARC_FIRE, VOL_BASE, ATTN_NORM);
 
 	entity beam = self.arc_beam = spawn();
 	beam.classname = "W_Arc_Beam";
@@ -593,14 +592,11 @@ void W_Arc_Beam(float burst)
 	beam.beam_bursting = burst;
 	Net_LinkEntity(beam, false, 0, W_Arc_Beam_Send);
 
-	entity oldself = self;
-	self = beam;
-	self.think();
-	self = oldself;
+	WITH(entity, self, beam, beam.think());
 }
 
 void Arc_Smoke()
-{
+{SELFPARAM();
 	makevectors(self.v_angle);
 	W_SetupShot_Range(self,true,0,"",0,0,0);
 
@@ -615,7 +611,7 @@ void Arc_Smoke()
 			if ( !self.arc_smoke_sound )
 			{
 				self.arc_smoke_sound = 1;
-				sound(self, CH_SHOTS_SINGLE, W_Sound("arc_loop_overheat"), VOL_BASE, ATTN_NORM);
+				sound(self, CH_SHOTS_SINGLE, SND_ARC_LOOP_OVERHEAT, VOL_BASE, ATTN_NORM);
 			}
 		}
 	}
@@ -631,12 +627,12 @@ void Arc_Smoke()
 		!( self.BUTTON_ATCK || self.BUTTON_ATCK2 ) ) || self.switchweapon != WEP_ARC.m_id )
 	{
 		self.arc_smoke_sound = 0;
-		sound(self, CH_SHOTS_SINGLE, "misc/null.wav", VOL_BASE, ATTEN_NORM);
+		sound(self, CH_SHOTS_SINGLE, SND_Null, VOL_BASE, ATTEN_NORM);
 	}
 }
 
 bool W_Arc(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_AIM:
@@ -699,7 +695,7 @@ bool W_Arc(int req)
 
 			if(self.arc_BUTTON_ATCK_prev != 0)
 			{
-				sound(self, CH_WEAPON_A, W_Sound("arc_stop"), VOL_BASE, ATTN_NORM);
+				sound(self, CH_WEAPON_A, SND_ARC_STOP, VOL_BASE, ATTN_NORM);
 				weapon_thinkf(WFRAME_FIRE1, WEP_CVAR(arc, beam_animtime), w_ready);
 				ATTACK_FINISHED(self) = time + WEP_CVAR(arc, beam_refire) * W_WeaponRateFactor();
 			}
@@ -720,13 +716,6 @@ bool W_Arc(int req)
 		}
 		case WR_INIT:
 		{
-			precache_model(W_Model("g_arc.md3"));
-			precache_model(W_Model("v_arc.md3"));
-			precache_model(W_Model("h_arc.iqm"));
-			precache_sound(W_Sound("arc_fire"));
-			precache_sound(W_Sound("arc_loop"));
-			precache_sound(W_Sound("arc_stop"));
-			precache_sound(W_Sound("arc_loop_overheat"));
 			if(!arc_shotorigin[0])
 			{
 				arc_shotorigin[0] = shotorg_adjust_values(CL_Weapon_GetShotOrg(WEP_ARC.m_id), false, false, 1);
@@ -870,7 +859,7 @@ void Reset_ArcBeam(void)
 }
 
 void Draw_ArcBeam(void)
-{
+{SELFPARAM();
 	float dt = time - self.move_time;
 	self.move_time = time;
 	if(dt <= 0) { return; }
@@ -1163,13 +1152,13 @@ void Draw_ArcBeam(void)
 }
 
 void Remove_ArcBeam(void)
-{
+{SELFPARAM();
 	remove(self.beam_muzzleentity);
-	sound(self, CH_SHOTS_SINGLE, "misc/null.wav", VOL_BASE, ATTEN_NORM);
+	sound(self, CH_SHOTS_SINGLE, SND_Null, VOL_BASE, ATTEN_NORM);
 }
 
 void Ent_ReadArcBeam(float isnew)
-{
+{SELFPARAM();
 	int sf = ReadByte();
 	entity flash;
 
@@ -1187,7 +1176,7 @@ void Ent_ReadArcBeam(float isnew)
 		self.draw = Draw_ArcBeam;
 		self.entremove = Remove_ArcBeam;
 		self.move_time = time;
-		loopsound(self, CH_SHOTS_SINGLE, W_Sound("arc_loop"), VOL_BASE, ATTEN_NORM);
+		loopsound(self, CH_SHOTS_SINGLE, SND(ARC_LOOP), VOL_BASE, ATTEN_NORM);
 
 		flash = spawn();
 		flash.owner = self;
@@ -1294,7 +1283,7 @@ void Ent_ReadArcBeam(float isnew)
 				self.beam_muzzlelight[3] = 1;
 				if(self.beam_muzzleeffect >= 0)
 				{
-					setmodel(flash, "models/flash.md3");
+					setmodel(flash, MDL_ARC_MUZZLEFLASH);
 					flash.alpha = self.beam_alpha;
 					flash.colormod = self.beam_color;
 					flash.scale = 0.5;
@@ -1320,7 +1309,7 @@ void Ent_ReadArcBeam(float isnew)
 				self.beam_image = "particles/lgbeam";
 				if(self.beam_muzzleeffect >= 0)
 				{
-					setmodel(flash, "models/flash.md3");
+					setmodel(flash, MDL_ARC_MUZZLEFLASH);
 					flash.alpha = self.beam_alpha;
 					flash.colormod = self.beam_color;
 					flash.scale = 0.5;
@@ -1346,7 +1335,7 @@ void Ent_ReadArcBeam(float isnew)
 				self.beam_image = "particles/lgbeam";
 				if(self.beam_muzzleeffect >= 0)
 				{
-					setmodel(flash, "models/flash.md3");
+					setmodel(flash, MDL_ARC_MUZZLEFLASH);
 					flash.alpha = self.beam_alpha;
 					flash.colormod = self.beam_color;
 					flash.scale = 0.5;
@@ -1372,7 +1361,7 @@ void Ent_ReadArcBeam(float isnew)
 				self.beam_image = "particles/lgbeam";
 				if(self.beam_muzzleeffect >= 0)
 				{
-					setmodel(flash, "models/flash.md3");
+					setmodel(flash, MDL_ARC_MUZZLEFLASH);
 					flash.alpha = self.beam_alpha;
 					flash.colormod = self.beam_color;
 					flash.scale = 0.5;
@@ -1398,7 +1387,7 @@ void Ent_ReadArcBeam(float isnew)
 				self.beam_image = "particles/lgbeam";
 				if(self.beam_muzzleeffect >= 0)
 				{
-					setmodel(flash, "models/flash.md3");
+					setmodel(flash, MDL_ARC_MUZZLEFLASH);
 					flash.alpha = self.beam_alpha;
 					flash.colormod = self.beam_color;
 					flash.scale = 0.5;
@@ -1424,7 +1413,7 @@ void Ent_ReadArcBeam(float isnew)
 				self.beam_image = "particles/lgbeam";
 				if(self.beam_muzzleeffect >= 0)
 				{
-					setmodel(flash, "models/flash.md3");
+					setmodel(flash, MDL_ARC_MUZZLEFLASH);
 					flash.alpha = self.beam_alpha;
 					flash.colormod = self.beam_color;
 					flash.scale = 0.5;
@@ -1450,7 +1439,7 @@ void Ent_ReadArcBeam(float isnew)
 				self.beam_image = "particles/lgbeam";
 				if(self.beam_muzzleeffect >= 0)
 				{
-					setmodel(flash, "models/flash.md3");
+					setmodel(flash, MDL_ARC_MUZZLEFLASH);
 					flash.alpha = self.beam_alpha;
 					flash.colormod = self.beam_color;
 					flash.scale = 0.5;
@@ -1476,7 +1465,7 @@ void Ent_ReadArcBeam(float isnew)
 				self.beam_image = "particles/lgbeam";
 				if(self.beam_muzzleeffect >= 0)
 				{
-					setmodel(flash, "models/flash.md3");
+					setmodel(flash, MDL_ARC_MUZZLEFLASH);
 					flash.alpha = self.beam_alpha;
 					flash.colormod = self.beam_color;
 					flash.scale = 0.5;
@@ -1504,7 +1493,7 @@ void Ent_ReadArcBeam(float isnew)
 				self.beam_image = "particles/lgbeam";
 				if(self.beam_muzzleeffect >= 0)
 				{
-					setmodel(flash, "models/flash.md3");
+					setmodel(flash, MDL_ARC_MUZZLEFLASH);
 					flash.alpha = self.beam_alpha;
 					flash.colormod = self.beam_color;
 					flash.scale = 0.5;
@@ -1521,7 +1510,7 @@ void Ent_ReadArcBeam(float isnew)
 }
 
 bool W_Arc(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:
@@ -1531,7 +1520,6 @@ bool W_Arc(int req)
 		}
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("arc_loop"));
 			return true;
 		}
 		case WR_ZOOMRETICLE:

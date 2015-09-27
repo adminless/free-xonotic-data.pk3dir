@@ -4,36 +4,6 @@
 entity turret_info[TUR_MAXCOUNT];
 entity dummy_turret_info;
 
-void turrets_common_precache()
-{
-	precache_sound (W_Sound("rocket_impact"));
-	precache_model ("models/turrets/base-gib1.md3");
-	precache_model ("models/turrets/base-gib2.md3");
-	precache_model ("models/turrets/base-gib3.md3");
-	precache_model ("models/turrets/base-gib4.md3");
-	precache_model ("models/turrets/head-gib1.md3");
-	precache_model ("models/turrets/head-gib2.md3");
-	precache_model ("models/turrets/head-gib3.md3");
-	precache_model ("models/turrets/head-gib4.md3");
-	precache_model ("models/turrets/base.md3");
-	precache_model ("models/turrets/rocket.md3");
-
-	precache_model ("models/turrets/c512.md3");
-	precache_model ("models/marker.md3");
-
-#ifdef SVQC
-	precache_sound(W_Sound("rocket_impact"));
-#endif
-
-#ifdef TURRET_DEBUG
-	precache_model ("models/turrets/c512.md3");
-	precache_model ("models/pathlib/goodsquare.md3");
-	precache_model ("models/pathlib/badsquare.md3");
-	precache_model ("models/pathlib/square.md3");
-	precache_model ("models/pathlib/edge.md3");
-#endif
-}
-
 void register_turret(float id, float(float) func, float turretflags, vector min_s, vector max_s, string modelname, string headmodelname, string shortname, string mname)
 {
 	entity e;
@@ -50,10 +20,6 @@ void register_turret(float id, float(float) func, float turretflags, vector min_
 	e.maxs = max_s;
 	e.model = strzone(strcat("models/turrets/", modelname));
 	e.head_model = strzone(strcat("models/turrets/", headmodelname));
-
-	#ifndef MENUQC
-	turrets_common_precache();
-	#endif
 }
 float t_null(float dummy) { return 0; }
 void register_turrets_done()

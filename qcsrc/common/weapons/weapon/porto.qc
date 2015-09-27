@@ -39,12 +39,12 @@ PORTO_SETTINGS(WEP_ADD_CVAR, WEP_ADD_PROP)
 #endif
 #ifdef IMPLEMENTATION
 #ifdef SVQC
-#include "../triggers/trigger/jumppads.qh"
+#include "../../triggers/trigger/jumppads.qh"
 
 void spawnfunc_weapon_porto(void) { weapon_defaultspawnfunc(WEP_PORTO.m_id); }
 
 void W_Porto_Success(void)
-{
+{SELFPARAM();
 	if(self.realowner == world)
 	{
 		objerror("Cannot succeed successfully: no owner\n");
@@ -57,7 +57,7 @@ void W_Porto_Success(void)
 
 string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector velo);
 void W_Porto_Fail(float failhard)
-{
+{SELFPARAM();
 	if(self.realowner == world)
 	{
 		objerror("Cannot fail successfully: no owner\n");
@@ -92,19 +92,15 @@ void W_Porto_Fail(float failhard)
 }
 
 void W_Porto_Remove(entity p)
-{
+{SELFPARAM();
 	if(p.porto_current.realowner == p && p.porto_current.classname == "porto")
 	{
-		entity oldself;
-		oldself = self;
-		self = p.porto_current;
-		W_Porto_Fail(1);
-		self = oldself;
+		WITH(entity, self, p.porto_current, W_Porto_Fail(1));
 	}
 }
 
 void W_Porto_Think(void)
-{
+{SELFPARAM();
 	trace_plane_normal = '0 0 0';
 	if(self.realowner.playerid != self.playerid)
 		remove(self);
@@ -113,7 +109,7 @@ void W_Porto_Think(void)
 }
 
 void W_Porto_Touch(void)
-{
+{SELFPARAM();
 	vector norm;
 
 	// do not use PROJECTILE_TOUCH here
@@ -136,19 +132,19 @@ void W_Porto_Touch(void)
 
 	if(self.realowner.playerid != self.playerid)
 	{
-		sound(self, CH_SHOTS, "porto/unsupported.wav", VOL_BASE, ATTEN_NORM);
+		sound(self, CH_SHOTS, SND_PORTO_UNSUPPORTED, VOL_BASE, ATTEN_NORM);
 		remove(self);
 	}
 	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SLICK || trace_dphitcontents & DPCONTENTS_PLAYERCLIP)
 	{
-		spamsound(self, CH_SHOTS, "porto/bounce.wav", VOL_BASE, ATTEN_NORM);
+		spamsound(self, CH_SHOTS, SND(PORTO_BOUNCE), VOL_BASE, ATTEN_NORM);
 		// just reflect
 		self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
 		self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
 	}
 	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		sound(self, CH_SHOTS, "porto/unsupported.wav", VOL_BASE, ATTEN_NORM);
+		sound(self, CH_SHOTS, SND_PORTO_UNSUPPORTED, VOL_BASE, ATTEN_NORM);
 		W_Porto_Fail(0);
 		if(self.cnt < 0)
 			Portal_ClearAll_PortalsOnly(self.realowner);
@@ -158,14 +154,14 @@ void W_Porto_Touch(void)
 		// in-portal only
 		if(Portal_SpawnInPortalAtTrace(self.realowner, self.right_vector, self.portal_id))
 		{
-			sound(self, CH_SHOTS, "porto/create.wav", VOL_BASE, ATTEN_NORM);
+			sound(self, CH_SHOTS, SND_PORTO_CREATE, VOL_BASE, ATTEN_NORM);
 			trace_plane_normal = norm;
 			Send_Notification(NOTIF_ONE, self.realowner, MSG_CENTER, CENTER_PORTO_CREATED_IN);
 			W_Porto_Success();
 		}
 		else
 		{
-			sound(self, CH_SHOTS, "porto/unsupported.wav", VOL_BASE, ATTEN_NORM);
+			sound(self, CH_SHOTS, SND_PORTO_UNSUPPORTED, VOL_BASE, ATTEN_NORM);
 			trace_plane_normal = norm;
 			W_Porto_Fail(0);
 		}
@@ -175,14 +171,14 @@ void W_Porto_Touch(void)
 		// out-portal only
 		if(Portal_SpawnOutPortalAtTrace(self.realowner, self.right_vector, self.portal_id))
 		{
-			sound(self, CH_SHOTS, "porto/create.wav", VOL_BASE, ATTEN_NORM);
+			sound(self, CH_SHOTS, SND_PORTO_CREATE, VOL_BASE, ATTEN_NORM);
 			trace_plane_normal = norm;
 			Send_Notification(NOTIF_ONE, self.realowner, MSG_CENTER, CENTER_PORTO_CREATED_OUT);
 			W_Porto_Success();
 		}
 		else
 		{
-			sound(self, CH_SHOTS, "porto/unsupported.wav", VOL_BASE, ATTEN_NORM);
+			sound(self, CH_SHOTS, SND_PORTO_UNSUPPORTED, VOL_BASE, ATTEN_NORM);
 			trace_plane_normal = norm;
 			W_Porto_Fail(0);
 		}
@@ -192,7 +188,7 @@ void W_Porto_Touch(void)
 		self.effects += EF_BLUE - EF_RED;
 		if(Portal_SpawnInPortalAtTrace(self.realowner, self.right_vector, self.portal_id))
 		{
-			sound(self, CH_SHOTS, "porto/create.wav", VOL_BASE, ATTEN_NORM);
+			sound(self, CH_SHOTS, SND_PORTO_CREATE, VOL_BASE, ATTEN_NORM);
 			trace_plane_normal = norm;
 			Send_Notification(NOTIF_ONE, self.realowner, MSG_CENTER, CENTER_PORTO_CREATED_IN);
 			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * norm);
@@ -201,7 +197,7 @@ void W_Porto_Touch(void)
 		}
 		else
 		{
-			sound(self, CH_SHOTS, "porto/unsupported.wav", VOL_BASE, ATTEN_NORM);
+			sound(self, CH_SHOTS, SND_PORTO_UNSUPPORTED, VOL_BASE, ATTEN_NORM);
 			trace_plane_normal = norm;
 			Portal_ClearAll_PortalsOnly(self.realowner);
 			W_Porto_Fail(0);
@@ -213,21 +209,21 @@ void W_Porto_Touch(void)
 		{
 			if(Portal_SpawnOutPortalAtTrace(self.realowner, self.right_vector, self.portal_id))
 			{
-				sound(self, CH_SHOTS, "porto/create.wav", VOL_BASE, ATTEN_NORM);
+				sound(self, CH_SHOTS, SND_PORTO_CREATE, VOL_BASE, ATTEN_NORM);
 				trace_plane_normal = norm;
 				Send_Notification(NOTIF_ONE, self.realowner, MSG_CENTER, CENTER_PORTO_CREATED_OUT);
 				W_Porto_Success();
 			}
 			else
 			{
-				sound(self, CH_SHOTS, "porto/unsupported.wav", VOL_BASE, ATTEN_NORM);
+				sound(self, CH_SHOTS, SND_PORTO_UNSUPPORTED, VOL_BASE, ATTEN_NORM);
 				Portal_ClearAll_PortalsOnly(self.realowner);
 				W_Porto_Fail(0);
 			}
 		}
 		else
 		{
-			sound(self, CH_SHOTS, "porto/unsupported.wav", VOL_BASE, ATTEN_NORM);
+			sound(self, CH_SHOTS, SND_PORTO_UNSUPPORTED, VOL_BASE, ATTEN_NORM);
 			Portal_ClearAll_PortalsOnly(self.realowner);
 			W_Porto_Fail(0);
 		}
@@ -235,10 +231,10 @@ void W_Porto_Touch(void)
 }
 
 void W_Porto_Attack(float type)
-{
+{SELFPARAM();
 	entity gren;
 
-	W_SetupShot(self, false, 4, "porto/fire.wav", CH_WEAPON_A, 0);
+	W_SetupShot(self, false, 4, SND(PORTO_FIRE), CH_WEAPON_A, 0);
 	// always shoot from the eye
 	w_shotdir = v_forward;
 	w_shotorg = self.origin + self.view_ofs + ((w_shotorg - self.origin - self.view_ofs) * v_forward) * v_forward;
@@ -289,7 +285,7 @@ void W_Porto_Attack(float type)
 
 bool w_nexball_weapon(int req); // WEAPONTODO
 bool W_Porto(int req)
-{
+{SELFPARAM();
 	//vector v_angle_save;
 
 	if(g_nexball) { return w_nexball_weapon(req); }
@@ -377,16 +373,6 @@ bool W_Porto(int req)
 		}
 		case WR_INIT:
 		{
-			precache_model(W_Model("g_porto.md3"));
-			precache_model(W_Model("v_porto.md3"));
-			precache_model(W_Model("h_porto.iqm"));
-			precache_model("models/portal.md3");
-			precache_sound("porto/bounce.wav");
-			precache_sound("porto/create.wav");
-			precache_sound("porto/expire.wav");
-			precache_sound("porto/explode.wav");
-			precache_sound("porto/fire.wav");
-			precache_sound("porto/unsupported.wav");
 			PORTO_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
 		}
@@ -406,7 +392,7 @@ bool W_Porto(int req)
 #endif
 #ifdef CSQC
 bool W_Porto(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:

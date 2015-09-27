@@ -16,20 +16,7 @@
 #ifndef MENUQC
 STATIC_INIT(vehicles_common_initialize)
 {
-#ifdef CSQC
-	precache_model("models/vehicles/bomblet.md3");
-	precache_model("models/vehicles/clusterbomb.md3");
-	precache_model("models/vehicles/clusterbomb_fragment.md3");
-	precache_model("models/vehicles/rocket01.md3");
-	precache_model("models/vehicles/rocket02.md3");
-
-	precache_sound ("vehicles/alarm.wav");
-	precache_sound ("vehicles/alarm_shield.wav");
-#endif // CSQC
 #ifdef SVQC
-	precache_sound("onslaught/ons_hit2.wav");
-	precache_sound("onslaught/electricity_explode.wav");
-
 	addstat(STAT_HUD, AS_INT, hud);
 	addstat(STAT_VEHICLESTAT_HEALTH,  AS_INT, vehicle_health);
 	addstat(STAT_VEHICLESTAT_SHIELD,  AS_INT, vehicle_shield);
@@ -48,9 +35,9 @@ STATIC_INIT(vehicles_common_initialize)
 
 entity get_vehicleinfo(int id)
 {
-	if (id < VEH_FIRST || id > VEH_LAST) return VEH_NULL;
+	if (id < VEH_FIRST || id > VEH_LAST) return VEH_Null;
 	entity m = vehicle_info[id];
-	return m ? m : VEH_NULL;
+	return m ? m : VEH_Null;
 }
 
 #endif

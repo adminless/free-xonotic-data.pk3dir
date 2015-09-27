@@ -9,4 +9,7 @@
 #include "../dpdefs/progsdefs.qh"
 #include "../dpdefs/dpextensions.qh"
 
+#include "../common/models/models.qh"
+#include "../common/sounds/sounds.qh"
+
 #endif

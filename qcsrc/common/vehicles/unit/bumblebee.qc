@@ -104,18 +104,18 @@ float bumble_raygun_send(entity to, int sf);
 void bumblebee_fire_cannon(entity _gun, string _tagname, entity _owner)
 {
 	vector v = gettaginfo(_gun, gettagindex(_gun, _tagname));
-	vehicles_projectile(EFFECT_BIGPLASMA_MUZZLEFLASH.eent_eff_name, W_Sound("flacexp3"),
+	vehicles_projectile(EFFECT_BIGPLASMA_MUZZLEFLASH.eent_eff_name, SND(VEH_BUMBLEBEE_FIRE),
 						v, normalize(v_forward + randomvec() * autocvar_g_vehicle_bumblebee_cannon_spread) * autocvar_g_vehicle_bumblebee_cannon_speed,
 						autocvar_g_vehicle_bumblebee_cannon_damage, autocvar_g_vehicle_bumblebee_cannon_radius, autocvar_g_vehicle_bumblebee_cannon_force,  0,
 						DEATH_VH_BUMB_GUN, PROJECTILE_BUMBLE_GUN, 0, true, true, _owner);
 }
 
 float bumblebee_gunner_frame()
-{
+{SELFPARAM();
 	entity vehic    = self.vehicle.owner;
 	entity gun      = self.vehicle;
 	entity gunner   = self;
-	self = vehic;
+	setself(vehic);
 
 	vehic.solid = SOLID_NOT;
 	//setorigin(gunner, vehic.origin);
@@ -216,7 +216,7 @@ float bumblebee_gunner_frame()
 	gunner.BUTTON_ATCK = gunner.BUTTON_ATCK2 = gunner.BUTTON_CROUCH = 0;
 	gunner.vehicle_energy = (gun.vehicle_energy / autocvar_g_vehicle_bumblebee_cannon_ammo) * 100;
 
-	self = gunner;
+	setself(gunner);
 	return 1;
 }
 
@@ -247,7 +247,7 @@ vector bumblebee_gunner_findgoodexit(vector prefer_spot, entity gunner, entity p
 }
 
 void bumblebee_gunner_exit(int _exitflag)
-{
+{SELFPARAM();
 	entity player = self;
 	entity gunner = player.vehicle;
 	entity vehic = gunner.owner;
@@ -303,7 +303,7 @@ void bumblebee_gunner_exit(int _exitflag)
 }
 
 bool bumblebee_gunner_enter()
-{
+{SELFPARAM();
 	entity vehic = self;
 	entity player = other;
 	entity gunner = world;
@@ -370,7 +370,7 @@ bool bumblebee_gunner_enter()
 }
 
 bool vehicles_valid_pilot()
-{
+{SELFPARAM();
 	if(IS_BOT_CLIENT(other) && !autocvar_g_vehicles_allow_bots)
 		return false;
 
@@ -384,7 +384,7 @@ bool vehicles_valid_pilot()
 }
 
 void bumblebee_touch()
-{
+{SELFPARAM();
 	if(autocvar_g_vehicles_enter) { return; }
 
 	if(self.gunner1 != world && self.gunner2 != world)
@@ -406,7 +406,7 @@ void bumblebee_touch()
 }
 
 void bumblebee_regen()
-{
+{SELFPARAM();
 	if(self.gun1.delay + autocvar_g_vehicle_bumblebee_cannon_ammo_regen_pause < time)
 		self.gun1.vehicle_energy = min(autocvar_g_vehicle_bumblebee_cannon_ammo,
 									   self.gun1.vehicle_energy + autocvar_g_vehicle_bumblebee_cannon_ammo_regen * frametime);
@@ -427,7 +427,7 @@ void bumblebee_regen()
 }
 
 float bumblebee_pilot_frame()
-{
+{SELFPARAM();
 	entity pilot, vehic;
 	vector newvel;
 
@@ -440,11 +440,11 @@ float bumblebee_pilot_frame()
 
 	pilot = self;
 	vehic = self.vehicle;
-	self   = vehic;
+	setself(vehic);
 
 	if(vehic.deadflag != DEAD_NO)
 	{
-		self = pilot;
+		setself(pilot);
 		pilot.BUTTON_ATCK = pilot.BUTTON_ATCK2 = 0;
 		return 1;
 	}
@@ -643,13 +643,13 @@ float bumblebee_pilot_frame()
 	setorigin(pilot, vehic.origin + v_up * 48 + v_forward * 160);
 
 	pilot.BUTTON_ATCK = pilot.BUTTON_ATCK2 = pilot.BUTTON_CROUCH = 0;
-	self = pilot;
+	setself(pilot);
 
 	return 1;
 }
 
 void bumblebee_land()
-{
+{SELFPARAM();
 	float hgt;
 
 	hgt = raptor_altitude(512);
@@ -662,11 +662,11 @@ void bumblebee_land()
 
 	self.nextthink = time;
 
-	CSQCMODEL_AUTOUPDATE();
+	CSQCMODEL_AUTOUPDATE(self);
 }
 
 void bumblebee_exit(float eject)
-{
+{SELFPARAM();
 	if(self.owner.vehicleid == VEH_BUMBLEBEE.vehicleid)
 	{
 		bumblebee_gunner_exit(eject);
@@ -709,14 +709,14 @@ void bumblebee_exit(float eject)
 }
 
 void bumblebee_blowup()
-{
+{SELFPARAM();
 	RadiusDamage(self, self.enemy, autocvar_g_vehicle_bumblebee_blowup_coredamage,
 				 autocvar_g_vehicle_bumblebee_blowup_edgedamage,
 				 autocvar_g_vehicle_bumblebee_blowup_radius, self, world,
 				 autocvar_g_vehicle_bumblebee_blowup_forceintensity,
 				 DEATH_VH_BUMB_DEATH, world);
 
-	sound(self, CH_SHOTS, W_Sound("rocket_impact"), VOL_BASE, ATTEN_NORM);
+	sound(self, CH_SHOTS, SND_ROCKET_IMPACT, VOL_BASE, ATTEN_NORM);
 	Send_Effect(EFFECT_EXPLOSION_BIG, (self.origin + '0 0 100') + (randomvec() * 80), '0 0 0', 1);
 
 	if(self.owner.deadflag == DEAD_DYING)
@@ -726,13 +726,13 @@ void bumblebee_blowup()
 }
 
 void bumblebee_diethink()
-{
+{SELFPARAM();
 	if(time >= self.wait)
 		self.think = bumblebee_blowup;
 
 	if(random() < 0.1)
 	{
-		sound(self, CH_SHOTS, W_Sound("rocket_impact"), VOL_BASE, ATTEN_NORM);
+		sound(self, CH_SHOTS, SND_ROCKET_IMPACT, VOL_BASE, ATTEN_NORM);
 		Send_Effect(EFFECT_EXPLOSION_SMALL, randomvec() * 80 + (self.origin + '0 0 100'), '0 0 0', 1);
 	}
 
@@ -740,7 +740,7 @@ void bumblebee_diethink()
 }
 
 float bumble_raygun_send(entity to, float sf)
-{
+{SELFPARAM();
 	WriteByte(MSG_ENTITY, ENT_CLIENT_BUMBLE_RAYGUN);
 
 	WriteByte(MSG_ENTITY, sf);
@@ -769,13 +769,13 @@ float bumble_raygun_send(entity to, float sf)
 }
 
 void spawnfunc_vehicle_bumblebee()
-{
+{SELFPARAM();
 	if(!autocvar_g_vehicle_bumblebee) { remove(self); return; }
 	if(!vehicle_initialize(VEH_BUMBLEBEE, false)) { remove(self); return; }
 }
 
 float v_bumblebee(float req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case VR_IMPACT:
@@ -804,11 +804,11 @@ float v_bumblebee(float req)
 				entity oldself = self;
 				if(self.gunner1)
 				{
-					self = self.gunner1;
+					setself(self.gunner1);
 					oldself.gun1.vehicle_exit(VHEF_EJECT);
 					entity oldother = other;
 					other = self;
-					self = oldself;
+					setself(oldself);
 					self.phase = 0;
 					self.touch();
 					other = oldother;
@@ -817,11 +817,11 @@ float v_bumblebee(float req)
 
 				if(self.gunner2)
 				{
-					self = self.gunner2;
+					setself(self.gunner2);
 					oldself.gun2.vehicle_exit(VHEF_EJECT);
 					entity oldother = other;
 					other = self;
-					self = oldself;
+					setself(oldself);
 					self.phase = 0;
 					self.touch();
 					other = oldother;
@@ -843,16 +843,16 @@ float v_bumblebee(float req)
 
 			if(self.gunner1)
 			{
-				self = self.gunner1;
+				setself(self.gunner1);
 				oldself.gun1.vehicle_exit(VHEF_EJECT);
-				self = oldself;
+				setself(oldself);
 			}
 
 			if(self.gunner2)
 			{
-				self = self.gunner2;
+				setself(self.gunner2);
 				oldself.gun2.vehicle_exit(VHEF_EJECT);
-				self = oldself;
+				setself(oldself);
 			}
 
 			self.vehicle_exit(VHEF_EJECT);
@@ -902,7 +902,7 @@ float v_bumblebee(float req)
 				// for some reason, autosizing of the shield entity refuses to work for this one so set it up in advance.
 				self.vehicle_shieldent = spawn();
 				self.vehicle_shieldent.effects = EF_LOWPRECISION;
-				setmodel(self.vehicle_shieldent, "models/vhshield.md3");
+				setmodel(self.vehicle_shieldent, MDL_VEH_BUMBLEBEE_SHIELD);
 				setattachment(self.vehicle_shieldent, self, "");
 				setorigin(self.vehicle_shieldent, real_origin(self) - self.origin);
 				self.vehicle_shieldent.scale       = 512 / vlen(self.maxs - self.mins);
@@ -922,9 +922,9 @@ float v_bumblebee(float req)
 
 				self.gun1.classname = self.gun2.classname = "vehicle_playerslot";
 
-				setmodel(self.gun1, "models/vehicles/bumblebee_plasma_right.dpm");
-				setmodel(self.gun2, "models/vehicles/bumblebee_plasma_left.dpm");
-				setmodel(self.gun3, "models/vehicles/bumblebee_ray.dpm");
+				setmodel(self.gun1, MDL_VEH_BUMBLEBEE_CANNON_RIGHT);
+				setmodel(self.gun2, MDL_VEH_BUMBLEBEE_CANNON_LEFT);
+				setmodel(self.gun3, MDL_VEH_BUMBLEBEE_CANNON_CENTER);
 
 				setattachment(self.gun1, self, "cannon_right");
 				setattachment(self.gun2, self, "cannon_left");
@@ -1000,13 +1000,6 @@ float v_bumblebee(float req)
 		}
 		case VR_PRECACHE:
 		{
-			precache_model("models/vehicles/bumblebee_body.dpm");
-			precache_model("models/vehicles/bumblebee_plasma_left.dpm");
-			precache_model("models/vehicles/bumblebee_plasma_right.dpm");
-			precache_model("models/vehicles/bumblebee_ray.dpm");
-			precache_model("models/vehicles/wakizashi_cockpit.dpm");
-			precache_model("models/vehicles/spiderbot_cockpit.dpm");
-			precache_model("models/vehicles/raptor_cockpit.dpm");
 			return true;
 		}
 	}
@@ -1026,7 +1019,7 @@ void CSQC_BUMBLE_GUN_HUD()
 }
 
 void bumble_raygun_draw()
-{
+{SELFPARAM();
 	float _len;
 	vector _dir;
 	vector _vtmp1, _vtmp2;
@@ -1064,7 +1057,7 @@ void bumble_raygun_draw()
 }
 
 void bumble_raygun_read(bool bIsNew)
-{
+{SELFPARAM();
 	int sf = ReadByte();
 
 	if(sf & BRG_SETUP)

@@ -12,7 +12,7 @@ REGISTER_TURRET(
 #else
 #ifdef SVQC
 void turret_flac_projectile_think_explode()
-{
+{SELFPARAM();
     if(self.enemy != world)
     if(vlen(self.origin - self.enemy.origin) < self.owner.shot_radius * 3)
         setorigin(self,self.enemy.origin + randomvec() * self.owner.shot_radius);
@@ -28,10 +28,10 @@ void turret_flac_projectile_think_explode()
     remove(self);
 }
 
-void spawnfunc_turret_flac() { if(!turret_initialize(TUR_FLAC)) remove(self); }
+void spawnfunc_turret_flac() { SELFPARAM(); if(!turret_initialize(TUR_FLAC)) remove(self); }
 
 float t_flac(float req)
-{
+{SELFPARAM();
     switch(req)
     {
         case TR_ATTACK:
@@ -40,7 +40,7 @@ float t_flac(float req)
 
             turret_tag_fire_update();
 
-            proj = turret_projectile(W_Sound("hagar_fire"), 5, 0, DEATH_TURRET_FLAC, PROJECTILE_HAGAR, TRUE, TRUE);
+            proj = turret_projectile(SND(HAGAR_FIRE), 5, 0, DEATH_TURRET_FLAC, PROJECTILE_HAGAR, TRUE, TRUE);
             Send_Effect(EFFECT_BLASTER_MUZZLEFLASH, self.tur_shotorg, self.tur_shotdir_updated * 1000, 1);
             proj.think	  = turret_flac_projectile_think_explode;
             proj.nextthink  = time + self.tur_impacttime + (random() * 0.01 - random() * 0.01);
@@ -71,8 +71,6 @@ float t_flac(float req)
         }
         case TR_PRECACHE:
         {
-            precache_model ("models/turrets/base.md3");
-            precache_model ("models/turrets/flac.md3");
             return true;
         }
     }

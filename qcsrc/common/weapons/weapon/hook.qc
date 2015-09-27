@@ -60,7 +60,7 @@ HOOK_SETTINGS(WEP_ADD_CVAR, WEP_ADD_PROP)
 #ifdef SVQC
 
 void spawnfunc_weapon_hook(void)
-{
+{SELFPARAM();
 	if(g_grappling_hook) // offhand hook
 	{
 		startitem_failed = true;
@@ -71,7 +71,7 @@ void spawnfunc_weapon_hook(void)
 }
 
 void W_Hook_ExplodeThink(void)
-{
+{SELFPARAM();
 	float dt, dmg_remaining_next, f;
 
 	dt = time - self.teleport_time;
@@ -91,7 +91,7 @@ void W_Hook_ExplodeThink(void)
 }
 
 void W_Hook_Explode2(void)
-{
+{SELFPARAM();
 	self.event_damage = func_null;
 	self.touch = func_null;
 	self.effects |= EF_NODRAW;
@@ -110,7 +110,7 @@ void W_Hook_Explode2(void)
 }
 
 void W_Hook_Damage(entity inflictor, entity attacker, float damage, int deathtype, vector hitloc, vector force)
-{
+{SELFPARAM();
 	if(self.health <= 0)
 		return;
 
@@ -124,17 +124,17 @@ void W_Hook_Damage(entity inflictor, entity attacker, float damage, int deathtyp
 }
 
 void W_Hook_Touch2(void)
-{
+{SELFPARAM();
 	PROJECTILE_TOUCH;
 	self.use();
 }
 
 void W_Hook_Attack2(void)
-{
+{SELFPARAM();
 	entity gren;
 
 	//W_DecreaseAmmo(WEP_CVAR_SEC(hook, ammo)); // WEAPONTODO: Figure out how to handle ammo with hook secondary (gravitybomb)
-	W_SetupShot(self, false, 4, W_Sound("hookbomb_fire"), CH_WEAPON_A, WEP_CVAR_SEC(hook, damage));
+	W_SetupShot(self, false, 4, SND(HOOKBOMB_FIRE), CH_WEAPON_A, WEP_CVAR_SEC(hook, damage));
 
 	gren = spawn();
 	gren.owner = gren.realowner = self;
@@ -175,7 +175,7 @@ void W_Hook_Attack2(void)
 }
 
 bool W_Hook(int req)
-{
+{SELFPARAM();
 	float hooked_time_max, hooked_fuel;
 
 	switch(req)
@@ -288,12 +288,6 @@ bool W_Hook(int req)
 		}
 		case WR_INIT:
 		{
-			precache_model(W_Model("g_hookgun.md3"));
-			precache_model(W_Model("v_hookgun.md3"));
-			precache_model(W_Model("h_hookgun.iqm"));
-			precache_sound(W_Sound("hook_impact")); // done by g_hook.qc
-			precache_sound(W_Sound("hook_fire"));
-			precache_sound(W_Sound("hookbomb_fire"));
 			HOOK_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
 		}
@@ -338,7 +332,7 @@ bool W_Hook(int req)
 #endif
 #ifdef CSQC
 bool W_Hook(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:
@@ -347,13 +341,12 @@ bool W_Hook(int req)
 			org2 = w_org + w_backoff * 2;
 			pointparticles(particleeffectnum(EFFECT_HOOK_EXPLODE), org2, '0 0 0', 1);
 			if(!w_issilent)
-				sound(self, CH_SHOTS, W_Sound("hookbomb_impact"), VOL_BASE, ATTN_NORM);
+				sound(self, CH_SHOTS, SND_HOOKBOMB_IMPACT, VOL_BASE, ATTN_NORM);
 
 			return true;
 		}
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("hookbomb_impact"));
 			return true;
 		}
 		case WR_ZOOMRETICLE:

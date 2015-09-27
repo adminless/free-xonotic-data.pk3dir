@@ -6,7 +6,7 @@
 // NOTE: also contains func_sparks
 
 float pointparticles_SendEntity(entity to, float fl)
-{
+{SELFPARAM();
 	WriteByte(MSG_ENTITY, ENT_CLIENT_POINTPARTICLES);
 
 	// optional features to save space
@@ -89,13 +89,13 @@ float pointparticles_SendEntity(entity to, float fl)
 }
 
 void pointparticles_use()
-{
+{SELFPARAM();
 	self.state = !self.state;
 	self.SendFlags |= 2;
 }
 
 void pointparticles_think()
-{
+{SELFPARAM();
 	if(self.origin != self.oldorigin)
 	{
 		self.SendFlags |= 4;
@@ -105,7 +105,7 @@ void pointparticles_think()
 }
 
 void pointparticles_reset()
-{
+{SELFPARAM();
 	if(self.spawnflags & 1)
 		self.state = 1;
 	else
@@ -113,9 +113,9 @@ void pointparticles_reset()
 }
 
 void spawnfunc_func_pointparticles()
-{
+{SELFPARAM();
 	if(self.model != "")
-		setmodel(self, self.model);
+		_setmodel(self, self.model);
 	if(self.noise != "")
 		precache_sound (self.noise);
 
@@ -158,7 +158,7 @@ void spawnfunc_func_pointparticles()
 }
 
 void spawnfunc_func_sparks()
-{
+{SELFPARAM();
 	// self.cnt is the amount of sparks that one burst will spawn
 	if(self.cnt < 1) {
 		self.cnt = 25.0; // nice default value
@@ -184,7 +184,7 @@ void spawnfunc_func_sparks()
 #elif defined(CSQC)
 
 void Draw_PointParticles()
-{
+{SELFPARAM();
 	float n, i, fail;
 	vector p;
 	vector sz;
@@ -230,7 +230,7 @@ void Draw_PointParticles()
 			if(self.noise != "")
 			{
 				setorigin(self, p);
-				sound(self, CH_AMBIENT, self.noise, VOL_BASE * self.volume, self.atten);
+				_sound(self, CH_AMBIENT, self.noise, VOL_BASE * self.volume, self.atten);
 			}
 			self.just_toggled = 0;
 		}
@@ -244,7 +244,7 @@ void Draw_PointParticles()
 }
 
 void Ent_PointParticles_Remove()
-{
+{SELFPARAM();
 	if(self.noise)
 		strunzone(self.noise);
 	self.noise = string_null;
@@ -254,7 +254,7 @@ void Ent_PointParticles_Remove()
 }
 
 void Ent_PointParticles()
-{
+{SELFPARAM();
 	float i;
 	vector v;
 	int f = ReadByte();

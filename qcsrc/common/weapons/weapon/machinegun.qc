@@ -56,7 +56,7 @@ MACHINEGUN_SETTINGS(WEP_ADD_CVAR, WEP_ADD_PROP)
 #ifdef SVQC
 
 void spawnfunc_weapon_machinegun(void)
-{
+{SELFPARAM();
 	if(autocvar_sv_q3acompat_machineshotgunswap)
 	if(self.classname != "droppedweapon")
 	{
@@ -68,7 +68,7 @@ void spawnfunc_weapon_machinegun(void)
 void spawnfunc_weapon_uzi(void) { spawnfunc_weapon_machinegun(); }
 
 void W_MachineGun_MuzzleFlash_Think(void)
-{
+{SELFPARAM();
 	self.frame = self.frame + 2;
 	self.scale = self.scale * 0.5;
 	self.alpha = self.alpha - 0.25;
@@ -85,12 +85,12 @@ void W_MachineGun_MuzzleFlash_Think(void)
 }
 
 void W_MachineGun_MuzzleFlash(void)
-{
+{SELFPARAM();
 	if(self.muzzle_flash == world)
 		self.muzzle_flash = spawn();
 
 	// muzzle flash for 1st person view
-	setmodel(self.muzzle_flash, "models/uziflash.md3"); // precision set below
+	setmodel(self.muzzle_flash, MDL_MACHINEGUN_MUZZLEFLASH); // precision set below
 
 	self.muzzle_flash.scale = 0.75;
 	self.muzzle_flash.think = W_MachineGun_MuzzleFlash_Think;
@@ -103,8 +103,8 @@ void W_MachineGun_MuzzleFlash(void)
 }
 
 void W_MachineGun_Attack(int deathtype)
-{
-	W_SetupShot(self, true, 0, W_Sound("uzi_fire"), CH_WEAPON_A, ((self.misc_bulletcounter == 1) ? WEP_CVAR(machinegun, first_damage) : WEP_CVAR(machinegun, sustained_damage)));
+{SELFPARAM();
+	W_SetupShot(self, true, 0, SND(UZI_FIRE), CH_WEAPON_A, ((self.misc_bulletcounter == 1) ? WEP_CVAR(machinegun, first_damage) : WEP_CVAR(machinegun, sustained_damage)));
 	if(!autocvar_g_norecoil)
 	{
 		self.punchangle_x = random() - 0.5;
@@ -136,7 +136,7 @@ void W_MachineGun_Attack(int deathtype)
 
 // weapon frames
 void W_MachineGun_Attack_Frame(void)
-{
+{SELFPARAM();
 	if(self.weapon != self.switchweapon) // abort immediately if switching
 	{
 		w_ready();
@@ -161,7 +161,7 @@ void W_MachineGun_Attack_Frame(void)
 
 
 void W_MachineGun_Attack_Auto(void)
-{
+{SELFPARAM();
 	float machinegun_spread;
 
 	if(!self.BUTTON_ATCK)
@@ -180,7 +180,7 @@ void W_MachineGun_Attack_Auto(void)
 
 	W_DecreaseAmmo(WEP_CVAR(machinegun, sustained_ammo));
 
-	W_SetupShot(self, true, 0, W_Sound("uzi_fire"), CH_WEAPON_A, WEP_CVAR(machinegun, sustained_damage));
+	W_SetupShot(self, true, 0, SND(UZI_FIRE), CH_WEAPON_A, WEP_CVAR(machinegun, sustained_damage));
 	if(!autocvar_g_norecoil)
 	{
 		self.punchangle_x = random() - 0.5;
@@ -205,8 +205,8 @@ void W_MachineGun_Attack_Auto(void)
 }
 
 void W_MachineGun_Attack_Burst(void)
-{
-	W_SetupShot(self, true, 0, W_Sound("uzi_fire"), CH_WEAPON_A, WEP_CVAR(machinegun, sustained_damage));
+{SELFPARAM();
+	W_SetupShot(self, true, 0, SND(UZI_FIRE), CH_WEAPON_A, WEP_CVAR(machinegun, sustained_damage));
 	if(!autocvar_g_norecoil)
 	{
 		self.punchangle_x = random() - 0.5;
@@ -237,7 +237,7 @@ void W_MachineGun_Attack_Burst(void)
 }
 
 bool W_MachineGun(int req)
-{
+{SELFPARAM();
 	float ammo_amount;
 	switch(req)
 	{
@@ -304,11 +304,6 @@ bool W_MachineGun(int req)
 		}
 		case WR_INIT:
 		{
-			precache_model("models/uziflash.md3");
-			precache_model(W_Model("g_uzi.md3"));
-			precache_model(W_Model("v_uzi.md3"));
-			precache_model(W_Model("h_uzi.iqm"));
-			precache_sound(W_Sound("uzi_fire"));
 			MACHINEGUN_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
 		}
@@ -351,7 +346,7 @@ bool W_MachineGun(int req)
 		}
 		case WR_RELOAD:
 		{
-			W_Reload(min(max(WEP_CVAR(machinegun, sustained_ammo), WEP_CVAR(machinegun, first_ammo)), WEP_CVAR(machinegun, burst_ammo)), W_Sound("reload"));
+			W_Reload(min(max(WEP_CVAR(machinegun, sustained_ammo), WEP_CVAR(machinegun, first_ammo)), WEP_CVAR(machinegun, burst_ammo)), SND(RELOAD));
 			return true;
 		}
 		case WR_SUICIDEMESSAGE:
@@ -371,7 +366,7 @@ bool W_MachineGun(int req)
 #endif
 #ifdef CSQC
 bool W_MachineGun(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:
@@ -381,19 +376,16 @@ bool W_MachineGun(int req)
 			pointparticles(particleeffectnum(EFFECT_MACHINEGUN_IMPACT), org2, w_backoff * 1000, 1);
 			if(!w_issilent)
 				if(w_random < 0.05)
-					sound(self, CH_SHOTS, W_Sound("ric1"), VOL_BASE, ATTN_NORM);
+					sound(self, CH_SHOTS, SND_RIC1, VOL_BASE, ATTN_NORM);
 				else if(w_random < 0.1)
-					sound(self, CH_SHOTS, W_Sound("ric2"), VOL_BASE, ATTN_NORM);
+					sound(self, CH_SHOTS, SND_RIC2, VOL_BASE, ATTN_NORM);
 				else if(w_random < 0.2)
-					sound(self, CH_SHOTS, W_Sound("ric3"), VOL_BASE, ATTN_NORM);
+					sound(self, CH_SHOTS, SND_RIC3, VOL_BASE, ATTN_NORM);
 
 			return true;
 		}
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("ric1"));
-			precache_sound(W_Sound("ric2"));
-			precache_sound(W_Sound("ric3"));
 			return true;
 		}
 		case WR_ZOOMRETICLE:

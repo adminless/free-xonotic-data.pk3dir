@@ -52,7 +52,7 @@ void spawnfunc_weapon_blaster(void) { weapon_defaultspawnfunc(WEP_BLASTER.m_id);
 void spawnfunc_weapon_laser(void) { spawnfunc_weapon_blaster(); }
 
 void W_Blaster_Touch(void)
-{
+{SELFPARAM();
 	PROJECTILE_TOUCH;
 
 	self.event_damage = func_null;
@@ -74,7 +74,7 @@ void W_Blaster_Touch(void)
 }
 
 void W_Blaster_Think(void)
-{
+{SELFPARAM();
 	self.movetype = MOVETYPE_FLY;
 	self.think = SUB_Remove;
 	self.nextthink = time + self.blaster_lifetime;
@@ -92,10 +92,10 @@ void W_Blaster_Attack(
 	float atk_spread,
 	float atk_delay,
 	float atk_lifetime)
-{
+{SELFPARAM();
 	vector s_forward = v_forward * cos(atk_shotangle * DEG2RAD) + v_up * sin(atk_shotangle * DEG2RAD);
 
-	W_SetupShot_Dir(self, s_forward, false, 3, W_Sound("lasergun_fire"), CH_WEAPON_B, atk_damage);
+	W_SetupShot_Dir(self, s_forward, false, 3, SND(LASERGUN_FIRE), CH_WEAPON_B, atk_damage);
 	Send_Effect(EFFECT_BLASTER_MUZZLEFLASH, w_shotorg, w_shotdir * 1000, 1);
 
 	entity missile = spawn();
@@ -141,15 +141,11 @@ void W_Blaster_Attack(
 
 	if(time >= missile.nextthink)
 	{
-		entity oldself;
-		oldself = self;
-		self = missile;
-		self.think();
-		self = oldself;
+		WITH(entity, self, missile, missile.think());
 	}
 }
 bool W_Blaster(int request)
-{
+{SELFPARAM();
 	switch(request)
 	{
 		case WR_AIM:
@@ -227,10 +223,6 @@ bool W_Blaster(int request)
 
 		case WR_INIT:
 		{
-			precache_model(W_Model("g_laser.md3"));
-			precache_model(W_Model("v_laser.md3"));
-			precache_model(W_Model("h_laser.iqm"));
-			precache_sound(W_Sound("lasergun_fire"));
 			BLASTER_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
 		}
@@ -268,7 +260,7 @@ bool W_Blaster(int request)
 #endif
 #ifdef CSQC
 bool W_Blaster(int request)
-{
+{SELFPARAM();
 	switch(request)
 	{
 		case WR_IMPACTEFFECT:
@@ -276,13 +268,12 @@ bool W_Blaster(int request)
 			vector org2;
 			org2 = w_org + w_backoff * 6;
 			pointparticles(particleeffectnum(EFFECT_BLASTER_IMPACT), org2, w_backoff * 1000, 1);
-			if(!w_issilent) { sound(self, CH_SHOTS, W_Sound("laserimpact"), VOL_BASE, ATTN_NORM); }
+			if(!w_issilent) { sound(self, CH_SHOTS, SND_LASERIMPACT, VOL_BASE, ATTN_NORM); }
 			return true;
 		}
 
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("laserimpact"));
 			return true;
 		}
 		case WR_ZOOMRETICLE:

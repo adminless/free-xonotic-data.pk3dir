@@ -12,7 +12,7 @@ REGISTER_TURRET(
 #else
 #ifdef SVQC
 entity toast(entity from, float range, float damage)
-{
+{SELFPARAM();
     entity e;
     entity etarget = world;
     float d,dd;
@@ -54,7 +54,7 @@ entity toast(entity from, float range, float damage)
 }
 
 float turret_tesla_firecheck()
-{
+{SELFPARAM();
     // g_turrets_targetscan_maxdelay forces a target re-scan at least this often
     float do_target_scan = 0;
 
@@ -89,10 +89,10 @@ float turret_tesla_firecheck()
     return 0;
 }
 
-void spawnfunc_turret_tesla() { if(!turret_initialize(TUR_TESLA)) remove(self); }
+void spawnfunc_turret_tesla() { SELFPARAM(); if(!turret_initialize(TUR_TESLA)) remove(self); }
 
 float t_tesla(float req)
-{
+{SELFPARAM();
     switch(req)
     {
         case TR_ATTACK:
@@ -185,8 +185,6 @@ float t_tesla(float req)
         }
         case TR_PRECACHE:
         {
-            precache_model ("models/turrets/tesla_base.md3");
-            precache_model ("models/turrets/tesla_head.md3");
             return true;
         }
     }

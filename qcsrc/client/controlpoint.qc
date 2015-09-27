@@ -4,7 +4,6 @@
 #include "../common/movetypes/movetypes.qh"
 
 .float alpha;
-bool cpicon_precached;
 .int count;
 .float pain_finished;
 
@@ -21,21 +20,8 @@ bool cpicon_precached;
 
 .entity icon_realmodel;
 
-void cpicon_precache()
-{
-	if(cpicon_precached)
-		return; // already precached
-
-	precache_model("models/onslaught/controlpoint_icon_dmg3.md3");
-	precache_model("models/onslaught/controlpoint_icon_dmg2.md3");
-	precache_model("models/onslaught/controlpoint_icon_dmg1.md3");
-	precache_model("models/onslaught/controlpoint_icon.md3");
-
-	cpicon_precached = true;
-}
-
 void cpicon_draw()
-{
+{SELFPARAM();
 	if(time < self.move_time) { return; }
 
 	if(self.cp_bob_dmg_z > 0)
@@ -99,17 +85,17 @@ void cpicon_draw()
 }
 
 void cpicon_damage(float hp)
-{
+{SELFPARAM();
 	if(!self.iscaptured) { return; }
 
 	if(hp < self.max_health * 0.25)
-		setmodel(self, "models/onslaught/controlpoint_icon_dmg3.md3");
+		setmodel(self, MDL_ONS_CP3);
 	else if(hp < self.max_health * 0.50)
-		setmodel(self, "models/onslaught/controlpoint_icon_dmg2.md3");
+		setmodel(self, MDL_ONS_CP2);
 	else if(hp < self.max_health * 0.75)
-		setmodel(self, "models/onslaught/controlpoint_icon_dmg1.md3");
+		setmodel(self, MDL_ONS_CP1);
 	else if(hp <= self.max_health || hp >= self.max_health)
-		setmodel(self, "models/onslaught/controlpoint_icon.md3");
+		setmodel(self, MDL_ONS_CP);
 
 	self.punchangle = (2 * randomvec() - '1 1 1') * 45;
 
@@ -121,16 +107,16 @@ void cpicon_damage(float hp)
 }
 
 void cpicon_construct()
-{
+{SELFPARAM();
 	self.netname = "Control Point Icon";
 
-	setmodel(self, "models/onslaught/controlpoint_icon.md3");
+	setmodel(self, MDL_ONS_CP);
 	setsize(self, CPICON_MIN, CPICON_MAX);
 
 	if(self.icon_realmodel == world)
 	{
 		self.icon_realmodel = spawn();
-		setmodel(self.icon_realmodel, "null");
+		setmodel(self.icon_realmodel, MDL_Null);
 		setorigin(self.icon_realmodel, self.origin);
 		setsize(self.icon_realmodel, CPICON_MIN, CPICON_MAX);
 		self.icon_realmodel.movetype = MOVETYPE_NOCLIP;
@@ -155,7 +141,7 @@ void cpicon_construct()
 
 .vector glowmod;
 void cpicon_changeteam()
-{
+{SELFPARAM();
 	if(self.team)
 	{
 		self.glowmod = Team_ColorRGB(self.team - 1);
@@ -171,7 +157,7 @@ void cpicon_changeteam()
 }
 
 void ent_cpicon()
-{
+{SELFPARAM();
 	int sf = ReadByte();
 
 	if(sf & CPSF_SETUP)
@@ -191,7 +177,6 @@ void ent_cpicon()
 			self.count = (self.health - self.max_health) * frametime;
 
 		cpicon_changeteam();
-		cpicon_precache();
 		cpicon_construct();
 	}
 

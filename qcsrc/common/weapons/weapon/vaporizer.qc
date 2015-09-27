@@ -19,6 +19,7 @@ REGISTER_WEAPON(
 #define VAPORIZER_SETTINGS_LIST(w_cvar,w_prop,id,sn) \
 	w_cvar(id, sn, PRI, ammo) \
 	w_cvar(id, sn, PRI, animtime) \
+	w_cvar(id, sn, PRI, damage) \
 	w_cvar(id, sn, PRI, refire) \
 	w_cvar(id, sn, SEC, ammo) \
 	w_cvar(id, sn, SEC, animtime) \
@@ -58,7 +59,7 @@ void spawnfunc_weapon_vaporizer(void) { weapon_defaultspawnfunc(WEP_VAPORIZER.m_
 void spawnfunc_weapon_minstanex(void) { spawnfunc_weapon_vaporizer(); }
 
 void W_RocketMinsta_Explosion(vector loc)
-{
+{SELFPARAM();
 	if(accuracy_canbegooddamage(self))
 		accuracy_add(self, WEP_DEVASTATOR.m_id, autocvar_g_rm_damage, 0);
 	entity dmgent = spawn();
@@ -69,18 +70,18 @@ void W_RocketMinsta_Explosion(vector loc)
 }
 
 void W_Vaporizer_Attack(void)
-{
-	float flying;
-	flying = IsFlying(self); // do this BEFORE to make the trace values from FireRailgunBullet last
+{SELFPARAM();
+	bool flying = IsFlying(self); // do this BEFORE to make the trace values from FireRailgunBullet last
+	float vaporizer_damage = ((WEP_CVAR_PRI(vaporizer, damage) > 0) ? WEP_CVAR_PRI(vaporizer, damage) : 10000);
 
-	W_SetupShot(self, true, 0, "", CH_WEAPON_A, 10000);
+	W_SetupShot(self, true, 0, "", CH_WEAPON_A, vaporizer_damage);
 	// handle sound separately so we can change the volume
 	// added bonus: no longer plays the strength sound (strength gives no bonus to instakill anyway)
-	sound (self, CH_WEAPON_A, W_Sound("minstanexfire"), VOL_BASE * 0.8, ATTEN_NORM);
+	sound (self, CH_WEAPON_A, SND_MINSTANEXFIRE, VOL_BASE * 0.8, ATTEN_NORM);
 
 	yoda = 0;
 	damage_goodhits = 0;
-	FireRailgunBullet(w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 10000, 800, 0, 0, 0, 0, WEP_VAPORIZER.m_id);
+	FireRailgunBullet(w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, vaporizer_damage, 800, 0, 0, 0, 0, WEP_VAPORIZER.m_id);
 
 	if(yoda && flying)
 		Send_Notification(NOTIF_ONE, self, MSG_ANNCE, ANNCE_ACHIEVEMENT_YODA);
@@ -95,41 +96,8 @@ void W_Vaporizer_Attack(void)
 	Send_Effect(EFFECT_VORTEX_MUZZLEFLASH, w_shotorg, w_shotdir * 1000, 1);
 
 	// teamcolor / hit beam effect
-	vector v;
-	v = WarpZone_UnTransformOrigin(WarpZone_trace_transform, trace_endpos);
-	switch(self.team)
-	{
-		case NUM_TEAM_1:   // Red
-			if(damage_goodhits)
-				Send_Effect(EFFECT_VAPORIZER_RED_HIT, w_shotorg, v, 1);
-			else
-				Send_Effect(EFFECT_VAPORIZER_RED, w_shotorg, v, 1);
-			break;
-		case NUM_TEAM_2:   // Blue
-			if(damage_goodhits)
-				Send_Effect(EFFECT_VAPORIZER_BLUE_HIT, w_shotorg, v, 1);
-			else
-				Send_Effect(EFFECT_VAPORIZER_BLUE, w_shotorg, v, 1);
-			break;
-		case NUM_TEAM_3:   // Yellow
-			if(damage_goodhits)
-				Send_Effect(EFFECT_VAPORIZER_YELLOW_HIT, w_shotorg, v, 1);
-			else
-				Send_Effect(EFFECT_VAPORIZER_YELLOW, w_shotorg, v, 1);
-			break;
-		case NUM_TEAM_4:   // Pink
-			if(damage_goodhits)
-				Send_Effect(EFFECT_VAPORIZER_PINK_HIT, w_shotorg, v, 1);
-			else
-				Send_Effect(EFFECT_VAPORIZER_PINK, w_shotorg, v, 1);
-			break;
-		default:
-			if(damage_goodhits)
-				Send_Effect_("TE_TEI_G3_HIT", w_shotorg, v, 1);
-			else
-				Send_Effect_("TE_TEI_G3", w_shotorg, v, 1);
-			break;
-	}
+	vector v = WarpZone_UnTransformOrigin(WarpZone_trace_transform, trace_endpos);
+	Send_Effect((damage_goodhits ? EFFECT_VAPORIZER_HIT(self.team) : EFFECT_VAPORIZER(self.team)), w_shotorg, v, 1);
 
 	if(autocvar_g_rm)
 	if(!(trace_dphitq3surfaceflags & (Q3SURFACEFLAG_SKY | Q3SURFACEFLAG_NOIMPACT)))
@@ -139,7 +107,7 @@ void W_Vaporizer_Attack(void)
 }
 
 void W_RocketMinsta_Laser_Explode (void)
-{
+{SELFPARAM();
 	if(other.takedamage == DAMAGE_AIM)
 		if(IS_PLAYER(other))
 			if(DIFF_TEAM(self.realowner, other))
@@ -154,7 +122,7 @@ void W_RocketMinsta_Laser_Explode (void)
 }
 
 void W_RocketMinsta_Laser_Touch (void)
-{
+{SELFPARAM();
 	PROJECTILE_TOUCH;
 	//W_RocketMinsta_Laser_Explode ();
 	RadiusDamage (self, self.realowner, self.rm_damage, self.rm_edmg, autocvar_g_rm_laser_radius, world, world, self.rm_force, self.projectiledeathtype, other);
@@ -162,9 +130,9 @@ void W_RocketMinsta_Laser_Touch (void)
 }
 
 void W_RocketMinsta_Attack2(void)
-{
+{SELFPARAM();
 	makevectors(self.v_angle);
-	
+
 	entity proj;
 	float counter = 0;
 	float total = autocvar_g_rm_laser_count;
@@ -173,7 +141,7 @@ void W_RocketMinsta_Attack2(void)
 
 	float w = self.weapon;
 	self.weapon = WEP_ELECTRO.m_id;
-	W_SetupShot_ProjectileSize (self, '0 0 -3', '0 0 -3', false, 2, W_Sound("crylink_fire"), CH_WEAPON_A, autocvar_g_rm_laser_damage);
+	W_SetupShot_ProjectileSize (self, '0 0 -3', '0 0 -3', false, 2, SND(CRYLINK_FIRE), CH_WEAPON_A, autocvar_g_rm_laser_damage);
 	self.weapon = w;
 
 	Send_Effect(EFFECT_ELECTRO_MUZZLEFLASH, w_shotorg, w_shotdir * 1000, 1);
@@ -191,11 +159,11 @@ void W_RocketMinsta_Attack2(void)
         PROJECTILE_MAKETRIGGER(proj);
         proj.projectiledeathtype = WEP_ELECTRO.m_id;
         setorigin(proj, w_shotorg);
-		
+
 		proj.rm_force = autocvar_g_rm_laser_force / total;
 		proj.rm_damage = autocvar_g_rm_laser_damage / total;
 		proj.rm_edmg = proj.rm_damage;
-        
+
         //W_SetupProjectileVelocity(proj, autocvar_g_rm_laser_speed, spread * (rndspread ? random() : 1) * autocvar_g_rm_laser_speed);
 
         proj.movetype = MOVETYPE_BOUNCEMISSILE;
@@ -217,16 +185,16 @@ void W_RocketMinsta_Attack2(void)
 }
 
 void W_RocketMinsta_Attack3 (void)
-{
+{SELFPARAM();
 	makevectors(self.v_angle);
-	
+
 	entity proj;
 	float counter = 0;
 	float total = 1;
 
 	int w = self.weapon;
 	self.weapon = WEP_ELECTRO.m_id;
-	W_SetupShot_ProjectileSize (self, '0 0 -3', '0 0 -3', false, 2, W_Sound("electro_fire2"), CH_WEAPON_A, autocvar_g_rm_laser_damage);
+	W_SetupShot_ProjectileSize (self, '0 0 -3', '0 0 -3', false, 2, SND(ELECTRO_FIRE2), CH_WEAPON_A, autocvar_g_rm_laser_damage);
 	self.weapon = w;
 
 	Send_Effect(EFFECT_ELECTRO_MUZZLEFLASH, w_shotorg, w_shotdir * 1000, 1);
@@ -244,11 +212,11 @@ void W_RocketMinsta_Attack3 (void)
         PROJECTILE_MAKETRIGGER(proj);
         proj.projectiledeathtype = WEP_ELECTRO.m_id;
         setorigin(proj, w_shotorg);
-		
+
 		proj.rm_force = autocvar_g_rm_laser_force / total;
 		proj.rm_damage = autocvar_g_rm_laser_damage / total;
 		proj.rm_edmg = proj.rm_damage;
-        
+
         //W_SetupProjectileVelocity(proj, autocvar_g_rm_laser_speed, spread * (rndspread ? random() : 1) * autocvar_g_rm_laser_speed);
 
         proj.movetype = MOVETYPE_BOUNCEMISSILE;
@@ -268,7 +236,7 @@ void W_RocketMinsta_Attack3 (void)
 }
 
 float W_Vaporizer(float req)
-{
+{SELFPARAM();
 	float ammo_amount;
 	float vaporizer_ammo;
 	float rapid = autocvar_g_rm_laser_rapid;
@@ -356,19 +324,11 @@ float W_Vaporizer(float req)
 			}
 			else
 				self.held_down = false;
-			
+
 			return true;
 		}
 		case WR_INIT:
 		{
-			precache_model("models/nexflash.md3");
-			precache_model(W_Model("g_minstanex.md3"));
-			precache_model(W_Model("v_minstanex.md3"));
-			precache_model(W_Model("h_minstanex.iqm"));
-			precache_sound(W_Sound("minstanexfire"));
-			precache_sound(W_Sound("nexwhoosh1"));
-			precache_sound(W_Sound("nexwhoosh2"));
-			precache_sound(W_Sound("nexwhoosh3"));
 			//W_Blaster(WR_INIT); // Samual: Is this really the proper thing to do? Didn't we already run this previously?
 			VAPORIZER_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
@@ -411,7 +371,7 @@ float W_Vaporizer(float req)
 			else
 				used_ammo = vaporizer_ammo;
 
-			W_Reload(used_ammo, W_Sound("reload"));
+			W_Reload(used_ammo, SND(RELOAD));
 			return true;
 		}
 		case WR_SUICIDEMESSAGE:
@@ -428,7 +388,7 @@ float W_Vaporizer(float req)
 #endif
 #ifdef CSQC
 float W_Vaporizer(float req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:
@@ -437,19 +397,17 @@ float W_Vaporizer(float req)
 			if(w_deathtype & HITTYPE_SECONDARY)
 			{
 				pointparticles(particleeffectnum(EFFECT_BLASTER_IMPACT), org2, w_backoff * 1000, 1);
-				if(!w_issilent) { sound(self, CH_SHOTS, W_Sound("laserimpact"), VOL_BASE, ATTN_NORM); }
+				if(!w_issilent) { sound(self, CH_SHOTS, SND_LASERIMPACT, VOL_BASE, ATTN_NORM); }
 			}
 			else
 			{
 				pointparticles(particleeffectnum(EFFECT_VORTEX_IMPACT), org2, '0 0 0', 1);
-				if(!w_issilent) { sound(self, CH_SHOTS, W_Sound("neximpact"), VOL_BASE, ATTN_NORM); }
+				if(!w_issilent) { sound(self, CH_SHOTS, SND_NEXIMPACT, VOL_BASE, ATTN_NORM); }
 			}
 			return true;
 		}
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("laserimpact"));
-			precache_sound(W_Sound("neximpact"));
 			if(autocvar_cl_reticle && autocvar_cl_reticle_weapon)
 			{
 				precache_pic("gfx/reticle_nex");

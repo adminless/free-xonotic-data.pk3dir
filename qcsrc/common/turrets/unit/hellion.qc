@@ -15,7 +15,7 @@ float autocvar_g_turrets_unit_hellion_shot_speed_gain;
 float autocvar_g_turrets_unit_hellion_shot_speed_max;
 
 void turret_hellion_missile_think()
-{
+{SELFPARAM();
     vector olddir,newdir;
     vector pre_pos;
     float itime;
@@ -76,10 +76,10 @@ void turret_hellion_missile_think()
     UpdateCSQCProjectile(self);
 }
 
-void spawnfunc_turret_hellion() { if(!turret_initialize(TUR_HELLION)) remove(self); }
+void spawnfunc_turret_hellion() { SELFPARAM(); if(!turret_initialize(TUR_HELLION)) remove(self); }
 
 float t_hellion(float req)
-{
+{SELFPARAM();
     switch(req)
     {
         case TR_ATTACK:
@@ -91,7 +91,7 @@ float t_hellion(float req)
             else
                 self.tur_shotorg = gettaginfo(self.tur_head, gettagindex(self.tur_head, "tag_fire2"));
 
-            missile = turret_projectile(W_Sound("rocket_fire"), 6, 10, DEATH_TURRET_HELLION, PROJECTILE_ROCKET, FALSE, FALSE);
+            missile = turret_projectile(SND(ROCKET_FIRE), 6, 10, DEATH_TURRET_HELLION, PROJECTILE_ROCKET, FALSE, FALSE);
             te_explosion (missile.origin);
             missile.think		= turret_hellion_missile_think;
             missile.nextthink	= time;
@@ -128,8 +128,6 @@ float t_hellion(float req)
         }
         case TR_PRECACHE:
         {
-            precache_model ("models/turrets/base.md3");
-            precache_model ("models/turrets/hellion.md3");
             return true;
         }
     }

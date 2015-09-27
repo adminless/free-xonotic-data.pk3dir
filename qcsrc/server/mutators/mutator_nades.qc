@@ -14,7 +14,7 @@
 .entity nade_spawnloc;
 
 void nade_timer_think()
-{
+{SELFPARAM();
 	self.skin = 8 - (self.owner.wait - time) / (autocvar_g_nades_nade_lifetime / 10);
 	self.nextthink = time;
 	if(!self.owner || wasfreed(self.owner))
@@ -29,7 +29,7 @@ void nade_burn_spawn(entity _nade)
 void nade_spawn(entity _nade)
 {
 	entity timer = spawn();
-	setmodel(timer, "models/ok_nade_counter/ok_nade_counter.md3");
+	setmodel(timer, MDL_NADE_TIMER);
 	setattachment(timer, _nade, "");
 	timer.classname = "nade_timer";
 	timer.colormap = _nade.colormap;
@@ -46,7 +46,7 @@ void nade_spawn(entity _nade)
 }
 
 void napalm_damage(float dist, float damage, float edgedamage, float burntime)
-{
+{SELFPARAM();
 	entity e;
 	float d;
 	vector p;
@@ -84,7 +84,7 @@ void napalm_damage(float dist, float damage, float edgedamage, float burntime)
 
 
 void napalm_ball_think()
-{
+{SELFPARAM();
 	if(round_handler_IsActive())
 	if(!round_handler_IsRoundStarted())
 	{
@@ -117,11 +117,11 @@ void napalm_ball_think()
 
 
 void nade_napalm_ball()
-{
+{SELFPARAM();
 	entity proj;
 	vector kick;
 
-	spamsound(self, CH_SHOTS, W_Sound("fireball_fire"), VOL_BASE, ATTEN_NORM);
+	spamsound(self, CH_SHOTS, SND(FIREBALL_FIRE), VOL_BASE, ATTEN_NORM);
 
 	proj = spawn ();
 	proj.owner = self.owner;
@@ -133,7 +133,7 @@ void nade_napalm_ball()
 	proj.movetype = MOVETYPE_BOUNCE;
 	proj.projectiledeathtype = DEATH_NADE_NAPALM;
 	PROJECTILE_MAKETRIGGER(proj);
-	setmodel(proj, "null");
+	setmodel(proj, MDL_Null);
 	proj.scale = 1;//0.5;
 	setsize(proj, '-4 -4 -4', '4 4 4');
 	setorigin(proj, self.origin);
@@ -158,7 +158,7 @@ void nade_napalm_ball()
 
 
 void napalm_fountain_think()
-{
+{SELFPARAM();
 
 	if(round_handler_IsActive())
 	if(!round_handler_IsRoundStarted())
@@ -196,7 +196,7 @@ void napalm_fountain_think()
 }
 
 void nade_napalm_boom()
-{
+{SELFPARAM();
 	entity fountain;
 	int c;
 	for (c = 0; c < autocvar_g_nades_napalm_ball_count; c++)
@@ -237,7 +237,7 @@ void nade_ice_freeze(entity freezefield, entity frost_target, float freeze_time)
 }
 
 void nade_ice_think()
-{
+{SELFPARAM();
 
 	if(round_handler_IsActive())
 	if(!round_handler_IsRoundStarted())
@@ -250,17 +250,9 @@ void nade_ice_think()
 	{
 		if ( autocvar_g_nades_ice_explode )
 		{
-			entity expef = NULL;
-			switch(self.realowner.team)
-			{
-				case NUM_TEAM_1: expef = EFFECT_NADE_RED_EXPLODE; break;
-				case NUM_TEAM_2: expef = EFFECT_NADE_BLUE_EXPLODE; break;
-				case NUM_TEAM_3: expef = EFFECT_NADE_YELLOW_EXPLODE; break;
-				case NUM_TEAM_4: expef = EFFECT_NADE_PINK_EXPLODE; break;
-				default:		 expef = EFFECT_NADE_NEUTRAL_EXPLODE; break;
-			}
+			entity expef = EFFECT_NADE_EXPLODE(self.realowner.team);
 			Send_Effect(expef, self.origin + '0 0 1', '0 0 0', 1);
-			sound(self, CH_SHOTS, W_Sound("rocket_impact"), VOL_BASE, ATTEN_NORM);
+			sound(self, CH_SHOTS, SND_ROCKET_IMPACT, VOL_BASE, ATTEN_NORM);
 
 			RadiusDamage(self, self.realowner, autocvar_g_nades_nade_damage, autocvar_g_nades_nade_edgedamage,
 				autocvar_g_nades_nade_radius, self, world, autocvar_g_nades_nade_force, self.projectiledeathtype, self.enemy);
@@ -310,7 +302,7 @@ void nade_ice_think()
 }
 
 void nade_ice_boom()
-{
+{SELFPARAM();
 	entity fountain;
 	fountain = spawn();
 	fountain.owner = self.owner;
@@ -331,9 +323,9 @@ void nade_ice_boom()
 
 	if ( autocvar_g_nades_ice_explode )
 	{
-		setmodel(fountain, "models/grenademodel.md3");
+		setmodel(fountain, MDL_PROJECTILE_GRENADE);
 		entity timer = spawn();
-		setmodel(timer, "models/ok_nade_counter/ok_nade_counter.md3");
+		setmodel(timer, MDL_NADE_TIMER);
 		setattachment(timer, fountain, "");
 		timer.classname = "nade_timer";
 		timer.colormap = self.colormap;
@@ -345,11 +337,11 @@ void nade_ice_boom()
 		timer.skin = 10;
 	}
 	else
-		setmodel(fountain, "null");
+		setmodel(fountain, MDL_Null);
 }
 
 void nade_translocate_boom()
-{
+{SELFPARAM();
 	if(self.realowner.vehicle)
 		return;
 
@@ -365,7 +357,7 @@ void nade_translocate_boom()
 }
 
 void nade_spawn_boom()
-{
+{SELFPARAM();
 	entity spawnloc = spawn();
 	setorigin(spawnloc, self.origin);
 	setsize(spawnloc, self.realowner.mins, self.realowner.maxs);
@@ -385,7 +377,7 @@ void nade_spawn_boom()
 }
 
 void nade_heal_think()
-{
+{SELFPARAM();
 	if(time >= self.ltime)
 	{
 		remove(self);
@@ -404,7 +396,7 @@ void nade_heal_think()
 }
 
 void nade_heal_touch()
-{
+{SELFPARAM();
 	float maxhealth;
 	float health_factor;
 	if(IS_PLAYER(other) || IS_MONSTER(other))
@@ -446,7 +438,7 @@ void nade_heal_touch()
 }
 
 void nade_heal_boom()
-{
+{SELFPARAM();
 	entity healer;
 	healer = spawn();
 	healer.owner = self.owner;
@@ -459,7 +451,7 @@ void nade_heal_boom()
 	healer.solid = SOLID_TRIGGER;
 	healer.touch = nade_heal_touch;
 
-	setmodel(healer, "models/ctf/shield.md3");
+	setmodel(healer, MDL_NADE_HEAL);
 	healer.healer_radius = autocvar_g_nades_nade_radius;
 	vector size = '1 1 1' * healer.healer_radius / 2;
 	setsize(healer,-size,size);
@@ -472,7 +464,7 @@ void nade_heal_boom()
 }
 
 void nade_monster_boom()
-{
+{SELFPARAM();
 	entity e = spawnmonster(self.pokenade_type, 0, self.realowner, self.realowner, self.origin, false, false, 1);
 
 	if(autocvar_g_nades_pokenade_monster_lifetime > 0)
@@ -481,7 +473,7 @@ void nade_monster_boom()
 }
 
 void nade_boom()
-{
+{SELFPARAM();
 	entity expef = NULL;
 	bool nade_blast = true;
 
@@ -517,21 +509,15 @@ void nade_boom()
 
 		default:
 		case NADE_TYPE_NORMAL:
-			switch(self.realowner.team)
-			{
-				case NUM_TEAM_1: expef = EFFECT_NADE_RED_EXPLODE; break;
-				case NUM_TEAM_2: expef = EFFECT_NADE_BLUE_EXPLODE; break;
-				case NUM_TEAM_3: expef = EFFECT_NADE_YELLOW_EXPLODE; break;
-				case NUM_TEAM_4: expef = EFFECT_NADE_PINK_EXPLODE; break;
-				default:		 expef = EFFECT_NADE_NEUTRAL_EXPLODE; break;
-			}
+			expef = EFFECT_NADE_EXPLODE(self.realowner.team);
+			break;
 	}
 
 	if(expef)
 		Send_Effect(expef, findbetterlocation(self.origin, 8), '0 0 0', 1);
 
-	sound(self, CH_SHOTS_SINGLE, "misc/null.wav", VOL_BASE, ATTEN_NORM);
-	sound(self, CH_SHOTS, W_Sound("rocket_impact"), VOL_BASE, ATTEN_NORM);
+	sound(self, CH_SHOTS_SINGLE, SND_Null, VOL_BASE, ATTEN_NORM);
+	sound(self, CH_SHOTS, SND_ROCKET_IMPACT, VOL_BASE, ATTEN_NORM);
 
 	self.event_damage = func_null; // prevent somehow calling damage in the next call
 
@@ -562,7 +548,7 @@ void nade_boom()
 }
 
 void nade_touch()
-{
+{SELFPARAM();
 	/*float is_weapclip = 0;
 	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NODRAW)
 	if (!(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NONSOLID))
@@ -584,7 +570,7 @@ void nade_touch()
 	//UpdateCSQCProjectile(self);
 	if(self.health == self.max_health)
 	{
-		spamsound(self, CH_SHOTS, W_Sound(strcat("grenade_bounce", ftos(1 + rint(random() * 5)))), VOL_BASE, ATTEN_NORM);
+		spamsound(self, CH_SHOTS, SND(GRENADE_BOUNCE_RANDOM()), VOL_BASE, ATTEN_NORM);
 		return;
 	}
 
@@ -593,14 +579,14 @@ void nade_touch()
 }
 
 void nade_beep()
-{
-	sound(self, CH_SHOTS_SINGLE, "overkill/grenadebip.ogg", VOL_BASE, 0.5 *(ATTEN_LARGE + ATTEN_MAX));
+{SELFPARAM();
+	sound(self, CH_SHOTS_SINGLE, SND_NADE_BEEP, VOL_BASE, 0.5 *(ATTEN_LARGE + ATTEN_MAX));
 	self.think = nade_boom;
 	self.nextthink = max(self.wait, time);
 }
 
 void nade_damage(entity inflictor, entity attacker, float damage, int deathtype, vector hitloc, vector force)
-{
+{SELFPARAM();
 	if(ITEM_DAMAGE_NEEDKILL(deathtype))
 	{
 		self.takedamage = DAMAGE_NO;
@@ -649,7 +635,7 @@ void nade_damage(entity inflictor, entity attacker, float damage, int deathtype,
 
 	if(self.health == self.max_health)
 	{
-		sound(self, CH_SHOTS_SINGLE, "misc/null.wav", VOL_BASE, 0.5 *(ATTEN_LARGE + ATTEN_MAX));
+		sound(self, CH_SHOTS_SINGLE, SND_Null, VOL_BASE, 0.5 *(ATTEN_LARGE + ATTEN_MAX));
 		self.nextthink = max(time + autocvar_g_nades_nade_lifetime, time);
 		self.think = nade_beep;
 	}
@@ -666,7 +652,7 @@ void nade_damage(entity inflictor, entity attacker, float damage, int deathtype,
 }
 
 void toss_nade(entity e, vector _velocity, float _time)
-{
+{SELFPARAM();
 	if(e.nade == world)
 		return;
 
@@ -689,7 +675,7 @@ void toss_nade(entity e, vector _velocity, float _time)
 		offset = '0 0 0';
 
 	setorigin(_nade, w_shotorg + offset + (v_right * 25) * -1);
-	//setmodel(_nade, W_Model("v_ok_grenade.md3"));
+	//setmodel(_nade, MDL_PROJECTILE_NADE);
 	//setattachment(_nade, world, "");
 	PROJECTILE_MAKETRIGGER(_nade);
 	setsize(_nade, '-16 -16 -16', '16 16 16');
@@ -759,7 +745,7 @@ void nades_GiveBonus(entity player, float score)
 		if ( player.bonus_nade_score >= 1 )
 		{
 			Send_Notification(NOTIF_ONE, player, MSG_CENTER, CENTER_NADE_BONUS);
-			play2(player,"kh/alarm.wav");
+			play2(player, SND(KH_ALARM));
 			player.bonus_nades++;
 			player.bonus_nade_score -= 1;
 		}
@@ -772,7 +758,7 @@ void nades_RemoveBonus(entity player)
 }
 
 float nade_customize()
-{
+{SELFPARAM();
 	//if(IS_SPEC(other)) { return false; }
 	if(other == self.realowner || (IS_SPEC(other) && other.enemy == self.realowner))
 	{
@@ -794,7 +780,7 @@ float nade_customize()
 }
 
 void nade_prime()
-{
+{SELFPARAM();
 	if(autocvar_g_nades_bonus_only)
 	if(!self.bonus_nades)
 		return; // only allow bonus nades
@@ -826,7 +812,7 @@ void nade_prime()
 
 	n.nade_type = bound(1, n.nade_type, NADES_COUNT);
 
-	setmodel(n, W_Model("v_ok_grenade.md3"));
+	setmodel(n, MDL_PROJECTILE_NADE);
 	//setattachment(n, self, "bip01 l hand");
 	n.exteriormodeltoclient = self;
 	n.customizeentityforclient = nade_customize;
@@ -841,7 +827,7 @@ void nade_prime()
 	n.nextthink = max(n.wait - 3, time);
 	n.projectiledeathtype = DEATH_NADE;
 
-	setmodel(fn, W_Model("h_ok_grenade.iqm"));
+	setmodel(fn, MDL_NADE_VIEW);
 	setattachment(fn, self.weaponentity, "");
 	fn.realowner = fn.owner = self;
 	fn.colormod = NADES[n.nade_type].m_color;
@@ -855,7 +841,7 @@ void nade_prime()
 }
 
 float CanThrowNade()
-{
+{SELFPARAM();
 	if(self.vehicle)
 		return false;
 
@@ -878,7 +864,7 @@ float CanThrowNade()
 }
 
 void nades_CheckThrow()
-{
+{SELFPARAM();
 	if(!CanThrowNade())
 		return;
 
@@ -930,7 +916,7 @@ MUTATOR_HOOKFUNCTION(nades_VehicleEnter)
 }
 
 MUTATOR_HOOKFUNCTION(nades_PlayerPreThink)
-{
+{SELFPARAM();
 	if(!IS_PLAYER(self)) { return false; }
 
 	float key_pressed = self.BUTTON_HOOK;
@@ -1061,7 +1047,7 @@ MUTATOR_HOOKFUNCTION(nades_PlayerPreThink)
 }
 
 MUTATOR_HOOKFUNCTION(nades_PlayerSpawn)
-{
+{SELFPARAM();
 	if(autocvar_g_nades_spawn)
 		self.nade_refire = time + autocvar_g_spawnshieldtime;
 	else
@@ -1142,7 +1128,7 @@ MUTATOR_HOOKFUNCTION(nades_PlayerDamage)
 }
 
 MUTATOR_HOOKFUNCTION(nades_MonsterDies)
-{
+{SELFPARAM();
 	if(IS_PLAYER(frag_attacker))
 	if(DIFF_TEAM(frag_attacker, self))
 	if(!(self.spawnflags & MONSTERFLAG_SPAWNED))
@@ -1152,14 +1138,14 @@ MUTATOR_HOOKFUNCTION(nades_MonsterDies)
 }
 
 MUTATOR_HOOKFUNCTION(nades_RemovePlayer)
-{
+{SELFPARAM();
 	nades_Clear(self);
 	nades_RemoveBonus(self);
 	return false;
 }
 
 MUTATOR_HOOKFUNCTION(nades_SpectateCopy)
-{
+{SELFPARAM();
 	self.nade_timer = other.nade_timer;
 	self.nade_type = other.nade_type;
 	self.pokenade_type = other.pokenade_type;
@@ -1198,20 +1184,6 @@ void nades_Initialize()
 	addstat(STAT_NADE_BONUS_SCORE, AS_FLOAT, bonus_nade_score);
 	addstat(STAT_HEALING_ORB, AS_FLOAT, stat_healing_orb);
 	addstat(STAT_HEALING_ORB_ALPHA, AS_FLOAT, stat_healing_orb_alpha);
-
-	precache_model("models/ok_nade_counter/ok_nade_counter.md3");
-	precache_model(W_Model("h_ok_grenade.iqm"));
-	precache_model(W_Model("v_ok_grenade.md3"));
-	precache_model("models/ctf/shield.md3");
-
-	precache_sound(W_Sound("rocket_impact"));
-	precache_sound(W_Sound("grenade_bounce1"));
-	precache_sound(W_Sound("grenade_bounce2"));
-	precache_sound(W_Sound("grenade_bounce3"));
-	precache_sound(W_Sound("grenade_bounce4"));
-	precache_sound(W_Sound("grenade_bounce5"));
-	precache_sound(W_Sound("grenade_bounce6"));
-	precache_sound("overkill/grenadebip.ogg");
 }
 
 MUTATOR_DEFINITION(mutator_nades)

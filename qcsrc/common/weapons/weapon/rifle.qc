@@ -52,7 +52,7 @@ void spawnfunc_weapon_campingrifle(void) { spawnfunc_weapon_rifle(); }
 void spawnfunc_weapon_sniperrifle(void) { spawnfunc_weapon_rifle(); }
 
 void W_Rifle_FireBullet(float pSpread, float pDamage, float pForce, float pSolidPenetration, float pAmmo, int deathtype, float pTracer, float pShots, string pSound)
-{
+{SELFPARAM();
 	float i;
 
 	W_DecreaseAmmo(pAmmo);
@@ -76,12 +76,12 @@ void W_Rifle_FireBullet(float pSpread, float pDamage, float pForce, float pSolid
 
 void W_Rifle_Attack(void)
 {
-	W_Rifle_FireBullet(WEP_CVAR_PRI(rifle, spread), WEP_CVAR_PRI(rifle, damage), WEP_CVAR_PRI(rifle, force), WEP_CVAR_PRI(rifle, solidpenetration), WEP_CVAR_PRI(rifle, ammo), WEP_RIFLE.m_id, WEP_CVAR_PRI(rifle, tracer), WEP_CVAR_PRI(rifle, shots), W_Sound("campingrifle_fire"));
+	W_Rifle_FireBullet(WEP_CVAR_PRI(rifle, spread), WEP_CVAR_PRI(rifle, damage), WEP_CVAR_PRI(rifle, force), WEP_CVAR_PRI(rifle, solidpenetration), WEP_CVAR_PRI(rifle, ammo), WEP_RIFLE.m_id, WEP_CVAR_PRI(rifle, tracer), WEP_CVAR_PRI(rifle, shots), SND(CAMPINGRIFLE_FIRE));
 }
 
 void W_Rifle_Attack2(void)
 {
-	W_Rifle_FireBullet(WEP_CVAR_SEC(rifle, spread), WEP_CVAR_SEC(rifle, damage), WEP_CVAR_SEC(rifle, force), WEP_CVAR_SEC(rifle, solidpenetration), WEP_CVAR_SEC(rifle, ammo), WEP_RIFLE.m_id | HITTYPE_SECONDARY, WEP_CVAR_SEC(rifle, tracer), WEP_CVAR_SEC(rifle, shots), W_Sound("campingrifle_fire2"));
+	W_Rifle_FireBullet(WEP_CVAR_SEC(rifle, spread), WEP_CVAR_SEC(rifle, damage), WEP_CVAR_SEC(rifle, force), WEP_CVAR_SEC(rifle, solidpenetration), WEP_CVAR_SEC(rifle, ammo), WEP_RIFLE.m_id | HITTYPE_SECONDARY, WEP_CVAR_SEC(rifle, tracer), WEP_CVAR_SEC(rifle, shots), SND(CAMPINGRIFLE_FIRE2));
 }
 
 .void(void) rifle_bullethail_attackfunc;
@@ -89,7 +89,7 @@ void W_Rifle_Attack2(void)
 .float rifle_bullethail_animtime;
 .float rifle_bullethail_refire;
 void W_Rifle_BulletHail_Continue(void)
-{
+{SELFPARAM();
 	float r, sw, af;
 
 	sw = self.switchweapon; // make it not detect weapon changes as reason to abort firing
@@ -114,7 +114,7 @@ void W_Rifle_BulletHail_Continue(void)
 }
 
 void W_Rifle_BulletHail(float mode, void(void) AttackFunc, float fr, float animtime, float refire)
-{
+{SELFPARAM();
 	// if we get here, we have at least one bullet to fire
 	AttackFunc();
 	if(mode)
@@ -135,7 +135,7 @@ void W_Rifle_BulletHail(float mode, void(void) AttackFunc, float fr, float animt
 
 .float bot_secondary_riflemooth;
 bool W_Rifle(int req)
-{
+{SELFPARAM();
 	float ammo_amount;
 
 	switch(req)
@@ -204,11 +204,6 @@ bool W_Rifle(int req)
 		}
 		case WR_INIT:
 		{
-			precache_model(W_Model("g_sniperrifle.md3"));
-			precache_model(W_Model("v_sniperrifle.md3"));
-			precache_model(W_Model("h_sniperrifle.iqm"));
-			precache_sound(W_Sound("campingrifle_fire"));
-			precache_sound(W_Sound("campingrifle_fire2"));
 			RIFLE_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 			return true;
 		}
@@ -236,7 +231,7 @@ bool W_Rifle(int req)
 		}
 		case WR_RELOAD:
 		{
-			W_Reload(min(WEP_CVAR_PRI(rifle, ammo), WEP_CVAR_SEC(rifle, ammo)), W_Sound("reload"));
+			W_Reload(min(WEP_CVAR_PRI(rifle, ammo), WEP_CVAR_SEC(rifle, ammo)), SND(RELOAD));
 			return true;
 		}
 		case WR_SUICIDEMESSAGE:
@@ -266,7 +261,7 @@ bool W_Rifle(int req)
 #endif
 #ifdef CSQC
 bool W_Rifle(int req)
-{
+{SELFPARAM();
 	switch(req)
 	{
 		case WR_IMPACTEFFECT:
@@ -277,20 +272,17 @@ bool W_Rifle(int req)
 			if(!w_issilent)
 			{
 				if(w_random < 0.2)
-					sound(self, CH_SHOTS, W_Sound("ric1"), VOL_BASE, ATTN_NORM);
+					sound(self, CH_SHOTS, SND_RIC1, VOL_BASE, ATTN_NORM);
 				else if(w_random < 0.4)
-					sound(self, CH_SHOTS, W_Sound("ric2"), VOL_BASE, ATTN_NORM);
+					sound(self, CH_SHOTS, SND_RIC2, VOL_BASE, ATTN_NORM);
 				else if(w_random < 0.5)
-					sound(self, CH_SHOTS, W_Sound("ric3"), VOL_BASE, ATTN_NORM);
+					sound(self, CH_SHOTS, SND_RIC3, VOL_BASE, ATTN_NORM);
 			}
 
 			return true;
 		}
 		case WR_INIT:
 		{
-			precache_sound(W_Sound("ric1"));
-			precache_sound(W_Sound("ric2"));
-			precache_sound(W_Sound("ric3"));
 			if(autocvar_cl_reticle && autocvar_cl_reticle_weapon)
 			{
 				precache_pic("gfx/reticle_nex");
