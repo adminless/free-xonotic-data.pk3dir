@@ -16,7 +16,7 @@
     if (cvar("developer")) X(NEW(DebugSource), _("Debug"), "gametype_ons") \
     /**/
 CLASS(TopicSource, DataSource)
-    METHOD(TopicSource, getEntry, entity(int i, void(string, string) returns)) {
+    METHOD(TopicSource, getEntry, entity(TopicSource this, int i, void(string, string) returns)) {
         int idx = 0;
         #define TOPIC(src, name, icon) if (idx++ == i) { if (returns) returns(name, icon); return DataSource_true; }
         TOPICS(TOPIC);
@@ -24,7 +24,7 @@ CLASS(TopicSource, DataSource)
         if (returns) returns("undefined", "undefined");
         return DataSource_false;
     }
-    METHOD(TopicSource, reload, int(string filter)) {
+    METHOD(TopicSource, reload, int(TopicSource this, string filter)) {
         int n = 0;
         #define TOPIC(src, name, icon) n++;
         TOPICS(TOPIC);
@@ -54,7 +54,7 @@ CLASS(DebugSource, DataSource)
         return head;
     }
     string DebugSource_activeFilter = "";
-    METHOD(DebugSource, getEntry, entity(int i, void(string, string) returns)) {
+    METHOD(DebugSource, getEntry, entity(DebugSource this, int i, void(string, string) returns)) {
         int idx = 0;
         entity e;
         for (e = find_debug(); e; e = e.nextdebug) {
@@ -64,7 +64,7 @@ CLASS(DebugSource, DataSource)
         if (returns) e.display(e, returns);
         return e;
     }
-    METHOD(DebugSource, reload, int(string filter)) {
+    METHOD(DebugSource, reload, int(DebugSource this, string filter)) {
         DebugSource_activeFilter = filter;
         int idx = 0;
         entity e;
@@ -78,12 +78,12 @@ ENDCLASS(DebugSource)
 
 #define REGISTRY_SOURCE(id, arr, count) \
 CLASS(id, DataSource) \
-    METHOD(id, getEntry, entity(int i, void(string, string) returns)) { \
+    METHOD(id, getEntry, entity(id this, int i, void(string, string) returns)) { \
         entity e = arr[i]; \
         if (returns) e.display(e, returns); \
         return e; \
     } \
-    METHOD(id, reload, int(string filter)) { return count; } \
+    METHOD(id, reload, int(id this, string filter)) { return count; } \
 ENDCLASS(id)
 
 #include "../../common/mapinfo.qh"
@@ -114,7 +114,7 @@ REGISTRY_SOURCE(TurretSource, turret_info, TUR_COUNT)
 REGISTRY_SOURCE(MutatorSource, MUTATORS, MUTATORS_COUNT)
 
 CLASS(MapSource, DataSource)
-    METHOD(MapSource, getEntry, entity(int i, void(string, string) returns)) {
+    METHOD(MapSource, getEntry, entity(MapSource this, int i, void(string, string) returns)) {
         if (!MapInfo_Get_ByID(i)) return DataSource_false;
         string path = strcat("/maps/", MapInfo_Map_bspname);
         string img = draw_PictureSize(path) ? path : "nopreview_map";
@@ -122,16 +122,16 @@ CLASS(MapSource, DataSource)
         MapInfo_ClearTemps();
         return DataSource_true;
     }
-    METHOD(MapSource, indexOf, int(string s)) {
+    METHOD(MapSource, indexOf, int(MapSource this, string s)) {
         MapInfo_FindName(s);
         return MapInfo_FindName_firstResult;
     }
-    METHOD(MapSource, reload, int(string s)) {
+    METHOD(MapSource, reload, int(MapSource this, string s)) {
         MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 0, 0, 0);
         if (s) MapInfo_FilterString(s);
         return MapInfo_count;
     }
-    METHOD(MapSource, destroy, void(entity this)) { MapInfo_Shutdown(); }
+    METHOD(MapSource, destroy, void(MapSource this)) { MapInfo_Shutdown(); }
 ENDCLASS(MapSource)
 
 #include "dialog_media_guide_topics.qc"
@@ -217,7 +217,7 @@ void XonoticGuideTab_entryChangeNotify(entity, entity this)
 {
     entity desc = this.descriptionPane;
     entity entries = this.entryList;
-    entity e = entries.source.getEntry(entries.selectedItem, func_null);
+    entity e = entries.source.getEntry(entries.source, entries.selectedItem, func_null);
     string s = e.describe(e);
     if (cvar("developer")) { s = sprintf("entity %i\n%s", e, s); }
     desc.setDescription(desc, s);

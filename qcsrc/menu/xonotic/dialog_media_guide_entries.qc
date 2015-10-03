@@ -44,7 +44,7 @@ void XonoticEntryList_cb(string _name, string _icon) {
 void XonoticEntryList_drawListBoxItem(entity this, int i, vector absSize, bool isSelected, bool isFocused)
 {
     if (!this.source) return;
-    if (!this.source.getEntry(i, XonoticEntryList_cb)) return;
+    if (!this.source.getEntry(this.source, i, XonoticEntryList_cb)) return;
     string name = XonoticEntryList_cb_name;
     string icon = XonoticEntryList_cb_icon;
     if (isSelected) {
@@ -80,7 +80,7 @@ float XonoticEntryList_keyDown(entity this, float scan, float ascii, float shift
         this.typeToSearchString = strzone(save);
         this.typeToSearchTime = time + 0.5;
         if (strlen(this.typeToSearchString)) {
-            int idx = this.source.indexOf(this.typeToSearchString);
+            int idx = this.source.indexOf(this.source, this.typeToSearchString);
             if (idx >= 0) this.setSelected(this, idx);
         }
     } else if (shift & S_CTRL && scan == 'f') {
@@ -100,9 +100,9 @@ void XonoticEntryList_refilter(entity this)
         this.nItems = 0;
         return;
     }
-    this.nItems = this.source.reload(this.stringFilter);
+    this.nItems = this.source.reload(this.source, this.stringFilter);
     for (int i = 0, n = this.nItems; i < n; ++i) {
-        if (this.source.getEntry(i, XonoticEntryList_cb)) {
+        if (this.source.getEntry(this.source, i, XonoticEntryList_cb)) {
             draw_PreloadPicture(XonoticEntryList_cb_icon);
         }
     }

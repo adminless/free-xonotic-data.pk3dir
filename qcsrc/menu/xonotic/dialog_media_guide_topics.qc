@@ -22,7 +22,7 @@ CLASS(XonoticTopicList, XonoticListBox)
     CONSTRUCTOR(XonoticTopicList, DataSource _source) {
     	CONSTRUCT(XonoticTopicList);
     	this.source = _source;
-    	this.nItems = _source.reload("");
+    	this.nItems = _source.reload(_source, "");
     	this.configureXonoticListBox(this);
     }
 ENDCLASS(XonoticTopicList)
@@ -44,7 +44,7 @@ void XonoticTopicList_cb(string _name, string _icon) {
 void XonoticTopicList_drawListBoxItem(entity this, int i, vector absSize, bool isSelected, bool isFocused)
 {
     if (!this.source) return;
-    if (!this.source.getEntry(i, XonoticTopicList_cb)) return;
+    if (!this.source.getEntry(this.source, i, XonoticTopicList_cb)) return;
     string icon = XonoticTopicList_cb_icon;
     string name = XonoticTopicList_cb_name;
     if (isSelected) {
