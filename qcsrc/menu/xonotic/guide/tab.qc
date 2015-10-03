@@ -1,8 +1,9 @@
 #ifndef DIALOG_MEDIA_GUIDE_H
 #define DIALOG_MEDIA_GUIDE_H
-#include "datasource.qc"
+#include "../datasource.qc"
 
 #define TOPICS(X) \
+    X(NEW(FreetextSource),  _("Guide"),     "gametype_tdm") \
     X(NEW(GametypeSource),  _("Gametypes"), "gametype_dm") \
     X(NEW(WeaponSource),    _("Weapons"),   "gametype_ka") \
     X(NEW(ItemSource),      _("Items"),     "gametype_kh") \
@@ -86,31 +87,34 @@ CLASS(id, DataSource) \
     METHOD(id, reload, int(id this, string filter)) { return count; } \
 ENDCLASS(id)
 
-#include "../../common/mapinfo.qh"
+#include "pages.qh"
+REGISTRY_SOURCE(FreetextSource, GUIDE_PAGES, GUIDE_PAGES_COUNT)
+
+#include "../../../common/mapinfo.qh"
 REGISTRY_SOURCE(GametypeSource, MAPINFO_TYPES, MAPINFO_TYPE_COUNT)
 
-#include "../../common/items/all.qh"
+#include "../../../common/items/all.qh"
 REGISTRY_SOURCE(ItemSource, ITEMS, ITEM_COUNT)
 
-#include "../../common/buffs.qh"
+#include "../../../common/buffs.qh"
 REGISTRY_SOURCE(BuffSource, BUFFS, BUFFS_COUNT)
 
-#include "../../common/nades.qh"
+#include "../../../common/nades.qh"
 REGISTRY_SOURCE(NadeSource, NADES, NADES_COUNT)
 
-#include "../../common/weapons/all.qh"
+#include "../../../common/weapons/all.qh"
 REGISTRY_SOURCE(WeaponSource, weapon_info, WEP_COUNT)
 
-#include "../../common/monsters/all.qh"
+#include "../../../common/monsters/all.qh"
 REGISTRY_SOURCE(MonsterSource, monster_info, MON_COUNT)
 
-#include "../../common/vehicles/all.qh"
+#include "../../../common/vehicles/all.qh"
 REGISTRY_SOURCE(VehicleSource, vehicle_info, VEH_COUNT)
 
-#include "../../common/turrets/all.qh"
+#include "../../../common/turrets/all.qh"
 REGISTRY_SOURCE(TurretSource, turret_info, TUR_COUNT)
 
-#include "../../common/mutators/base.qh"
+#include "../../../common/mutators/base.qh"
 REGISTRY_SOURCE(MutatorSource, MUTATORS, MUTATORS_COUNT)
 
 CLASS(MapSource, DataSource)
@@ -134,10 +138,10 @@ CLASS(MapSource, DataSource)
     METHOD(MapSource, destroy, void(MapSource this)) { MapInfo_Shutdown(); }
 ENDCLASS(MapSource)
 
-#include "dialog_media_guide_topics.qc"
-#include "dialog_media_guide_entries.qc"
-#include "dialog_media_guide_description.qc"
-#include "tab.qc"
+#include "topics.qc"
+#include "entries.qc"
+#include "description.qc"
+#include "../tab.qc"
 CLASS(XonoticGuideTab, XonoticTab)
     ATTRIB(XonoticGuideTab, rows, float, 21)
     ATTRIB(XonoticGuideTab, columns, float, 6)

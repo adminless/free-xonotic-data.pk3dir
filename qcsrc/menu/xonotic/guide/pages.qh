@@ -1,0 +1,32 @@
+#ifndef GUIDE_PAGES_H
+#define GUIDE_PAGES_H
+
+CLASS(GuidePage, Object);
+    ATTRIB(GuidePage, m_id, int, 0);
+    ATTRIB(GuidePage, m_title, string, "");
+    ATTRIB(GuidePage, m_description, string, "");
+    METHOD(GuidePage, describe, string(GuidePage this)) {
+        return this.m_description;
+    }
+    METHOD(GuidePage, display, void(GuidePage this, void(string name, string icon) returns)) {
+        returns(this.m_title, "nopreview_map");
+    }
+    CONSTRUCTOR(GuidePage, string _title) {
+        CONSTRUCT(GuidePage);
+        this.m_title = _title;
+    }
+ENDCLASS(GuidePage)
+
+void RegisterGuidePages();
+const int GUIDE_PAGES_MAX = 16;
+entity GUIDE_PAGES[GUIDE_PAGES_MAX], GUIDE_PAGES_first, GUIDE_PAGES_last;
+int GUIDE_PAGES_COUNT;
+#define REGISTER_GUIDE_PAGE(id, title) \
+    REGISTER(RegisterGuidePages, GUIDE_PAGE, GUIDE_PAGES, GUIDE_PAGES_COUNT, id, m_id, NEW(GuidePage, title))
+REGISTER_REGISTRY(RegisterGuidePages)
+
+REGISTER_GUIDE_PAGE(0, _("Intro")) { this.m_description = _(
+"Welcome to xonotic"
+);}
+
+#endif

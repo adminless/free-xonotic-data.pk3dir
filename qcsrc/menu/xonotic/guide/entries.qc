@@ -1,7 +1,7 @@
 #ifndef DIALOG_MEDIA_GUIDE_ENTRIES_H
 #define DIALOG_MEDIA_GUIDE_ENTRIES_H
-#include "datasource.qc"
-#include "listbox.qc"
+#include "../datasource.qc"
+#include "../listbox.qc"
 CLASS(XonoticEntryList, XonoticListBox)
     ATTRIB(XonoticEntryList, alphaBG, float, 0)
     ATTRIB(XonoticEntryList, itemAbsSize, vector, '0 0 0')

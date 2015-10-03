@@ -1,7 +1,7 @@
 #ifndef DIALOG_MEDIA_GUIDE_TOPICS_H
 #define DIALOG_MEDIA_GUIDE_TOPICS_H
-#include "datasource.qc"
-#include "listbox.qc"
+#include "../datasource.qc"
+#include "../listbox.qc"
 CLASS(XonoticTopicList, XonoticListBox)
     ATTRIB(XonoticTopicList, columnIconOrigin, float, 0)
     ATTRIB(XonoticTopicList, columnIconSize, float, 0)

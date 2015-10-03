@@ -1,6 +1,6 @@
 #ifndef DIALOG_MEDIA_GUIDE_DESCRIPTION_H
 #define DIALOG_MEDIA_GUIDE_DESCRIPTION_H
-#include "credits.qc"
+#include "../listbox.qc"
 CLASS(XonoticGuideDescription, XonoticListBox)
 	ATTRIB(XonoticGuideDescription, rowsPerItem, float, 1)
 	ATTRIB(XonoticGuideDescription, selectionDoesntMatter, bool, true)
