@@ -3,7 +3,6 @@
 #include "../common/items/all.qc"
 
 #if defined(SVQC)
-    #include "_all.qh"
 
     #include "bot/bot.qh"
     #include "bot/waypoints.qh"
@@ -15,7 +14,7 @@
     #include "weapons/weaponsystem.qh"
 
     #include "../common/constants.qh"
-    #include "../common/deathtypes.qh"
+    #include "../common/deathtypes/all.qh"
     #include "../common/notifications.qh"
 	#include "../common/triggers/subs.qh"
     #include "../common/util.qh"
@@ -24,12 +23,12 @@
 
     #include "../common/weapons/all.qh"
 
-    #include "../warpzonelib/util_server.qh"
+    #include "../lib/warpzone/util_server.qh"
 #endif
 
 #ifdef CSQC
-void ItemDraw()
-{SELFPARAM();
+void ItemDraw(entity self)
+{
     if(self.gravity)
     {
         Movetype_Physics_MatchServer(autocvar_cl_projectiles_sloppy);
@@ -64,8 +63,8 @@ void ItemDraw()
     }
 }
 
-void ItemDrawSimple()
-{SELFPARAM();
+void ItemDrawSimple(entity this)
+{
     if(self.gravity)
     {
         Movetype_Physics_MatchServer(autocvar_cl_projectiles_sloppy);
@@ -246,8 +245,8 @@ void ItemRead(float _IsNew)
 #endif
 
 #ifdef SVQC
-bool ItemSend(entity to, int sf)
-{SELFPARAM();
+bool ItemSend(entity this, entity to, int sf)
+{
 	if(self.gravity)
 		sf |= ISF_DROP;
 	else
@@ -476,7 +475,7 @@ void Item_RespawnCountdown (void)
 				{
 					entity wi = get_weaponinfo(self.weapon);
 					if (wi.m_id) {
-						entity wp = WaypointSprite_Spawn(WP_Weapon, 0, 0, self, '0 0 64', world, 0, self, waypointsprite_attached, true, RADARICON_POWERUP);
+						entity wp = WaypointSprite_Spawn(WP_Weapon, 0, 0, self, '0 0 64', world, 0, self, waypointsprite_attached, true, RADARICON_Weapon);
 						wp.wp_extra = wi.m_id;
 						break;
 					}
@@ -484,7 +483,7 @@ void Item_RespawnCountdown (void)
 				{
 					entity ii = self.itemdef;
 					if (ii.m_id) {
-						entity wp = WaypointSprite_Spawn(WP_Item, 0, 0, self, '0 0 64', world, 0, self, waypointsprite_attached, true, RADARICON_POWERUP);
+						entity wp = WaypointSprite_Spawn(WP_Item, 0, 0, self, '0 0 64', world, 0, self, waypointsprite_attached, true, RADARICON_Item);
 						wp.wp_extra = ii.m_id;
 						break;
 					}
@@ -514,8 +513,6 @@ void Item_RespawnCountdown (void)
 			WaypointSprite_Ping(self.waypointsprite_attached);
 			//WaypointSprite_UpdateHealth(self.waypointsprite_attached, self.count);
 		}
-		else
-			sound(self, CH_TRIGGER, SND_ITEMRESPAWNCOUNTDOWN, VOL_BASE, ATTEN_NORM);	// play respawn sound
 	}
 }
 
@@ -654,7 +651,7 @@ float Item_GiveTo(entity item, entity player)
 			for(i = WEP_FIRST; i <= WEP_LAST; ++i)
 			if(it & WepSet_FromWeapon(i))
 			{
-				W_DropEvent(WR_PICKUP, player, i, item);
+				W_DropEvent(wr_pickup, player, i, item);
 				W_GiveWeapon(player, i);
 			}
 		}
@@ -1444,8 +1441,10 @@ spawnfunc(target_items)
 					if(s == e.netname)
 					{
 						self.weapons |= WepSet_FromWeapon(j);
-						if(self.spawnflags == 0 || self.spawnflags == 2)
-							WEP_ACTION(e.weapon, WR_INIT);
+						if(self.spawnflags == 0 || self.spawnflags == 2) {
+							Weapon w = get_weaponinfo(e.weapon);
+							w.wr_init(w);
+						}
 						break;
 					}
 				}
@@ -1515,7 +1514,8 @@ spawnfunc(target_items)
 			e = get_weaponinfo(j);
 			if(argv(i) == e.netname)
 			{
-				WEP_ACTION(e.weapon, WR_INIT);
+				Weapon w = get_weaponinfo(e.weapon);
+				w.wr_init(w);
 				break;
 			}
 		}
@@ -1828,8 +1828,10 @@ float GiveItems(entity e, float beginarg, float endarg)
 		{
 			POSTGIVE_WEAPON(e, j, SND(WEAPONPICKUP), string_null);
 			if (!(save_weapons & WepSet_FromWeapon(j)))
-				if(e.weapons & WepSet_FromWeapon(j))
-					WEP_ACTION(wi.weapon, WR_INIT);
+				if(e.weapons & WepSet_FromWeapon(j)) {
+					Weapon w = get_weaponinfo(wi.weapon);
+					w.wr_init(w);
+				}
 		}
 	}
 	POSTGIVE_VALUE(e, strength_finished, 1, SND(POWERUP), SND(POWEROFF));

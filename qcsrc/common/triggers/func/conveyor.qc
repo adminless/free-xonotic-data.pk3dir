@@ -70,8 +70,8 @@ void conveyor_reset()
 	self.SendFlags |= 2;
 }
 
-bool conveyor_send(entity to, int sf)
-{SELFPARAM();
+bool conveyor_send(entity this, entity to, int sf)
+{
 	WriteByte(MSG_ENTITY, ENT_CLIENT_CONVEYOR);
 	WriteByte(MSG_ENTITY, sf);
 
@@ -131,14 +131,14 @@ void conveyor_init()
 
 spawnfunc(trigger_conveyor)
 {
-	SetMovedir();
+	SetMovedir(self);
 	EXACTTRIGGER_INIT;
 	conveyor_init();
 }
 
 spawnfunc(func_conveyor)
 {
-	SetMovedir();
+	SetMovedir(self);
 	InitMovingBrushTrigger();
 	self.movetype = MOVETYPE_NONE;
 	conveyor_init();
@@ -146,9 +146,11 @@ spawnfunc(func_conveyor)
 
 #elif defined(CSQC)
 
+void conveyor_draw(entity this) { WITH(entity, self, this, conveyor_think()); }
+
 void conveyor_init()
 {SELFPARAM();
-	self.draw = conveyor_think;
+	self.draw = conveyor_draw;
 	self.drawmask = MASK_NORMAL;
 
 	self.movetype = MOVETYPE_NONE;

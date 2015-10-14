@@ -77,45 +77,45 @@ CLASS(DebugSource, DataSource)
     }
 ENDCLASS(DebugSource)
 
-#define REGISTRY_SOURCE(id, arr, count) \
+#define REGISTRY_SOURCE(id, arr) \
 CLASS(id, DataSource) \
     METHOD(id, getEntry, entity(id this, int i, void(string, string) returns)) { \
         entity e = arr[i]; \
         if (returns) e.display(e, returns); \
         return e; \
     } \
-    METHOD(id, reload, int(id this, string filter)) { return count; } \
+    METHOD(id, reload, int(id this, string filter)) { return arr##_COUNT; } \
 ENDCLASS(id)
 
 #include "pages.qh"
-REGISTRY_SOURCE(FreetextSource, GUIDE_PAGES, GUIDE_PAGES_COUNT)
+REGISTRY_SOURCE(FreetextSource, GuidePages)
 
 #include "../../../common/mapinfo.qh"
-REGISTRY_SOURCE(GametypeSource, MAPINFO_TYPES, MAPINFO_TYPE_COUNT)
+REGISTRY_SOURCE(GametypeSource, Gametypes)
 
 #include "../../../common/items/all.qh"
-REGISTRY_SOURCE(ItemSource, ITEMS, ITEM_COUNT)
+REGISTRY_SOURCE(ItemSource, Items)
 
-#include "../../../common/buffs.qh"
-REGISTRY_SOURCE(BuffSource, BUFFS, BUFFS_COUNT)
+#include "../../../common/buffs/all.qh"
+REGISTRY_SOURCE(BuffSource, Buffs)
 
-#include "../../../common/nades.qh"
-REGISTRY_SOURCE(NadeSource, NADES, NADES_COUNT)
+#include "../../../common/nades/all.qh"
+REGISTRY_SOURCE(NadeSource, Nades)
 
 #include "../../../common/weapons/all.qh"
-REGISTRY_SOURCE(WeaponSource, weapon_info, WEP_COUNT)
+REGISTRY_SOURCE(WeaponSource, Weapons)
 
 #include "../../../common/monsters/all.qh"
-REGISTRY_SOURCE(MonsterSource, monster_info, MON_COUNT)
+REGISTRY_SOURCE(MonsterSource, Monsters)
 
 #include "../../../common/vehicles/all.qh"
-REGISTRY_SOURCE(VehicleSource, vehicle_info, VEH_COUNT)
+REGISTRY_SOURCE(VehicleSource, Vehicles)
 
 #include "../../../common/turrets/all.qh"
-REGISTRY_SOURCE(TurretSource, turret_info, TUR_COUNT)
+REGISTRY_SOURCE(TurretSource, Turrets)
 
 #include "../../../common/mutators/base.qh"
-REGISTRY_SOURCE(MutatorSource, MUTATORS, MUTATORS_COUNT)
+REGISTRY_SOURCE(MutatorSource, MUTATORS)
 
 CLASS(MapSource, DataSource)
     METHOD(MapSource, getEntry, entity(MapSource this, int i, void(string, string) returns)) {

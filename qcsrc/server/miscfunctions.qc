@@ -1,5 +1,4 @@
 #include "miscfunctions.qh"
-#include "_all.qh"
 #include "antilag.qh"
 #include "command/common.qh"
 #include "constants.qh"
@@ -12,7 +11,7 @@
 #include "weapons/selection.qh"
 #include "../common/command/generic.qh"
 #include "../common/constants.qh"
-#include "../common/deathtypes.qh"
+#include "../common/deathtypes/all.qh"
 #include "../common/mapinfo.qh"
 #include "../common/notifications.qh"
 #include "../common/playerstats.qh"
@@ -21,9 +20,12 @@
 #include "../common/util.qh"
 #include "../common/turrets/sv_turrets.qh"
 #include "../common/weapons/all.qh"
-#include "../csqcmodellib/sv_model.qh"
-#include "../warpzonelib/anglestransform.qh"
-#include "../warpzonelib/server.qh"
+#include "../common/vehicles/sv_vehicles.qh"
+#include "../common/vehicles/vehicle.qh"
+#include "../common/items/all.qc"
+#include "../lib/csqcmodel/sv_model.qh"
+#include "../lib/warpzone/anglestransform.qh"
+#include "../lib/warpzone/server.qh"
 
 void crosshair_trace(entity pl)
 {
@@ -501,8 +503,6 @@ float want_weapon(entity weaponinfo, float allguns) // WEAPONTODO: what still ne
 	else
 		d = !(!weaponinfo.weaponstart);
 
-	if(g_grappling_hook) // if possible, redirect off-hand hook to on-hand hook
-		d |= (i == WEP_HOOK.m_id);
 	if(!g_cts && (weaponinfo.spawnflags & WEP_FLAG_MUTATORBLOCKED)) // never default mutator blocked guns
 		d = 0;
 
@@ -708,7 +708,7 @@ void readplayerstartcvars()
 
 	MUTATOR_CALLHOOK(SetStartItems);
 
-	if ((start_items & ITEM_Jetpack.m_itemid) || (g_grappling_hook && (start_weapons & WEPSET_HOOK)))
+	if (start_items & ITEM_Jetpack.m_itemid)
 	{
 		start_items |= ITEM_JetpackRegen.m_itemid;
 		start_ammo_fuel = max(start_ammo_fuel, cvar("g_balance_fuel_rotstable"));
@@ -721,8 +721,10 @@ void readplayerstartcvars()
 	for (i = WEP_FIRST; i <= WEP_LAST; ++i)
 	{
 		e = get_weaponinfo(i);
-		if(precache_weapons & WepSet_FromWeapon(i))
-			WEP_ACTION(i, WR_INIT);
+		if(precache_weapons & WepSet_FromWeapon(i)) {
+			Weapon w = get_weaponinfo(i);
+			w.wr_init(w);
+		}
 	}
 
 	start_ammo_shells = max(0, start_ammo_shells);
@@ -965,6 +967,18 @@ void precache_all_playermodels(string pattern)
 	search_end(globhandle);
 }
 
+void precache_playermodels(string s)
+{
+	if(s != "")
+	{
+		int n = tokenize_console(s);
+		precache_playermodel(argv(0));
+
+		for (int i = 1; i < n; ++i)
+			precache_model(argv(i));
+	}
+}
+
 void precache()
 {SELFPARAM();
     // gamemode related things
@@ -982,22 +996,11 @@ void precache()
 
     if (autocvar_sv_defaultcharacter)
     {
-        string s;
-        s = autocvar_sv_defaultplayermodel_red;
-        if (s != "")
-            precache_playermodel(s);
-        s = autocvar_sv_defaultplayermodel_blue;
-        if (s != "")
-            precache_playermodel(s);
-        s = autocvar_sv_defaultplayermodel_yellow;
-        if (s != "")
-            precache_playermodel(s);
-        s = autocvar_sv_defaultplayermodel_pink;
-        if (s != "")
-            precache_playermodel(s);
-        s = autocvar_sv_defaultplayermodel;
-        if (s != "")
-            precache_playermodel(s);
+		precache_playermodels(autocvar_sv_defaultplayermodel_red);
+		precache_playermodels(autocvar_sv_defaultplayermodel_blue);
+		precache_playermodels(autocvar_sv_defaultplayermodel_yellow);
+		precache_playermodels(autocvar_sv_defaultplayermodel_pink);
+		precache_playermodels(autocvar_sv_defaultplayermodel);
     }
 
     if (g_footsteps)
@@ -1155,51 +1158,8 @@ void InitializeEntitiesRun()
     remove = remove_unsafely;
 }
 
-void UncustomizeEntitiesRun()
-{SELFPARAM();
-    for (entity e = NULL; (e = findfloat(e, uncustomizeentityforclient_set, 1)); )
-    {
-        WITH(entity, self, e, e.uncustomizeentityforclient());
-    }
-}
-void SetCustomizer(entity e, float(void) customizer, void(void) uncustomizer)
-{
-    e.customizeentityforclient = customizer;
-    e.uncustomizeentityforclient = uncustomizer;
-    e.uncustomizeentityforclient_set = !!uncustomizer;
-}
-
-void Net_LinkEntity(entity e, bool docull, float dt, bool(entity, int) sendfunc)
-{SELFPARAM();
-    vector mi, ma;
-
-    if (e.classname == "")
-        e.classname = "net_linked";
-
-    if (e.model == "" || self.modelindex == 0)
-    {
-        mi = e.mins;
-        ma = e.maxs;
-        setmodel(e, MDL_Null);
-        setsize(e, mi, ma);
-    }
-
-    e.SendEntity = sendfunc;
-    e.SendFlags = 0xFFFFFF;
-
-    if (!docull)
-        e.effects |= EF_NODEPTHTEST;
-
-    if (dt)
-    {
-        e.nextthink = time + dt;
-        e.think = SUB_Remove;
-    }
-}
-
-
 .float(entity) isEliminated;
-float EliminatedPlayers_SendEntity(entity to, float sendflags)
+bool EliminatedPlayers_SendEntity(entity this, entity to, float sendflags)
 {
 	float i, f, b;
 	entity e;
@@ -1561,94 +1521,6 @@ void write_recordmarker(entity pl, float tstart, float dt)
                  " ", ftos(tstart), " ", ftos(dt), "\n"));
 }
 
-vector shotorg_adjustfromclient(vector vecs, float y_is_right, float allowcenter, float algn)
-{
-	switch(algn)
-	{
-		default:
-		case 3: // right
-			break;
-
-		case 4: // left
-			vecs.y = -vecs.y;
-			break;
-
-		case 1:
-			if(allowcenter) // 2: allow center handedness
-			{
-				// center
-				vecs.y = 0;
-				vecs.z -= 2;
-			}
-			else
-			{
-				// right
-			}
-			break;
-
-		case 2:
-			if(allowcenter) // 2: allow center handedness
-			{
-				// center
-				vecs.y = 0;
-				vecs.z -= 2;
-			}
-			else
-			{
-				// left
-				vecs.y = -vecs.y;
-			}
-			break;
-	}
-	return vecs;
-}
-
-vector shotorg_adjust_values(vector vecs, float y_is_right, float visual, float algn)
-{
-	string s;
-	vector v;
-
-	if (autocvar_g_shootfromeye)
-	{
-		if (visual)
-		{
-			if (autocvar_g_shootfromclient) { vecs = shotorg_adjustfromclient(vecs, y_is_right, (autocvar_g_shootfromclient >= 2), algn); }
-			else { vecs.y = 0; vecs.z -= 2; }
-		}
-		else
-		{
-			vecs.y = 0;
-			vecs.z = 0;
-		}
-	}
-	else if (autocvar_g_shootfromcenter)
-	{
-		vecs.y = 0;
-		vecs.z -= 2;
-	}
-	else if ((s = autocvar_g_shootfromfixedorigin) != "")
-	{
-		v = stov(s);
-		if (y_is_right)
-			v.y = -v.y;
-		if (v.x != 0)
-			vecs.x = v.x;
-		vecs.y = v.y;
-		vecs.z = v.z;
-	}
-	else if (autocvar_g_shootfromclient)
-	{
-		vecs = shotorg_adjustfromclient(vecs, y_is_right, (autocvar_g_shootfromclient >= 2), algn);
-	}
-	return vecs;
-}
-
-vector shotorg_adjust(vector vecs, float y_is_right, float visual)
-{SELFPARAM();
-	return shotorg_adjust_values(vecs, y_is_right, visual, self.owner.cvar_cl_gunalign);
-}
-
-
 void attach_sameorigin(entity e, entity to, string tag)
 {
     vector org, t_forward, t_left, t_up, e_forward, e_up;
@@ -1733,8 +1605,8 @@ vector gettaginfo_relative(entity e, float tag)
 
 .float scale2;
 
-float modeleffect_SendEntity(entity to, int sf)
-{SELFPARAM();
+bool modeleffect_SendEntity(entity this, entity to, int sf)
+{
 	float f;
 	WriteByte(MSG_ENTITY, ENT_CLIENT_MODELEFFECT);
 

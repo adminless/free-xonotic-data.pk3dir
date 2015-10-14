@@ -64,6 +64,8 @@ string WeaponArenaString()
 	return weaponarenastring;
 }
 
+AUTOCVAR(g_grappling_hook, bool, _("let players spawn with the grappling hook which allows them to pull themselves up"));
+
 string XonoticMutatorsDialog_toString(entity me)
 {
 	string s;
@@ -88,7 +90,7 @@ string XonoticMutatorsDialog_toString(entity me)
 		s = strcat(s, ", ", _("Low gravity"));
 	if(cvar("g_cloaked"))
 		s = strcat(s, ", ", _("Cloaked"));
-	if(cvar("g_grappling_hook"))
+	if(autocvar_g_grappling_hook)
 		s = strcat(s, ", ", _("Hook"));
 	if(cvar("g_midair"))
 		s = strcat(s, ", ", _("Midair"));
@@ -290,7 +292,7 @@ void XonoticMutatorsDialog_fill(entity me)
 			setDependent(e, "g_nix", 1, 1);
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 1.8, e = makeXonoticRadioButton(1, "g_balance_blaster_weaponstart", "0", _("No start weapons")));
+		me.TD(me, 1, 1.8, e = makeXonoticRadioButton_T(1, "g_balance_blaster_weaponstart", "0", _("No start weapons"), "-"));
 			e.cvarOffValue = "-1";
 			makeMulti(e, "g_balance_shotgun_weaponstart g_balance_machinegun_weaponstart g_balance_devastator_weaponstart g_balance_minelayer_weaponstart g_balance_electro_weaponstart g_balance_crylink_weaponstart g_balance_hagar_weaponstart g_balance_porto_weaponstart g_balance_vaporizer_weaponstart g_balance_hook_weaponstart g_balance_rifle_weaponstart g_balance_fireball_weaponstart g_balance_seeker_weaponstart g_balance_tuba_weaponstart g_balance_arc_weaponstart g_balance_vortex_weaponstart g_balance_mortar_weaponstart");
 

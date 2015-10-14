@@ -17,12 +17,9 @@ CLASS(GuidePage, Object);
     }
 ENDCLASS(GuidePage)
 
-void RegisterGuidePages();
-const int GUIDE_PAGES_MAX = 16;
-entity GUIDE_PAGES[GUIDE_PAGES_MAX], GUIDE_PAGES_first, GUIDE_PAGES_last;
-int GUIDE_PAGES_COUNT;
+REGISTRY(GuidePages, 16)
 #define REGISTER_GUIDE_PAGE(id, title) \
-    REGISTER(RegisterGuidePages, GUIDE_PAGE, GUIDE_PAGES, GUIDE_PAGES_COUNT, id, m_id, NEW(GuidePage, title))
+    REGISTER(RegisterGuidePages, GUIDE_PAGE, GuidePages, id, m_id, NEW(GuidePage, title))
 REGISTER_REGISTRY(RegisterGuidePages)
 
 REGISTER_GUIDE_PAGE(0, _("Intro")) { this.m_description = _(
