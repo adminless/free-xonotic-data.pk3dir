@@ -80,7 +80,7 @@ ENDCLASS(DebugSource)
 #define REGISTRY_SOURCE(id, arr) \
 CLASS(id, DataSource) \
     METHOD(id, getEntry, entity(id this, int i, void(string, string) returns)) { \
-        entity e = arr[i]; \
+        entity e = _R_GET(_##arr, i); \
         if (returns) e.display(e, returns); \
         return e; \
     } \
@@ -96,10 +96,10 @@ REGISTRY_SOURCE(GametypeSource, Gametypes)
 #include "../../../common/items/all.qh"
 REGISTRY_SOURCE(ItemSource, Items)
 
-#include "../../../common/buffs/all.qh"
+#include "../../../common/mutators/mutator/buffs/all.qh"
 REGISTRY_SOURCE(BuffSource, Buffs)
 
-#include "../../../common/nades/all.qh"
+#include "../../../common/mutators/mutator/nades/nades.qh"
 REGISTRY_SOURCE(NadeSource, Nades)
 
 #include "../../../common/weapons/all.qh"
@@ -115,7 +115,7 @@ REGISTRY_SOURCE(VehicleSource, Vehicles)
 REGISTRY_SOURCE(TurretSource, Turrets)
 
 #include "../../../common/mutators/base.qh"
-REGISTRY_SOURCE(MutatorSource, MUTATORS)
+REGISTRY_SOURCE(MutatorSource, Mutators)
 
 CLASS(MapSource, DataSource)
     METHOD(MapSource, getEntry, entity(MapSource this, int i, void(string, string) returns)) {

@@ -22,7 +22,7 @@
 #ifdef SVQC
 spawnfunc(trigger_swamp);
 #endif
-void swamp_touch(void);
+void swamp_touch();
 void swampslug_think();
 
 
@@ -36,7 +36,7 @@ void swampslug_think();
 *
 * I do it this way becuz there is no "untouch" event.
 */
-void swampslug_think(void)
+void swampslug_think()
 {SELFPARAM();
 	//Slowly kill the slug
 	self.health = self.health - 1;
@@ -60,7 +60,7 @@ void swampslug_think(void)
 	self.nextthink = time + self.swamp_interval;
 }
 
-void swamp_touch(void)
+void swamp_touch()
 {SELFPARAM();
 	// If whatever thats touching the swamp is not a player
 	// or if its a dead player, just dont care abt it.
@@ -92,23 +92,25 @@ void swamp_touch(void)
 	other.swampslug.health = 2;
 }
 
+REGISTER_NET_LINKED(ENT_CLIENT_SWAMP)
+
 #ifdef SVQC
-float swamp_send(entity to, float sf)
-{SELFPARAM();
-	WriteByte(MSG_ENTITY, ENT_CLIENT_LADDER);
+float swamp_send(entity this, entity to, float sf)
+{
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_SWAMP);
 
-	WriteByte(MSG_ENTITY, self.dmg); // can probably get away with using a single byte here
-	WriteByte(MSG_ENTITY, self.swamp_slowdown);
-	WriteByte(MSG_ENTITY, self.swamp_interval);
+	WriteByte(MSG_ENTITY, this.dmg); // can probably get away with using a single byte here
+	WriteByte(MSG_ENTITY, this.swamp_slowdown);
+	WriteByte(MSG_ENTITY, this.swamp_interval);
 
-	trigger_common_write(false);
+	trigger_common_write(this, false);
 
 	return true;
 }
 
 void swamp_link()
 {SELFPARAM();
-	Net_LinkEntity(self, false, 0, func_ladder_send);
+	trigger_link(self, swamp_send);
 }
 
 /*QUAKED spawnfunc_trigger_swamp (.5 .5 .5) ?
@@ -118,7 +120,7 @@ get slowd down and damaged
 spawnfunc(trigger_swamp)
 {
 	// Init stuff
-	EXACTTRIGGER_INIT;
+	trigger_init(self);
 	self.touch = swamp_touch;
 
 	// Setup default keys, if missing
@@ -134,18 +136,19 @@ spawnfunc(trigger_swamp)
 
 #elif defined(CSQC)
 
-void ent_swamp()
-{SELFPARAM();
+NET_HANDLE(ENT_CLIENT_SWAMP, bool isnew)
+{
 	self.dmg = ReadByte();
 	self.swamp_slowdown = ReadByte();
 	self.swamp_interval = ReadByte();
 
 	trigger_common_read(false);
 
+	return = true;
+
 	self.classname = "trigger_swamp";
 	self.solid = SOLID_TRIGGER;
-	self.draw = trigger_draw_generic;
-	self.trigger_touch = swamp_touch;
+	self.move_touch = swamp_touch;
 	self.drawmask = MASK_NORMAL;
 	self.move_time = time;
 	self.entremove = trigger_remove_generic;

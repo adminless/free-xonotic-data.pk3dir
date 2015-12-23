@@ -64,10 +64,10 @@ void XonoticEntryList_drawListBoxItem(entity this, int i, vector absSize, bool i
     draw_Text(this.realUpperMargin1 * eY + (sz.x + 0.5 * this.realFontSize.x) * eX, s, this.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
 }
 
-float XonoticEntryList_keyDown(entity this, float scan, float ascii, float shift)
+METHOD(XonoticEntryList, keyDown, float(entity this, float scan, float ascii, float shift))
 {
     if (this.nItems <= 0) {
-        return super.keyDown(this, scan, ascii, shift);
+        return SUPER(XonoticEntryList).keyDown(this, scan, ascii, shift);
     } else if ((ascii >= 32 || scan == K_BACKSPACE) && this.source.indexOf) {
         string save;
         if (scan == K_BACKSPACE) {
@@ -91,7 +91,7 @@ float XonoticEntryList_keyDown(entity this, float scan, float ascii, float shift
         this.stringFilter = string_null;
         this.refilter(this);
     }
-    return super.keyDown(this, scan, ascii, shift);
+    return SUPER(XonoticEntryList).keyDown(this, scan, ascii, shift);
 }
 
 void XonoticEntryList_refilter(entity this)
@@ -111,7 +111,7 @@ void XonoticEntryList_refilter(entity this)
 void XonoticEntryList_resizeNotify(entity this, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
     this.itemAbsSize = '0 0 0';
-    super.resizeNotify(this, relOrigin, relSize, absOrigin, absSize);
+    SUPER(XonoticEntryList).resizeNotify(this, relOrigin, relSize, absOrigin, absSize);
 
     this.realFontSize_y = this.fontSize / (this.itemAbsSize_y = (absSize.y * this.itemHeight));
     this.realFontSize_x = this.fontSize / (this.itemAbsSize_x = (absSize.x * (1 - this.controlWidth)));
@@ -121,7 +121,7 @@ void XonoticEntryList_resizeNotify(entity this, vector relOrigin, vector relSize
 
 void XonoticEntryList_setSelected(entity this, int i)
 {
-    super.setSelected(this, i);
+    SUPER(XonoticEntryList).setSelected(this, i);
     this.onChange(this, this.onChangeEntity);
 }
 #endif

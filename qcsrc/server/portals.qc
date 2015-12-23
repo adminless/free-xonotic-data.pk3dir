@@ -1,7 +1,7 @@
 #include "portals.qh"
 
 #include "g_hook.qh"
-#include "mutators/mutators_include.qh"
+#include "mutators/all.qh"
 #include "../common/constants.qh"
 #include "../common/deathtypes/all.qh"
 #include "../common/notifications.qh"
@@ -53,7 +53,7 @@ vector Portal_ApplyTransformToPlayerAngle(vector transform, vector vangle)
 	 */
 
 	// PLAYERS use different math
-#ifndef POSITIVE_PITCH_IS_DOWN
+#if !(POSITIVE_PITCH_IS_DOWN)
 	ang.x = -ang.x;
 #endif
 
@@ -94,7 +94,7 @@ vector Portal_ApplyTransformToPlayerAngle(vector transform, vector vangle)
 		//print("GOOD path: ", vtos(ang), "\n");
 	}
 
-#ifndef POSITIVE_PITCH_IS_DOWN
+#if !(POSITIVE_PITCH_IS_DOWN)
 	ang.x = -ang.x;
 #endif
 	ang.z = vangle.z;
@@ -624,8 +624,7 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	if(!CheckWireframeBox(own, org - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 96 * v_forward))
 		return world;
 
-	portal = spawn();
-	portal.classname = "portal";
+	portal = new(portal);
 	portal.aiment = own;
 	setorigin(portal, org);
 	portal.mangle = ang;

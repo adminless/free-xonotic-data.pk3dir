@@ -15,6 +15,13 @@
 #include "../lib/warpzone/common.qh"
 #include "../common/mutators/mutator/waypoints/waypointsprites.qh"
 
+void race_InitSpectator()
+{
+	if(g_race_qualifying)
+		if(msg_entity.enemy.race_laptime)
+			race_SendNextCheckpoint(msg_entity.enemy, 1);
+}
+
 void W_Porto_Fail(float failhard);
 
 float race_readTime(string map, float pos)
@@ -165,8 +172,7 @@ void race_SendNextCheckpoint(entity e, float spec) // qualifying only
 	if(!spec)
 		msg_entity = e;
 	WRITESPECTATABLE_MSG_ONE({
-		WriteByte(MSG_ONE, SVC_TEMPENTITY);
-		WriteByte(MSG_ONE, TE_CSQC_RACE);
+		WriteHeader(MSG_ONE, TE_CSQC_RACE);
 		if(spec)
 		{
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING);
@@ -184,8 +190,7 @@ void race_SendNextCheckpoint(entity e, float spec) // qualifying only
 void race_send_recordtime(float msg)
 {
 	// send the server best time
-	WriteByte(msg, SVC_TEMPENTITY);
-	WriteByte(msg, TE_CSQC_RACE);
+	WriteHeader(msg, TE_CSQC_RACE);
 	WriteByte(msg, RACE_NET_SERVER_RECORD);
 	WriteInt24_t(msg, race_readTime(GetMapname(), 1));
 }
@@ -194,8 +199,7 @@ void race_send_recordtime(float msg)
 void race_send_speedaward(float msg)
 {
 	// send the best speed of the round
-	WriteByte(msg, SVC_TEMPENTITY);
-	WriteByte(msg, TE_CSQC_RACE);
+	WriteHeader(msg, TE_CSQC_RACE);
 	WriteByte(msg, RACE_NET_SPEED_AWARD);
 	WriteInt24_t(msg, floor(speedaward_speed+0.5));
 	WriteString(msg, speedaward_holder);
@@ -204,8 +208,7 @@ void race_send_speedaward(float msg)
 void race_send_speedaward_alltimebest(float msg)
 {
 	// send the best speed
-	WriteByte(msg, SVC_TEMPENTITY);
-	WriteByte(msg, TE_CSQC_RACE);
+	WriteHeader(msg, TE_CSQC_RACE);
 	WriteByte(msg, RACE_NET_SPEED_AWARD_BEST);
 	WriteInt24_t(msg, floor(speedaward_alltimebest+0.5));
 	WriteString(msg, speedaward_alltimebest_holder);
@@ -213,8 +216,7 @@ void race_send_speedaward_alltimebest(float msg)
 
 void race_SendRankings(float pos, float prevpos, float del, float msg)
 {
-	WriteByte(msg, SVC_TEMPENTITY);
-	WriteByte(msg, TE_CSQC_RACE);
+	WriteHeader(msg, TE_CSQC_RACE);
 	WriteByte(msg, RACE_NET_SERVER_RANKINGS);
 	WriteShort(msg, pos);
 	WriteShort(msg, prevpos);
@@ -235,8 +237,7 @@ void race_SendStatus(float id, entity e)
 		msg = MSG_ALL;
 	msg_entity = e;
 	WRITESPECTATABLE_MSG_ONE_VARNAME(dummy3, {
-		WriteByte(msg, SVC_TEMPENTITY);
-		WriteByte(msg, TE_CSQC_RACE);
+		WriteHeader(msg, TE_CSQC_RACE);
 		WriteByte(msg, RACE_NET_SERVER_STATUS);
 		WriteShort(msg, id);
 		WriteString(msg, e.netname);
@@ -334,8 +335,8 @@ void race_deleteTime(string map, float pos)
 	{
 		if (i == RANKINGS_CNT)
 		{
-			db_put(ServerProgsDB, strcat(map, rr, "time", ftos(i)), string_null);
-			db_put(ServerProgsDB, strcat(map, rr, "crypto_idfp", ftos(i)), string_null);
+			db_remove(ServerProgsDB, strcat(map, rr, "time", ftos(i)));
+			db_remove(ServerProgsDB, strcat(map, rr, "crypto_idfp", ftos(i)));
 		}
 		else
 		{
@@ -416,10 +417,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				if(cp == race_timed_checkpoint)
 				{
 					race_setTime(GetMapname(), t, e.crypto_idfp, e.netname, e);
-					if(g_cts && autocvar_g_cts_finish_kill_delay)
-					{
-						CTS_ClientKill(e);
-					}
+					MUTATOR_CALLHOOK(Race_FinalCheckpoint, e);
 				}
 				if(t < recordtime || recordtime == 0)
 				{
@@ -450,8 +448,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			if(g_race_qualifying)
 			{
 				WRITESPECTATABLE_MSG_ONE_VARNAME(dummy1, {
-					WriteByte(MSG_ONE, SVC_TEMPENTITY);
-					WriteByte(MSG_ONE, TE_CSQC_RACE);
+					WriteHeader(MSG_ONE, TE_CSQC_RACE);
 					WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_QUALIFYING);
 					WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player now is at
 					WriteInt24_t(MSG_ONE, t); // time to that intermediate
@@ -479,8 +476,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 		{
 			msg_entity = e;
 			WRITESPECTATABLE_MSG_ONE_VARNAME(dummy2, {
-				WriteByte(MSG_ONE, SVC_TEMPENTITY);
-				WriteByte(MSG_ONE, TE_CSQC_RACE);
+				WriteHeader(MSG_ONE, TE_CSQC_RACE);
 				WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_RACE);
 				WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player now is at
 				if(e == oth)
@@ -506,8 +502,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 		{
 			msg_entity = oth;
 			WRITESPECTATABLE_MSG_ONE_VARNAME(dummy3, {
-				WriteByte(MSG_ONE, SVC_TEMPENTITY);
-				WriteByte(MSG_ONE, TE_CSQC_RACE);
+				WriteHeader(MSG_ONE, TE_CSQC_RACE);
 				WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT);
 				WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player now is at
 				if(e == oth)
@@ -540,8 +535,7 @@ void race_ClearTime(entity e)
 
 	msg_entity = e;
 	WRITESPECTATABLE_MSG_ONE({
-		WriteByte(MSG_ONE, SVC_TEMPENTITY);
-		WriteByte(MSG_ONE, TE_CSQC_RACE);
+		WriteHeader(MSG_ONE, TE_CSQC_RACE);
 		WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_CLEAR); // next
 	});
 }
@@ -674,7 +668,7 @@ void checkpoint_passed()
 		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);
 		other.race_started = 1;
 
-		race_SendTime(other, self.race_checkpoint, other.race_movetime, !!other.race_laptime);
+		race_SendTime(other, self.race_checkpoint, other.race_movetime, boolean(other.race_laptime));
 
 		if(!self.race_checkpoint) // start line
 		{
@@ -749,7 +743,7 @@ void trigger_race_checkpoint_verify()
 	qual = g_race_qualifying;
 
 	setself(spawn());
-	self.classname = "player";
+	self.classname = STR_PLAYER;
 
 	if(g_race)
 	{
@@ -1103,8 +1097,7 @@ void race_ImposePenaltyTime(entity pl, float penalty, string reason)
 		{
 			msg_entity = pl;
 			WRITESPECTATABLE_MSG_ONE({
-				WriteByte(MSG_ONE, SVC_TEMPENTITY);
-				WriteByte(MSG_ONE, TE_CSQC_RACE);
+				WriteHeader(MSG_ONE, TE_CSQC_RACE);
 				WriteByte(MSG_ONE, RACE_NET_PENALTY_QUALIFYING);
 				WriteShort(MSG_ONE, TIME_ENCODE(penalty));
 				WriteString(MSG_ONE, reason);
@@ -1118,8 +1111,7 @@ void race_ImposePenaltyTime(entity pl, float penalty, string reason)
 		{
 			msg_entity = pl;
 			WRITESPECTATABLE_MSG_ONE_VARNAME(dummy, {
-				WriteByte(MSG_ONE, SVC_TEMPENTITY);
-				WriteByte(MSG_ONE, TE_CSQC_RACE);
+				WriteHeader(MSG_ONE, TE_CSQC_RACE);
 				WriteByte(MSG_ONE, RACE_NET_PENALTY_RACE);
 				WriteShort(MSG_ONE, TIME_ENCODE(penalty));
 				WriteString(MSG_ONE, reason);
@@ -1145,6 +1137,9 @@ void penalty_use()
 
 spawnfunc(trigger_race_penalty)
 {
+	// TODO: find out why this wasnt done:
+	//if(!g_cts && !g_race) { remove(self); return; }
+
 	EXACTTRIGGER_INIT;
 
 	self.use = penalty_use;

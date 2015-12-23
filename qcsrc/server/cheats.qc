@@ -4,7 +4,7 @@
 #include "race.qh"
 #include "../common/triggers/teleporters.qh"
 
-#include "mutators/mutators_include.qh"
+#include "mutators/all.qh"
 
 #include "weapons/tracing.qh"
 
@@ -71,7 +71,7 @@ float CheatsAllowed(float i, float argc, float fr) // the cheat gets passed as a
 		return 0;
 
 	// sv_clones
-	if(i == CHIMPULSE_CLONE_MOVING || i == CHIMPULSE_CLONE_STANDING)
+	if(i == CHIMPULSE_CLONE_MOVING.impulse || i == CHIMPULSE_CLONE_STANDING.impulse)
 		if(self.lip < sv_clones)
 			return 1;
 
@@ -146,12 +146,11 @@ float CheatImpulse(float i)
 	{
 		entity e, e2;
 
-		case CHIMPULSE_SPEEDRUN_INIT: // deploy personal waypoint
+		case CHIMPULSE_SPEEDRUN_INIT.impulse: // deploy personal waypoint
 			// shared with regular waypoint init, so this is not a cheat by itself
 			if(!self.personal)
 			{
-				self.personal = spawn();
-				self.personal.classname = "personal_wp";
+				self.personal = new(personal_wp);
 			}
 			self.personal.origin = self.origin;
 			self.personal.v_angle = self.v_angle;
@@ -174,7 +173,7 @@ float CheatImpulse(float i)
 			self.personal.invincible_finished = self.invincible_finished;
 			self.personal.teleport_time = time;
 			break; // this part itself doesn't cheat, so let's not count this
-		case CHIMPULSE_CLONE_MOVING:
+		case CHIMPULSE_CLONE_MOVING.impulse:
 			IS_CHEAT(i, 0, 0);
 			makevectors (self.v_angle);
 			self.velocity = self.velocity + v_forward * 300;
@@ -183,17 +182,17 @@ float CheatImpulse(float i)
 			self.velocity = self.velocity - v_forward * 300;
 			DID_CHEAT();
 			break;
-		case CHIMPULSE_CLONE_STANDING:
+		case CHIMPULSE_CLONE_STANDING.impulse:
 			IS_CHEAT(i, 0, 0);
 			CopyBody(0);
 			self.lip += 1;
 			DID_CHEAT();
 			break;
-		case CHIMPULSE_GIVE_ALL:
+		case CHIMPULSE_GIVE_ALL.impulse:
 			IS_CHEAT(i, 0, 0);
 			CheatCommand(tokenize_console("give all"));
 			break; // already counted as cheat
-		case CHIMPULSE_SPEEDRUN:
+		case CHIMPULSE_SPEEDRUN.impulse:
 			IS_CHEAT(i, 0, 0);
 			if(self.personal)
 			{
@@ -239,7 +238,7 @@ float CheatImpulse(float i)
 			else
 				sprint(self, "No waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
 			break;
-		case CHIMPULSE_TELEPORT:
+		case CHIMPULSE_TELEPORT.impulse:
 			IS_CHEAT(i, 0, 0);
 			if(self.movetype == MOVETYPE_NOCLIP)
 			{
@@ -268,7 +267,7 @@ float CheatImpulse(float i)
 			}
 			sprint(self, "Emergency teleport could not find a good location, forget it!\n");
 			break;
-		case CHIMPULSE_R00T:
+		case CHIMPULSE_R00T.impulse:
 			IS_CHEAT(i, 0, 0);
 			RandomSelection_Init();
 			FOR_EACH_PLAYER(e)
@@ -338,7 +337,7 @@ float CheatCommand(float argc)
 				effectnum = _particleeffectnum(argv(1));
 				W_SetupShot(self, false, false, "", CH_WEAPON_A, 0);
 				traceline(w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
-				trailparticles(self, effectnum, w_shotorg, trace_endpos);
+				__trailparticles(self, effectnum, w_shotorg, trace_endpos);
 				DID_CHEAT();
 				break;
 			}
@@ -402,8 +401,7 @@ float CheatCommand(float argc)
 			break;
 		case "dragbox_spawn": {
 			IS_CHEAT(0, argc, 0);
-			entity e = spawn();
-			e.classname = "dragbox_box";
+			entity e = new(dragbox_box);
 			e.think = DragBox_Think;
 			e.nextthink = time;
 			e.solid = -1; // black
@@ -413,8 +411,7 @@ float CheatCommand(float argc)
 			else
 				e.cnt = max(0, drag_lastcnt);
 
-			e.aiment = spawn();
-			e.aiment.classname = "dragbox_corner_1";
+			e.aiment = new(dragbox_corner_1);
 			e.aiment.owner = e;
 			setmodel(e.aiment, MDL_MARKER);
 			e.aiment.skin = 0;
@@ -427,8 +424,7 @@ float CheatCommand(float argc)
 				setorigin(e.aiment, trace_endpos);
 			}
 
-			e.enemy = spawn();
-			e.enemy.classname = "dragbox_corner_2";
+			e.enemy = new(dragbox_corner_2);
 			e.enemy.owner = e;
 			setmodel(e.enemy, MDL_MARKER);
 			e.enemy.skin = 1;
@@ -442,13 +438,11 @@ float CheatCommand(float argc)
 			else
 				setorigin(e.enemy, e.aiment.origin + 32 * end);
 
-			e.killindicator = spawn();
-			e.killindicator.classname = "drag_digit";
+			e.killindicator = new(drag_digit);
 			e.killindicator.owner = e;
 			setattachment(e.killindicator, e, "");
 			setorigin(e.killindicator, '0 0 -8');
-			e.killindicator.killindicator = spawn();
-			e.killindicator.killindicator.classname = "drag_digit";
+			e.killindicator.killindicator = new(drag_digit);
 			e.killindicator.killindicator.owner = e;
 			setattachment(e.killindicator.killindicator, e, "");
 			setorigin(e.killindicator.killindicator, '0 0 8');
@@ -457,8 +451,7 @@ float CheatCommand(float argc)
 		}
 		case "dragpoint_spawn": {
 			IS_CHEAT(0, argc, 0);
-			entity e = spawn();
-			e.classname = "dragpoint";
+			entity e = new(dragpoint);
 			e.think = DragBox_Think;
 			e.nextthink = time;
 			e.solid = 0; // nothing special
@@ -478,13 +471,11 @@ float CheatCommand(float argc)
 				move_out_of_solid(e);
 			}
 
-			e.killindicator = spawn();
-			e.killindicator.classname = "drag_digit";
+			e.killindicator = new(drag_digit);
 			e.killindicator.owner = e;
 			setattachment(e.killindicator, e, "");
 			setorigin(e.killindicator, '0 0 40');
-			e.killindicator.killindicator = spawn();
-			e.killindicator.killindicator.classname = "drag_digit";
+			e.killindicator.killindicator = new(drag_digit);
 			e.killindicator.killindicator.owner = e;
 			setattachment(e.killindicator.killindicator, e, "");
 			setorigin(e.killindicator.killindicator, '0 0 56');
@@ -608,7 +599,7 @@ float CheatCommand(float argc)
 							{
 								if(vlen(oldself.origin - start) < vlen(e.origin - start))
 									++effectnum;
-								else if(vlen(oldself.origin - start) == vlen(e.origin - start) && num_for_edict(oldself) < num_for_edict(e))
+								else if(vlen(oldself.origin - start) == vlen(e.origin - start) && etof(oldself) < etof(e))
 									++effectnum;
 							}
 							fputs(f, strcat("\"race_place\" \"", ftos(effectnum), "\"\n"));
@@ -713,9 +704,8 @@ float CheatCommand(float argc)
 			break;
 		case "teleporttotarget":
 			IS_CHEAT(0, argc, 0);
-			setself(spawn());
+			setself(new(cheattriggerteleport));
 			setorigin(self, self.origin);
-			self.classname = "cheattriggerteleport";
 			self.target = argv(1);
 			teleport_findtarget();
 			if(!wasfreed(self))
@@ -1025,8 +1015,9 @@ void Drag_Update(entity dragger)
 	draggee.ltime = max(servertime + serverframetime, draggee.ltime); // fixes func_train breakage
 
 	vector vecs = '0 0 0';
-	if(dragger.weaponentity.movedir_x > 0)
-		vecs = dragger.weaponentity.movedir;
+	.entity weaponentity = weaponentities[0]; // TODO: unhardcode
+	if(dragger.(weaponentity).movedir.x > 0)
+		vecs = dragger.(weaponentity).movedir;
 
 	vector dv = v_right * -vecs_y + v_up * vecs_z;
 

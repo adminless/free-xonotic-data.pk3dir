@@ -4,7 +4,7 @@
 #include "constants.qh"
 #include "g_hook.qh"
 #include "ipban.qh"
-#include "mutators/mutators_include.qh"
+#include "mutators/all.qh"
 #include "t_items.qh"
 #include "weapons/accuracy.qh"
 #include "weapons/csqcprojectile.qh"
@@ -52,46 +52,12 @@ void WarpZone_crosshair_trace(entity pl)
 }
 
 
-string admin_name(void)
+string admin_name()
 {
 	if(autocvar_sv_adminnick != "")
 		return autocvar_sv_adminnick;
 	else
 		return "SERVER ADMIN";
-}
-
-void DistributeEvenly_Init(float amount, float totalweight)
-{
-    if (DistributeEvenly_amount)
-    {
-        LOG_TRACE("DistributeEvenly_Init: UNFINISHED DISTRIBUTION (", ftos(DistributeEvenly_amount), " for ");
-        LOG_TRACE(ftos(DistributeEvenly_totalweight), " left!)\n");
-    }
-    if (totalweight == 0)
-        DistributeEvenly_amount = 0;
-    else
-        DistributeEvenly_amount = amount;
-    DistributeEvenly_totalweight = totalweight;
-}
-float DistributeEvenly_Get(float weight)
-{
-    float f;
-    if (weight <= 0)
-        return 0;
-    f = floor(0.5 + DistributeEvenly_amount * weight / DistributeEvenly_totalweight);
-    DistributeEvenly_totalweight -= weight;
-    DistributeEvenly_amount -= f;
-    return f;
-}
-float DistributeEvenly_GetRandomized(float weight)
-{
-    float f;
-    if (weight <= 0)
-        return 0;
-    f = floor(random() + DistributeEvenly_amount * weight / DistributeEvenly_totalweight);
-    DistributeEvenly_totalweight -= weight;
-    DistributeEvenly_amount -= f;
-    return f;
 }
 
 
@@ -296,7 +262,7 @@ string formatmessage(string msg)
 			case "l": replacement = NearestLocation(self.origin); break;
 			case "y": replacement = NearestLocation(cursor); break;
 			case "d": replacement = NearestLocation(self.death_origin); break;
-			case "w": replacement = WEP_NAME((!self.weapon) ? (!self.switchweapon ? self.cnt : self.switchweapon) : self.weapon); break;
+			case "w": replacement = ((PS(self).m_weapon == WEP_Null) ? ((PS(self).m_switchweapon == WEP_Null) ? Weapons_from(self.cnt) : PS(self).m_switchweapon) : PS(self).m_weapon).m_name; break;
 			case "W": replacement = ammoitems; break;
 			case "x": replacement = ((cursor_ent.netname == "" || !cursor_ent) ? "nothing" : cursor_ent.netname); break;
 			case "s": replacement = ftos(vlen(self.velocity - self.velocity_z * '0 0 1')); break;
@@ -408,7 +374,11 @@ string W_FixWeaponOrder_ForceComplete_AndBuildImpulseList(string wo)
 	self.weaponorder_byimpulse = strzone(W_FixWeaponOrder_BuildImpulseList(o));
 	return o;
 }
-void GetCvars(float f)
+
+/**
+ * @param f -1: cleanup, 0: request, 1: receive
+ */
+void GetCvars(int f)
 {SELFPARAM();
 	string s = string_null;
 
@@ -446,13 +416,7 @@ void GetCvars(float f)
 	GetCvars_handleFloat(s, f, cvar_cl_noantilag, "cl_noantilag");
 	GetCvars_handleFloat(s, f, cvar_cl_voice_directional, "cl_voice_directional");
 	GetCvars_handleFloat(s, f, cvar_cl_voice_directional_taunt_attenuation, "cl_voice_directional_taunt_attenuation");
-	GetCvars_handleFloat(s, f, cvar_cl_accuracy_data_share, "cl_accuracy_data_share");
-	GetCvars_handleFloat(s, f, cvar_cl_accuracy_data_receive, "cl_accuracy_data_receive");
 
-	self.cvar_cl_accuracy_data_share = boolean(self.cvar_cl_accuracy_data_share);
-	self.cvar_cl_accuracy_data_receive = boolean(self.cvar_cl_accuracy_data_receive);
-
-	GetCvars_handleFloatOnce(s, f, cvar_cl_gunalign, "cl_gunalign");
 	GetCvars_handleFloat(s, f, cvar_cl_allow_uid2name, "cl_allow_uid2name");
 	GetCvars_handleFloat(s, f, cvar_cl_allow_uidtracking, "cl_allow_uidtracking");
 	GetCvars_handleFloat(s, f, cvar_cl_movement_track_canjump, "cl_movement_track_canjump");
@@ -462,7 +426,7 @@ void GetCvars(float f)
 	if (f > 0)
 	{
 		if (s == "cl_weaponpriority")
-			self.switchweapon = w_getbestweapon(self);
+			if (PS(self)) PS(self).m_switchweapon = w_getbestweapon(self);
 		if (s == "cl_allow_uidtracking")
 			PlayerStats_GameReport_AddPlayer(self);
 	}
@@ -483,27 +447,29 @@ string playername(entity p)
 
 float want_weapon(entity weaponinfo, float allguns) // WEAPONTODO: what still needs done?
 {
-	int i = weaponinfo.weapon;
+	int i = weaponinfo.m_id;
 	int d = 0;
+	bool allow_mutatorblocked = false;
 
-	if (!i)
+	if(!i)
 		return 0;
 
-	if (g_lms || g_ca || allguns)
+	bool mutator_returnvalue = MUTATOR_CALLHOOK(WantWeapon, weaponinfo, d, allguns, allow_mutatorblocked);
+	d = ret_float;
+	allguns = want_allguns;
+	allow_mutatorblocked = false;
+
+	if(allguns)
 	{
 		if(weaponinfo.spawnflags & WEP_FLAG_NORMAL)
 			d = true;
 		else
 			d = false;
 	}
-	else if (g_cts)
-		d = (i == WEP_SHOTGUN.m_id);
-	else if (g_nexball)
-		d = 0; // weapon is set a few lines later
-	else
+	else if(!mutator_returnvalue)
 		d = !(!weaponinfo.weaponstart);
 
-	if(!g_cts && (weaponinfo.spawnflags & WEP_FLAG_MUTATORBLOCKED)) // never default mutator blocked guns
+	if(!allow_mutatorblocked && (weaponinfo.spawnflags & WEP_FLAG_MUTATORBLOCKED)) // never default mutator blocked guns
 		d = 0;
 
 	float t = weaponinfo.weaponstartoverride;
@@ -545,11 +511,9 @@ void readplayerstartcvars()
 	g_weaponarena_weapons = '0 0 0';
 
 	s = cvar_string("g_weaponarena");
-	if (s == "0" || s == "")
-	{
-		if(g_ca || g_freezetag)
-			s = "most";
-	}
+
+	MUTATOR_CALLHOOK(SetWeaponArena, s);
+	s = ret_string;
 
 	if (s == "0" || s == "")
 	{
@@ -565,9 +529,9 @@ void readplayerstartcvars()
 		g_weaponarena_list = "All Weapons";
 		for (j = WEP_FIRST; j <= WEP_LAST; ++j)
 		{
-			e = get_weaponinfo(j);
+			e = Weapons_from(j);
 			if (!(e.spawnflags & WEP_FLAG_MUTATORBLOCKED))
-				g_weaponarena_weapons |= WepSet_FromWeapon(j);
+				g_weaponarena_weapons |= (e.m_wepset);
 		}
 	}
 	else if (s == "most")
@@ -576,10 +540,10 @@ void readplayerstartcvars()
 		g_weaponarena_list = "Most Weapons";
 		for (j = WEP_FIRST; j <= WEP_LAST; ++j)
 		{
-			e = get_weaponinfo(j);
+			e = Weapons_from(j);
 			if (!(e.spawnflags & WEP_FLAG_MUTATORBLOCKED))
 				if (e.spawnflags & WEP_FLAG_NORMAL)
-					g_weaponarena_weapons |= WepSet_FromWeapon(j);
+					g_weaponarena_weapons |= (e.m_wepset);
 		}
 	}
 	else if (s == "none")
@@ -597,11 +561,11 @@ void readplayerstartcvars()
 			s = argv(i);
 			for (j = WEP_FIRST; j <= WEP_LAST; ++j)
 			{
-				e = get_weaponinfo(j);
+				e = Weapons_from(j);
 				if (e.netname == s)
 				{
-					g_weaponarena_weapons |= WepSet_FromWeapon(j);
-					g_weaponarena_list = strcat(g_weaponarena_list, e.message, " & ");
+					g_weaponarena_weapons |= (e.m_wepset);
+					g_weaponarena_list = strcat(g_weaponarena_list, e.m_name, " & ");
 					break;
 				}
 			}
@@ -629,14 +593,15 @@ void readplayerstartcvars()
 	{
 		for (i = WEP_FIRST; i <= WEP_LAST; ++i)
 		{
-			e = get_weaponinfo(i);
+			e = Weapons_from(i);
 			int w = want_weapon(e, false);
+			WepSet s = e.m_wepset;
 			if(w & 1)
-				start_weapons |= WepSet_FromWeapon(i);
+				start_weapons |= s;
 			if(w & 2)
-				start_weapons_default |= WepSet_FromWeapon(i);
+				start_weapons_default |= s;
 			if(w & 4)
-				start_weapons_defaultmask |= WepSet_FromWeapon(i);
+				start_weapons_defaultmask |= s;
 		}
 	}
 
@@ -691,14 +656,15 @@ void readplayerstartcvars()
 			warmup_start_weapons_defaultmask = '0 0 0';
 			for (i = WEP_FIRST; i <= WEP_LAST; ++i)
 			{
-				e = get_weaponinfo(i);
+				e = Weapons_from(i);
 				int w = want_weapon(e, g_warmup_allguns);
+				WepSet s = (e.m_wepset);
 				if(w & 1)
-					warmup_start_weapons |= WepSet_FromWeapon(i);
+					warmup_start_weapons |= s;
 				if(w & 2)
-					warmup_start_weapons_default |= WepSet_FromWeapon(i);
+					warmup_start_weapons_default |= s;
 				if(w & 4)
-					warmup_start_weapons_defaultmask |= WepSet_FromWeapon(i);
+					warmup_start_weapons_defaultmask |= s;
 			}
 		}
 	}
@@ -720,10 +686,9 @@ void readplayerstartcvars()
 		precache_weapons |= warmup_start_weapons;
 	for (i = WEP_FIRST; i <= WEP_LAST; ++i)
 	{
-		e = get_weaponinfo(i);
-		if(precache_weapons & WepSet_FromWeapon(i)) {
-			Weapon w = get_weaponinfo(i);
-			w.wr_init(w);
+		e = Weapons_from(i);
+		if(precache_weapons & (e.m_wepset)) {
+			e.wr_init(e);
 		}
 	}
 
@@ -742,184 +707,6 @@ void readplayerstartcvars()
 	warmup_start_ammo_fuel = max(0, warmup_start_ammo_fuel);
 }
 
-float sound_allowed(float destin, entity e)
-{
-    // sounds from world may always pass
-    for (;;)
-    {
-        if (e.classname == "body")
-            e = e.enemy;
-	else if (e.realowner && e.realowner != e)
-            e = e.realowner;
-	else if (e.owner && e.owner != e)
-            e = e.owner;
-        else
-            break;
-    }
-    // sounds to self may always pass
-    if (destin == MSG_ONE)
-        if (e == msg_entity)
-            return true;
-    // sounds by players can be removed
-    if (autocvar_bot_sound_monopoly)
-        if (IS_REAL_CLIENT(e))
-            return false;
-    // anything else may pass
-    return true;
-}
-
-void soundtoat(float _dest, entity e, vector o, float chan, string samp, float vol, float attenu)
-{
-    float entno, idx;
-
-    if (!sound_allowed(_dest, e))
-        return;
-
-    entno = num_for_edict(e);
-    idx = precache_sound_index(samp);
-
-    int sflags;
-    sflags = 0;
-
-    attenu = floor(attenu * 64);
-    vol = floor(vol * 255);
-
-    if (vol != 255)
-        sflags |= SND_VOLUME;
-    if (attenu != 64)
-        sflags |= SND_ATTENUATION;
-    if (entno >= 8192 || chan < 0 || chan > 7)
-        sflags |= SND_LARGEENTITY;
-    if (idx >= 256)
-        sflags |= SND_LARGESOUND;
-
-    WriteByte(_dest, SVC_SOUND);
-    WriteByte(_dest, sflags);
-    if (sflags & SND_VOLUME)
-        WriteByte(_dest, vol);
-    if (sflags & SND_ATTENUATION)
-        WriteByte(_dest, attenu);
-    if (sflags & SND_LARGEENTITY)
-    {
-        WriteShort(_dest, entno);
-        WriteByte(_dest, chan);
-    }
-    else
-    {
-        WriteShort(_dest, entno * 8 + chan);
-    }
-    if (sflags & SND_LARGESOUND)
-        WriteShort(_dest, idx);
-    else
-        WriteByte(_dest, idx);
-
-    WriteCoord(_dest, o.x);
-    WriteCoord(_dest, o.y);
-    WriteCoord(_dest, o.z);
-}
-void soundto(float _dest, entity e, float chan, string samp, float vol, float _atten)
-{
-    vector o;
-
-    if (!sound_allowed(_dest, e))
-        return;
-
-    o = e.origin + 0.5 * (e.mins + e.maxs);
-    soundtoat(_dest, e, o, chan, samp, vol, _atten);
-}
-void soundat(entity e, vector o, float chan, string samp, float vol, float _atten)
-{
-    soundtoat(((chan & 8) ? MSG_ALL : MSG_BROADCAST), e, o, chan, samp, vol, _atten);
-}
-void stopsoundto(float _dest, entity e, float chan)
-{
-    float entno;
-
-    if (!sound_allowed(_dest, e))
-        return;
-
-    entno = num_for_edict(e);
-
-    if (entno >= 8192 || chan < 0 || chan > 7)
-    {
-        float idx, sflags;
-        idx = precache_sound_index(SND(Null));
-        sflags = SND_LARGEENTITY;
-        if (idx >= 256)
-            sflags |= SND_LARGESOUND;
-        WriteByte(_dest, SVC_SOUND);
-        WriteByte(_dest, sflags);
-        WriteShort(_dest, entno);
-        WriteByte(_dest, chan);
-        if (sflags & SND_LARGESOUND)
-            WriteShort(_dest, idx);
-        else
-            WriteByte(_dest, idx);
-        WriteCoord(_dest, e.origin.x);
-        WriteCoord(_dest, e.origin.y);
-        WriteCoord(_dest, e.origin.z);
-    }
-    else
-    {
-        WriteByte(_dest, SVC_STOPSOUND);
-        WriteShort(_dest, entno * 8 + chan);
-    }
-}
-void stopsound(entity e, float chan)
-{
-    if (!sound_allowed(MSG_BROADCAST, e))
-        return;
-
-    stopsoundto(MSG_BROADCAST, e, chan); // unreliable, gets there fast
-    stopsoundto(MSG_ALL, e, chan); // in case of packet loss
-}
-
-void play2(entity e, string filename)
-{
-    //stuffcmd(e, strcat("play2 ", filename, "\n"));
-    msg_entity = e;
-    soundtoat(MSG_ONE, world, '0 0 0', CH_INFO, filename, VOL_BASE, ATTEN_NONE);
-}
-
-// use this one if you might be causing spam (e.g. from touch functions that might get called more than once per frame)
-.float spamtime;
-float spamsound(entity e, float chan, string samp, float vol, float _atten)
-{
-    if (!sound_allowed(MSG_BROADCAST, e))
-        return false;
-
-    if (time > e.spamtime)
-    {
-        e.spamtime = time;
-        _sound(e, chan, samp, vol, _atten);
-        return true;
-    }
-    return false;
-}
-
-void play2team(float t, string filename)
-{
-    entity head;
-
-    if (autocvar_bot_sound_monopoly)
-        return;
-
-    FOR_EACH_REALPLAYER(head)
-    {
-        if (head.team == t)
-            play2(head, filename);
-    }
-}
-
-void play2all(string samp)
-{
-    if (autocvar_bot_sound_monopoly)
-        return;
-
-    _sound(world, CH_INFO, samp, VOL_BASE, ATTEN_NONE);
-}
-
-void PrecachePlayerSounds(string f);
 void precache_playermodel(string m)
 {
 	float globhandle, i, n;
@@ -951,32 +738,20 @@ void precache_playermodel(string m)
 }
 void precache_all_playermodels(string pattern)
 {
-	float globhandle, i, n;
-	string f;
-
-	globhandle = search_begin(pattern, true, false);
-	if (globhandle < 0)
-		return;
-	n = search_getsize(globhandle);
-	for (i = 0; i < n; ++i)
+	int globhandle = search_begin(pattern, true, false);
+	if (globhandle < 0) return;
+	int n = search_getsize(globhandle);
+	for (int i = 0; i < n; ++i)
 	{
-		//print(search_getfilename(globhandle, i), "\n");
-		f = search_getfilename(globhandle, i);
-		precache_playermodel(f);
+		string s = search_getfilename(globhandle, i);
+		precache_playermodel(s);
 	}
 	search_end(globhandle);
 }
 
 void precache_playermodels(string s)
 {
-	if(s != "")
-	{
-		int n = tokenize_console(s);
-		precache_playermodel(argv(0));
-
-		for (int i = 1; i < n; ++i)
-			precache_model(argv(i));
-	}
+	FOREACH_WORD(s, true, LAMBDA(precache_playermodel(it)));
 }
 
 void precache()
@@ -1002,16 +777,6 @@ void precache()
 		precache_playermodels(autocvar_sv_defaultplayermodel_pink);
 		precache_playermodels(autocvar_sv_defaultplayermodel);
     }
-
-    if (g_footsteps)
-    {
-        PrecacheGlobalSound((globalsound_step = "misc/footstep0 6"));
-        PrecacheGlobalSound((globalsound_metalstep = "misc/metalfootstep0 6"));
-    }
-
-    // gore and miscellaneous sounds
-    PrecacheGlobalSound((globalsound_fall = "misc/hitground 4"));
-    PrecacheGlobalSound((globalsound_metalfall = "misc/metalhitground 4"));
 
 #if 0
     // Disabled this code because it simply does not work (e.g. ignores bgmvolume, overlaps with "cd loop" controlled tracks).
@@ -1087,7 +852,7 @@ void remove_safely(entity e)
     builtin_remove(e);
 }
 
-void InitializeEntity(entity e, void(void) func, float order)
+void InitializeEntity(entity e, void() func, float order)
 {
     entity prev, cur;
 
@@ -1163,7 +928,7 @@ bool EliminatedPlayers_SendEntity(entity this, entity to, float sendflags)
 {
 	float i, f, b;
 	entity e;
-	WriteByte(MSG_ENTITY, ENT_CLIENT_ELIMINATEDPLAYERS);
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_ELIMINATEDPLAYERS);
 	WriteByte(MSG_ENTITY, sendflags);
 
 	if(sendflags & 1)
@@ -1294,7 +1059,7 @@ float SUB_NoImpactCheck()
 	if(trace_dphitcontents == 0)
 	{
 		//dprint("A hit happened with zero hit contents... DEBUG THIS, this should never happen for projectiles! Projectile will self-destruct.\n");
-		LOG_TRACEF("A hit from a projectile happened with no hit contents! DEBUG THIS, this should never happen for projectiles! Profectile will self-destruct. (edict: %d, classname: %s, origin: %s)\n", num_for_edict(self), self.classname, vtos(self.origin));
+		LOG_TRACEF("A hit from a projectile happened with no hit contents! DEBUG THIS, this should never happen for projectiles! Profectile will self-destruct. (edict: %d, classname: %s, origin: %s)\n", etof(self), self.classname, vtos(self.origin));
 		checkclient();
 	}
     if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
@@ -1346,7 +1111,7 @@ float WarpZone_Projectile_Touch_ImpactFilter_Callback()
 	return false;
 }
 
-
+/** engine callback */
 void URI_Get_Callback(float id, float status, string data)
 {
 	if(url_URI_Get_Callback(id, status, data))
@@ -1385,7 +1150,7 @@ string uid2name(string myuid) {
 		if(s != "")
 		{
 			db_put(ServerProgsDB, strcat("/uid2name/", myuid), s);
-			db_put(ServerProgsDB, strcat("uid2name", myuid), "");
+			db_remove(ServerProgsDB, strcat("uid2name", myuid));
 		}
 	}
 
@@ -1602,151 +1367,6 @@ vector gettaginfo_relative(entity e, float tag)
     gettaginfo_relative_ent.frame = e.frame;
     return gettaginfo(gettaginfo_relative_ent, tag);
 }
-
-.float scale2;
-
-bool modeleffect_SendEntity(entity this, entity to, int sf)
-{
-	float f;
-	WriteByte(MSG_ENTITY, ENT_CLIENT_MODELEFFECT);
-
-	f = 0;
-	if(self.velocity != '0 0 0')
-		f |= 1;
-	if(self.angles != '0 0 0')
-		f |= 2;
-	if(self.avelocity != '0 0 0')
-		f |= 4;
-
-	WriteByte(MSG_ENTITY, f);
-	WriteShort(MSG_ENTITY, self.modelindex);
-	WriteByte(MSG_ENTITY, self.skin);
-	WriteByte(MSG_ENTITY, self.frame);
-	WriteCoord(MSG_ENTITY, self.origin.x);
-	WriteCoord(MSG_ENTITY, self.origin.y);
-	WriteCoord(MSG_ENTITY, self.origin.z);
-	if(f & 1)
-	{
-		WriteCoord(MSG_ENTITY, self.velocity.x);
-		WriteCoord(MSG_ENTITY, self.velocity.y);
-		WriteCoord(MSG_ENTITY, self.velocity.z);
-	}
-	if(f & 2)
-	{
-		WriteCoord(MSG_ENTITY, self.angles.x);
-		WriteCoord(MSG_ENTITY, self.angles.y);
-		WriteCoord(MSG_ENTITY, self.angles.z);
-	}
-	if(f & 4)
-	{
-		WriteCoord(MSG_ENTITY, self.avelocity.x);
-		WriteCoord(MSG_ENTITY, self.avelocity.y);
-		WriteCoord(MSG_ENTITY, self.avelocity.z);
-	}
-	WriteShort(MSG_ENTITY, self.scale * 256.0);
-	WriteShort(MSG_ENTITY, self.scale2 * 256.0);
-	WriteByte(MSG_ENTITY, self.teleport_time * 100.0);
-	WriteByte(MSG_ENTITY, self.fade_time * 100.0);
-	WriteByte(MSG_ENTITY, self.alpha * 255.0);
-
-	return true;
-}
-
-void modeleffect_spawn(string m, float s, float f, vector o, vector v, vector ang, vector angv, float s0, float s2, float a, float t1, float t2)
-{
-	entity e;
-	float sz;
-	e = spawn();
-	e.classname = "modeleffect";
-	_setmodel(e, m);
-	e.frame = f;
-	setorigin(e, o);
-	e.velocity = v;
-	e.angles = ang;
-	e.avelocity = angv;
-	e.alpha = a;
-	e.teleport_time = t1;
-	e.fade_time = t2;
-	e.skin = s;
-	if(s0 >= 0)
-		e.scale = s0 / max6(-e.mins.x, -e.mins.y, -e.mins.z, e.maxs.x, e.maxs.y, e.maxs.z);
-	else
-		e.scale = -s0;
-	if(s2 >= 0)
-		e.scale2 = s2 / max6(-e.mins.x, -e.mins.y, -e.mins.z, e.maxs.x, e.maxs.y, e.maxs.z);
-	else
-		e.scale2 = -s2;
-	sz = max(e.scale, e.scale2);
-	setsize(e, e.mins * sz, e.maxs * sz);
-	Net_LinkEntity(e, false, 0.1, modeleffect_SendEntity);
-}
-
-void shockwave_spawn(string m, vector org, float sz, float t1, float t2)
-{
-	return modeleffect_spawn(m, 0, 0, org, '0 0 0', '0 0 0', '0 0 0', 0, sz, 1, t1, t2);
-}
-
-float randombit(float bits)
-{
-	if(!(bits & (bits-1))) // this ONLY holds for powers of two!
-		return bits;
-
-	float n, f, b, r;
-
-	r = random();
-	b = 0;
-	n = 0;
-
-	for(f = 1; f <= bits; f *= 2)
-	{
-		if(bits & f)
-		{
-			++n;
-			r *= n;
-			if(r <= 1)
-				b = f;
-			else
-				r = (r - 1) / (n - 1);
-		}
-	}
-
-	return b;
-}
-
-float randombits(float bits, float k, float error_return)
-{
-	float r;
-	r = 0;
-	while(k > 0 && bits != r)
-	{
-		r += randombit(bits - r);
-		--k;
-	}
-	if(error_return)
-		if(k > 0)
-			return -1; // all
-	return r;
-}
-
-void randombit_test(float bits, float iter)
-{
-	while(iter > 0)
-	{
-		LOG_INFO(ftos(randombit(bits)), "\n");
-		--iter;
-	}
-}
-
-float ExponentialFalloff(float mindist, float maxdist, float halflifedist, float d)
-{
-	if(halflifedist > 0)
-		return pow(0.5, (bound(mindist, d, maxdist) - mindist) / halflifedist);
-	else if(halflifedist < 0)
-		return pow(0.5, (bound(mindist, d, maxdist) - maxdist) / halflifedist);
-	else
-		return 1;
-}
-
 
 .string aiment_classname;
 .float aiment_deadflag;

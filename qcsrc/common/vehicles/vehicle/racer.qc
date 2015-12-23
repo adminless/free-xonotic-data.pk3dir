@@ -153,11 +153,11 @@ void racer_align4point(float _delta)
 	self.angles_z *= 1 - (autocvar_g_vehicle_racer_anglestabilizer * _delta);
 }
 
-void racer_fire_rocket_aim(string tagname, entity trg)
+void racer_fire_rocket_aim(entity player, string tagname, entity trg)
 {
-	SELFPARAM();
-	vector v = gettaginfo(self, gettagindex(self, tagname));
-	racer_fire_rocket(v, v_forward, trg);
+	entity racer = player.vehicle;
+	vector v = gettaginfo(racer, gettagindex(racer, tagname));
+	racer_fire_rocket(player, v, v_forward, trg);
 }
 
 float racer_frame()
@@ -257,7 +257,7 @@ float racer_frame()
 	{
 #ifdef SVQC
 		if(time - racer.wait > 0.2)
-			pointparticles(particleeffectnum(EFFECT_RACER_BOOSTER), self.origin - v_forward * 32, v_forward  * vlen(self.velocity), 1);
+			pointparticles(EFFECT_RACER_BOOSTER, self.origin - v_forward * 32, v_forward  * vlen(self.velocity), 1);
 #endif
 
 		racer.wait = time;
@@ -278,7 +278,7 @@ float racer_frame()
 		{
 			traceline(racer.origin, racer.origin - '0 0 256', MOVE_NORMAL, self);
 			if(trace_fraction != 1.0)
-				pointparticles(particleeffectnum(EFFECT_SMOKE_SMALL), trace_endpos, '0 0 0', 1);
+				pointparticles(EFFECT_SMOKE_SMALL, trace_endpos, '0 0 0', 1);
 
 			racer.invincible_finished = time + 0.1 + (random() * 0.1);
 		}
@@ -321,7 +321,8 @@ float racer_frame()
 		// Fix z-aim (for chase mode)
 		crosshair_trace(player);
 		w_shotdir.z = normalize(trace_endpos - org).z * 0.5;
-		wep1.wr_think(wep1, self, true, false);
+		.entity weaponentity = weaponentities[0];
+		wep1.wr_think(wep1, self, weaponentity, 1);
 	}
 
 	if(autocvar_g_vehicle_racer_rocket_locktarget)
@@ -350,12 +351,12 @@ float racer_frame()
 
 		if(racer.misc_bulletcounter == 1)
 		{
-			racer_fire_rocket_aim("tag_rocket_r", (racer.lock_strength == 1 && racer.lock_target) ? racer.lock_target : world);
+			racer_fire_rocket_aim(player, "tag_rocket_r", (racer.lock_strength == 1 && racer.lock_target) ? racer.lock_target : world);
 			player.vehicle_ammo2 = 50;
 		}
 		else if(racer.misc_bulletcounter == 2)
 		{
-			racer_fire_rocket_aim("tag_rocket_l", (racer.lock_strength == 1 && racer.lock_target) ? racer.lock_target : world);
+			racer_fire_rocket_aim(player, "tag_rocket_l", (racer.lock_strength == 1 && racer.lock_target) ? racer.lock_target : world);
 			racer.lock_strength  = 0;
 			racer.lock_target	= world;
 			racer.misc_bulletcounter = 0;
@@ -531,17 +532,17 @@ void racer_draw()
 	self.lastpushtime = time;
 	if(!pushdeltatime) return;
 
-	tracebox(self.move_origin, self.mins, self.maxs, self.move_origin - ('0 0 1' * getstatf(STAT_VEH_RACER_SPRINGLENGTH)), MOVE_NOMONSTERS, self);
+	tracebox(self.move_origin, self.mins, self.maxs, self.move_origin - ('0 0 1' * STAT(VEH_RACER_SPRINGLENGTH)), MOVE_NOMONSTERS, self);
 
-	vector df = self.move_velocity * -getstatf(STAT_VEH_RACER_FRICTION);
-	df_z += (1 - trace_fraction) * getstatf(STAT_VEH_RACER_HOVERPOWER) + sin(time * 2) * (getstatf(STAT_VEH_RACER_SPRINGLENGTH) * 2);
+	vector df = self.move_velocity * -STAT(VEH_RACER_FRICTION);
+	df_z += (1 - trace_fraction) * STAT(VEH_RACER_HOVERPOWER) + sin(time * 2) * (STAT(VEH_RACER_SPRINGLENGTH) * 2);
 
-	float forced = getstatf(STAT_VEH_RACER_UPFORCEDAMPER);
+	float forced = STAT(VEH_RACER_UPFORCEDAMPER);
 
 	int cont = pointcontents(self.move_origin - '0 0 64');
 	if(cont == CONTENT_WATER || cont == CONTENT_LAVA || cont == CONTENT_SLIME)
 	{
-		forced = getstatf(STAT_VEH_RACER_WATER_UPFORCEDAMPER);
+		forced = STAT(VEH_RACER_WATER_UPFORCEDAMPER);
 		self.move_velocity_z += 200;
 	}
 
@@ -549,8 +550,8 @@ void racer_draw()
 	if(self.move_velocity_z > 0)
 		self.move_velocity_z *= 1 - forced * pushdeltatime;
 
-	self.move_angles_x *= 1 - (getstatf(STAT_VEH_RACER_ANGLESTABILIZER) * pushdeltatime);
-	self.move_angles_z *= 1 - (getstatf(STAT_VEH_RACER_ANGLESTABILIZER) * pushdeltatime);
+	self.move_angles_x *= 1 - (STAT(VEH_RACER_ANGLESTABILIZER) * pushdeltatime);
+	self.move_angles_z *= 1 - (STAT(VEH_RACER_ANGLESTABILIZER) * pushdeltatime);
 
 	Movetype_Physics_MatchServer(false);
 }
@@ -654,8 +655,11 @@ void racer_draw()
 		{
 			Vehicles_drawHUD(VEH_RACER.m_icon, "vehicle_racer_weapon1", "vehicle_racer_weapon2",
 							 "vehicle_icon_ammo1", autocvar_hud_progressbar_vehicles_ammo1_color,
-							 "vehicle_icon_ammo2", autocvar_hud_progressbar_vehicles_ammo2_color,
-							 vCROSS_GUIDE);
+							 "vehicle_icon_ammo2", autocvar_hud_progressbar_vehicles_ammo2_color);
+		}
+		METHOD(Racer, vr_crosshair, void(Racer thisveh))
+		{
+			Vehicles_drawCrosshair(vCROSS_GUIDE);
 		}
 #endif
 		METHOD(Racer, vr_setup, void(Racer thisveh))

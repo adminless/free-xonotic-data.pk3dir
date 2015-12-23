@@ -185,7 +185,7 @@ bool door_check_keys(entity door, entity player)
 #ifdef SVQC
 		if(player.key_door_messagetime <= time)
 		{
-			play2(player, SND(TALK));
+			play2(player, door.noise3);
 			Send_Notification(NOTIF_ONE, player, MSG_CENTER, CENTER_DOOR_LOCKED_NEED, item_keys_keylist(door.itemkeys));
 			player.key_door_messagetime = time + 2;
 		}
@@ -197,7 +197,7 @@ bool door_check_keys(entity door, entity player)
 #ifdef SVQC
 	if(player.key_door_messagetime <= time)
 	{
-		play2(player, SND(TALK));
+		play2(player, door.noise3);
 		Send_Notification(NOTIF_ONE, player, MSG_CENTER, CENTER_DOOR_LOCKED_ALSONEED, item_keys_keylist(door.itemkeys));
 		player.key_door_messagetime = time + 2;
 	}
@@ -293,6 +293,7 @@ void door_damage(entity inflictor, entity attacker, float damage, int deathtype,
 	}
 }
 
+.float door_finished;
 
 /*
 ================
@@ -306,17 +307,17 @@ void door_touch()
 {SELFPARAM();
 	if (!IS_PLAYER(other))
 		return;
-	if (self.owner.attack_finished_single > time)
+	if (self.owner.door_finished > time)
 		return;
 
-	self.owner.attack_finished_single = time + 2;
+	self.owner.door_finished = time + 2;
 
 #ifdef SVQC
 	if (!(self.owner.dmg) && (self.owner.message != ""))
 	{
 		if (IS_CLIENT(other))
 			centerprint(other, self.owner.message);
-		play2(other, SND(TALK));
+		play2(other, self.owner.noise);
 	}
 #endif
 }
@@ -437,14 +438,14 @@ void door_trigger_touch()
 #endif
 			return;
 
-	if (time < self.attack_finished_single)
+	if (time < self.door_finished)
 		return;
 
 	// check if door is locked
 	if (!door_check_keys(self, other))
 		return;
 
-	self.attack_finished_single = time + 1;
+	self.door_finished = time + 1;
 
 	activator = other;
 
@@ -457,8 +458,7 @@ void door_spawnfield(vector fmins, vector fmaxs)
 	entity	trigger;
 	vector	t1 = fmins, t2 = fmaxs;
 
-	trigger = spawn();
-	trigger.classname = "doortriggerfield";
+	trigger = new(doortriggerfield);
 	trigger.movetype = MOVETYPE_NONE;
 	trigger.solid = SOLID_TRIGGER;
 	trigger.owner = self;
@@ -599,6 +599,8 @@ void LinkDoors()
 	door_spawnfield(cmins, cmaxs);
 }
 
+REGISTER_NET_LINKED(ENT_CLIENT_DOOR)
+
 #ifdef SVQC
 /*QUAKED spawnfunc_func_door (0 .5 .8) ? START_OPEN x DOOR_DONT_LINK GOLD_KEY SILVER_KEY TOGGLE
 if two doors touch, they are assumed to be connected and operate as a unit.
@@ -631,7 +633,7 @@ FIXME: only one sound set available at the time being
 
 float door_send(entity to, float sf)
 {SELFPARAM();
-	WriteByte(MSG_ENTITY, ENT_CLIENT_DOOR);
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_DOOR);
 	WriteByte(MSG_ENTITY, sf);
 
 	if(sf & SF_TRIGGER_INIT)
@@ -641,7 +643,7 @@ float door_send(entity to, float sf)
 
 		WriteString(MSG_ENTITY, self.model);
 
-		trigger_common_write(true);
+		trigger_common_write(self, true);
 
 		WriteCoord(MSG_ENTITY, self.pos1_x);
 		WriteCoord(MSG_ENTITY, self.pos1_y);
@@ -702,16 +704,16 @@ void door_init_startopen()
 #endif
 }
 
-void door_reset()
-{SELFPARAM();
-	SUB_SETORIGIN(self, self.pos1);
-	self.SUB_VELOCITY = '0 0 0';
-	self.state = STATE_BOTTOM;
-	self.SUB_THINK = func_null;
-	self.SUB_NEXTTHINK = 0;
+void door_reset(entity this)
+{
+	SUB_SETORIGIN(this, this.pos1);
+	this.SUB_VELOCITY = '0 0 0';
+	this.state = STATE_BOTTOM;
+	this.SUB_THINK = func_null;
+	this.SUB_NEXTTHINK = 0;
 
 #ifdef SVQC
-	self.SendFlags |= SF_TRIGGER_RESET;
+	this.SendFlags |= SF_TRIGGER_RESET;
 #endif
 }
 
@@ -733,6 +735,13 @@ spawnfunc(func_door)
 		return;
 	self.effects |= EF_LOWPRECISION;
 	self.classname = "door";
+
+	if(self.noise == "")
+		self.noise = "misc/talk.wav";
+	if(self.noise3 == "")
+		self.noise3 = "misc/talk.wav";
+	precache_sound(self.noise);
+	precache_sound(self.noise3);
 
 	self.blocked = door_blocked;
 	self.use = door_use;
@@ -792,81 +801,88 @@ spawnfunc(func_door)
 
 void door_draw(entity this)
 {
-	Movetype_Physics_NoMatchServer();
+	Movetype_Physics_NoMatchServer(this);
 
 	trigger_draw_generic(this);
 }
 
-void ent_door()
-{SELFPARAM();
+NET_HANDLE(ENT_CLIENT_DOOR, bool isnew)
+{
 	float sf = ReadByte();
 
 	if(sf & SF_TRIGGER_INIT)
 	{
-		self.classname = strzone(ReadString());
-		self.spawnflags = ReadByte();
+		this.classname = strzone(ReadString());
+		this.spawnflags = ReadByte();
 
-		self.mdl = strzone(ReadString());
-		_setmodel(self, self.mdl);
+		this.mdl = strzone(ReadString());
+		_setmodel(this, this.mdl);
 
 		trigger_common_read(true);
 
-		self.pos1_x = ReadCoord();
-		self.pos1_y = ReadCoord();
-		self.pos1_z = ReadCoord();
-		self.pos2_x = ReadCoord();
-		self.pos2_y = ReadCoord();
-		self.pos2_z = ReadCoord();
+		vector v;
 
-		self.size_x = ReadCoord();
-		self.size_y = ReadCoord();
-		self.size_z = ReadCoord();
+		v.x = ReadCoord();
+		v.y = ReadCoord();
+		v.z = ReadCoord();
+		this.pos1 = v;
 
-		self.wait = ReadShort();
-		self.speed = ReadShort();
-		self.lip = ReadByte();
-		self.state = ReadByte();
-		self.SUB_LTIME = ReadCoord();
+		v.x = ReadCoord();
+		v.y = ReadCoord();
+		v.z = ReadCoord();
+		this.pos2 = v;
 
-		self.solid = SOLID_BSP;
-		self.movetype = MOVETYPE_PUSH;
-		self.trigger_touch = door_touch;
-		self.draw = door_draw;
-		self.drawmask = MASK_NORMAL;
-		self.use = door_use;
+		v.x = ReadCoord();
+		v.y = ReadCoord();
+		v.z = ReadCoord();
+		this.size = v;
+
+		this.wait = ReadShort();
+		this.speed = ReadShort();
+		this.lip = ReadByte();
+		this.state = ReadByte();
+		this.SUB_LTIME = ReadCoord();
+
+		this.solid = SOLID_BSP;
+		this.movetype = MOVETYPE_PUSH;
+		this.trigger_touch = door_touch;
+		this.draw = door_draw;
+		this.drawmask = MASK_NORMAL;
+		this.use = door_use;
 
 		LinkDoors();
 
-		if(self.spawnflags & DOOR_START_OPEN)
+		if(this.spawnflags & DOOR_START_OPEN)
 			door_init_startopen();
 
-		self.move_time = time;
-		self.move_origin = self.origin;
-		self.move_movetype = MOVETYPE_PUSH;
-		self.move_angles = self.angles;
-		self.move_blocked = door_blocked;
+		this.move_time = time;
+		this.move_origin = this.origin;
+		this.move_movetype = MOVETYPE_PUSH;
+		this.move_angles = this.angles;
+		this.move_blocked = door_blocked;
 	}
 
 	if(sf & SF_TRIGGER_RESET)
 	{
-		door_reset();
+		door_reset(this);
 	}
 
 	if(sf & SF_TRIGGER_UPDATE)
 	{
-		self.origin_x = ReadCoord();
-		self.origin_y = ReadCoord();
-		self.origin_z = ReadCoord();
-		setorigin(self, self.origin);
-		self.move_origin = self.origin;
+		this.origin_x = ReadCoord();
+		this.origin_y = ReadCoord();
+		this.origin_z = ReadCoord();
+		setorigin(this, this.origin);
+		this.move_origin = this.origin;
 
-		self.pos1_x = ReadCoord();
-		self.pos1_y = ReadCoord();
-		self.pos1_z = ReadCoord();
-		self.pos2_x = ReadCoord();
-		self.pos2_y = ReadCoord();
-		self.pos2_z = ReadCoord();
+		this.pos1_x = ReadCoord();
+		this.pos1_y = ReadCoord();
+		this.pos1_z = ReadCoord();
+		this.pos2_x = ReadCoord();
+		this.pos2_y = ReadCoord();
+		this.pos2_z = ReadCoord();
 	}
+	return true;
 }
 
 #endif

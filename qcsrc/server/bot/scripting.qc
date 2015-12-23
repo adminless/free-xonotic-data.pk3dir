@@ -570,15 +570,13 @@ float bot_cmd_turn()
 
 float bot_cmd_select_weapon()
 {SELFPARAM();
-	float id;
-
-	id = bot_cmd.bot_cmd_parm_float;
+	float id = bot_cmd.bot_cmd_parm_float;
 
 	if(id < WEP_FIRST || id > WEP_LAST)
 		return CMD_STATUS_ERROR;
 
-	if(client_hasweapon(self, id, true, false))
-		self.switchweapon = id;
+	if(client_hasweapon(self, Weapons_from(id), true, false))
+		PS(self).m_switchweapon = Weapons_from(id);
 	else
 		return CMD_STATUS_ERROR;
 
@@ -815,17 +813,17 @@ float bot_cmd_aimtarget()
 .int bot_cmd_keys;
 
 const int BOT_CMD_KEY_NONE 		= 0;
-const int BOT_CMD_KEY_FORWARD 	= 1;
-const int BOT_CMD_KEY_BACKWARD 	= 2;
-const int BOT_CMD_KEY_RIGHT 	= 4;
-const int BOT_CMD_KEY_LEFT 		= 8;
-const int BOT_CMD_KEY_JUMP 		= 16;
-const int BOT_CMD_KEY_ATTACK1 	= 32;
-const int BOT_CMD_KEY_ATTACK2 	= 64;
-const int BOT_CMD_KEY_USE 		= 128;
-const int BOT_CMD_KEY_HOOK 		= 256;
-const int BOT_CMD_KEY_CROUCH 	= 512;
-const int BOT_CMD_KEY_CHAT 		= 1024;
+const int BOT_CMD_KEY_FORWARD 	= BIT(0);
+const int BOT_CMD_KEY_BACKWARD 	= BIT(1);
+const int BOT_CMD_KEY_RIGHT 	= BIT(2);
+const int BOT_CMD_KEY_LEFT 		= BIT(3);
+const int BOT_CMD_KEY_JUMP 		= BIT(4);
+const int BOT_CMD_KEY_ATTACK1 	= BIT(5);
+const int BOT_CMD_KEY_ATTACK2 	= BIT(6);
+const int BOT_CMD_KEY_USE 		= BIT(7);
+const int BOT_CMD_KEY_HOOK 		= BIT(8);
+const int BOT_CMD_KEY_CROUCH 	= BIT(9);
+const int BOT_CMD_KEY_CHAT 		= BIT(10);
 
 float bot_presskeys()
 {SELFPARAM();
@@ -1059,10 +1057,11 @@ float bot_cmd_sound()
 .entity tuba_note;
 float bot_cmd_debug_assert_canfire()
 {SELFPARAM();
-	float f;
-	f = bot_cmd.bot_cmd_parm_float;
+	float f = bot_cmd.bot_cmd_parm_float;
 
-	if(self.weaponentity.state != WS_READY)
+	int slot = 0;
+	.entity weaponentity = weaponentities[slot];
+	if(self.(weaponentity).state != WS_READY)
 	{
 		if(f)
 		{
@@ -1070,12 +1069,12 @@ float bot_cmd_debug_assert_canfire()
 			LOG_INFO("Bot ", self.netname, " using ", self.weaponname, " wants to fire, inhibited by weaponentity state\n");
 		}
 	}
-	else if(ATTACK_FINISHED(self) > time)
+	else if(ATTACK_FINISHED(self, slot) > time)
 	{
 		if(f)
 		{
 			self.colormod = '8 0 8';
-			LOG_INFO("Bot ", self.netname, " using ", self.weaponname, " wants to fire, inhibited by ATTACK_FINISHED (", ftos(ATTACK_FINISHED(self) - time), " seconds left)\n");
+			LOG_INFO("Bot ", self.netname, " using ", self.weaponname, " wants to fire, inhibited by ATTACK_FINISHED (", ftos(ATTACK_FINISHED(self, slot) - time), " seconds left)\n");
 		}
 	}
 	else if(self.tuba_note)
@@ -1091,7 +1090,7 @@ float bot_cmd_debug_assert_canfire()
 		if(!f)
 		{
 			self.colormod = '8 8 0';
-			LOG_INFO("Bot ", self.netname, " using ", self.weaponname, " thinks it has fired, but apparently did not; ATTACK_FINISHED says ", ftos(ATTACK_FINISHED(self) - time), " seconds left\n");
+			LOG_INFO("Bot ", self.netname, " using ", self.weaponname, " thinks it has fired, but apparently did not; ATTACK_FINISHED says ", ftos(ATTACK_FINISHED(self, slot) - time), " seconds left\n");
 		}
 	}
 
@@ -1118,9 +1117,8 @@ void bot_setcurrentcommand()
 
 	if(!self.bot_cmd_current)
 	{
-		self.bot_cmd_current = spawn();
-		self.bot_cmd_current.classname = "bot_cmd";
-		self.bot_cmd_current.is_bot_cmd = 1;
+		self.bot_cmd_current = new(bot_cmd);
+		self.bot_cmd_current.is_bot_cmd = true;
 	}
 
 	bot_cmd = self.bot_cmd_current;
@@ -1198,7 +1196,7 @@ float bot_execute_commands_once()
 	}
 
 	// Keep pressing keys raised by the "presskey" command
-	ispressingkey = !!bot_presskeys();
+	ispressingkey = boolean(bot_presskeys());
 
 	// Handle conditions
 	if (!(bot_cmd.bot_cmd_type==BOT_CMD_FI||bot_cmd.bot_cmd_type==BOT_CMD_ELSE))

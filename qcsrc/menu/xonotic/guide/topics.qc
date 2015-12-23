@@ -69,13 +69,13 @@ bool XonoticTopicList_keyDown(entity this, float scan, float ascii, float shift)
         m_play_click_sound(MENU_SOUND_EXECUTE);
         return true;
     }
-    return super.keyDown(this, scan, ascii, shift);
+    return SUPER(XonoticEntryList).keyDown(this, scan, ascii, shift);
 }
 
 void XonoticTopicList_resizeNotify(entity this, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
     this.itemAbsSize = '0 0 0';
-    super.resizeNotify(this, relOrigin, relSize, absOrigin, absSize);
+    SUPER(XonoticEntryList).resizeNotify(this, relOrigin, relSize, absOrigin, absSize);
 
     this.realFontSize_y = this.fontSize / (this.itemAbsSize_y = (absSize.y * this.itemHeight));
     this.realFontSize_x = this.fontSize / (this.itemAbsSize_x = (absSize.x * (1 - this.controlWidth)));
@@ -88,7 +88,7 @@ void XonoticTopicList_resizeNotify(entity this, vector relOrigin, vector relSize
 
 void XonoticTopicList_setSelected(entity this, int i)
 {
-    super.setSelected(this, i);
+    SUPER(XonoticEntryList).setSelected(this, i);
     this.onChange(this, this.onChangeEntity);
 }
 #endif

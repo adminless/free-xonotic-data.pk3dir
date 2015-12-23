@@ -25,7 +25,7 @@ void W_SetupShot_Dir_ProjectileSize_Range(entity ent, vector s_forward, vector m
 	float oldsolid;
 	vector vecs, dv;
 	oldsolid = ent.dphitcontentsmask;
-	if(ent.weapon == WEP_RIFLE.m_id)
+	if (IS_PLAYER(ent) && PS(ent).m_weapon == WEP_RIFLE)
 		ent.dphitcontentsmask = DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 	else
 		ent.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
@@ -50,13 +50,15 @@ void W_SetupShot_Dir_ProjectileSize_Range(entity ent, vector s_forward, vector m
 		w_shotend = ent.origin + ent.view_ofs + s_forward * autocvar_g_trueaim_minrange;
 
 	// track max damage
-	if(accuracy_canbegooddamage(ent))
-		accuracy_add(ent, ent.weapon, maxdamage, 0);
+	if (IS_PLAYER(ent) && accuracy_canbegooddamage(ent))
+		accuracy_add(ent, PS(ent).m_weapon.m_id, maxdamage, 0);
 
 	W_HitPlotAnalysis(ent, v_forward, v_right, v_up);
 
-	if(ent.weaponentity.movedir.x > 0)
-		vecs = ent.weaponentity.movedir;
+	.entity weaponentity = weaponentities[0]; // TODO: unhardcode
+	vector md = ent.(weaponentity).movedir;
+	if(md.x > 0)
+		vecs = md;
 	else
 		vecs = '0 0 0';
 
@@ -329,7 +331,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	}
 
 	// calculate hits and fired shots for hitscan
-	accuracy_add(self, self.weapon, 0, min(bdamage, totaldmg));
+	accuracy_add(self, PS(self).m_weapon.m_id, 0, min(bdamage, totaldmg));
 
 	trace_endpos = endpoint;
 	trace_ent = endent;
@@ -357,11 +359,11 @@ void fireBullet(vector start, vector dir, float spread, float max_solid_penetrat
 	float total_damage = 0;
 
 	if(tracereffects & EF_RED)
-		fireBullet_trace_callback_eff = particleeffectnum(EFFECT_RIFLE);
+		fireBullet_trace_callback_eff = EFFECT_RIFLE;
 	else if(tracereffects & EF_BLUE)
-		fireBullet_trace_callback_eff = particleeffectnum(EFFECT_RIFLE_WEAK);
+		fireBullet_trace_callback_eff = EFFECT_RIFLE_WEAK;
 	else
-		fireBullet_trace_callback_eff = particleeffectnum(EFFECT_BULLET);
+		fireBullet_trace_callback_eff = EFFECT_BULLET;
 
 	float lag = ANTILAG_LATENCY(self);
 	if(lag < 0.001)
@@ -432,7 +434,7 @@ void fireBullet(vector start, vector dir, float spread, float max_solid_penetrat
 				// do not exceed 100%
 				float added_damage = min(damage - total_damage, damage * solid_penetration_left);
 				total_damage += damage * solid_penetration_left;
-				accuracy_add(self, self.weapon, 0, added_damage);
+				accuracy_add(self, PS(self).m_weapon.m_id, 0, added_damage);
 			}
 		}
 

@@ -21,11 +21,13 @@ void default_delayedinit();
 
 void ActivateTeamplay();
 
+void SetLimits(int fraglimit_override, int leadlimit_override, float timelimit_override, float qualifying_override);
+
 void InitGameplayMode();
 
 string GetClientVersionMessage();
 
-string getwelcomemessage(void);
+string getwelcomemessage();
 
 void SetPlayerColors(entity pl, float _color);
 

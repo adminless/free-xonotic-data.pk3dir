@@ -74,7 +74,7 @@ MINIGAME_SIMPLELINKED_ENTITIES
 
 void minigame_autoclean_entity(entity e)
 {
-	LOG_DEBUG("CL Auto-cleaned: ",ftos(num_for_edict(e)), " (",e.classname,")\n");
+	LOG_DEBUG("CL Auto-cleaned: ",ftos(etof(e)), " (",e.classname,")\n");
 	remove(e);
 }
 
@@ -153,8 +153,6 @@ void minigame_player_entremove()
 		deactivate_minigame();
 }
 
-vector ReadVector2D() { vector v; v_x = ReadCoord(); v_y = ReadCoord(); v_z = 0; return v; }
-vector ReadVector() { vector v; v_x = ReadCoord(); v_y = ReadCoord(); v_z = ReadCoord(); return v; }
 string() ReadString_Raw = #366;
 string ReadString_Zoned() { return strzone(ReadString_Raw()); }
 #define ReadString ReadString_Zoned
@@ -178,8 +176,8 @@ void minigame_read_owner()
 	if ( !self.owner )
 		LOG_TRACE("Got a minigame entity without a minigame!\n");
 }
-void ent_read_minigame()
-{SELFPARAM();
+NET_HANDLE(ENT_CLIENT_MINIGAME, bool isnew)
+{
 	float sf = ReadByte();
 	if ( sf & MINIG_SF_CREATE )
 	{
@@ -214,7 +212,7 @@ void ent_read_minigame()
 			minigame_read_owner();
 			float ent = ReadLong();
 			self.minigame_playerslot = ent;
-			LOG_DEBUG("Player: ",GetPlayerName(ent-1),"\n");
+			LOG_DEBUG("Player: ",entcs_GetName(ent-1),"\n");
 
 			activate = (ent == player_localnum+1 && self.owner && self.owner != active_minigame);
 
@@ -237,10 +235,11 @@ void ent_read_minigame()
 
 	if ( sf & MINIG_SF_CREATE )
 	{
-		LOG_DEBUG("CL Reading entity: ",ftos(num_for_edict(self)),
+		LOG_DEBUG("CL Reading entity: ",ftos(etof(self)),
 			" classname:",self.classname," enttype:",ftos(self.enttype) );
 		LOG_DEBUG(" sf:",ftos(sf)," netname:",self.netname,"\n\n");
 	}
+	return true;
 }
 #undef ReadString
 #undef FIELD

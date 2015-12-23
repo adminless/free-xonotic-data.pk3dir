@@ -19,8 +19,8 @@ ENDCLASS(GuidePage)
 
 REGISTRY(GuidePages, 16)
 #define REGISTER_GUIDE_PAGE(id, title) \
-    REGISTER(RegisterGuidePages, GUIDE_PAGE, GuidePages, id, m_id, NEW(GuidePage, title))
-REGISTER_REGISTRY(RegisterGuidePages)
+    REGISTER(GuidePages, GUIDE_PAGE, id, m_id, NEW(GuidePage, title))
+REGISTER_REGISTRY(GuidePages)
 
 REGISTER_GUIDE_PAGE(0, _("Intro")) { this.m_description = _(
 "Welcome to xonotic"

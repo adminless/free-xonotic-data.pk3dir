@@ -167,32 +167,32 @@ spawnfunc(item_key)
 
 	// find default netname and colormod
 	switch(self.itemkeys) {
-	case 1:
+	case BIT(0):
 		_netname = "GOLD key";
 		_colormod = '1 .9 0';
 		break;
 
-	case 2:
+	case BIT(1):
 		_netname = "SILVER key";
 		_colormod = '.9 .9 .9';
 		break;
 
-	case 4:
+	case BIT(2):
 		_netname = "BRONZE key";
 		_colormod = '.6 .25 0';
 		break;
 
-	case 8:
+	case BIT(3):
 		_netname = "RED keycard";
 		_colormod = '.9 0 0';
 		break;
 
-	case 16:
+	case BIT(4):
 		_netname = "BLUE keycard";
 		_colormod = '0 0 .9';
 		break;
 
-	case 32:
+	case BIT(5):
 		_netname = "GREEN keycard";
 		_colormod = '0 .9 0';
 		break;
@@ -239,7 +239,7 @@ spawnfunc(item_key)
 		self.message = strzone(strcat("You've picked up the ", self.netname, "!"));
 
 	if (self.noise == "")
-		self.noise = SND(ITEMPICKUP);
+		self.noise = strzone(SND(ITEMPICKUP));
 
 	// save the name for later
 	item_keys_names[lowestbit(self.itemkeys)] = self.netname;

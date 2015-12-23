@@ -2,6 +2,7 @@
 #define CLIENT_MAIN_H
 
 #include "../common/constants.qh"
+#include "../common/weapons/all.qh"
 
 // --------------------------------------------------------------------------
 // MENU Functionality
@@ -12,13 +13,6 @@ const float DATABUF_PING = 0;
 #define DATABUF_RETURNS (3*maxclients)
 
 #define DATABUF_NEXT (5*maxclients)
-
-void() menu_show_error;
-void() menu_sub_null;
-
-float menu_visible;
-var void() menu_show;
-var float(float bInputType, float nPrimary, float nSecondary) menu_action;
 
 // --------------------------------------------------------------------------
 // Onslaught
@@ -93,17 +87,17 @@ entity teamslots[17];    // 17 teams (including "spectator team")
 
 .void(entity) draw;
 .void(entity) draw2d;
-.void(void) entremove;
+.void() entremove;
 float drawframetime;
 vector view_origin, view_forward, view_right, view_up;
 
-float button_zoom;
-float spectatorbutton_zoom;
-float button_attack2;
+bool button_zoom;
+bool spectatorbutton_zoom;
+bool button_attack2;
 
-int activeweapon;
-int switchingweapon;
-int switchweapon;
+Weapon activeweapon;
+Weapon switchingweapon;
+Weapon switchweapon;
 float current_viewzoom;
 float zoomin_effect;
 float warmup_stage;
@@ -142,13 +136,7 @@ const int HOOK_END =      2;
 
 .float ping, ping_packetloss, ping_movementloss;
 
-float g_balance_mortar_bouncefactor;
-float g_balance_mortar_bouncestop;
-float g_balance_electro_secondary_bouncefactor;
-float g_balance_electro_secondary_bouncestop;
 float g_trueaim_minrange;
-
-entity entcs_receiver[255]; // 255 is the engine limit on maxclients
 
 float hud;
 float view_quality;

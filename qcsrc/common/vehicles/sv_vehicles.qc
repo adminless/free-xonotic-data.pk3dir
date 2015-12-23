@@ -40,7 +40,7 @@ bool vehicle_send(entity to, int sf)
 bool SendAuxiliaryXhair(entity this, entity to, int sf)
 {
 
-	WriteByte(MSG_ENTITY, ENT_CLIENT_AUXILIARYXHAIR);
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_AUXILIARYXHAIR);
 
 	WriteByte(MSG_ENTITY, self.cnt);
 
@@ -87,8 +87,7 @@ void CSQCVehicleSetup(entity own, int vehicle_id)
 
 	msg_entity = own;
 
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TE_CSQC_VEHICLESETUP);
+	WriteHeader(MSG_ONE, TE_CSQC_VEHICLESETUP);
 	WriteByte(MSG_ONE, vehicle_id);
 }
 
@@ -275,7 +274,7 @@ entity vehicles_projectile(string _mzlfx, string _mzlsound,
 	proj.use			  = vehicles_projectile_explode;
 	proj.owner			= self;
 	proj.realowner		= _owner;
-	proj.think			= SUB_Remove;
+	proj.think			= SUB_Remove_self;
 	proj.nextthink		= time + 30;
 
 	if(_health)
@@ -455,15 +454,13 @@ void vehicles_reset_colors()
 
 void vehicles_clearreturn(entity veh)
 {
-	entity ret;
 	// Remove "return helper", if any.
-	ret = findchain(classname, "vehicle_return");
-	while(ret)
+	for (entity ret = findchain(classname, "vehicle_return"); ret; ret = ret.chain)
 	{
 		if(ret.wp00 == veh)
 		{
 			ret.classname   = "";
-			ret.think	   = SUB_Remove;
+			ret.think	   = SUB_Remove_self;
 			ret.nextthink   = time + 0.1;
 
 			if(ret.waypointsprite_attached)
@@ -471,7 +468,6 @@ void vehicles_clearreturn(entity veh)
 
 			return;
 		}
-		ret = ret.chain;
 	}
 }
 
@@ -548,8 +544,7 @@ void vehicles_setreturn(entity veh)
 
 	vehicles_clearreturn(veh);
 
-	ret = spawn();
-	ret.classname   = "vehicle_return";
+	ret = new(vehicle_return);
 	ret.wp00	   = veh;
 	ret.team		= veh.team;
 	ret.think	   = vehicles_showwp;
@@ -634,7 +629,7 @@ void vehicles_painframe()
 		float _ftmp;
 		_ftmp = self.owner.vehicle_health / 50;
 		self.pain_frame = time + 0.1 + (random() * 0.5 * _ftmp);
-		pointparticles(particleeffectnum(EFFECT_SMOKE_SMALL), (self.origin + (randomvec() * 80)), '0 0 0', 1);
+		pointparticles(EFFECT_SMOKE_SMALL, (self.origin + (randomvec() * 80)), '0 0 0', 1);
 
 		if(self.vehicle_flags & VHF_DMGSHAKE)
 			self.velocity += randomvec() * 30;
@@ -882,7 +877,7 @@ void vehicles_exit(bool eject)
 		_player.view_ofs		= PL_VIEW_OFS;
 		_player.event_damage	= PlayerDamage;
 		_player.hud				= HUD_NORMAL;
-		_player.switchweapon	= _vehicle.switchweapon;
+		PS(_player).m_switchweapon = _vehicle.m_switchweapon;
 		_player.last_vehiclecheck = time + 3;
 		_player.vehicle_enter_delay = time + 2;
 
@@ -956,17 +951,21 @@ void vehicles_touch()
 	vehicles_enter(other, self);
 }
 
-bool vehicle_impulse(int imp)
-{SELFPARAM();
-	switch(imp)
+bool vehicle_impulse(entity this, int imp)
+{
+	entity v = this.vehicle;
+	if (!v) return false;
+	if (v.deadflag != DEAD_NO) return false;
+	bool(int) f = v.vehicles_impulse;
+	if (f && f(imp)) return true;
+	switch (imp)
 	{
-		case 17:
+		case IMP_weapon_drop.impulse:
 		{
 			stuffcmd(self, "\ntoggle cl_eventchase_vehicle\nset _vehicles_shownchasemessage 1\n");
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -1064,7 +1063,7 @@ void vehicles_enter(entity pl, entity veh)
 	veh.colormap		= pl.colormap;
 	if(veh.tur_head)
 		veh.tur_head.colormap = pl.colormap;
-	veh.switchweapon = pl.switchweapon;
+	veh.m_switchweapon = PS(pl).m_switchweapon;
 	pl.hud = veh.vehicleid;
 	pl.PlayerPhysplug = veh.PlayerPhysplug;
 
@@ -1234,9 +1233,9 @@ bool vehicle_initialize(entity veh, bool nodrop)
 
 	self.vehicle_flags |= VHF_ISVEHICLE;
 
-	self.vehicle_viewport		= spawn();
-	self.vehicle_hudmodel		= spawn();
-	self.tur_head				= spawn();
+	self.vehicle_viewport		= new(vehicle_viewport);
+	self.vehicle_hudmodel		= new(vehicle_hudmodel);
+	self.tur_head				= new(tur_head);
 	self.tur_head.owner			= self;
 	self.takedamage				= DAMAGE_NO;
 	self.bot_attack				= true;

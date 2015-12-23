@@ -10,7 +10,7 @@ void pathlib_deletepath(entity start)
     e = findchainentity(owner, start);
     while(e)
     {
-        e.think = SUB_Remove;
+        e.think = SUB_Remove_self;
         e.nextthink = time;
         e = e.chain;
     }
@@ -22,7 +22,7 @@ const float PATHLIB_NODEEXPIRE = 20;
 void dumpnode(entity n)
 {
     n.is_path_node = false;
-    n.think        = SUB_Remove;
+    n.think        = SUB_Remove_self;
     n.nextthink    = time;
 }
 
@@ -49,7 +49,7 @@ entity pathlib_mknode(vector where,entity parent)
 
     node = spawn();
 
-    node.think        = SUB_Remove;
+    node.think        = SUB_Remove_self;
     node.nextthink    = time + PATHLIB_NODEEXPIRE;
     node.is_path_node = true;
     node.owner        = openlist;
@@ -471,9 +471,8 @@ entity pathlib_astar(vector from,vector to)
     {
         LOG_TRACE("AStar: Goal found on first node!\n");
 
-        open           = spawn();
+        open           = new(path_end);
         open.owner     = open;
-        open.classname = "path_end";
         setorigin(open,path.origin);
 
         pathlib_cleanup();

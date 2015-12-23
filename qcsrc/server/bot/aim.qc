@@ -4,7 +4,7 @@
 
 #include "../weapons/weaponsystem.qh"
 
-#include "../mutators/mutators_include.qh"
+#include "../mutators/all.qh"
 
 // traces multiple trajectories to find one that will impact the target
 // 'end' vector is the place it aims for,
@@ -19,7 +19,7 @@ float findtrajectorywithleading(vector org, vector m1, vector m2, entity targ, f
 	if (targ.solid < SOLID_BBOX) // SOLID_NOT and SOLID_TRIGGER
 		return false; // could never hit it
 	if (!tracetossent)
-		tracetossent = spawn();
+		tracetossent = new(tracetossent);
 	tracetossent.owner = ignore;
 	setsize(tracetossent, m1, m2);
 	savesolid = targ.solid;
@@ -38,7 +38,7 @@ float findtrajectorywithleading(vector org, vector m1, vector m2, entity targ, f
 	}
 
 	if (!tracetossfaketarget)
-		tracetossfaketarget = spawn();
+		tracetossfaketarget = new(tracetossfaketarget);
 	tracetossfaketarget.solid = savesolid;
 	tracetossfaketarget.movetype = targ.movetype;
 	_setmodel(tracetossfaketarget, targ.model); // no low precision
@@ -338,12 +338,12 @@ float bot_aim(float shotspeed, float shotspeedupward, float maxshottime, float a
 	shotspeedupward *= W_WeaponSpeedFactor();
 	if (!shotspeed)
 	{
-		LOG_TRACE("bot_aim: WARNING: weapon ", WEP_NAME(self.weapon), " shotspeed is zero!\n");
+		LOG_TRACE("bot_aim: WARNING: weapon ", PS(self).m_weapon.m_name, " shotspeed is zero!\n");
 		shotspeed = 1000000;
 	}
 	if (!maxshottime)
 	{
-		LOG_TRACE("bot_aim: WARNING: weapon ", WEP_NAME(self.weapon), " maxshottime is zero!\n");
+		LOG_TRACE("bot_aim: WARNING: weapon ", PS(self).m_weapon.m_name, " maxshottime is zero!\n");
 		maxshottime = 1;
 	}
 	makevectors(self.v_angle);

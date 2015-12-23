@@ -79,9 +79,8 @@ string nmm_tile_build_vmill(entity tile)
 void nmm_spawn_tile(string id, entity minig, int distance)
 {
 	// TODO global variable + list_next for simpler tile loops
-	entity e = spawn();
+	entity e = new(minigame_nmm_tile);
 	e.origin = minigame_tile_pos(id,7,7);
-	e.classname = "minigame_nmm_tile";
 	e.netname = id;
 	e.owner = minig;
 	e.team = 0;
@@ -478,7 +477,7 @@ void nmm_hud_board(vector pos, vector mySize)
 		FOREACH_MINIGAME_ENTITY(e)
 			if ( e.classname == "minigame_player" &&
 					e.team == (active_minigame.minigame_flags & NMM_TURN_TEAM) )
-				playername = GetPlayerName(e.minigame_playerslot-1);
+				playername = entcs_GetName(e.minigame_playerslot-1);
 
 		vector win_pos = pos+eY*(mySize_y-winfs_y)/2;
 		vector win_sz;
@@ -532,7 +531,7 @@ void nmm_hud_status(vector pos, vector mySize)
 			if ( e.team == 2 )
 				mypos_y  += player_fontsize_y + ts_y;
 			minigame_drawcolorcodedstring_trunc(mySize_x,mypos,
-				GetPlayerName(e.minigame_playerslot-1),
+				entcs_GetName(e.minigame_playerslot-1),
 				player_fontsize, panel_fg_alpha, DRAWFLAG_NORMAL);
 		}
 		else if ( e.classname == "minigame_board_piece" )

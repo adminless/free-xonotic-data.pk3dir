@@ -283,11 +283,11 @@ void HUD_MinigameMenu_ClickInvite()
 		entity prev = self;
 		for(int i = 0; i < maxclients; ++i)
 		{
-			if ( player_localnum != i && playerslots[i] && GetPlayerName(i) != "" &&
+			if ( player_localnum != i && playerslots[i] && entcs_GetName(i) != "" &&
 				!findfloat(world,minigame_playerslot,i+1) && playerslots[i].ping )
 			{
 				e = HUD_MinigameMenu_SpawnSubEntry(
-					strzone(GetPlayerName(i)), HUD_MinigameMenu_ClickInvite_Entry,
+					strzone(entcs_GetName(i)), HUD_MinigameMenu_ClickInvite_Entry,
 					self );
 				e.flags |= 1;
 				e.netname = strzone(ftos(i+1));
@@ -332,7 +332,7 @@ void HUD_MinigameMenu_ClickCurrentGame()
 // Whether the minigame menu panel is open
 bool HUD_MinigameMenu_IsOpened()
 {
-	return !!HUD_MinigameMenu_entries;
+	return HUD_MinigameMenu_entries != NULL;
 }
 
 // Close the minigame menu panel
@@ -692,5 +692,5 @@ void HUD_Minigame_Mouse()
 
 bool HUD_Minigame_Showpanels()
 {
-	return HUD_MinigameMenu_IsOpened() && ( autocvar__hud_configure || minigame_isactive() );
+	return (HUD_MinigameMenu_IsOpened() && minigame_isactive());
 }

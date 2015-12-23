@@ -392,7 +392,8 @@ float raptor_frame()
 	if(player.BUTTON_ATCK)
 	if (wep1.wr_checkammo1(wep1))
 	{
-		wep1.wr_think(wep1, self, true, false);
+	    .entity weaponentity = weaponentities[0];
+		wep1.wr_think(wep1, self, weaponentity, 1);
 	}
 
 	if(self.vehicle_flags  & VHF_SHIELDREGEN)
@@ -411,7 +412,8 @@ float raptor_frame()
 		if(time > raptor.lip + autocvar_g_vehicle_raptor_bombs_refire)
 		if(player.BUTTON_ATCK2)
 		{
-			wep2a.wr_think(wep2a, self, false, true);
+		    .entity weaponentity = weaponentities[1];
+			wep2a.wr_think(wep2a, self, weaponentity, 2);
 			raptor.delay = time + autocvar_g_vehicle_raptor_bombs_refire;
 			raptor.lip   = time;
 		}
@@ -422,7 +424,8 @@ float raptor_frame()
 		if(time > raptor.lip + autocvar_g_vehicle_raptor_flare_refire)
 		if(player.BUTTON_ATCK2)
 		{
-			wep2b.wr_think(wep2b, self, false, true);
+		    .entity weaponentity = weaponentities[1];
+			wep2b.wr_think(wep2b, self, weaponentity, 2);
 			raptor.delay = time + autocvar_g_vehicle_raptor_flare_refire;
 			raptor.lip   = time;
 		}
@@ -566,28 +569,28 @@ float raptor_impulse(float _imp)
 {SELFPARAM();
 	switch(_imp)
 	{
-		case 1:
+		case IMP_weapon_group_1.impulse:
 			self.vehicle.vehicle_weapon2mode = RSM_BOMB;
 			CSQCVehicleSetup(self, 0);
 			return true;
-		case 2:
+		case IMP_weapon_group_2.impulse:
 			self.vehicle.vehicle_weapon2mode = RSM_FLARE;
 			CSQCVehicleSetup(self, 0);
 			return true;
 
-		case 10:
-		case 15:
-		case 18:
+		case IMP_weapon_next_byid.impulse:
+		case IMP_weapon_next_bypriority.impulse:
+		case IMP_weapon_next_bygroup.impulse:
 			self.vehicle.vehicle_weapon2mode += 1;
 			if(self.vehicle.vehicle_weapon2mode > RSM_LAST)
 				self.vehicle.vehicle_weapon2mode = RSM_FIRST;
 
 			CSQCVehicleSetup(self, 0);
 			return true;
-		case 11:
-		case 12:
-		case 16:
-		case 19:
+		case IMP_weapon_last.impulse:
+		case IMP_weapon_prev_byid.impulse:
+		case IMP_weapon_prev_bypriority.impulse:
+		case IMP_weapon_prev_bygroup.impulse:
 			self.vehicle.vehicle_weapon2mode -= 1;
 			if(self.vehicle.vehicle_weapon2mode < RSM_FIRST)
 				self.vehicle.vehicle_weapon2mode = RSM_LAST;
@@ -596,9 +599,9 @@ float raptor_impulse(float _imp)
 			return true;
 
 		/*
-		case 17: // toss gun, could be used to exit?
+		case IMP_weapon_drop.impulse: // toss gun, could be used to exit?
 			break;
-		case 20: // Manual minigun reload?
+		case IMP_weapon_reload.impulse: // Manual minigun reload?
 			break;
 		*/
 	}
@@ -671,10 +674,10 @@ spawnfunc(vehicle_raptor)
 
 				self.frame = 0;
 
-				self.bomb1 = spawn();
-				self.bomb2 = spawn();
-				self.gun1  = spawn();
-				self.gun2  = spawn();
+				self.bomb1 = new(raptor_bomb);
+				self.bomb2 = new(raptor_bomb);
+				self.gun1  = new(raptor_gun);
+				self.gun2  = new(raptor_gun);
 
 				setmodel(self.bomb1, MDL_VEH_RAPTOR_CB_FOLDED);
 				setmodel(self.bomb2, MDL_VEH_RAPTOR_CB_FOLDED);
@@ -705,7 +708,7 @@ spawnfunc(vehicle_raptor)
 				self.angles = self.bomb1.angles;
 				self.bomb1.angles = '0 0 0';
 
-				spinner = spawn();
+				spinner = new(raptor_spinner);
 				spinner.owner = self;
 				setmodel(spinner, MDL_VEH_RAPTOR_PROP);
 				setattachment(spinner, self, "engine_left");
@@ -713,7 +716,7 @@ spawnfunc(vehicle_raptor)
 				spinner.avelocity = '0 90 0';
 				self.bomb1.gun1 = spinner;
 
-				spinner = spawn();
+				spinner = new(raptor_spinner);
 				spinner.owner = self;
 				setmodel(spinner, MDL_VEH_RAPTOR_PROP);
 				setattachment(spinner, self, "engine_right");
@@ -774,6 +777,12 @@ spawnfunc(vehicle_raptor)
 
 		METHOD(Raptor, vr_hud, void(Raptor thisveh))
 		{
+			Vehicles_drawHUD(VEH_RAPTOR.m_icon, "vehicle_raptor_weapon1", "vehicle_raptor_weapon2",
+							 "vehicle_icon_ammo1", autocvar_hud_progressbar_vehicles_ammo1_color,
+							 "vehicle_icon_ammo2", autocvar_hud_progressbar_vehicles_ammo2_color);
+		}
+		METHOD(Raptor, vr_crosshair, void(Raptor thisveh))
+		{
 			string crosshair;
 
 			switch(weapon2mode)
@@ -783,10 +792,60 @@ spawnfunc(vehicle_raptor)
 				default:        crosshair = vCROSS_BURST;
 			}
 
-			Vehicles_drawHUD(VEH_RAPTOR.m_icon, "vehicle_raptor_weapon1", "vehicle_raptor_weapon2",
-							 "vehicle_icon_ammo1", autocvar_hud_progressbar_vehicles_ammo1_color,
-							 "vehicle_icon_ammo2", autocvar_hud_progressbar_vehicles_ammo2_color,
-							 crosshair);
+			vector tmpSize = '0 0 0';
+			if(weapon2mode != RSM_FLARE)
+			{
+				vector where;
+
+				if(!dropmark)
+				{
+					dropmark = spawn();
+					dropmark.owner = self;
+					dropmark.gravity = 1;
+				}
+
+				float reload2 = STAT(VEHICLESTAT_RELOAD2) * 0.01;
+				if(reload2 == 1)
+				{
+					setorigin(dropmark, pmove_org);
+					dropmark.velocity = pmove_vel;
+					tracetoss(dropmark, self);
+
+					where = project_3d_to_2d(trace_endpos);
+
+					setorigin(dropmark, trace_endpos);
+					tmpSize = draw_getimagesize(vCROSS_DROP) * autocvar_cl_vehicles_crosshair_size;
+
+					if (!(where.z < 0 || where.x < 0 || where.y < 0 || where.x > vid_conwidth || where.y > vid_conheight))
+					{
+						where.x -= tmpSize.x * 0.5;
+						where.y -= tmpSize.y * 0.5;
+						where.z = 0;
+						drawpic(where, vCROSS_DROP, tmpSize, '0 1 0', autocvar_crosshair_alpha * 0.9, DRAWFLAG_ADDITIVE);
+						drawpic(where, vCROSS_DROP, tmpSize, '0 1 0', autocvar_crosshair_alpha * 0.6, DRAWFLAG_NORMAL); // Ensure visibility against bright bg
+					}
+					dropmark.cnt = time + 5;
+				}
+				else
+				{
+					if(dropmark.cnt > time)
+					{
+						where = project_3d_to_2d(dropmark.origin);
+						tmpSize = draw_getimagesize(vCROSS_DROP) * autocvar_cl_vehicles_crosshair_size * 1.25;
+
+						if (!(where.z < 0 || where.x < 0 || where.y < 0 || where.x > vid_conwidth || where.y > vid_conheight))
+						{
+							where.x -= tmpSize.x * 0.5;
+							where.y -= tmpSize.y * 0.5;
+							where.z = 0;
+							drawpic(where, vCROSS_DROP, tmpSize, '1 0 0', autocvar_crosshair_alpha * 0.9, DRAWFLAG_ADDITIVE);
+							drawpic(where, vCROSS_DROP, tmpSize, '1 0 0', autocvar_crosshair_alpha * 0.6, DRAWFLAG_NORMAL); // Ensure visibility against bright bg
+						}
+					}
+				}
+			}
+
+			Vehicles_drawCrosshair(crosshair);
 		}
 		METHOD(Raptor, vr_setup, void(Raptor thisveh))
 		{

@@ -133,11 +133,13 @@ void fd_secret_done()
 		_sound(self, CH_TRIGGER_SINGLE, self.noise3, VOL_BASE, ATTEN_NORM);
 }
 
+.float door_finished;
+
 void secret_blocked()
 {SELFPARAM();
-	if (time < self.attack_finished_single)
+	if (time < self.door_finished)
 		return;
-	self.attack_finished_single = time + 0.5;
+	self.door_finished = time + 0.5;
 	//T_Damage (other, self, self, self.dmg, self.dmg, self.deathtype, DT_IMPACT, (self.absmin + self.absmax) * 0.5, '0 0 0', Obituary_Generic);
 }
 
@@ -152,29 +154,29 @@ void secret_touch()
 {SELFPARAM();
 	if (!other.iscreature)
 		return;
-	if (self.attack_finished_single > time)
+	if (self.door_finished > time)
 		return;
 
-	self.attack_finished_single = time + 2;
+	self.door_finished = time + 2;
 
 	if (self.message)
 	{
 		if (IS_CLIENT(other))
 			centerprint(other, self.message);
-		play2(other, SND(TALK));
+		play2(other, self.noise);
 	}
 }
 
-void secret_reset()
-{SELFPARAM();
-	if (self.spawnflags&SECRET_YES_SHOOT)
+void secret_reset(entity this)
+{
+	if (this.spawnflags & SECRET_YES_SHOOT)
 	{
-		self.health = 10000;
-		self.takedamage = DAMAGE_YES;
+		this.health = 10000;
+		this.takedamage = DAMAGE_YES;
 	}
-	setorigin(self, self.oldorigin);
-	self.think = func_null;
-	self.SUB_NEXTTHINK = 0;
+	setorigin(this, this.oldorigin);
+	this.think = func_null;
+	this.SUB_NEXTTHINK = 0;
 }
 
 /*QUAKED spawnfunc_func_door_secret (0 .5 .8) ? open_once 1st_left 1st_down no_shoot always_shoot
@@ -196,41 +198,41 @@ If a secret door has a targetname, it will only be opened by it's botton or trig
 
 spawnfunc(func_door_secret)
 {
-	/*if (!self.deathtype) // map makers can override this
-		self.deathtype = " got in the way";*/
+	/*if (!this.deathtype) // map makers can override this
+		this.deathtype = " got in the way";*/
 
-	if (!self.dmg)
-		self.dmg = 2;
+	if (!this.dmg) this.dmg = 2;
 
 	// Magic formula...
-	self.mangle = self.angles;
-	self.angles = '0 0 0';
-	self.classname = "door";
-	if (!InitMovingBrushTrigger())
-		return;
-	self.effects |= EF_LOWPRECISION;
+	this.mangle = this.angles;
+	this.angles = '0 0 0';
+	this.classname = "door";
+	if (!InitMovingBrushTrigger()) return;
+	this.effects |= EF_LOWPRECISION;
 
-	self.touch = secret_touch;
-	self.blocked = secret_blocked;
-	self.speed = 50;
-	self.use = fd_secret_use;
+	if (this.noise == "") this.noise = "misc/talk.wav";
+	precache_sound(this.noise);
+
+	this.touch = secret_touch;
+	this.blocked = secret_blocked;
+	this.speed = 50;
+	this.use = fd_secret_use;
 	IFTARGETED
 	{
 	}
 	else
-		self.spawnflags |= SECRET_YES_SHOOT;
+		this.spawnflags |= SECRET_YES_SHOOT;
 
-	if(self.spawnflags&SECRET_YES_SHOOT)
+	if (this.spawnflags & SECRET_YES_SHOOT)
 	{
-		self.health = 10000;
-		self.takedamage = DAMAGE_YES;
-		self.event_damage = fd_secret_damage;
+		this.health = 10000;
+		this.takedamage = DAMAGE_YES;
+		this.event_damage = fd_secret_damage;
 	}
-	self.oldorigin = self.origin;
-	if (!self.wait)
-		self.wait = 5;		// 5 seconds before closing
+	this.oldorigin = this.origin;
+	if (!this.wait) this.wait = 5; // seconds before closing
 
-	self.reset = secret_reset;
-	secret_reset();
+	this.reset = secret_reset;
+	this.reset(this);
 }
 #endif

@@ -85,7 +85,7 @@ void Ent_Wall_Draw(entity this)
 		}
 	}
 
-	InterpolateOrigin_Do();
+	InterpolateOrigin_Do(self);
 
 	self.saved = self.(fld);
 
@@ -114,12 +114,12 @@ void Ent_Wall_Remove()
 	self.bgmscript = string_null;
 }
 
-void Ent_Wall()
-{SELFPARAM();
+NET_HANDLE(ENT_CLIENT_WALL, bool isnew)
+{
 	int f;
 	var .vector fld;
 
-	InterpolateOrigin_Undo();
+	InterpolateOrigin_Undo(self);
 	self.iflags = IFLAG_ANGLES | IFLAG_ORIGIN;
 
 	if(self.bgmscriptangular)
@@ -222,7 +222,9 @@ void Ent_Wall()
 		BGMScript_InitEntity(self);
 	}
 
-	InterpolateOrigin_Note();
+	return = true;
+
+	InterpolateOrigin_Note(this);
 
 	self.saved = self.(fld);
 

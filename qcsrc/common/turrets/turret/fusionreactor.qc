@@ -6,8 +6,8 @@ CLASS(FusionReactor, Turret)
 /* mins       */ ATTRIB(FusionReactor, mins, vector, '-34 -34 0');
 /* maxs       */ ATTRIB(FusionReactor, maxs, vector, '34 34 90');
 /* modelname  */ ATTRIB(FusionReactor, mdl, string, "base.md3");
-/* model      */ ATTRIB(FusionReactor, model, string, strzone(strcat("models/turrets/", this.mdl)));
-/* head_model */ ATTRIB(FusionReactor, head_model, string, strzone(strcat("models/turrets/", "reactor.md3")));
+/* model      */ ATTRIB_STRZONE(FusionReactor, model, string, strcat("models/turrets/", this.mdl));
+/* head_model */ ATTRIB_STRZONE(FusionReactor, head_model, string, strcat("models/turrets/", "reactor.md3"));
 /* netname    */ ATTRIB(FusionReactor, netname, string, "fusionreactor");
 /* fullname   */ ATTRIB(FusionReactor, turret_name, string, _("Fusion Reactor"));
 ENDCLASS(FusionReactor)
@@ -19,7 +19,7 @@ REGISTER_TURRET(FUSIONREACTOR, NEW(FusionReactor));
 #ifdef SVQC
 bool turret_fusionreactor_firecheck()
 {SELFPARAM();
-    if (self.attack_finished_single > time)
+    if (self.attack_finished_single[0] > time)
         return false;
 
     if (self.enemy.deadflag != DEAD_NO)

@@ -87,8 +87,8 @@ string XonoticWeaponsList_toString(entity me)
 	s = "";
 	for(i = 0; i < n; ++i)
 	{
-		e = get_weaponinfo(stof(argv(i)));
-		s = strcat(s, e.message, ", ");
+		e = Weapons_from(stof(argv(i)));
+		s = strcat(s, e.m_name, ", ");
 	}
 	return substring(s, 0, strlen(s) - 2);
 }
@@ -102,8 +102,8 @@ void XonoticWeaponsList_drawListBoxItem(entity me, int i, vector absSize, bool i
 		me.focusedItemAlpha = getFadedAlpha(me.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
 		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, me.focusedItemAlpha);
 	}
-	e = get_weaponinfo(stof(argv(i)));
-	string msg = e.message;
+	e = Weapons_from(stof(argv(i)));
+	string msg = e.m_name;
 	if(e.spawnflags & WEP_FLAG_MUTATORBLOCKED)
 		msg = strcat(msg, "*");
 

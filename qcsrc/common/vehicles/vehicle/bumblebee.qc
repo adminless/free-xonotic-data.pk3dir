@@ -174,13 +174,13 @@ float bumblebee_gunner_frame()
 
 	if(!forbidWeaponUse(gunner))
 	if(gunner.BUTTON_ATCK)
-		if(time > gun.attack_finished_single)
+		if(time > gun.attack_finished_single[0])
 			if(gun.vehicle_energy >= autocvar_g_vehicle_bumblebee_cannon_cost)
 			{
 				gun.vehicle_energy -= autocvar_g_vehicle_bumblebee_cannon_cost;
 				bumblebee_fire_cannon(gun, "fire", gunner);
 				gun.delay = time;
-				gun.attack_finished_single = time + autocvar_g_vehicle_bumblebee_cannon_refire;
+				gun.attack_finished_single[0] = time + autocvar_g_vehicle_bumblebee_cannon_refire;
 			}
 
 	VEHICLE_UPDATE_PLAYER(gunner, health, bumblebee);
@@ -261,7 +261,7 @@ void bumblebee_gunner_exit(int _exitflag)
 	player.event_damage   = PlayerDamage;
 	player.hud            = HUD_NORMAL;
 	player.teleportable	  = TELEPORT_NORMAL;
-	player.switchweapon   = gunner.switchweapon;
+	PS(player).m_switchweapon = gunner.m_switchweapon;
 	player.vehicle_enter_delay = time + 2;
 
 	fixedmakevectors(vehic.angles);
@@ -330,7 +330,7 @@ bool bumblebee_gunner_enter()
 
 	RemoveGrapplingHook(player);
 
-	gunner.switchweapon = player.switchweapon;
+	gunner.m_switchweapon = PS(player).m_switchweapon;
 	gunner.vehicle_exit = bumblebee_gunner_exit;
 	gunner.vehicle_hudmodel.viewmodelforclient = player;
 
@@ -859,17 +859,15 @@ spawnfunc(vehicle_bumblebee)
 				self.vehicle_shieldent.alpha = -1;
 				self.vehicle_shieldent.effects = EF_LOWPRECISION | EF_NODRAW;
 
-				self.gun1 = spawn();
-				self.gun2 = spawn();
-				self.gun3 = spawn();
+				self.gun1 = new(vehicle_playerslot);
+				self.gun2 = new(vehicle_playerslot);
+				self.gun3 = new(bumblebee_raygun);
 
 				self.vehicle_flags |= VHF_MULTISLOT;
 
 				self.gun1.owner = self;
 				self.gun2.owner = self;
 				self.gun3.owner = self;
-
-				self.gun1.classname = self.gun2.classname = "vehicle_playerslot";
 
 				setmodel(self.gun1, MDL_VEH_BUMBLEBEE_CANNON_RIGHT);
 				setmodel(self.gun2, MDL_VEH_BUMBLEBEE_CANNON_LEFT);
@@ -953,16 +951,36 @@ void CSQC_BUMBLE_GUN_HUD()
 {
 	Vehicles_drawHUD("vehicle_gunner", "vehicle_gunner_weapon1", string_null,
 					 "vehicle_icon_ammo1", autocvar_hud_progressbar_vehicles_ammo1_color,
-					 string_null, '0 0 0',
-					 string_null);
+					 string_null, '0 0 0');
 }
 
 		METHOD(Bumblebee, vr_hud, void(Bumblebee thisveh))
 		{
 			Vehicles_drawHUD(VEH_BUMBLEBEE.m_icon, "vehicle_bumble_weapon1", "vehicle_bumble_weapon2",
 							 "vehicle_icon_ammo1", autocvar_hud_progressbar_vehicles_ammo1_color,
-							 "vehicle_icon_ammo1", autocvar_hud_progressbar_vehicles_ammo1_color,
-							 vCROSS_HEAL);
+							 "vehicle_icon_ammo1", autocvar_hud_progressbar_vehicles_ammo1_color);
+
+			float hudAlpha = autocvar_hud_panel_fg_alpha;
+			float blinkValue = 0.55 + sin(time * 7) * 0.45;
+			vector tmpPos  = '0 0 0';
+			vector tmpSize = '1 1 1' * hud_fontsize;
+			tmpPos.x = vehicleHud_Pos.x + vehicleHud_Size.x * (520/768);
+
+			if(!AuxiliaryXhair[1].draw2d)
+			{
+				tmpPos.y = vehicleHud_Pos.y + vehicleHud_Size.y * (96/256) - tmpSize.y;
+				drawstring(tmpPos, _("No right gunner!"), tmpSize, '1 1 1', hudAlpha * blinkValue, DRAWFLAG_NORMAL);
+			}
+
+			if(!AuxiliaryXhair[2].draw2d)
+			{
+				tmpPos.y = vehicleHud_Pos.y + vehicleHud_Size.y * (160/256);
+				drawstring(tmpPos, _("No left gunner!"), tmpSize, '1 1 1', hudAlpha * blinkValue, DRAWFLAG_NORMAL);
+			}
+		}
+		METHOD(Bumblebee, vr_crosshair, void(Bumblebee thisveh))
+		{
+			Vehicles_drawCrosshair(vCROSS_HEAL);
 		}
 		METHOD(Bumblebee, vr_setup, void(Bumblebee thisveh))
 		{

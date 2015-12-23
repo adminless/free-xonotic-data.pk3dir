@@ -1,13 +1,11 @@
-#ifdef CSQC
-	#include "../../../client/particles.qh"
-#endif
+REGISTER_NET_LINKED(ENT_CLIENT_POINTPARTICLES)
 
 #ifdef SVQC
 // NOTE: also contains func_sparks
 
 bool pointparticles_SendEntity(entity this, entity to, float fl)
 {
-	WriteByte(MSG_ENTITY, ENT_CLIENT_POINTPARTICLES);
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_POINTPARTICLES);
 
 	// optional features to save space
 	fl = fl & 0x0F;
@@ -104,57 +102,47 @@ void pointparticles_think()
 	self.nextthink = time;
 }
 
-void pointparticles_reset()
-{SELFPARAM();
-	if(self.spawnflags & 1)
-		self.state = 1;
+void pointparticles_reset(entity this)
+{
+	if(this.spawnflags & 1)
+		this.state = 1;
 	else
-		self.state = 0;
+		this.state = 0;
 }
 
 spawnfunc(func_pointparticles)
 {
-	if(self.model != "")
-		_setmodel(self, self.model);
-	if(self.noise != "")
-		precache_sound (self.noise);
+	if(this.model != "") _setmodel(this, this.model);
+	if(this.noise != "") precache_sound(this.noise);
 
-	if(!self.bgmscriptsustain)
-		self.bgmscriptsustain = 1;
-	else if(self.bgmscriptsustain < 0)
-		self.bgmscriptsustain = 0;
+	if(!this.bgmscriptsustain) this.bgmscriptsustain = 1;
+	else if(this.bgmscriptsustain < 0) this.bgmscriptsustain = 0;
 
-	if(!self.atten)
-		self.atten = ATTEN_NORM;
-	else if(self.atten < 0)
-		self.atten = 0;
-	if(!self.volume)
-		self.volume = 1;
-	if(!self.count)
-		self.count = 1;
-	if(!self.impulse)
-		self.impulse = 1;
+	if(!this.atten) this.atten = ATTEN_NORM;
+	else if(this.atten < 0) this.atten = 0;
+	if(!this.volume) this.volume = 1;
+	if(!this.count) this.count = 1;
+	if(!this.impulse) this.impulse = 1;
 
-	if(!self.modelindex)
+	if(!this.modelindex)
 	{
-		setorigin(self, self.origin + self.mins);
-		setsize(self, '0 0 0', self.maxs - self.mins);
+		setorigin(this, this.origin + this.mins);
+		setsize(this, '0 0 0', this.maxs - this.mins);
 	}
-	if(!self.cnt)
-		self.cnt = _particleeffectnum(self.mdl);
+	if(!this.cnt) this.cnt = _particleeffectnum(this.mdl);
 
-	Net_LinkEntity(self, (self.spawnflags & 4), 0, pointparticles_SendEntity);
+	Net_LinkEntity(this, (this.spawnflags & 4), 0, pointparticles_SendEntity);
 
 	IFTARGETED
 	{
-		self.use = pointparticles_use;
-		self.reset = pointparticles_reset;
-		self.reset();
+		this.use = pointparticles_use;
+		this.reset = pointparticles_reset;
+		this.reset(this);
 	}
 	else
-		self.state = 1;
-	self.think = pointparticles_think;
-	self.nextthink = time;
+		this.state = 1;
+	this.think = pointparticles_think;
+	this.nextthink = time;
 }
 
 spawnfunc(func_sparks)
@@ -182,6 +170,21 @@ spawnfunc(func_sparks)
 	spawnfunc_func_pointparticles(this);
 }
 #elif defined(CSQC)
+
+.int dphitcontentsmask;
+
+entityclass(PointParticles);
+class(PointParticles) .int cnt; // effect number
+class(PointParticles) .vector velocity; // particle velocity
+class(PointParticles) .float waterlevel; // direction jitter
+class(PointParticles) .int count; // count multiplier
+class(PointParticles) .int impulse; // density
+class(PointParticles) .string noise; // sound
+class(PointParticles) .float atten;
+class(PointParticles) .float volume;
+class(PointParticles) .float absolute; // 1 = count per second is absolute, 2 = only spawn at toggle
+class(PointParticles) .vector movedir; // trace direction
+class(PointParticles) .float glow_color; // palette index
 
 void Draw_PointParticles(entity this)
 {
@@ -221,11 +224,11 @@ void Draw_PointParticles(entity this)
 			{
 				traceline(p, p + normalize(self.movedir) * 4096, 0, world);
 				p = trace_endpos;
-				pointparticles(self.cnt, p, trace_plane_normal * vlen(self.movedir) + self.velocity + randomvec() * self.waterlevel, self.count);
+				__pointparticles(self.cnt, p, trace_plane_normal * vlen(self.movedir) + self.velocity + randomvec() * self.waterlevel, self.count);
 			}
 			else
 			{
-				pointparticles(self.cnt, p, self.velocity + randomvec() * self.waterlevel, self.count);
+				__pointparticles(self.cnt, p, self.velocity + randomvec() * self.waterlevel, self.count);
 			}
 			if(self.noise != "")
 			{
@@ -253,8 +256,8 @@ void Ent_PointParticles_Remove()
 	self.bgmscript = string_null;
 }
 
-void Ent_PointParticles()
-{SELFPARAM();
+NET_HANDLE(ENT_CLIENT_POINTPARTICLES, bool isnew)
+{
 	float i;
 	vector v;
 	int f = ReadByte();
@@ -339,6 +342,8 @@ void Ent_PointParticles()
 		}
 		BGMScript_InitEntity(self);
 	}
+
+	return = true;
 
 	if(f & 2)
 	{

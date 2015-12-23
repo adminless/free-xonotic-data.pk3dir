@@ -4,12 +4,12 @@
 #include "cheats.qh"
 #include "g_damage.qh"
 #include "g_subs.qh"
-#include "g_violence.qh"
 #include "miscfunctions.qh"
 #include "portals.qh"
 #include "teamplay.qh"
 #include "weapons/throwing.qh"
 #include "command/common.qh"
+#include "../common/anim.qh"
 #include "../common/animdecide.qh"
 #include "../common/csqcmodel_settings.qh"
 #include "../common/deathtypes/all.qh"
@@ -26,7 +26,15 @@
 
 #include "../common/animdecide.qh"
 
-void CopyBody_Think(void)
+void Drop_Special_Items(entity player)
+{
+	// called when the player has become stuck or frozen
+	// so objective items aren't stuck with the player
+
+	MUTATOR_CALLHOOK(DropSpecialItems, player);
+}
+
+void CopyBody_Think()
 {SELFPARAM();
 	if(self.CopyBody_nextthink && time > self.CopyBody_nextthink)
 	{
@@ -44,7 +52,7 @@ void CopyBody(float keepvelocity)
 {SELFPARAM();
 	if (self.effects & EF_NODRAW)
 		return;
-	setself(spawn());
+	setself(new(body));
 	self.enemy = this;
 	self.lip = this.lip;
 	self.colormap = this.colormap;
@@ -54,7 +62,6 @@ void CopyBody(float keepvelocity)
 	self.angles = this.angles;
 	self.v_angle = this.v_angle;
 	self.avelocity = this.avelocity;
-	self.classname = "body";
 	self.damageforcescale = this.damageforcescale;
 	self.effects = this.effects;
 	self.glowmod = this.glowmod;
@@ -117,17 +124,6 @@ void CopyBody(float keepvelocity)
 	setself(this);
 }
 
-float player_getspecies()
-{SELFPARAM();
-	float s;
-	get_model_parameters(self.model, self.skin);
-	s = get_model_parameters_species;
-	get_model_parameters(string_null, 0);
-	if(s < 0)
-		return SPECIES_HUMAN;
-	return s;
-}
-
 void player_setupanimsformodel()
 {SELFPARAM();
 	// load animation info
@@ -135,7 +131,7 @@ void player_setupanimsformodel()
 	animdecide_setstate(self, 0, false);
 }
 
-void player_anim (void)
+void player_anim ()
 {SELFPARAM();
 	int deadbits = (self.anim_state & (ANIMSTATE_DEAD1 | ANIMSTATE_DEAD2));
 	if(self.deadflag) {
@@ -159,13 +155,6 @@ void player_anim (void)
 		animbits |= ANIMSTATE_DUCK;
 	animdecide_setstate(self, animbits, false);
 	animdecide_setimplicitstate(self, (self.flags & FL_ONGROUND));
-
-	if (self.weaponentity)
-	{
-		updateanim(self.weaponentity);
-		if (!self.weaponentity.animstate_override)
-			setanim(self.weaponentity, self.weaponentity.anim_idle, true, false, false);
-	}
 }
 
 void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, int deathtype, vector hitloc, vector force)
@@ -441,15 +430,15 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, int deathtyp
 					// exclude pain sounds for laserjumps as long as you aren't REALLY low on health and would die of the next two
 					{
 						if(deathtype == DEATH_FALL.m_id)
-							PlayerSound(playersound_fall, CH_PAIN, VOICETYPE_PLAYERSOUND);
+							PlayerSound(self, playersound_fall, CH_PAIN, VOICETYPE_PLAYERSOUND);
 						else if(self.health > 75) // TODO make a "gentle" version?
-							PlayerSound(playersound_pain100, CH_PAIN, VOICETYPE_PLAYERSOUND);
+							PlayerSound(self, playersound_pain100, CH_PAIN, VOICETYPE_PLAYERSOUND);
 						else if(self.health > 50)
-							PlayerSound(playersound_pain75, CH_PAIN, VOICETYPE_PLAYERSOUND);
+							PlayerSound(self, playersound_pain75, CH_PAIN, VOICETYPE_PLAYERSOUND);
 						else if(self.health > 25)
-							PlayerSound(playersound_pain50, CH_PAIN, VOICETYPE_PLAYERSOUND);
+							PlayerSound(self, playersound_pain50, CH_PAIN, VOICETYPE_PLAYERSOUND);
 						else
-							PlayerSound(playersound_pain25, CH_PAIN, VOICETYPE_PLAYERSOUND);
+							PlayerSound(self, playersound_pain25, CH_PAIN, VOICETYPE_PLAYERSOUND);
 					}
 				}
 			}
@@ -471,9 +460,18 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, int deathtyp
 	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
 	self.dmg_inflictor = inflictor;
 
-	float abot, vbot;
-	abot = (IS_BOT_CLIENT(attacker));
-	vbot = (IS_BOT_CLIENT(self));
+	if (self != attacker) {
+		float realdmg = damage - excess;
+		if (IS_PLAYER(attacker)) {
+			PlayerScore_Add(attacker, SP_DMG, realdmg);
+		}
+		if (IS_PLAYER(self)) {
+			PlayerScore_Add(self, SP_DMGTAKEN, realdmg);
+		}
+	}
+
+	bool abot = (IS_BOT_CLIENT(attacker));
+	bool vbot = (IS_BOT_CLIENT(self));
 
 	valid_damage_for_weaponstats = 0;
 	Weapon awep = WEP_Null;
@@ -484,7 +482,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, int deathtyp
 	if(DIFF_TEAM(self, attacker))
 	{
 		if(DEATH_ISSPECIAL(deathtype))
-			awep = get_weaponinfo(attacker.weapon);
+			awep = PS(attacker).m_weapon;
 		else
 			awep = DEATH_WEAPONOF(deathtype);
 		valid_damage_for_weaponstats = 1;
@@ -494,8 +492,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, int deathtyp
 	{
 		dh = dh - max(self.health, 0);
 		da = da - max(self.armorvalue, 0);
-		WeaponStats_LogDamage(awep.m_id, abot, self.weapon, vbot, dh + da);
-		MUTATOR_CALLHOOK(PlayerDamaged, attacker, self, dh, da, hitloc);
+		WeaponStats_LogDamage(awep.m_id, abot, PS(self).m_weapon.m_id, vbot, dh + da);
+		MUTATOR_CALLHOOK(PlayerDamaged, attacker, self, dh, da, hitloc, deathtype);
 	}
 
 	if (self.health < 1)
@@ -510,15 +508,15 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, int deathtyp
 		}
 
 		if(valid_damage_for_weaponstats)
-			WeaponStats_LogKill(awep.m_id, abot, self.weapon, vbot);
+			WeaponStats_LogKill(awep.m_id, abot, PS(self).m_weapon.m_id, vbot);
 
 		if(autocvar_sv_gentle < 1) // TODO make a "gentle" version?
 		if(sound_allowed(MSG_BROADCAST, attacker))
 		{
 			if(deathtype == DEATH_DROWN.m_id)
-				PlayerSound(playersound_drown, CH_PAIN, VOICETYPE_PLAYERSOUND);
+				PlayerSound(self, playersound_drown, CH_PAIN, VOICETYPE_PLAYERSOUND);
 			else
-				PlayerSound(playersound_death, CH_PAIN, VOICETYPE_PLAYERSOUND);
+				PlayerSound(self, playersound_death, CH_PAIN, VOICETYPE_PLAYERSOUND);
 		}
 
 		// get rid of kill indicator
@@ -550,7 +548,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, int deathtyp
 		MUTATOR_CALLHOOK(PlayerDies, inflictor, attacker, self, deathtype);
 		excess = frag_damage;
 
-		Weapon wep = get_weaponinfo(self.weapon);
+		Weapon wep = PS(self).m_weapon;
 		wep.wr_playerdeath(wep);
 
 		RemoveGrapplingHook(self);
@@ -575,7 +573,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, int deathtyp
 		// clear waypoints
 		WaypointSprite_PlayerDead();
 		// throw a weapon
-		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.switchweapon);
+		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, PS(self).m_switchweapon.m_id);
 
 		// become fully visible
 		self.alpha = default_player_alpha;
@@ -633,19 +631,35 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, int deathtyp
 		// reset fields the weapons may use just in case
 		for (j = WEP_FIRST; j <= WEP_LAST; ++j)
 		{
-			Weapon w = get_weaponinfo(j);
+			Weapon w = Weapons_from(j);
 			w.wr_resetplayer(w);
-			ATTACK_FINISHED_FOR(self, j) = 0;
+			for (int slot = 0; slot < MAX_WEAPONSLOTS; ++slot)
+			{
+				ATTACK_FINISHED_FOR(self, j, slot) = 0;
+			}
 		}
 	}
 }
 
-float Say(entity source, float teamsay, entity privatesay, string msgin, float floodcontrol)
-// message "": do not say, just test flood control
-// return value:
-//   1 = accept
-//   0 = reject
-//  -1 = fake accept
+void MoveToTeam(entity client, int team_colour, int type)
+{
+	int lockteams_backup = lockteams;  // backup any team lock
+	lockteams = 0;  // disable locked teams
+	TeamchangeFrags(client);  // move the players frags
+	SetPlayerColors(client, team_colour - 1);  // set the players colour
+	Damage(client, client, client, 100000, DEATH_AUTOTEAMCHANGE.m_id, client.origin, '0 0 0');  // kill the player
+	lockteams = lockteams_backup;  // restore the team lock
+	LogTeamchange(client.playerid, client.team, type);
+}
+
+/**
+ * message "": do not say, just test flood control
+ * return value:
+ *   1 = accept
+ *   0 = reject
+ *  -1 = fake accept
+ */
+int Say(entity source, float teamsay, entity privatesay, string msgin, bool floodcontrol)
 {
 	string msgstr, colorstr, cmsgstr, namestr, fullmsgstr, sourcemsgstr, fullcmsgstr, sourcecmsgstr, colorprefix;
 	float flood;
@@ -935,349 +949,4 @@ float Say(entity source, float teamsay, entity privatesay, string msgin, float f
 	}
 
 	return ret;
-}
-
-float GetVoiceMessageVoiceType(string type)
-{
-	if(type == "taunt")
-		return VOICETYPE_TAUNT;
-	if(type == "teamshoot")
-		return VOICETYPE_LASTATTACKER;
-	return VOICETYPE_TEAMRADIO;
-}
-
-.string GetVoiceMessageSampleField(string type)
-{
-	GetPlayerSoundSampleField_notFound = 0;
-	switch(type)
-	{
-#define _VOICEMSG(m) case #m: return playersound_##m;
-		ALLVOICEMSGS
-#undef _VOICEMSG
-	}
-	GetPlayerSoundSampleField_notFound = 1;
-	return playersound_taunt;
-}
-
-.string GetPlayerSoundSampleField(string type)
-{
-	GetPlayerSoundSampleField_notFound = 0;
-	switch(type)
-	{
-#define _VOICEMSG(m) case #m: return playersound_##m;
-		ALLPLAYERSOUNDS
-#undef _VOICEMSG
-	}
-	GetPlayerSoundSampleField_notFound = 1;
-	return playersound_taunt;
-}
-
-void PrecacheGlobalSound(string samplestring)
-{
-	float n, i;
-	tokenize_console(samplestring);
-	n = stof(argv(1));
-	if(n > 0)
-	{
-		for(i = 1; i <= n; ++i)
-			precache_sound(strcat(argv(0), ftos(i), ".wav"));
-	}
-	else
-	{
-		precache_sound(strcat(argv(0), ".wav"));
-	}
-}
-
-void PrecachePlayerSounds(string f)
-{
-	int fh = fopen(f, FILE_READ);
-	if (fh < 0)
-		return;
-	for (string s; (s = fgets(fh)); )
-	{
-		int n = tokenize_console(s);
-		if (n != 3)
-		{
-			if (n != 0) LOG_TRACEF("Invalid sound info line: %s\n", s);
-			continue;
-		}
-		PrecacheGlobalSound(strcat(argv(1), " ", argv(2)));
-	}
-	fclose(fh);
-
-	if (!allvoicesamples)
-	{
-#define _VOICEMSG(m) allvoicesamples = strcat(allvoicesamples, " ", #m);
-		ALLVOICEMSGS
-#undef _VOICEMSG
-		allvoicesamples = strzone(substring(allvoicesamples, 1, strlen(allvoicesamples) - 1));
-	}
-}
-
-void ClearPlayerSounds()
-{SELFPARAM();
-#define _VOICEMSG(m) if(self.playersound_##m) { strunzone(self.playersound_##m); self.playersound_##m = string_null; }
-	ALLPLAYERSOUNDS
-	ALLVOICEMSGS
-#undef _VOICEMSG
-}
-
-float LoadPlayerSounds(string f, float first)
-{SELFPARAM();
-	float fh;
-	string s;
-	var .string field;
-	fh = fopen(f, FILE_READ);
-	if(fh < 0)
-	{
-		LOG_TRACE("Player sound file not found: ", f, "\n");
-		return 0;
-	}
-	while((s = fgets(fh)))
-	{
-		if(tokenize_console(s) != 3)
-			continue;
-		field = GetPlayerSoundSampleField(argv(0));
-		if(GetPlayerSoundSampleField_notFound)
-			field = GetVoiceMessageSampleField(argv(0));
-		if(GetPlayerSoundSampleField_notFound)
-			continue;
-		if (self.(field))
-			strunzone(self.(field));
-		self.(field) = strzone(strcat(argv(1), " ", argv(2)));
-	}
-	fclose(fh);
-	return 1;
-}
-
-void UpdatePlayerSounds()
-{SELFPARAM();
-	if(self.modelindex == self.modelindex_for_playersound)
-	if(self.skin == self.skin_for_playersound)
-		return;
-	self.modelindex_for_playersound = self.modelindex;
-	self.skin_for_playersound = self.skin;
-	ClearPlayerSounds();
-	LoadPlayerSounds("sound/player/default.sounds", 1);
-	if(!autocvar_g_debug_defaultsounds)
-		if(!LoadPlayerSounds(get_model_datafilename(self.model, self.skin, "sounds"), 0))
-			LoadPlayerSounds(get_model_datafilename(self.model, 0, "sounds"), 0);
-}
-
-void FakeGlobalSound(string sample, float chan, float voicetype)
-{SELFPARAM();
-	float n;
-	float tauntrand;
-
-	if(sample == "")
-		return;
-
-	tokenize_console(sample);
-	n = stof(argv(1));
-	if(n > 0)
-		sample = strcat(argv(0), ftos(floor(random() * n + 1)), ".wav"); // randomization
-	else
-		sample = strcat(argv(0), ".wav"); // randomization
-
-	switch(voicetype)
-	{
-		case VOICETYPE_LASTATTACKER_ONLY:
-			break;
-		case VOICETYPE_LASTATTACKER:
-			if(self.pusher)
-			{
-				msg_entity = self;
-				if(IS_REAL_CLIENT(msg_entity))
-					soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTEN_NONE);
-			}
-			break;
-		case VOICETYPE_TEAMRADIO:
-			msg_entity = self;
-			if(msg_entity.cvar_cl_voice_directional == 1)
-				soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_MIN);
-			else
-				soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_NONE);
-			break;
-		case VOICETYPE_AUTOTAUNT:
-			if(!sv_autotaunt)
-				break;
-			if(!sv_taunt)
-				break;
-			if(autocvar_sv_gentle)
-				break;
-			tauntrand = random();
-			msg_entity = self;
-			if (tauntrand < msg_entity.cvar_cl_autotaunt)
-			{
-				if (msg_entity.cvar_cl_voice_directional >= 1)
-					soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, bound(ATTEN_MIN, msg_entity.cvar_cl_voice_directional_taunt_attenuation, ATTEN_MAX));
-				else
-					soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_NONE);
-			}
-			break;
-		case VOICETYPE_TAUNT:
-			if(IS_PLAYER(self))
-				if(self.deadflag == DEAD_NO)
-					animdecide_setaction(self, ANIMACTION_TAUNT, true);
-			if(!sv_taunt)
-				break;
-			if(autocvar_sv_gentle)
-				break;
-			msg_entity = self;
-			if (msg_entity.cvar_cl_voice_directional >= 1)
-				soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, bound(ATTEN_MIN, msg_entity.cvar_cl_voice_directional_taunt_attenuation, ATTEN_MAX));
-			else
-				soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_NONE);
-			break;
-		case VOICETYPE_PLAYERSOUND:
-			msg_entity = self;
-			soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTEN_NORM);
-			break;
-		default:
-			backtrace("Invalid voice type!");
-			break;
-	}
-}
-
-void GlobalSound(string sample, float chan, float voicetype)
-{SELFPARAM();
-	float n;
-	float tauntrand;
-
-	if(sample == "")
-		return;
-
-	tokenize_console(sample);
-	n = stof(argv(1));
-	if(n > 0)
-		sample = strcat(argv(0), ftos(floor(random() * n + 1)), ".wav"); // randomization
-	else
-		sample = strcat(argv(0), ".wav"); // randomization
-
-	switch(voicetype)
-	{
-		case VOICETYPE_LASTATTACKER_ONLY:
-			if(self.pusher)
-			{
-				msg_entity = self.pusher;
-				if(IS_REAL_CLIENT(msg_entity))
-				{
-					if(msg_entity.cvar_cl_voice_directional == 1)
-						soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_MIN);
-					else
-						soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_NONE);
-				}
-			}
-			break;
-		case VOICETYPE_LASTATTACKER:
-			if(self.pusher)
-			{
-				msg_entity = self.pusher;
-				if(IS_REAL_CLIENT(msg_entity))
-				{
-					if(msg_entity.cvar_cl_voice_directional == 1)
-						soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_MIN);
-					else
-						soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_NONE);
-				}
-				msg_entity = self;
-				if(IS_REAL_CLIENT(msg_entity))
-					soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTEN_NONE);
-			}
-			break;
-		case VOICETYPE_TEAMRADIO:
-			FOR_EACH_REALCLIENT(msg_entity)
-				if(!teamplay || msg_entity.team == self.team)
-				{
-					if(msg_entity.cvar_cl_voice_directional == 1)
-						soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_MIN);
-					else
-						soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_NONE);
-				}
-			break;
-		case VOICETYPE_AUTOTAUNT:
-			if(!sv_autotaunt)
-				break;
-			if(!sv_taunt)
-				break;
-			if(autocvar_sv_gentle)
-				break;
-			tauntrand = random();
-			FOR_EACH_REALCLIENT(msg_entity)
-				if (tauntrand < msg_entity.cvar_cl_autotaunt)
-				{
-					if (msg_entity.cvar_cl_voice_directional >= 1)
-						soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, bound(ATTEN_MIN, msg_entity.cvar_cl_voice_directional_taunt_attenuation, ATTEN_MAX));
-					else
-						soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_NONE);
-				}
-			break;
-		case VOICETYPE_TAUNT:
-			if(IS_PLAYER(self))
-				if(self.deadflag == DEAD_NO)
-					animdecide_setaction(self, ANIMACTION_TAUNT, true);
-			if(!sv_taunt)
-				break;
-			if(autocvar_sv_gentle)
-				break;
-			FOR_EACH_REALCLIENT(msg_entity)
-			{
-				if (msg_entity.cvar_cl_voice_directional >= 1)
-					soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, bound(ATTEN_MIN, msg_entity.cvar_cl_voice_directional_taunt_attenuation, ATTEN_MAX));
-				else
-					soundto(MSG_ONE, self, chan, sample, VOL_BASEVOICE, ATTEN_NONE);
-			}
-			break;
-		case VOICETYPE_PLAYERSOUND:
-			_sound(self, chan, sample, VOL_BASE, ATTEN_NORM);
-			break;
-		default:
-			backtrace("Invalid voice type!");
-			break;
-	}
-}
-
-void PlayerSound(.string samplefield, float chan, float voicetype)
-{SELFPARAM();
-	GlobalSound(self.(samplefield), chan, voicetype);
-}
-
-void VoiceMessage(string type, string msg)
-{SELFPARAM();
-	float voicetype, ownteam;
-	float flood;
-	var .string sample = GetVoiceMessageSampleField(type);
-
-	if(GetPlayerSoundSampleField_notFound)
-	{
-		sprint(self, strcat("Invalid voice. Use one of: ", allvoicesamples, "\n"));
-		return;
-	}
-
-	voicetype = GetVoiceMessageVoiceType(type);
-	ownteam = (voicetype == VOICETYPE_TEAMRADIO);
-
-	flood = Say(self, ownteam, world, msg, 1);
-
-	if (IS_SPEC(self) || IS_OBSERVER(self) || flood < 0)
-		FakeGlobalSound(self.(sample), CH_VOICE, voicetype);
-	else if (flood > 0)
-		GlobalSound(self.(sample), CH_VOICE, voicetype);
-}
-
-void MoveToTeam(entity client, float team_colour, float type)
-{
-	float lockteams_backup;
-
-	lockteams_backup = lockteams;  // backup any team lock
-
-	lockteams = 0;  // disable locked teams
-
-	TeamchangeFrags(client);  // move the players frags
-	SetPlayerColors(client, team_colour - 1);  // set the players colour
-	Damage(client, client, client, 100000, DEATH_AUTOTEAMCHANGE.m_id, client.origin, '0 0 0');  // kill the player
-
-	lockteams = lockteams_backup;  // restore the team lock
-
-	LogTeamchange(client.playerid, client.team, type);
 }

@@ -13,7 +13,7 @@ vector turret_aim_generic()
 	if(self.aim_flags & TFL_AIM_SIMPLE)
 		return real_origin(self.enemy);
 
-	mintime = max(self.attack_finished_single - time,0) + sys_frametime;
+	mintime = max(self.attack_finished_single[0] - time,0) + sys_frametime;
 
 	// Baseline
 	pre_pos = real_origin(self.enemy);
@@ -302,7 +302,7 @@ void turrets_setframe(float _frame, float client_only)
 bool turret_send(entity this, entity to, float sf)
 {
 
-	WriteByte(MSG_ENTITY, ENT_CLIENT_TURRET);
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_TURRET);
 	WriteByte(MSG_ENTITY, sf);
 	if(sf & TNSF_SETUP)
 	{
@@ -360,7 +360,7 @@ bool turret_send(entity this, entity to, float sf)
 	return true;
 }
 
-void load_unit_settings(entity ent, float is_reload)
+void load_unit_settings(entity ent, bool is_reload)
 {SELFPARAM();
 	string unitname = ent.netname;
 	string sbase;
@@ -708,9 +708,8 @@ float turret_validate_target(entity e_turret, entity e_target, float validate_fl
 	if(e_target.alpha <= 0.3)
 		return -1;
 
-	if(g_onslaught)
-		if (substring(e_target.classname, 0, 10) == "onslaught_") // don't attack onslaught targets, that's the player's job!
-			return - 3;
+	if(MUTATOR_CALLHOOK(TurretValidateTarget, e_turret, e_target, validate_flags))
+		return ret_float;
 
 	if (validate_flags & TFL_TARGETSELECT_NO)
 		return -4;
@@ -914,7 +913,7 @@ float turret_firecheck()
 
 	// Ready?
 	if (self.firecheck_flags & TFL_FIRECHECK_REFIRE)
-		if (self.attack_finished_single > time) return 0;
+		if (self.attack_finished_single[0] > time) return 0;
 
 	// Special case: volly fire turret that has to fire a full volly if a shot was fired.
 	if (self.shoot_flags & TFL_SHOOT_VOLLYALWAYS)
@@ -997,7 +996,7 @@ void turret_fire()
 	Turret info = get_turretinfo(self.m_id);
 	info.tr_attack(info);
 
-	self.attack_finished_single = time + self.shot_refire;
+	self.attack_finished_single[0] = time + self.shot_refire;
 	self.ammo -= self.shot_dmg;
 	self.volly_counter = self.volly_counter - 1;
 
@@ -1009,7 +1008,7 @@ void turret_fire()
 			self.enemy = world;
 
 		if (self.shot_volly > 1)
-			self.attack_finished_single = time + self.shot_volly_refire;
+			self.attack_finished_single[0] = time + self.shot_volly_refire;
 	}
 
 #ifdef TURRET_DEBUG
@@ -1019,24 +1018,9 @@ void turret_fire()
 
 void turret_think()
 {SELFPARAM();
-	entity e;
-
 	self.nextthink = time + self.ticrate;
 
-	// ONS uses somewhat backwards linking.
-	if (teamplay)
-	{
-		if (g_onslaught)
-			if (self.target)
-			{
-				e = find(world, targetname,self.target);
-				if (e != world)
-					self.team = e.team;
-			}
-
-		if (self.team != self.tur_head.team)
-			turret_respawn();
-	}
+	MUTATOR_CALLHOOK(TurretThink, self);
 
 #ifdef TURRET_DEBUG
 	if (self.tur_debug_tmr1 < time)
@@ -1065,7 +1049,7 @@ void turret_think()
 	if (self.shoot_flags & TFL_SHOOT_HITALLVALID)
 	{
 		// Do a self.turret_fire for every valid target.
-		e = findradius(self.origin,self.target_range);
+		entity e = findradius(self.origin,self.target_range);
 		while (e)
 		{
 			if(e.takedamage)
@@ -1216,25 +1200,18 @@ void turret_link()
 }
 
 void turrets_manager_think()
-{SELFPARAM();
-	self.nextthink = time + 1;
+{
+	SELFPARAM();
+	this.nextthink = time + 1;
 
-	entity e;
 	if (autocvar_g_turrets_reloadcvars == 1)
 	{
-		e = nextent(world);
-		while (e)
-		{
-			if (IS_TURRET(e))
-			{
-				load_unit_settings(e,1);
-				Turret tur = get_turretinfo(self.m_id);
-				tur.tr_think(tur);
-			}
-
-			e = nextent(e);
-		}
-		cvar_set("g_turrets_reloadcvars","0");
+		FOREACH_ENTITY(IS_TURRET(it), LAMBDA(
+			load_unit_settings(it, true);
+			Turret tur = get_turretinfo(it.m_id);
+			tur.tr_think(tur);
+		));
+		cvar_set("g_turrets_reloadcvars", "0");
 	}
 }
 
@@ -1283,8 +1260,7 @@ float turret_initialize(Turret tur)
 	entity e = find(world, classname, "turret_manager");
 	if(!e)
 	{
-		e = spawn();
-		e.classname = "turret_manager";
+		e = new(turret_manager);
 		e.think = turrets_manager_think;
 		e.nextthink = time + 2;
 	}
@@ -1369,13 +1345,13 @@ float turret_initialize(Turret tur)
 	self.nextthink				= time + 1;
 	self.nextthink			   += turret_count * sys_frametime;
 
-	self.tur_head = spawn();
+	self.tur_head = new(turret_head);
 	_setmodel(self.tur_head, tur.head_model);
 	setsize(self.tur_head, '0 0 0', '0 0 0');
 	setorigin(self.tur_head, '0 0 0');
 	setattachment(self.tur_head, self, "tag_head");
 
-	self.tur_head.netname		= self.tur_head.classname = "turret_head";
+	self.tur_head.netname		= self.tur_head.classname;
 	self.tur_head.team			= self.team;
 	self.tur_head.owner			= self;
 	self.tur_head.takedamage	= DAMAGE_NO;

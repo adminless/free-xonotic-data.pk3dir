@@ -88,7 +88,7 @@ float spiderbot_frame()
 
 	player.BUTTON_ZOOM	  = 0;
 	player.BUTTON_CROUCH	= 0;
-	player.switchweapon	 = 0;
+	PS(player).m_switchweapon = WEP_Null;
 	player.vehicle_weapon2mode = spider.vehicle_weapon2mode;
 
 
@@ -276,7 +276,7 @@ float spiderbot_frame()
 	if(player.BUTTON_ATCK)
 	{
 		spider.cnt = time;
-		if(spider.vehicle_ammo1 >= autocvar_g_vehicle_spiderbot_minigun_ammo_cost && spider.tur_head.attack_finished_single <= time)
+		if(spider.vehicle_ammo1 >= autocvar_g_vehicle_spiderbot_minigun_ammo_cost && spider.tur_head.attack_finished_single[0] <= time)
 		{
 			entity gun;
 			vector v;
@@ -295,12 +295,12 @@ float spiderbot_frame()
 
 			sound (gun, CH_WEAPON_A, SND_UZI_FIRE, VOL_BASE, ATTEN_NORM);
 			//trailparticles(self, _particleeffectnum("spiderbot_minigun_trail"), v, trace_endpos);
-			pointparticles(particleeffectnum(EFFECT_SPIDERBOT_MINIGUN_MUZZLEFLASH), v, v_forward * 2500, 1);
+			pointparticles(EFFECT_SPIDERBOT_MINIGUN_MUZZLEFLASH, v, v_forward * 2500, 1);
 
 			setself(spider);
 
 			spider.vehicle_ammo1 -= autocvar_g_vehicle_spiderbot_minigun_ammo_cost;
-			spider.tur_head.attack_finished_single = time + autocvar_g_vehicle_spiderbot_minigun_refire;
+			spider.tur_head.attack_finished_single[0] = time + autocvar_g_vehicle_spiderbot_minigun_refire;
 			player.vehicle_ammo1 = (spider.vehicle_ammo1 / autocvar_g_vehicle_spiderbot_minigun_ammo_max) * 100;
 			spider.gun1.angles_z += 45;
 			spider.gun2.angles_z -= 45;
@@ -332,7 +332,7 @@ float spiderbot_frame()
 	if(spider.gun2.cnt <= time)
 		player.vehicle_reload2 = 100;
 	else
-		player.vehicle_reload2 = 100 - ((spider.gun2.cnt - time) / spider.attack_finished_single) * 100;
+		player.vehicle_reload2 = 100 - ((spider.gun2.cnt - time) / spider.attack_finished_single[0]) * 100;
 
 	setorigin(player, spider.origin + '0 0 1' * spider.maxs_z);
 	player.velocity = spider.velocity;
@@ -497,22 +497,22 @@ bool spiderbot_impulse(int _imp)
 {SELFPARAM();
 	switch(_imp)
 	{
-		case 1:
+		case IMP_weapon_group_1.impulse:
 			self.vehicle.vehicle_weapon2mode = SBRM_VOLLY;
 			CSQCVehicleSetup(self, 0);
 			return true;
-		case 2:
+		case IMP_weapon_group_2.impulse:
 			self.vehicle.vehicle_weapon2mode = SBRM_GUIDE;
 			CSQCVehicleSetup(self, 0);
 			return true;
-		case 3:
+		case IMP_weapon_group_3.impulse:
 			self.vehicle.vehicle_weapon2mode = SBRM_ARTILLERY;
 			CSQCVehicleSetup(self, 0);
 			return true;
 
-		case 10:
-		case 15:
-		case 18:
+		case IMP_weapon_next_byid.impulse:
+		case IMP_weapon_next_bypriority.impulse:
+		case IMP_weapon_next_bygroup.impulse:
 			self.vehicle.vehicle_weapon2mode += 1;
 			if(self.vehicle.vehicle_weapon2mode > SBRM_LAST)
 				self.vehicle.vehicle_weapon2mode = SBRM_FIRST;
@@ -520,10 +520,10 @@ bool spiderbot_impulse(int _imp)
 			//centerprint(self, strcat("Rocket mode is ", ftos(self.vehicle.vehicle_weapon2mode)));
 			CSQCVehicleSetup(self, 0);
 			return true;
-		case 11:
-		case 12:
-		case 16:
-		case 19:
+		case IMP_weapon_last.impulse:
+		case IMP_weapon_prev_byid.impulse:
+		case IMP_weapon_prev_bypriority.impulse:
+		case IMP_weapon_prev_bygroup.impulse:
 			self.vehicle.vehicle_weapon2mode -= 1;
 			if(self.vehicle.vehicle_weapon2mode < SBRM_FIRST)
 				self.vehicle.vehicle_weapon2mode = SBRM_LAST;
@@ -533,9 +533,9 @@ bool spiderbot_impulse(int _imp)
 			return true;
 
 		/*
-		case 17: // toss gun, could be used to exit?
+		case IMP_weapon_drop.impulse: // toss gun, could be used to exit?
 			break;
-		case 20: // Manual minigun reload?
+		case IMP_weapon_reload.impulse: // Manual minigun reload?
 			break;
 		*/
 	}
@@ -646,6 +646,12 @@ float autocvar_cl_vehicle_spiderbot_cross_size = 1;
 
 		METHOD(Spiderbot, vr_hud, void(Spiderbot thisveh))
 		{
+			Vehicles_drawHUD(VEH_SPIDERBOT.m_icon, "vehicle_spider_weapon1", "vehicle_spider_weapon2",
+							 "vehicle_icon_ammo1", autocvar_hud_progressbar_vehicles_ammo1_color,
+							 "vehicle_icon_ammo2", autocvar_hud_progressbar_vehicles_ammo2_color);
+		}
+		METHOD(Spiderbot, vr_crosshair, void(Spiderbot thisveh))
+		{
 			string crosshair;
 
 			switch(weapon2mode)
@@ -656,10 +662,7 @@ float autocvar_cl_vehicle_spiderbot_cross_size = 1;
 				default:             crosshair = vCROSS_BURST;
 			}
 
-			Vehicles_drawHUD(VEH_SPIDERBOT.m_icon, "vehicle_spider_weapon1", "vehicle_spider_weapon2",
-							 "vehicle_icon_ammo1", autocvar_hud_progressbar_vehicles_ammo1_color,
-							 "vehicle_icon_ammo2", autocvar_hud_progressbar_vehicles_ammo2_color,
-							 crosshair);
+			Vehicles_drawCrosshair(crosshair);
 		}
 		METHOD(Spiderbot, vr_setup, void(Spiderbot thisveh))
 		{

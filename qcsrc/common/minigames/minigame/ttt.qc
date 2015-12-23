@@ -295,7 +295,7 @@ void ttt_hud_status(vector pos, vector mySize)
 			if ( e.team == 2 )
 				mypos_y  += player_fontsize_y + ts_y;
 			minigame_drawcolorcodedstring_trunc(mySize_x,mypos,
-				(e.minigame_playerslot ? GetPlayerName(e.minigame_playerslot-1) : _("AI")),
+				(e.minigame_playerslot ? entcs_GetName(e.minigame_playerslot-1) : _("AI")),
 				player_fontsize, panel_fg_alpha, DRAWFLAG_NORMAL);
 
 			mypos_y += player_fontsize_y;
@@ -642,8 +642,7 @@ int ttt_client_event(entity minigame, string event, ...)
 
 					if ( spawnai )
 					{
-						entity aiplayer = spawn();
-						aiplayer.classname = "minigame_player";
+						entity aiplayer = new(minigame_player);
 						aiplayer.owner = minigame;
 						aiplayer.team = ai;
 						aiplayer.minigame_playerslot = 0;

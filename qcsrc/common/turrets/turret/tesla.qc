@@ -8,8 +8,8 @@ CLASS(TeslaCoil, Turret)
 /* mins       */ ATTRIB(TeslaCoil, mins, vector, '-60 -60 0');
 /* maxs       */ ATTRIB(TeslaCoil, maxs, vector, '60 60 128');
 /* modelname  */ ATTRIB(TeslaCoil, mdl, string, "tesla_base.md3");
-/* model      */ ATTRIB(TeslaCoil, model, string, strzone(strcat("models/turrets/", this.mdl)));
-/* head_model */ ATTRIB(TeslaCoil, head_model, string, strzone(strcat("models/turrets/", "tesla_head.md3")));
+/* model      */ ATTRIB_STRZONE(TeslaCoil, model, string, strcat("models/turrets/", this.mdl));
+/* head_model */ ATTRIB_STRZONE(TeslaCoil, head_model, string, strcat("models/turrets/", "tesla_head.md3"));
 /* netname    */ ATTRIB(TeslaCoil, netname, string, "tesla");
 /* fullname   */ ATTRIB(TeslaCoil, turret_name, string, _("Tesla Coil"));
     ATTRIB(TeslaCoil, m_weapon, Weapon, WEP_TESLA);
@@ -42,7 +42,7 @@ METHOD(TeslaCoil, tr_think, void(TeslaCoil thistur))
     {
         self.tur_head.avelocity = '0 180 0' * (self.ammo / self.shot_dmg);
 
-        if(self.attack_finished_single > time)
+        if(self.attack_finished_single[0] > time)
             return;
 
         float f;

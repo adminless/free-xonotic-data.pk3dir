@@ -1,7 +1,7 @@
 #include "scores.qh"
 
 #include "command/common.qh"
-#include "mutators/mutators_include.qh"
+#include "mutators/all.qh"
 #include "../common/playerstats.qh"
 #include "../common/teams.qh"
 
@@ -58,8 +58,10 @@ bool TeamScore_SendEntity(entity this, entity to, float sendflags)
 {
 	float i, p, longflags;
 
-	WriteByte(MSG_ENTITY, ENT_CLIENT_TEAMSCORES);
-	WriteByte(MSG_ENTITY, self.team - 1);
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_TEAMSCORES);
+	int t = this.team - 1;
+	assert(t, eprint(this));
+	WriteByte(MSG_ENTITY, t);
 
 	longflags = 0;
 	for(i = 0, p = 1; i < MAX_TEAMSCORE; ++i, p *= 2)
@@ -87,9 +89,8 @@ bool TeamScore_SendEntity(entity this, entity to, float sendflags)
 
 void TeamScore_Spawn(float t, string name)
 {
-	entity ts;
-	ts = spawn();
-	ts.classname = "csqc_score_team";
+	entity ts = new(csqc_score_team);
+	make_pure(ts);
 	ts.netname = name; // not used yet, FIXME
 	ts.team = t;
 	Net_LinkEntity(ts, false, 0, TeamScore_SendEntity);
@@ -188,7 +189,7 @@ void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags)
 bool ScoreInfo_SendEntity(entity this, entity to, int sf)
 {
 	float i;
-	WriteByte(MSG_ENTITY, ENT_CLIENT_SCORES_INFO);
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_SCORES_INFO);
 	WriteInt24_t(MSG_ENTITY, MapInfo_LoadedGametype);
 	for(i = 0; i < MAX_SCORE; ++i)
 	{
@@ -211,8 +212,8 @@ void ScoreInfo_Init(float teams)
 	}
 	else
 	{
-		scores_initialized = spawn();
-		scores_initialized.classname = "ent_client_scoreinfo";
+		scores_initialized = new(ent_client_scoreinfo);
+		make_pure(scores_initialized);
 		Net_LinkEntity(scores_initialized, false, 0, ScoreInfo_SendEntity);
 	}
 	if(teams >= 1)
@@ -233,8 +234,8 @@ bool PlayerScore_SendEntity(entity this, entity to, float sendflags)
 {
 	float i, p, longflags;
 
-	WriteByte(MSG_ENTITY, ENT_CLIENT_SCORES);
-	WriteByte(MSG_ENTITY, num_for_edict(self.owner));
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_SCORES);
+	WriteByte(MSG_ENTITY, etof(self.owner));
 
 	longflags = 0;
 	for(i = 0, p = 1; i < MAX_SCORE; ++i, p *= 2)
@@ -316,10 +317,10 @@ void Score_ClearAll()
 
 void PlayerScore_Attach(entity player)
 {
-	entity sk;
 	if(player.scorekeeper)
 		error("player already has a scorekeeper");
-	sk = spawn();
+	entity sk = new(scorekeeper);
+	make_pure(sk);
 	sk.owner = player;
 	Net_LinkEntity(sk, false, 0, PlayerScore_SendEntity);
 	player.scorekeeper = sk;
@@ -335,14 +336,15 @@ void PlayerScore_Detach(entity player)
 
 float PlayerScore_Add(entity player, float scorefield, float score)
 {
-	entity s;
+	bool mutator_returnvalue = MUTATOR_CALLHOOK(AddPlayerScore, scorefield, score);
+	score = ret_float;
 
 	if(gameover)
-	if(!(g_lms && scorefield == SP_LMS_RANK)) // allow writing to this field in intermission as it is needed for newly joining players
+	if(!mutator_returnvalue)
 		score = 0;
 
 	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
-	s = player.scorekeeper;
+	entity s = player.scorekeeper;
 	if(!s)
 	{
 		if(gameover)
@@ -381,7 +383,7 @@ float PlayerScore_Compare(entity t1, entity t2, float strict)
 	}
 
 	if (result.x == 0 && strict)
-		result.x = num_for_edict(t1.owner) - num_for_edict(t2.owner);
+		result.x = etof(t1.owner) - etof(t2.owner);
 
 	return result.x;
 }
@@ -529,22 +531,24 @@ void WinningConditionHelper()
 
 	FOR_EACH_CLIENT(p)
 	{
+		string s = "";
 		if(fullstatus)
 		{
 			s = GetPlayerScoreString(p, 1);
-			if(IS_REAL_CLIENT(p))
-				s = strcat(s, ":human");
-			else
-				s = strcat(s, ":bot");
-			if(!IS_PLAYER(p) && p.caplayer != 1 && !g_lms)
+			s = strcat(s, IS_REAL_CLIENT(p) ? ":human" : ":bot");
+			ret_string = string_null;
+			if(!IS_PLAYER(p) && !MUTATOR_CALLHOOK(GetPlayerStatus, p, s))
 				s = strcat(s, ":spectator");
+			if (ret_string) s = strcat(s, ret_string);
 		}
 		else
 		{
-			if(IS_PLAYER(p) || p.caplayer == 1 || g_lms)
+			ret_string = string_null;
+			if (IS_PLAYER(p) || MUTATOR_CALLHOOK(GetPlayerStatus, p, s))
 				s = GetPlayerScoreString(p, 2);
 			else
 				s = "-666";
+			if (ret_string) s = strcat(s, ret_string);
 		}
 
 		if(p.clientstatus)
@@ -924,7 +928,7 @@ void PlayerScore_PlayerStats(entity p)
 				PS_GR_P_ADDVAL(s.owner, strcat(PLAYERSTATS_SCOREBOARD, scores_label[i]), s.(scores[i]));
 }
 
-void PlayerScore_TeamStats(void)
+void PlayerScore_TeamStats()
 {
 	entity sk;
 	float t, i;

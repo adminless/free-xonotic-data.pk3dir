@@ -1,6 +1,6 @@
 #include "teamradar.qh"
 
-#include "hud.qh"
+#include "hud/all.qh"
 
 #include "../common/mutators/mutator/waypoints/all.qh"
 
@@ -56,12 +56,6 @@ vector teamradar_texcoord_to_3dcoord(vector in,float z)
 	out_y = in_y * (mi_picmax_y - mi_picmin_y) + mi_picmin_y;
 	out_z = z;
 	return out;
-}
-
-vector yinvert(vector v)
-{
-	v.y = 1 - v.y;
-	return v;
 }
 
 void draw_teamradar_background(float fg)
@@ -200,11 +194,11 @@ void teamradar_loadcvars()
 
 // radar links
 
-void Ent_RadarLink()
-{SELFPARAM();
+NET_HANDLE(ENT_CLIENT_RADARLINK, bool isnew)
+{
 	int sendflags = ReadByte();
 
-	InterpolateOrigin_Undo();
+	InterpolateOrigin_Undo(self);
 
 	self.iflags = IFLAG_VELOCITY | IFLAG_ORIGIN;
 	self.classname = "radarlink";
@@ -229,5 +223,7 @@ void Ent_RadarLink()
 		self.team = ReadByte();
 	}
 
-	InterpolateOrigin_Note();
+	return = true;
+
+	InterpolateOrigin_Note(this);
 }

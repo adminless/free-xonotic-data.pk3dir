@@ -80,12 +80,12 @@ void RemoveGrapplingHook(entity pl)
 	//pl.disableclientprediction = false;
 }
 
-void GrapplingHookReset(void)
-{SELFPARAM();
-	if(self.realowner.hook == self)
-		RemoveGrapplingHook(self.owner);
+void GrapplingHookReset(entity this)
+{
+	if(this.realowner.hook == this)
+		RemoveGrapplingHook(this.owner);
 	else // in any case:
-		remove(self);
+		remove(this);
 }
 
 void GrapplingHookThink();
@@ -106,14 +106,14 @@ void GrapplingHook_Stop()
 .vector hook_start, hook_end;
 bool GrapplingHookSend(entity this, entity to, int sf)
 {
-	WriteByte(MSG_ENTITY, ENT_CLIENT_HOOK);
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_HOOK);
 	sf = sf & 0x7F;
 	if(sound_allowed(MSG_BROADCAST, self.realowner))
 		sf |= 0x80;
 	WriteByte(MSG_ENTITY, sf);
 	if(sf & 1)
 	{
-		WriteByte(MSG_ENTITY, num_for_edict(self.realowner));
+		WriteByte(MSG_ENTITY, etof(self.realowner));
 	}
 	if(sf & 2)
 	{
@@ -299,7 +299,7 @@ void GrapplingHookThink()
 	}
 }
 
-void GrapplingHookTouch (void)
+void GrapplingHookTouch ()
 {SELFPARAM();
 	if(other.movetype == MOVETYPE_FOLLOW)
 		return;
@@ -339,7 +339,7 @@ void GrapplingHook_Damage (entity inflictor, entity attacker, float damage, int 
 	}
 }
 
-void FireGrapplingHook (void)
+void FireGrapplingHook ()
 {SELFPARAM();
 	entity missile;
 	vector org;

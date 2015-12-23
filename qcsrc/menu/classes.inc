@@ -106,6 +106,7 @@
 #include "xonotic/guide/entries.qc"
 #include "xonotic/guide/tab.qc"
 #include "xonotic/guide/topics.qc"
+#include "xonotic/hudskinlist.qc"
 #include "xonotic/image.qc"
 #include "xonotic/inputbox.qc"
 #include "xonotic/keybinder.qc"

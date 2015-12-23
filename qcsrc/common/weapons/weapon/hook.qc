@@ -13,48 +13,54 @@ CLASS(Hook, Weapon)
 /* crosshair */ ATTRIB(Hook, w_crosshair_size, float, 0.5);
 /* wepimg    */ ATTRIB(Hook, model2, string, "weaponhook");
 /* refname   */ ATTRIB(Hook, netname, string, "hook");
-/* wepname   */ ATTRIB(Hook, message, string, _("Grappling Hook"));
+/* wepname   */ ATTRIB(Hook, m_name, string, _("Grappling Hook"));
 	ATTRIB(Hook, ammo_factor, float, 1)
+
+#define X(BEGIN, P, END, class, prefix) \
+	BEGIN(class) \
+		P(class, prefix, ammo, float, PRI) \
+		P(class, prefix, animtime, float, BOTH) \
+		P(class, prefix, damageforcescale, float, SEC) \
+		P(class, prefix, damage, float, SEC) \
+		P(class, prefix, duration, float, SEC) \
+		P(class, prefix, edgedamage, float, SEC) \
+		P(class, prefix, force, float, SEC) \
+		P(class, prefix, gravity, float, SEC) \
+		P(class, prefix, health, float, SEC) \
+		P(class, prefix, hooked_ammo, float, PRI) \
+		P(class, prefix, hooked_time_free, float, PRI) \
+		P(class, prefix, hooked_time_max, float, PRI) \
+		P(class, prefix, lifetime, float, SEC) \
+		P(class, prefix, power, float, SEC) \
+		P(class, prefix, radius, float, SEC) \
+		P(class, prefix, refire, float, BOTH) \
+		P(class, prefix, speed, float, SEC) \
+        P(class, prefix, switchdelay_drop, float, NONE) \
+		P(class, prefix, switchdelay_raise, float, NONE) \
+        P(class, prefix, weaponreplace, string, NONE) \
+        P(class, prefix, weaponstartoverride, float, NONE) \
+        P(class, prefix, weaponstart, float, NONE) \
+        P(class, prefix, weaponthrowable, float, NONE) \
+	END()
+    W_PROPS(X, Hook, hook)
+#undef X
+
 ENDCLASS(Hook)
-REGISTER_WEAPON(HOOK, NEW(Hook));
+REGISTER_WEAPON(HOOK, hook, NEW(Hook));
 
 CLASS(OffhandHook, OffhandWeapon)
+#ifdef SVQC
     METHOD(OffhandHook, offhand_think, void(OffhandHook this, entity actor, bool key_pressed))
     {
     	Weapon wep = WEP_HOOK;
-    	wep.wr_think(wep, actor, key_pressed, false);
+    	.entity weaponentity = weaponentities[1];
+    	wep.wr_think(wep, actor, weaponentity, key_pressed ? 1 : 0);
     }
+#endif
 ENDCLASS(OffhandHook)
 OffhandHook OFFHAND_HOOK; STATIC_INIT(OFFHAND_HOOK) { OFFHAND_HOOK = NEW(OffhandHook); }
 
-#define HOOK_SETTINGS(w_cvar,w_prop) HOOK_SETTINGS_LIST(w_cvar, w_prop, HOOK, hook)
-#define HOOK_SETTINGS_LIST(w_cvar,w_prop,id,sn) \
-	w_cvar(id, sn, BOTH, animtime) \
-	w_cvar(id, sn, BOTH, refire) \
-	w_cvar(id, sn, PRI,  ammo) \
-	w_cvar(id, sn, PRI,  hooked_ammo) \
-	w_cvar(id, sn, PRI,  hooked_time_free) \
-	w_cvar(id, sn, PRI,  hooked_time_max) \
-	w_cvar(id, sn, SEC,  damage) \
-	w_cvar(id, sn, SEC,  duration) \
-	w_cvar(id, sn, SEC,  edgedamage) \
-	w_cvar(id, sn, SEC,  force) \
-	w_cvar(id, sn, SEC,  gravity) \
-	w_cvar(id, sn, SEC,  lifetime) \
-	w_cvar(id, sn, SEC,  power) \
-	w_cvar(id, sn, SEC,  radius) \
-	w_cvar(id, sn, SEC,  speed) \
-	w_cvar(id, sn, SEC,  health) \
-	w_cvar(id, sn, SEC,  damageforcescale) \
-	w_prop(id, sn, float,  switchdelay_raise, switchdelay_raise) \
-	w_prop(id, sn, float,  switchdelay_drop, switchdelay_drop) \
-	w_prop(id, sn, string, weaponreplace, weaponreplace) \
-	w_prop(id, sn, float,  weaponstart, weaponstart) \
-	w_prop(id, sn, float,  weaponstartoverride, weaponstartoverride) \
-	w_prop(id, sn, float,  weaponthrowable, weaponthrowable)
-
 #ifdef SVQC
-HOOK_SETTINGS(WEP_ADD_CVAR, WEP_ADD_PROP)
 
 .float dmg;
 .float dmg_edge;
@@ -71,9 +77,9 @@ HOOK_SETTINGS(WEP_ADD_CVAR, WEP_ADD_PROP)
 #ifdef IMPLEMENTATION
 #ifdef SVQC
 
-spawnfunc(weapon_hook) { weapon_defaultspawnfunc(WEP_HOOK.m_id); }
+spawnfunc(weapon_hook) { weapon_defaultspawnfunc(this, WEP_HOOK); }
 
-void W_Hook_ExplodeThink(void)
+void W_Hook_ExplodeThink()
 {SELFPARAM();
 	float dt, dmg_remaining_next, f;
 
@@ -93,7 +99,7 @@ void W_Hook_ExplodeThink(void)
 		remove(self);
 }
 
-void W_Hook_Explode2(void)
+void W_Hook_Explode2()
 {SELFPARAM();
 	self.event_damage = func_null;
 	self.touch = func_null;
@@ -126,7 +132,7 @@ void W_Hook_Damage(entity inflictor, entity attacker, float damage, int deathtyp
 		W_PrepareExplosionByDamage(self.realowner, W_Hook_Explode2);
 }
 
-void W_Hook_Touch2(void)
+void W_Hook_Touch2()
 {SELFPARAM();
 	PROJECTILE_TOUCH;
 	self.use();
@@ -174,30 +180,30 @@ void W_Hook_Attack2(Weapon thiswep, entity actor)
 	MUTATOR_CALLHOOK(EditProjectile, actor, gren);
 }
 
-		METHOD(Hook, wr_think, void(entity thiswep, entity actor, bool fire1, bool fire2))
+		METHOD(Hook, wr_think, void(entity thiswep, entity actor, .entity weaponentity, int fire))
 		{
-			if (fire1) {
+			if (fire & 1) {
 				if(!actor.hook)
 				if(!(actor.hook_state & HOOK_WAITING_FOR_RELEASE))
 				if(time > actor.hook_refire)
-				if(weapon_prepareattack(thiswep, actor, false, -1))
+				if(weapon_prepareattack(thiswep, actor, weaponentity, false, -1))
 				{
 					W_DecreaseAmmo(thiswep, actor, thiswep.ammo_factor * WEP_CVAR_PRI(hook, ammo));
 					actor.hook_state |= HOOK_FIRING;
 					actor.hook_state |= HOOK_WAITING_FOR_RELEASE;
-					weapon_thinkf(actor, WFRAME_FIRE1, WEP_CVAR_PRI(hook, animtime), w_ready);
+					weapon_thinkf(actor, weaponentity, WFRAME_FIRE1, WEP_CVAR_PRI(hook, animtime), w_ready);
 				}
 			} else {
 				actor.hook_state |= HOOK_REMOVING;
 				actor.hook_state &= ~HOOK_WAITING_FOR_RELEASE;
 			}
 
-			if(fire2)
+			if(fire & 2)
 			{
-				if(weapon_prepareattack(thiswep, actor, true, WEP_CVAR_SEC(hook, refire)))
+				if(weapon_prepareattack(thiswep, actor, weaponentity, true, WEP_CVAR_SEC(hook, refire)))
 				{
 					W_Hook_Attack2(thiswep, actor);
-					weapon_thinkf(actor, WFRAME_FIRE2, WEP_CVAR_SEC(hook, animtime), w_ready);
+					weapon_thinkf(actor, weaponentity, WFRAME_FIRE2, WEP_CVAR_SEC(hook, animtime), w_ready);
 				}
 			}
 
@@ -266,10 +272,6 @@ void W_Hook_Attack2(Weapon thiswep, entity actor)
 				actor.hook_state &= ~HOOK_REMOVING;
 			}
 		}
-		METHOD(Hook, wr_init, void(entity thiswep))
-		{
-			HOOK_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
-		}
 		METHOD(Hook, wr_setup, void(entity thiswep))
 		{
 			self.hook_state &= ~HOOK_WAITING_FOR_RELEASE;
@@ -287,12 +289,10 @@ void W_Hook_Attack2(Weapon thiswep, entity actor)
 			// infinite ammo for now
 			return true; // self.ammo_cells >= WEP_CVAR_SEC(hook, ammo); // WEAPONTODO: see above
 		}
-		METHOD(Hook, wr_config, void(entity thiswep))
-		{
-			HOOK_SETTINGS(WEP_CONFIG_WRITE_CVARS, WEP_CONFIG_WRITE_PROPS);
-		}
 		METHOD(Hook, wr_resetplayer, void(entity thiswep))
 		{
+			RemoveGrapplingHook(self);
+			self.hook_time = 0;
 			self.hook_refire = time;
 		}
 		METHOD(Hook, wr_suicidemessage, int(entity thiswep))
@@ -311,7 +311,7 @@ void W_Hook_Attack2(Weapon thiswep, entity actor)
 		{
 			vector org2;
 			org2 = w_org + w_backoff * 2;
-			pointparticles(particleeffectnum(EFFECT_HOOK_EXPLODE), org2, '0 0 0', 1);
+			pointparticles(EFFECT_HOOK_EXPLODE, org2, '0 0 0', 1);
 			if(!w_issilent)
 				sound(self, CH_SHOTS, SND_HOOKBOMB_IMPACT, VOL_BASE, ATTN_NORM);
 		}

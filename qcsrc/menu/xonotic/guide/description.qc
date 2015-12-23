@@ -9,7 +9,7 @@ CLASS(XonoticGuideDescription, XonoticListBox)
     ATTRIB(XonoticGuideDescription, description, string, string_null)
 
 	METHOD(XonoticGuideDescription, resizeNotify, void(entity this, vector relOrigin, vector relSize, vector absOrigin, vector absSize)) {
-        super.resizeNotify(this, relOrigin, relSize, absOrigin, absSize);
+        SUPER(XonoticGuideDescription).resizeNotify(this, relOrigin, relSize, absOrigin, absSize);
 
         this.realFontSize_y = this.fontSize / (absSize.y * this.itemHeight);
         this.realFontSize_x = this.fontSize / (absSize.x * (1 - this.controlWidth));

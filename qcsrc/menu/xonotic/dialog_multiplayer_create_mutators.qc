@@ -52,9 +52,9 @@ string WeaponArenaString()
 	{
 		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
 		{
-			e = get_weaponinfo(j);
+			e = Weapons_from(j);
 			if(argv(i) == e.netname)
-				s = strcat(s, " & ", e.message);
+				s = strcat(s, " & ", e.m_name);
 		}
 	}
 	s = sprintf(_("%s Arena"), substring(s, 3, strlen(s) - 3));
@@ -253,13 +253,13 @@ void XonoticMutatorsDialog_fill(entity me)
 			e.cvarOffValue = "0";
 	for(i = WEP_FIRST, j = 0; i <= WEP_LAST; ++i)
 	{
-		w = get_weaponinfo(i);
+		w = Weapons_from(i);
 		if(w.spawnflags & WEP_FLAG_HIDDEN)
 			continue;
 		if((j & 1) == 0)
 			me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 1.8, e = makeXonoticWeaponarenaCheckBox(strzone(w.netname), strzone(w.message)));
+		me.TD(me, 1, 1.8, e = makeXonoticWeaponarenaCheckBox(strzone(w.netname), strzone(w.m_name)));
 			setDependentWeird(e, checkCompatibility_weaponarena_weapon);
 		++j;
 	}

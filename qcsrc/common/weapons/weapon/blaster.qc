@@ -13,34 +13,37 @@ CLASS(Blaster, Weapon)
 /* crosshair */ ATTRIB(Blaster, w_crosshair_size, float, 0.5);
 /* wepimg    */ ATTRIB(Blaster, model2, string, "weaponlaser");
 /* refname   */ ATTRIB(Blaster, netname, string, "blaster");
-/* wepname   */ ATTRIB(Blaster, message, string, _("Blaster"));
-ENDCLASS(Blaster)
-REGISTER_WEAPON(BLASTER, NEW(Blaster));
+/* wepname   */ ATTRIB(Blaster, m_name, string, _("Blaster"));
 
-#define BLASTER_SETTINGS(w_cvar,w_prop) BLASTER_SETTINGS_LIST(w_cvar, w_prop, BLASTER, blaster)
-#define BLASTER_SETTINGS_LIST(w_cvar,w_prop,id,sn) \
-	w_cvar(id, sn, BOTH, animtime) \
-	w_cvar(id, sn, BOTH, damage) \
-	w_cvar(id, sn, BOTH, delay) \
-	w_cvar(id, sn, BOTH, edgedamage) \
-	w_cvar(id, sn, BOTH, force) \
-	w_cvar(id, sn, BOTH, force_zscale) \
-	w_cvar(id, sn, BOTH, lifetime) \
-	w_cvar(id, sn, BOTH, radius) \
-	w_cvar(id, sn, BOTH, refire) \
-	w_cvar(id, sn, BOTH, shotangle) \
-	w_cvar(id, sn, BOTH, speed) \
-	w_cvar(id, sn, BOTH, spread) \
-	w_cvar(id, sn, NONE, secondary) \
-	w_prop(id, sn, float,  switchdelay_raise, switchdelay_raise) \
-	w_prop(id, sn, float,  switchdelay_drop, switchdelay_drop) \
-	w_prop(id, sn, string, weaponreplace, weaponreplace) \
-	w_prop(id, sn, float,  weaponstart, weaponstart) \
-	w_prop(id, sn, float,  weaponstartoverride, weaponstartoverride) \
-	w_prop(id, sn, float,  weaponthrowable, weaponthrowable)
+#define X(BEGIN, P, END, class, prefix) \
+	BEGIN(class) \
+		P(class, prefix, animtime, float, BOTH) \
+		P(class, prefix, damage, float, BOTH) \
+		P(class, prefix, delay, float, BOTH) \
+		P(class, prefix, edgedamage, float, BOTH) \
+		P(class, prefix, force, float, BOTH) \
+		P(class, prefix, force_zscale, float, BOTH) \
+		P(class, prefix, lifetime, float, BOTH) \
+		P(class, prefix, radius, float, BOTH) \
+		P(class, prefix, refire, float, BOTH) \
+		P(class, prefix, secondary, float, NONE) \
+		P(class, prefix, shotangle, float, BOTH) \
+		P(class, prefix, speed, float, BOTH) \
+		P(class, prefix, spread, float, BOTH) \
+        P(class, prefix, switchdelay_drop, float, NONE) \
+		P(class, prefix, switchdelay_raise, float, NONE) \
+        P(class, prefix, weaponreplace, string, NONE) \
+        P(class, prefix, weaponstartoverride, float, NONE) \
+        P(class, prefix, weaponstart, float, NONE) \
+        P(class, prefix, weaponthrowable, float, NONE) \
+	END()
+	W_PROPS(X, Blaster, blaster)
+#undef X
+
+ENDCLASS(Blaster)
+REGISTER_WEAPON(BLASTER, blaster, NEW(Blaster));
 
 #ifdef SVQC
-BLASTER_SETTINGS(WEP_ADD_CVAR, WEP_ADD_PROP)
 .float blaster_damage;
 .float blaster_edgedamage;
 .float blaster_radius;
@@ -50,10 +53,10 @@ BLASTER_SETTINGS(WEP_ADD_CVAR, WEP_ADD_PROP)
 #endif
 #ifdef IMPLEMENTATION
 #ifdef SVQC
-spawnfunc(weapon_blaster) { weapon_defaultspawnfunc(WEP_BLASTER.m_id); }
+spawnfunc(weapon_blaster) { weapon_defaultspawnfunc(this, WEP_BLASTER); }
 spawnfunc(weapon_laser) { spawnfunc_weapon_blaster(this); }
 
-void W_Blaster_Touch(void)
+void W_Blaster_Touch()
 {SELFPARAM();
 	PROJECTILE_TOUCH;
 
@@ -75,12 +78,12 @@ void W_Blaster_Touch(void)
 	remove(self);
 }
 
-void W_Blaster_Think(void)
+void W_Blaster_Think()
 {SELFPARAM();
-	self.movetype = MOVETYPE_FLY;
-	self.think = SUB_Remove;
-	self.nextthink = time + self.blaster_lifetime;
-	CSQCProjectile(self, true, PROJECTILE_BLASTER, true);
+	this.movetype = MOVETYPE_FLY;
+	this.think = SUB_Remove_self;
+	this.nextthink = time + this.blaster_lifetime;
+	CSQCProjectile(this, true, PROJECTILE_BLASTER, true);
 }
 
 void W_Blaster_Attack(
@@ -101,9 +104,8 @@ void W_Blaster_Attack(
 	W_SetupShot_Dir(actor, s_forward, false, 3, SND(LASERGUN_FIRE), CH_WEAPON_B, atk_damage);
 	Send_Effect(EFFECT_BLASTER_MUZZLEFLASH, w_shotorg, w_shotdir * 1000, 1);
 
-	entity missile = spawn();
+	entity missile = new(blasterbolt);
 	missile.owner = missile.realowner = actor;
-	missile.classname = "blasterbolt";
 	missile.bot_dodge = true;
 	missile.bot_dodgerating = atk_damage;
 	PROJECTILE_MAKETRIGGER(missile);
@@ -161,11 +163,11 @@ void W_Blaster_Attack(
 				{ self.BUTTON_ATCK = bot_aim(WEP_CVAR_PRI(blaster, speed), 0, WEP_CVAR_PRI(blaster, lifetime), false); }
 		}
 
-		METHOD(Blaster, wr_think, void(Blaster thiswep, entity actor, bool fire1, bool fire2))
+		METHOD(Blaster, wr_think, void(Blaster thiswep, entity actor, .entity weaponentity, int fire))
 		{
-			if(fire1)
+			if(fire & 1)
 			{
-				if(weapon_prepareattack(thiswep, actor, false, WEP_CVAR_PRI(blaster, refire)))
+				if(weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR_PRI(blaster, refire)))
 				{
 					W_Blaster_Attack(
 						actor,
@@ -180,23 +182,23 @@ void W_Blaster_Attack(
 						WEP_CVAR_PRI(blaster, delay),
 						WEP_CVAR_PRI(blaster, lifetime)
 					);
-					weapon_thinkf(actor, WFRAME_FIRE1, WEP_CVAR_PRI(blaster, animtime), w_ready);
+					weapon_thinkf(actor, weaponentity, WFRAME_FIRE1, WEP_CVAR_PRI(blaster, animtime), w_ready);
 				}
 			}
-			else if(fire2)
+			else if(fire & 2)
 			{
 				switch(WEP_CVAR(blaster, secondary))
 				{
 					case 0: // switch to last used weapon
 					{
-						if(actor.switchweapon == WEP_BLASTER.m_id) // don't do this if already switching
-							W_LastWeapon();
+						if(PS(actor).m_switchweapon == WEP_BLASTER) // don't do this if already switching
+							W_LastWeapon(actor);
 						break;
 					}
 
 					case 1: // normal projectile secondary
 					{
-						if(weapon_prepareattack(thiswep, actor, true, WEP_CVAR_SEC(blaster, refire)))
+						if(weapon_prepareattack(thiswep, actor, weaponentity, true, WEP_CVAR_SEC(blaster, refire)))
 						{
 							W_Blaster_Attack(
 								actor,
@@ -211,18 +213,13 @@ void W_Blaster_Attack(
 								WEP_CVAR_SEC(blaster, delay),
 								WEP_CVAR_SEC(blaster, lifetime)
 							);
-							weapon_thinkf(actor, WFRAME_FIRE2, WEP_CVAR_SEC(blaster, animtime), w_ready);
+							weapon_thinkf(actor, weaponentity, WFRAME_FIRE2, WEP_CVAR_SEC(blaster, animtime), w_ready);
 						}
 
 						break;
 					}
 				}
 			}
-		}
-
-		METHOD(Blaster, wr_init, void(entity thiswep))
-		{
-			BLASTER_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
 		}
 
 		METHOD(Blaster, wr_setup, void(entity thiswep))
@@ -238,11 +235,6 @@ void W_Blaster_Attack(
 		METHOD(Blaster, wr_checkammo2, bool(entity thiswep))
 		{
 			return true; // blaster has infinite ammo
-		}
-
-		METHOD(Blaster, wr_config, void(entity thiswep))
-		{
-			BLASTER_SETTINGS(WEP_CONFIG_WRITE_CVARS, WEP_CONFIG_WRITE_PROPS);
 		}
 
 		METHOD(Blaster, wr_suicidemessage, int(entity thiswep))
@@ -262,7 +254,7 @@ void W_Blaster_Attack(
 		{
 			vector org2;
 			org2 = w_org + w_backoff * 6;
-			pointparticles(particleeffectnum(EFFECT_BLASTER_IMPACT), org2, w_backoff * 1000, 1);
+			pointparticles(EFFECT_BLASTER_IMPACT, org2, w_backoff * 1000, 1);
 			if(!w_issilent) { sound(self, CH_SHOTS, SND_LASERIMPACT, VOL_BASE, ATTN_NORM); }
 		}
 

@@ -1,3 +1,5 @@
+REGISTER_NET_LINKED(ENT_CLIENT_CONVEYOR)
+
 void conveyor_think()
 {SELFPARAM();
 #ifdef CSQC
@@ -63,16 +65,16 @@ void conveyor_use()
 	self.SendFlags |= 2;
 }
 
-void conveyor_reset()
-{SELFPARAM();
-	self.state = (self.spawnflags & 1);
+void conveyor_reset(entity this)
+{
+	this.state = (this.spawnflags & 1);
 
-	self.SendFlags |= 2;
+	this.SendFlags |= 2;
 }
 
 bool conveyor_send(entity this, entity to, int sf)
 {
-	WriteByte(MSG_ENTITY, ENT_CLIENT_CONVEYOR);
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_CONVEYOR);
 	WriteByte(MSG_ENTITY, sf);
 
 	if(sf & 1)
@@ -108,25 +110,24 @@ bool conveyor_send(entity this, entity to, int sf)
 
 void conveyor_init()
 {SELFPARAM();
-	if (!self.speed)
-		self.speed = 200;
-	self.movedir = self.movedir * self.speed;
-	self.think = conveyor_think;
-	self.nextthink = time;
+	if (!this.speed) this.speed = 200;
+	this.movedir *= this.speed;
+	this.think = conveyor_think;
+	this.nextthink = time;
 	IFTARGETED
 	{
-		self.use = conveyor_use;
-		self.reset = conveyor_reset;
-		conveyor_reset();
+		this.use = conveyor_use;
+		this.reset = conveyor_reset;
+		this.reset(this);
 	}
 	else
-		self.state = 1;
+		this.state = 1;
 
-	FixSize(self);
+	FixSize(this);
 
-	Net_LinkEntity(self, 0, false, conveyor_send);
+	Net_LinkEntity(this, 0, false, conveyor_send);
 
-	self.SendFlags |= 1;
+	this.SendFlags |= 1;
 }
 
 spawnfunc(trigger_conveyor)
@@ -160,8 +161,8 @@ void conveyor_init()
 	self.move_time = time;
 }
 
-void ent_conveyor()
-{SELFPARAM();
+NET_HANDLE(ENT_CLIENT_CONVEYOR, bool isnew)
+{
 	float sf = ReadByte();
 
 	if(sf & 1)
@@ -195,5 +196,7 @@ void ent_conveyor()
 
 	if(sf & 2)
 		self.state = ReadByte();
+
+	return true;
 }
 #endif

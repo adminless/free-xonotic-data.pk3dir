@@ -1,7 +1,7 @@
 #include "throwing.qh"
 
 #include "weaponsystem.qh"
-#include "../mutators/mutators_include.qh"
+#include "../mutators/all.qh"
 #include "../t_items.qh"
 #include "../g_damage.qh"
 #include "../../common/items/item.qh"
@@ -34,12 +34,12 @@ string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vecto
 {SELFPARAM();
 	float thisammo, i;
 	string s;
-	var .int ammotype = (get_weaponinfo(wpn)).ammo_field;
+	Weapon info = Weapons_from(wpn);
+	var .int ammotype = info.ammo_field;
 
-	entity wep = spawn();
+	entity wep = new(droppedweapon);
 
 	setorigin(wep, org);
-	wep.classname = "droppedweapon";
 	wep.velocity = velo;
 	wep.owner = wep.enemy = own;
 	wep.flags |= FL_TOSSED;
@@ -47,7 +47,7 @@ string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vecto
 
 	W_DropEvent(wr_drop,own,wpn,wep);
 
-	if(WepSet_FromWeapon(wpn) & WEPSET_SUPERWEAPONS)
+	if(WepSet_FromWeapon(Weapons_from(wpn)) & WEPSET_SUPERWEAPONS)
 	{
 		if(own.items & IT_UNLIMITED_SUPERWEAPONS)
 		{
@@ -57,9 +57,10 @@ string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vecto
 		{
 			float superweapons = 1;
 			for(i = WEP_FIRST; i <= WEP_LAST; ++i)
-				if(WepSet_FromWeapon(i) & WEPSET_SUPERWEAPONS)
-					if(own.weapons & WepSet_FromWeapon(i))
-						++superweapons;
+			{
+				WepSet set = WepSet_FromWeapon(Weapons_from(i));
+				if ((set & WEPSET_SUPERWEAPONS) && (own.weapons & set)) ++superweapons;
+			}
 			if(superweapons <= 1)
 			{
 				wep.superweapons_finished = own.superweapons_finished;
@@ -75,7 +76,7 @@ string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vecto
 		}
 	}
 
-	WITH(entity, self, wep, weapon_defaultspawnfunc(wpn));
+	weapon_defaultspawnfunc(wep, info);
 	if(startitem_failed)
 		return string_null;
 	wep.glowmod = own.weaponentity_glowmod;
@@ -96,10 +97,11 @@ string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vecto
 		if(doreduce && g_weapon_stay == 2)
 		{
 			// if our weapon is loaded, give its load back to the player
-			if(self.(weapon_load[self.weapon]) > 0)
+			int i = PS(self).m_weapon.m_id;
+			if(self.(weapon_load[i]) > 0)
 			{
-				own.(ammotype) += self.(weapon_load[self.weapon]);
-				self.(weapon_load[self.weapon]) = -1; // schedule the weapon for reloading
+				own.(ammotype) += self.(weapon_load[i]);
+				self.(weapon_load[i]) = -1; // schedule the weapon for reloading
 			}
 
 			wep.(ammotype) = 0;
@@ -107,10 +109,11 @@ string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vecto
 		else if(doreduce)
 		{
 			// if our weapon is loaded, give its load back to the player
-			if(self.(weapon_load[self.weapon]) > 0)
+			int i = PS(self).m_weapon.m_id;
+			if(self.(weapon_load[i]) > 0)
 			{
-				own.(ammotype) += self.(weapon_load[self.weapon]);
-				self.(weapon_load[self.weapon]) = -1; // schedule the weapon for reloading
+				own.(ammotype) += self.(weapon_load[i]);
+				self.(weapon_load[i]) = -1; // schedule the weapon for reloading
 			}
 
 			thisammo = min(own.(ammotype), wep.(ammotype));
@@ -133,66 +136,64 @@ string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vecto
 	}
 }
 
-float W_IsWeaponThrowable(float w)
+bool W_IsWeaponThrowable(bool w)
 {
+	if (MUTATOR_CALLHOOK(ForbidDropCurrentWeapon))
+		return false;
 	if (!autocvar_g_pickup_items)
-		return 0;
+		return false;
 	if (g_weaponarena)
 		return 0;
 	if (g_cts)
 		return 0;
-	if (g_nexball && w == WEP_MORTAR.m_id)
-		return 0;
-    if(w == 0)
-        return 0;
+    if(w == WEP_Null.m_id)
+        return false;
 
 	#if 0
-	if(start_weapons & WepSet_FromWeapon(w))
+	if(start_weapons & WepSet_FromWeapon(Weapons_from(w)))
 	{
 		// start weapons that take no ammo can't be dropped (this prevents dropping the laser, as long as it continues to use no ammo)
 		if(start_items & IT_UNLIMITED_WEAPON_AMMO)
-			return 0;
-		if((get_weaponinfo(w)).ammo_field == ammo_none)
-			return 0;
+			return false;
+		if((Weapons_from(w)).ammo_field == ammo_none)
+			return false;
 	}
-	return 1;
+	return true;
 	#else
-	return (get_weaponinfo(w)).weaponthrowable;
+	return (Weapons_from(w)).weaponthrowable;
 	#endif
 }
 
 // toss current weapon
 void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 {SELFPARAM();
-	float w;
-	string a;
-
-	w = self.weapon;
-	if (w == 0)
+	Weapon w = PS(self).m_weapon;
+	if (w == WEP_Null)
 		return; // just in case
 	if(MUTATOR_CALLHOOK(ForbidThrowCurrentWeapon))
 		return;
 	if(!autocvar_g_weapon_throwable)
 		return;
-	if(self.weaponentity.state != WS_READY)
+	.entity weaponentity = weaponentities[0]; // TODO: unhardcode
+	if(self.(weaponentity).state != WS_READY)
 		return;
-	if(!W_IsWeaponThrowable(w))
+	if(!W_IsWeaponThrowable(w.m_id))
 		return;
 
-	if(!(self.weapons & WepSet_FromWeapon(w)))
-		return;
-	self.weapons &= ~WepSet_FromWeapon(w);
+	WepSet set = WepSet_FromWeapon(w);
+	if(!(self.weapons & set)) return;
+	self.weapons &= ~set;
 
 	W_SwitchWeapon_Force(self, w_getbestweapon(self));
-	a = W_ThrowNewWeapon(self, w, doreduce, self.origin + delta, velo);
+	string a = W_ThrowNewWeapon(self, w.m_id, doreduce, self.origin + delta, velo);
 
 	if(!a) return;
-	Send_Notification(NOTIF_ONE, self, MSG_MULTI, ITEM_WEAPON_DROP, a, w);
+	Send_Notification(NOTIF_ONE, self, MSG_MULTI, ITEM_WEAPON_DROP, a, w.m_id);
 }
 
 void SpawnThrownWeapon(vector org, float w)
 {SELFPARAM();
-	if(self.weapons & WepSet_FromWeapon(self.weapon))
-		if(W_IsWeaponThrowable(self.weapon))
-			W_ThrowNewWeapon(self, self.weapon, false, org, randomvec() * 125 + '0 0 200');
+	if(self.weapons & WepSet_FromWeapon(PS(self).m_weapon))
+		if(W_IsWeaponThrowable(PS(self).m_weapon.m_id))
+			W_ThrowNewWeapon(self, PS(self).m_weapon.m_id, false, org, randomvec() * 125 + '0 0 200');
 }

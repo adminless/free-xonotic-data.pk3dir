@@ -23,6 +23,10 @@ void multi_trigger()
 		return;		// allready been triggered
 	}
 
+	if(self.spawnflags & 16384)
+	if(!IS_PLAYER(self.enemy))
+		return; // only players
+
 	if (self.classname == "trigger_secret")
 	{
 		if (!IS_PLAYER(self.enemy))
@@ -111,19 +115,19 @@ void multi_eventdamage (entity inflictor, entity attacker, float damage, int dea
 	}
 }
 
-void multi_reset()
-{SELFPARAM();
-	if ( !(self.spawnflags & SPAWNFLAG_NOTOUCH) )
-		self.touch = multi_touch;
-	if (self.max_health)
+void multi_reset(entity this)
+{
+	if ( !(this.spawnflags & SPAWNFLAG_NOTOUCH) )
+		this.touch = multi_touch;
+	if (this.max_health)
 	{
-		self.health = self.max_health;
-		self.takedamage = DAMAGE_YES;
-		self.solid = SOLID_BBOX;
+		this.health = this.max_health;
+		this.takedamage = DAMAGE_YES;
+		this.solid = SOLID_BBOX;
 	}
-	self.think = func_null;
-	self.nextthink = 0;
-	self.team = self.team_saved;
+	this.think = func_null;
+	this.nextthink = 0;
+	this.team = this.team_saved;
 }
 
 /*QUAKED spawnfunc_trigger_multiple (.5 .5 .5) ? notouch
@@ -149,7 +153,7 @@ spawnfunc(trigger_multiple)
 	}
 	else if (self.sounds == 2)
 	{
-		self.noise = SND(TALK);
+		self.noise = strzone(SND(TALK));
 	}
 	else if (self.sounds == 3)
 	{

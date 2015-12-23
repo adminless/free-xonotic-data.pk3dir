@@ -4,18 +4,26 @@
 
 REGISTER_MUTATOR(waypointsprites, true);
 
+REGISTER_NET_LINKED(waypointsprites)
+
 #ifdef SVQC
 /** flags origin [team displayrule] [spritename] [spritename2] [spritename3] [lifetime maxdistance hideable] */
 bool WaypointSprite_SendEntity(entity this, entity to, float sendflags)
 {
-    WriteMutator(MSG_ENTITY, waypointsprites);
+    WriteHeader(MSG_ENTITY, waypointsprites);
 
     sendflags = sendflags & 0x7F;
 
-    if (g_nexball)
-        sendflags &= ~0x80;
-    else if (self.max_health || (self.pain_finished && (time < self.pain_finished + 0.25)))
+    if (self.max_health || (self.pain_finished && (time < self.pain_finished + 0.25)))
         sendflags |= 0x80;
+
+    int f = 0;
+    if(self.currentammo)
+        f |= 1; // hideable
+    if(self.exteriormodeltoclient == to)
+        f |= 2; // my own
+
+    MUTATOR_CALLHOOK(SendWaypoint, this, to, sendflags, f);
 
     WriteByte(MSG_ENTITY, sendflags);
     WriteByte(MSG_ENTITY, self.wp_extra);
@@ -62,27 +70,6 @@ bool WaypointSprite_SendEntity(entity this, entity to, float sendflags)
         WriteCoord(MSG_ENTITY, self.fade_time);
         WriteCoord(MSG_ENTITY, self.teleport_time);
         WriteShort(MSG_ENTITY, self.fade_rate); // maxdist
-        float f = 0;
-        if (self.currentammo)
-            f |= 1; // hideable
-        if (self.exteriormodeltoclient == to)
-            f |= 2; // my own
-        if (g_onslaught)
-        {
-            if (self.owner.classname == "onslaught_controlpoint")
-            {
-                entity wp_owner = self.owner;
-                entity e = WaypointSprite_getviewentity(to);
-                if (SAME_TEAM(e, wp_owner) && wp_owner.goalentity.health >= wp_owner.goalentity.max_health) { f |= 2; }
-                if (!ons_ControlPoint_Attackable(wp_owner, e.team)) { f |= 2; }
-            }
-            if (self.owner.classname == "onslaught_generator")
-            {
-                entity wp_owner = self.owner;
-                if (wp_owner.isshielded && wp_owner.health >= wp_owner.max_health) { f |= 2; }
-                if (wp_owner.health <= 0) { f |= 2; }
-            }
-        }
         WriteByte(MSG_ENTITY, f);
     }
 
@@ -112,9 +99,7 @@ bool WaypointSprite_SendEntity(entity this, entity to, float sendflags)
 
 #ifdef CSQC
 void Ent_WaypointSprite();
-MUTATOR_HOOKFUNCTION(waypointsprites, CSQC_Ent_Update) {
-    if (MUTATOR_RETURNVALUE) return false;
-    if (!ReadMutatorEquals(mutator_argv_int_0, waypointsprites)) return false;
+NET_HANDLE(waypointsprites, bool isnew) {
     Ent_WaypointSprite();
     return true;
 }
@@ -137,7 +122,7 @@ void Ent_WaypointSprite()
 
     self.draw2d = Draw_WaypointSprite;
 
-    InterpolateOrigin_Undo();
+    InterpolateOrigin_Undo(self);
     self.iflags |= IFLAG_ORIGIN;
 
     if (sendflags & 0x80)
@@ -226,7 +211,7 @@ void Ent_WaypointSprite()
             self.helpme += servertime;
     }
 
-    InterpolateOrigin_Note();
+    InterpolateOrigin_Note(this);
 
     self.entremove = Ent_RemoveWaypointSprite;
 }
@@ -236,29 +221,35 @@ void Ent_WaypointSprite()
 float spritelookupblinkvalue(string s)
 {SELFPARAM();
     if (s == WP_Weapon.netname) {
-        if (get_weaponinfo(self.wp_extra).spawnflags & WEP_FLAG_SUPERWEAPON)
+        if (Weapons_from(self.wp_extra).spawnflags & WEP_FLAG_SUPERWEAPON)
             return 2;
     }
-    if (s == WP_Item.netname) return Items[self.wp_extra].m_waypointblink;
+    if (s == WP_Item.netname) return Items_from(self.wp_extra).m_waypointblink;
 
     return 1;
 }
 
 vector spritelookupcolor(entity this, string s, vector def)
 {
-    if (s == WP_Weapon.netname  || s == RADARICON_Weapon.netname) return get_weaponinfo(this.wp_extra).wpcolor;
-    if (s == WP_Item.netname    || s == RADARICON_Item.netname) return Items[this.wp_extra].m_color;
-    if (s == WP_Buff.netname    || s == RADARICON_Buff.netname) return Buffs[this.wp_extra].m_color;
+    if (s == WP_Weapon.netname  || s == RADARICON_Weapon.netname) return Weapons_from(this.wp_extra).wpcolor;
+    if (s == WP_Item.netname    || s == RADARICON_Item.netname) return Items_from(this.wp_extra).m_color;
+    if (MUTATOR_CALLHOOK(WP_Format, this, s))
+    {
+        return MUTATOR_ARGV(0, vector);
+    }
     return def;
 }
 
 string spritelookuptext(string s)
 {SELFPARAM();
     if (s == WP_RaceStartFinish.netname) return (race_checkpointtime || race_mycheckpointtime) ? _("Finish") : _("Start");
-    if (s == WP_Weapon.netname) return get_weaponinfo(self.wp_extra).message;
-    if (s == WP_Item.netname) return Items[self.wp_extra].m_waypoint;
-    if (s == WP_Buff.netname) return Buffs[self.wp_extra].m_prettyName;
+    if (s == WP_Weapon.netname) return Weapons_from(self.wp_extra).m_name;
+    if (s == WP_Item.netname) return Items_from(self.wp_extra).m_waypoint;
     if (s == WP_Monster.netname) return get_monsterinfo(self.wp_extra).monster_name;
+    if (MUTATOR_CALLHOOK(WP_Format, this, s))
+    {
+        return MUTATOR_ARGV(0, string);
+    }
 
     // need to loop, as our netname could be one of three
     FOREACH(Waypoints, it.netname == s, LAMBDA(
@@ -386,11 +377,13 @@ vector drawspritetext(vector o, float ang, float minwidth, vector rgb, float a, 
     if (fabs(sa) > fabs(ca))
     {
         algnx = (sa < 0);
-        algny = 0.5 - 0.5 * ca / fabs(sa);
+        float f = fabs(sa);
+        algny = 0.5 - 0.5 * (f ? (ca / f) : 0);
     }
     else
     {
-        algnx = 0.5 - 0.5 * sa / fabs(ca);
+        float f = fabs(ca);
+        algnx = 0.5 - 0.5 * (f ? (sa / f) : 0);
         algny = (ca < 0);
     }
 
@@ -474,9 +467,9 @@ void Draw_WaypointSprite(entity this)
         if (autocvar_cl_hidewaypoints)
             return; // fixed waypoint
 
-    InterpolateOrigin_Do();
+    InterpolateOrigin_Do(self);
 
-    float t = GetPlayerColor(player_localnum) + 1;
+    float t = entcs_GetTeam(player_localnum) + 1;
 
     string spriteimage = "";
 
@@ -993,7 +986,7 @@ void WaypointSprite_Reset()
 {SELFPARAM();
     // if a WP wants to time out, let it time out immediately; other WPs ought to be reset/killed by their owners
 
-    if (self.fade_time) // there was there before: || g_keyhunt, do we really need this?
+    if (self.fade_time)
         WaypointSprite_Kill(self);
 }
 
@@ -1008,6 +1001,7 @@ entity WaypointSprite_Spawn(
 )
 {
     entity wp = new(sprite_waypoint);
+    make_pure(wp);
     wp.teleport_time = time + _lifetime;
     wp.fade_time = _lifetime;
     wp.exteriormodeltoclient = ref;

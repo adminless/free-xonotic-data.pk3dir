@@ -13,12 +13,11 @@
 #include "g_hook.qh"
 #include "ipban.qh"
 #include "mapvoting.qh"
-#include "mutators/mutators_include.qh"
+#include "mutators/all.qh"
 #include "race.qh"
 #include "scores.qh"
 #include "teamplay.qh"
 #include "weapons/weaponstats.qh"
-#include "../common/buffs/all.qh"
 #include "../common/constants.qh"
 #include "../common/deathtypes/all.qh"
 #include "../common/mapinfo.qh"
@@ -31,6 +30,7 @@
 #include "../common/stats.qh"
 #include "../common/teams.qh"
 #include "../common/triggers/trigger/secret.qh"
+#include "../common/triggers/target/music.qh"
 #include "../common/util.qh"
 #include "../common/items/all.qh"
 #include "../common/weapons/all.qh"
@@ -53,8 +53,7 @@ void PingPLReport_Think()
 	e = edict_num(self.cnt + 1);
 	if(IS_REAL_CLIENT(e))
 	{
-		WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte(MSG_BROADCAST, TE_CSQC_PINGPLREPORT);
+		WriteHeader(MSG_BROADCAST, TE_CSQC_PINGPLREPORT);
 		WriteByte(MSG_BROADCAST, self.cnt);
 		WriteShort(MSG_BROADCAST, max(1, e.ping));
 		WriteByte(MSG_BROADCAST, ceil(e.ping_packetloss * 255));
@@ -71,8 +70,7 @@ void PingPLReport_Think()
 	}
 	else
 	{
-		WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte(MSG_BROADCAST, TE_CSQC_PINGPLREPORT);
+		WriteHeader(MSG_BROADCAST, TE_CSQC_PINGPLREPORT);
 		WriteByte(MSG_BROADCAST, self.cnt);
 		WriteShort(MSG_BROADCAST, 0);
 		WriteByte(MSG_BROADCAST, 0);
@@ -82,8 +80,8 @@ void PingPLReport_Think()
 }
 void PingPLReport_Spawn()
 {
-	pingplreport = spawn();
-	pingplreport.classname = "pingplreport";
+	pingplreport = new(pingplreport);
+	make_pure(pingplreport);
 	pingplreport.think = PingPLReport_Think;
 	pingplreport.nextthink = time;
 }
@@ -97,17 +95,7 @@ void ShuffleMaplist();
 
 void SetDefaultAlpha()
 {
-	if(autocvar_g_running_guns)
-	{
-		default_player_alpha = -1;
-		default_weapon_alpha = +1;
-	}
-	else if(g_cloaked)
-	{
-		default_player_alpha = autocvar_g_balance_cloaked_alpha;
-		default_weapon_alpha = default_player_alpha;
-	}
-	else
+	if (!MUTATOR_CALLHOOK(SetDefaultAlpha))
 	{
 		default_player_alpha = autocvar_g_player_alpha;
 		if(default_player_alpha == 0)
@@ -514,7 +502,7 @@ void detect_maptype()
 entity randomseed;
 bool RandomSeed_Send(entity this, entity to, int sf)
 {
-	WriteByte(MSG_ENTITY, ENT_CLIENT_RANDOMSEED);
+	WriteHeader(MSG_ENTITY, ENT_CLIENT_RANDOMSEED);
 	WriteShort(MSG_ENTITY, self.cnt);
 	return true;
 }
@@ -527,7 +515,8 @@ void RandomSeed_Think()
 }
 void RandomSeed_Spawn()
 {SELFPARAM();
-	randomseed = spawn();
+	randomseed = new(randomseed);
+	make_pure(randomseed);
 	randomseed.think = RandomSeed_Think;
 	Net_LinkEntity(randomseed, false, 0, RandomSeed_Send);
 
@@ -545,21 +534,25 @@ spawnfunc(__init_dedicated_server)
 
 	remove = remove_unsafely;
 
-	entity e;
-	e = spawn();
+	entity e = spawn();
 	e.think = GotoFirstMap;
 	e.nextthink = time; // this is usually 1 at this point
 
-	e = spawn();
-	e.classname = "info_player_deathmatch"; // safeguard against player joining
+	e = new(info_player_deathmatch);  // safeguard against player joining
 
 	self.classname = "worldspawn"; // safeguard against various stuff ;)
 
 	// needs to be done so early because of the constants they create
 	static_init();
+	static_init_late();
+	static_init_precache();
 
 	MapInfo_Enumerate();
 	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), MapInfo_RequiredFlags(), MapInfo_ForbiddenFlags(), 0);
+}
+
+void __init_dedicated_server_shutdown() {
+	MapInfo_Shutdown();
 }
 
 void Map_MarkAsRecent(string m);
@@ -568,7 +561,6 @@ void Nagger_Init();
 void ClientInit_Spawn();
 void WeaponStats_Init();
 void WeaponStats_Shutdown();
-void Physics_AddStats();
 spawnfunc(worldspawn)
 {
 	float fd, l, j, n;
@@ -588,13 +580,10 @@ spawnfunc(worldspawn)
 
 	compressShortVector_init();
 
-	entity head;
-	head = nextent(world);
 	maxclients = 0;
-	while(head)
+	for (entity head = nextent(world); head; head = nextent(head))
 	{
 		++maxclients;
-		head = nextent(head);
 	}
 
 	server_is_dedicated = (stof(cvar_defstring("is_dedicated")) ? true : false);
@@ -655,6 +644,8 @@ spawnfunc(worldspawn)
 	PlayerStats_GameReport_Init(); // we need this to be initiated before InitGameplayMode
 
 	InitGameplayMode();
+	static_init_late();
+	static_init_precache();
 	readlevelcvars();
 	GrappleHookInit();
 
@@ -763,76 +754,7 @@ spawnfunc(worldspawn)
 
 	WeaponStats_Init();
 
-	WepSet_AddStat();
-	WepSet_AddStat_InMap();
-	addstat(STAT_SWITCHWEAPON, AS_INT, switchweapon);
-	addstat(STAT_SWITCHINGWEAPON, AS_INT, switchingweapon);
-	addstat(STAT_GAMESTARTTIME, AS_FLOAT, stat_game_starttime);
-	addstat(STAT_ROUNDSTARTTIME, AS_FLOAT, stat_round_starttime);
-	addstat(STAT_ALLOW_OLDVORTEXBEAM, AS_INT, stat_allow_oldvortexbeam);
 	Nagger_Init();
-
-	addstat(STAT_STRENGTH_FINISHED, AS_FLOAT, strength_finished);
-	addstat(STAT_INVINCIBLE_FINISHED, AS_FLOAT, invincible_finished);
-	addstat(STAT_SUPERWEAPONS_FINISHED, AS_FLOAT, superweapons_finished);
-	addstat(STAT_PRESSED_KEYS, AS_FLOAT, pressedkeys);
-	addstat(STAT_FUEL, AS_INT, ammo_fuel);
-	addstat(STAT_PLASMA, AS_INT, ammo_plasma);
-	addstat(STAT_SHOTORG, AS_INT, stat_shotorg);
-	addstat(STAT_LEADLIMIT, AS_FLOAT, stat_leadlimit);
-	addstat(STAT_WEAPON_CLIPLOAD, AS_INT, clip_load);
-	addstat(STAT_WEAPON_CLIPSIZE, AS_INT, clip_size);
-	addstat(STAT_LAST_PICKUP, AS_FLOAT, last_pickup);
-	addstat(STAT_HIT_TIME, AS_FLOAT, hit_time);
-	addstat(STAT_DAMAGE_DEALT_TOTAL, AS_INT, damage_dealt_total);
-	addstat(STAT_TYPEHIT_TIME, AS_FLOAT, typehit_time);
-	addstat(STAT_LAYED_MINES, AS_INT, minelayer_mines);
-
-	addstat(STAT_VORTEX_CHARGE, AS_FLOAT, vortex_charge);
-	addstat(STAT_VORTEX_CHARGEPOOL, AS_FLOAT, vortex_chargepool_ammo);
-
-	addstat(STAT_HAGAR_LOAD, AS_INT, hagar_load);
-
-	addstat(STAT_ARC_HEAT, AS_FLOAT, arc_heat_percent);
-
-	// freeze attacks
-	addstat(STAT_FROZEN, AS_INT, frozen);
-	addstat(STAT_REVIVE_PROGRESS, AS_FLOAT, revive_progress);
-
-	// physics
-	Physics_AddStats();
-
-	// new properties
-	addstat(STAT_MOVEVARS_JUMPVELOCITY, AS_FLOAT, stat_sv_jumpvelocity);
-	addstat(STAT_MOVEVARS_AIRACCEL_QW_STRETCHFACTOR, AS_FLOAT, stat_sv_airaccel_qw_stretchfactor);
-	addstat(STAT_MOVEVARS_MAXAIRSTRAFESPEED, AS_FLOAT, stat_sv_maxairstrafespeed);
-	addstat(STAT_MOVEVARS_MAXAIRSPEED, AS_FLOAT, stat_sv_maxairspeed);
-	addstat(STAT_MOVEVARS_AIRSTRAFEACCELERATE, AS_FLOAT, stat_sv_airstrafeaccelerate);
-	addstat(STAT_MOVEVARS_WARSOWBUNNY_TURNACCEL, AS_FLOAT, stat_sv_warsowbunny_turnaccel);
-	addstat(STAT_MOVEVARS_AIRACCEL_SIDEWAYS_FRICTION, AS_FLOAT, stat_sv_airaccel_sideways_friction);
-	addstat(STAT_MOVEVARS_AIRCONTROL, AS_FLOAT, stat_sv_aircontrol);
-	addstat(STAT_MOVEVARS_AIRCONTROL_POWER, AS_FLOAT, stat_sv_aircontrol_power);
-	addstat(STAT_MOVEVARS_AIRCONTROL_PENALTY, AS_FLOAT, stat_sv_aircontrol_penalty);
-	addstat(STAT_MOVEVARS_WARSOWBUNNY_AIRFORWARDACCEL, AS_FLOAT, stat_sv_warsowbunny_airforwardaccel);
-	addstat(STAT_MOVEVARS_WARSOWBUNNY_TOPSPEED, AS_FLOAT, stat_sv_warsowbunny_topspeed);
-	addstat(STAT_MOVEVARS_WARSOWBUNNY_ACCEL, AS_FLOAT, stat_sv_warsowbunny_accel);
-	addstat(STAT_MOVEVARS_WARSOWBUNNY_BACKTOSIDERATIO, AS_FLOAT, stat_sv_warsowbunny_backtosideratio);
-	addstat(STAT_MOVEVARS_FRICTION, AS_FLOAT, stat_sv_friction);
-	addstat(STAT_MOVEVARS_ACCELERATE, AS_FLOAT, stat_sv_accelerate);
-	addstat(STAT_MOVEVARS_STOPSPEED, AS_FLOAT, stat_sv_stopspeed);
-	addstat(STAT_MOVEVARS_AIRACCELERATE, AS_FLOAT, stat_sv_airaccelerate);
-	addstat(STAT_MOVEVARS_AIRSTOPACCELERATE, AS_FLOAT, stat_sv_airstopaccelerate);
-
-	// secrets
-	addstat(STAT_SECRETS_TOTAL, AS_FLOAT, stat_secrets_total);
-	addstat(STAT_SECRETS_FOUND, AS_FLOAT, stat_secrets_found);
-
-	// monsters
-	addstat(STAT_MONSTERS_TOTAL, AS_FLOAT, stat_monsters_total);
-	addstat(STAT_MONSTERS_KILLED, AS_FLOAT, stat_monsters_killed);
-
-	// misc
-	addstat(STAT_RESPAWN_TIME, AS_FLOAT, stat_respawn_time);
 
 	next_pingtime = time + 5;
 
@@ -1423,7 +1345,7 @@ void DumpStats(float final)
 		{
 			s = strcat(":player:see-labels:", GetPlayerScoreString(other, 0), ":");
 			s = strcat(s, ftos(rint(time - other.jointime)), ":");
-			if(IS_PLAYER(other) || other.caplayer == 1 || g_lms)
+			if(IS_PLAYER(other) || MUTATOR_CALLHOOK(GetPlayerStatus, other, s))
 				s = strcat(s, ftos(other.team), ":");
 			else
 				s = strcat(s, "spectator:");
@@ -1473,7 +1395,6 @@ void DumpStats(float final)
 
 void FixIntermissionClient(entity e)
 {
-	string s;
 	if(!e.autoscreenshot) // initial call
 	{
 		e.autoscreenshot = time + 0.8;	// used for autoscreenshot
@@ -1482,18 +1403,27 @@ void FixIntermissionClient(entity e)
 		e.solid = SOLID_NOT;
 		e.movetype = MOVETYPE_NONE;
 		e.takedamage = DAMAGE_NO;
-		if(e.weaponentity)
+		for (int slot = 0; slot < MAX_WEAPONSLOTS; ++slot)
 		{
-			e.weaponentity.effects = EF_NODRAW;
-			if (e.weaponentity.weaponentity)
-				e.weaponentity.weaponentity.effects = EF_NODRAW;
+		    .entity weaponentity = weaponentities[slot];
+			if(e.(weaponentity))
+			{
+				e.(weaponentity).effects = EF_NODRAW;
+				if (e.(weaponentity).weaponchild)
+					e.(weaponentity).weaponchild.effects = EF_NODRAW;
+			}
 		}
 		if(IS_REAL_CLIENT(e))
 		{
 			stuffcmd(e, "\nscr_printspeed 1000000\n");
-			s = autocvar_sv_intermission_cdtrack;
-			if(s != "")
-				stuffcmd(e, strcat("\ncd loop ", s, "\n"));
+			RandomSelection_Init();
+			FOREACH_WORD(autocvar_sv_intermission_cdtrack, true, LAMBDA(
+				RandomSelection_Add(NULL, 0, it, 1, 1);
+			));
+			if (RandomSelection_chosen_string != "")
+			{
+				stuffcmd(e, sprintf("\ncd loop %s\n", RandomSelection_chosen_string));
+			}
 			msg_entity = e;
 			WriteByte(MSG_ONE, SVC_INTERMISSION);
 		}
@@ -1545,6 +1475,10 @@ void NextLevel()
 		if(other.winning)
 			bprint(other.netname, " ^7wins.\n");
 	}
+
+	entity oldself = self;
+	target_music_kill();
+	self = oldself;
 
 	if(autocvar_g_campaign)
 		CampaignPreIntermission();
@@ -1650,7 +1584,7 @@ void AddWinners(.float field, float value)
 }
 
 // clear the .winning flags
-void ClearWinners(void)
+void ClearWinners()
 {
 	entity head;
 	FOR_EACH_PLAYER(head)
@@ -1700,85 +1634,6 @@ float WinningCondition_Assault()
 	}
 
 	return status;
-}
-
-// LMS winning condition: game terminates if and only if there's at most one
-// one player who's living lives. Top two scores being equal cancels the time
-// limit.
-float WinningCondition_LMS()
-{
-	entity head, head2;
-	float have_player;
-	float have_players;
-	float l;
-
-	have_player = false;
-	have_players = false;
-	l = LMS_NewPlayerLives();
-
-	head = find(world, classname, "player");
-	if(head)
-		have_player = true;
-	head2 = find(head, classname, "player");
-	if(head2)
-		have_players = true;
-
-	if(have_player)
-	{
-		// we have at least one player
-		if(have_players)
-		{
-			// two or more active players - continue with the game
-		}
-		else
-		{
-			// exactly one player?
-
-			ClearWinners();
-			SetWinners(winning, 0); // NOTE: exactly one player is still "player", so this works out
-
-			if(l)
-			{
-				// game still running (that is, nobody got removed from the game by a frag yet)? then continue
-				return WINNING_NO;
-			}
-			else
-			{
-				// a winner!
-				// and assign him his first place
-				PlayerScore_Add(head, SP_LMS_RANK, 1);
-				return WINNING_YES;
-			}
-		}
-	}
-	else
-	{
-		// nobody is playing at all...
-		if(l)
-		{
-			// wait for players...
-		}
-		else
-		{
-			// SNAFU (maybe a draw game?)
-			ClearWinners();
-			LOG_TRACE("No players, ending game.\n");
-			return WINNING_YES;
-		}
-	}
-
-	// When we get here, we have at least two players who are actually LIVING,
-	// now check if the top two players have equal score.
-	WinningConditionHelper();
-
-	ClearWinners();
-	if(WinningConditionHelper_winner)
-		WinningConditionHelper_winner.winning = true;
-	if(WinningConditionHelper_topscore == WinningConditionHelper_secondscore)
-		return WINNING_NEVER;
-
-	// Top two have different scores? Way to go for our beloved TIMELIMIT!
-	return WINNING_NO;
 }
 
 void ShuffleMaplist()
@@ -1856,46 +1711,6 @@ float WinningCondition_Scores(float limit, float leadlimit)
 		WinningConditionHelper_topscore && limitreached,
 		WinningConditionHelper_equality
 	);
-}
-
-float WinningCondition_Race(float fraglimit)
-{
-	float wc;
-	entity p;
-	float n, c;
-
-	n = 0;
-	c = 0;
-	FOR_EACH_PLAYER(p)
-	{
-		++n;
-		if(p.race_completed)
-			++c;
-	}
-	if(n && (n == c))
-		return WINNING_YES;
-	wc = WinningCondition_Scores(fraglimit, 0);
-
-	// ALWAYS initiate overtime, unless EVERYONE has finished the race!
-	if(wc == WINNING_YES || wc == WINNING_STARTSUDDENDEATHOVERTIME)
-	// do NOT support equality when the laps are all raced!
-		return WINNING_STARTSUDDENDEATHOVERTIME;
-	else
-		return WINNING_NEVER;
-}
-
-float WinningCondition_QualifyingThenRace(float limit)
-{
-	float wc;
-	wc = WinningCondition_Scores(limit, 0);
-
-	// NEVER initiate overtime
-	if(wc == WINNING_YES || wc == WINNING_STARTSUDDENDEATHOVERTIME)
-	{
-		return WINNING_YES;
-	}
-
-	return wc;
 }
 
 float WinningCondition_RanOutOfSpawns()
@@ -2082,35 +1897,13 @@ void CheckRules_World()
 		return;
 	}
 
-	float checkrules_status;
-	checkrules_status = WinningCondition_RanOutOfSpawns();
+	int checkrules_status = WinningCondition_RanOutOfSpawns();
 	if(checkrules_status == WINNING_YES)
-	{
 		bprint("Hey! Someone ran out of spawns!\n");
-	}
-	else if(g_race && !g_race_qualifying && timelimit >= 0)
-	{
-		checkrules_status = WinningCondition_Race(fraglimit);
-		//print("WC_RACE yields ", ftos(checkrules_status), "\n");
-	}
-	else if(g_race && g_race_qualifying == 2 && timelimit >= 0)
-	{
-		checkrules_status = WinningCondition_QualifyingThenRace(fraglimit);
-		//print("WC_QUALIFYING_THEN_RACE yields ", ftos(checkrules_status), "\n");
-	}
-	else if(g_assault)
-	{
-		checkrules_status = WinningCondition_Assault(); // TODO remove this?
-	}
-	else if(g_lms)
-	{
-		checkrules_status = WinningCondition_LMS();
-	}
+	else if(MUTATOR_CALLHOOK(CheckRules_World, checkrules_status, timelimit, fraglimit))
+		checkrules_status = ret_float;
 	else
-	{
 		checkrules_status = WinningCondition_Scores(fraglimit, leadlimit);
-		//print("WC_SCORES yields ", ftos(checkrules_status), "\n");
-	}
 
 	if(checkrules_status == WINNING_STARTSUDDENDEATHOVERTIME)
 	{
@@ -2199,6 +1992,10 @@ void EndFrame()
 		setself(e_);
 		antilag_record(e_, altime);
 	}
+	FOREACH_CLIENT(PS(it), {
+		PlayerState s = PS(it);
+		s.ps_push(s, it);
+	});
 }
 
 
@@ -2277,7 +2074,7 @@ void Shutdown()
 	if(world_initialized > 0)
 	{
 		world_initialized = 0;
-		LOG_INFO("Saving persistent data...\n");
+		LOG_TRACE("Saving persistent data...\n");
 		Ban_SaveBans();
 
 		// playerstats with unfinished match
@@ -2300,7 +2097,7 @@ void Shutdown()
 		CheatShutdown(); // must be after cheatcount check
 		db_close(ServerProgsDB);
 		db_close(TemporaryDB);
-		LOG_INFO("done!\n");
+		LOG_TRACE("Saving persistent data... done!\n");
 		// tell the bot system the game is ending now
 		bot_endgame();
 
@@ -2310,5 +2107,9 @@ void Shutdown()
 	else if(world_initialized == 0)
 	{
 		LOG_INFO("NOTE: crashed before even initializing the world, not saving persistent data\n");
+	}
+	else
+	{
+		__init_dedicated_server_shutdown();
 	}
 }

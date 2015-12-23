@@ -2,7 +2,7 @@
 
 #define world NULL
 
-#include "oo/classes.qc"
+#include "classes.qc"
 
 #include "draw.qc"
 #include "menu.qc"
@@ -16,6 +16,7 @@
 #include "../common/mapinfo.qc"
 #include "../common/playerstats.qc"
 #include "../common/util.qc"
+#include "../common/debug.qh"
 
 #include "../common/items/all.qc"
 #include "../common/monsters/all.qc"

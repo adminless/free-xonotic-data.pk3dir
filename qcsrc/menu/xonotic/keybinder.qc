@@ -47,13 +47,13 @@ void Xonotic_KeyBinds_Read()
 {
 	Xonotic_KeyBinds_Count = 0;
 
-	#define KEYBIND_DEF(func, desc) do { \
+	#define KEYBIND_DEF(func, desc) MACRO_BEGIN { \
 		if((Xonotic_KeyBinds_Count < MAX_KEYBINDS)) { \
 			Xonotic_KeyBinds_Functions[Xonotic_KeyBinds_Count] = strzone(func); \
 			Xonotic_KeyBinds_Descriptions[Xonotic_KeyBinds_Count] = strzone(desc); \
 			++Xonotic_KeyBinds_Count; \
 		} \
-	} while(0)
+	} MACRO_END
 
 	KEYBIND_DEF(""                                      , _("Moving"));
 	KEYBIND_DEF("+forward"                              , _("forward"));
@@ -78,26 +78,21 @@ void Xonotic_KeyBinds_Read()
 
 	int i;
 
-	#define ADD_TO_W_LIST(pred) do { \
-		for(i = WEP_FIRST; i <= WEP_LAST; ++i) \
-		{ \
-			wep = get_weaponinfo(i); \
-			if(wep.impulse == imp && (pred)) \
-				w_list = strcat(w_list, WEP_NAME(i), " / "); \
-		} \
-	} while(0)
+	#define ADD_TO_W_LIST(pred) \
+		FOREACH(Weapons, it != WEP_Null, LAMBDA( \
+			if (it.impulse != imp) continue; \
+			if (!(pred)) continue; \
+			w_list = strcat(w_list, it.m_name, " / "); \
+		))
 
-	int imp;
-	entity wep;
-	string w_list = "";
-	for(imp = 1; imp <= 9; ++imp)
+	for(int imp = 1; imp <= 9; ++imp)
 	{
-		ADD_TO_W_LIST(!(wep.flags & WEP_FLAG_MUTATORBLOCKED) && !(wep.flags & WEP_FLAG_SUPERWEAPON));
-		ADD_TO_W_LIST(wep.flags & WEP_FLAG_SUPERWEAPON);
-		ADD_TO_W_LIST(wep.flags & WEP_FLAG_MUTATORBLOCKED);
+        string w_list = "";
+		ADD_TO_W_LIST(!(it.flags & WEP_FLAG_MUTATORBLOCKED) && !(it.flags & WEP_FLAG_SUPERWEAPON));
+		ADD_TO_W_LIST(it.flags & WEP_FLAG_SUPERWEAPON);
+		ADD_TO_W_LIST(it.flags & WEP_FLAG_MUTATORBLOCKED);
 		if(w_list)
 			KEYBIND_DEF(strcat("weapon_group_", itos(imp)), substring(w_list, 0, -4));
-		w_list = "";
 		if(imp == 0)
 			break;
 		if(imp == 9)

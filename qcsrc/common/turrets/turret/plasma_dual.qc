@@ -3,7 +3,7 @@
 
 CLASS(PlasmaDualAttack, PlasmaAttack)
 /* refname   */ ATTRIB(PlasmaDualAttack, netname, string, "turret_plasma_dual");
-/* wepname   */ ATTRIB(PlasmaDualAttack, message, string, _("Dual plasma"));
+/* wepname   */ ATTRIB(PlasmaDualAttack, m_name, string, _("Dual plasma"));
 ENDCLASS(PlasmaDualAttack)
 REGISTER_WEAPON(PLASMA_DUAL, NEW(PlasmaDualAttack));
 
@@ -12,8 +12,8 @@ CLASS(DualPlasmaTurret, PlasmaTurret)
 /* mins       */ ATTRIB(DualPlasmaTurret, mins, vector, '-32 -32 0');
 /* maxs       */ ATTRIB(DualPlasmaTurret, maxs, vector, '32 32 64');
 /* modelname  */ ATTRIB(DualPlasmaTurret, mdl, string, "base.md3");
-/* model      */ ATTRIB(DualPlasmaTurret, model, string, strzone(strcat("models/turrets/", this.mdl)));
-/* head_model */ ATTRIB(DualPlasmaTurret, head_model, string, strzone(strcat("models/turrets/", "plasmad.md3")));
+/* model      */ ATTRIB_STRZONE(DualPlasmaTurret, model, string, strcat("models/turrets/", this.mdl));
+/* head_model */ ATTRIB_STRZONE(DualPlasmaTurret, head_model, string, strcat("models/turrets/", "plasmad.md3"));
 /* netname    */ ATTRIB(DualPlasmaTurret, netname, string, "plasma_dual");
 /* fullname   */ ATTRIB(DualPlasmaTurret, turret_name, string, _("Dual Plasma Cannon"));
     ATTRIB(DualPlasmaTurret, m_weapon, Weapon, WEP_PLASMA_DUAL);
@@ -41,7 +41,7 @@ METHOD(DualPlasmaTurret, tr_attack, void(DualPlasmaTurret this))
         vector v = WarpZone_UnTransformOrigin(WarpZone_trace_transform, trace_endpos);
         WarpZone_TrailParticles(world, particleeffectnum(EFFECT_VAPORIZER(self.team)), self.tur_shotorg, v);
     } else {
-        super.vtblbase.tr_attack(this);
+        SUPER(PlasmaTurret).tr_attack(this);
     }
     self.tur_head.frame += 1;
 }

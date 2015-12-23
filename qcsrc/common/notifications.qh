@@ -50,7 +50,7 @@ const int NOTIF_ABORT = -1234;   // allows Send_Notification to safely abort sen
     VARITEM(3, 4, XPD(s1, s2, s3, f1, f2, f3, f4)) \
     VARITEM(4, 4, XPD(s1, s2, s3, s4, f1, f2, f3, f4))
 
-void Destroy_All_Notifications(void);
+void Destroy_All_Notifications();
 void Create_Notification_Entity(
     float var_default,
     float var_cvar,
@@ -148,7 +148,6 @@ void Local_Notification_WOVA(
     float f1, float f2, float f3, float f4);
 
 #ifdef CSQC // CLIENT ONLY
-void Read_Notification(float is_new);
 string prev_soundfile;
 float prev_soundtime;
 #endif
@@ -203,7 +202,7 @@ float autocvar_notification_debug = false;
 
 #ifdef SVQC
 .float FRAG_VERBOSE;
-void Notification_GetCvars(void);
+void Notification_GetCvars();
 float autocvar_notification_server_allows_location = 1; // 0 = no, 1 = yes
 #else
 float autocvar_notification_item_centerprinttime = 1.5;
@@ -285,6 +284,8 @@ const float ARG_DC = 6; // unique result to durcnt/centerprint
 // todo possible idea.... declare how many floats/strings each arg needs, and then dynamically increment the input
 // this way, we don't need to have duplicates like i.e. s2loc and s3loc?
 
+string BUFF_NAME(int i);
+
 #define NOTIF_ARGUMENT_LIST \
     ARG_CASE(ARG_CS_SV_HA,  "s1",            s1) \
     ARG_CASE(ARG_CS_SV_HA,  "s2",            s2) \
@@ -317,9 +318,9 @@ const float ARG_DC = 6; // unique result to durcnt/centerprint
     ARG_CASE(ARG_CS_SV,     "spree_inf",     (autocvar_notification_show_sprees ? notif_arg_spree_inf(1, input, s2, f2) : "")) \
     ARG_CASE(ARG_CS_SV,     "spree_end",     (autocvar_notification_show_sprees ? notif_arg_spree_inf(-1, "", "", f1) : "")) \
     ARG_CASE(ARG_CS_SV,     "spree_lost",    (autocvar_notification_show_sprees ? notif_arg_spree_inf(-2, "", "", f1) : "")) \
-    ARG_CASE(ARG_CS_SV,     "item_wepname",  WEP_NAME(f1)) \
-    ARG_CASE(ARG_CS_SV,     "item_buffname", sprintf("%s%s", rgb_to_hexcolor(Buffs[f1].m_color), Buffs[f1].m_prettyName)) \
-    ARG_CASE(ARG_CS_SV,     "f3buffname",    sprintf("%s%s", rgb_to_hexcolor(Buffs[f3].m_color), Buffs[f3].m_prettyName)) \
+    ARG_CASE(ARG_CS_SV,     "item_wepname",  Weapons_from(f1).m_name) \
+    ARG_CASE(ARG_CS_SV,     "item_buffname", BUFF_NAME(f1)) \
+    ARG_CASE(ARG_CS_SV,     "f3buffname",    BUFF_NAME(f3)) \
     ARG_CASE(ARG_CS_SV,     "item_wepammo",  (s1 != "" ? sprintf(_(" with %s"), s1) : "")) \
     ARG_CASE(ARG_DC,        "item_centime",  ftos(autocvar_notification_item_centerprinttime)) \
     ARG_CASE(ARG_SV,        "death_team",    Team_ColoredFullName(f1)) \
@@ -327,9 +328,9 @@ const float ARG_DC = 6; // unique result to durcnt/centerprint
     ARG_CASE(ARG_CS_SV_HA,  "minigame1_name",find(world,netname,s1).descriptor.message) \
     ARG_CASE(ARG_CS_SV_HA,  "minigame1_d",   find(world,netname,s1).descriptor.netname)
 
-#define NOTIF_HIT_MAX(count,funcname) do { \
+#define NOTIF_HIT_MAX(count,funcname) MACRO_BEGIN { \
     if(sel_num == count) { backtrace(sprintf("%s: Hit maximum arguments!\n", funcname)); break; } \
-} while(0)
+} MACRO_END
 #define NOTIF_HIT_UNKNOWN(token,funcname) { backtrace(sprintf("%s: Hit unknown token in selected string! '%s'\n", funcname, selected)); break; }
 
 #define KILL_SPREE_LIST \
@@ -574,11 +575,11 @@ float NOTIF_MULTI_COUNT;
 float NOTIF_CHOICE_COUNT;
 
 // notification limits -- INCREASE AS NECESSARY
-const float NOTIF_ANNCE_MAX   = 100;
-const float NOTIF_INFO_MAX    = 350;
-const float NOTIF_CENTER_MAX  = 250;
-const float NOTIF_MULTI_MAX   = 200;
-const float NOTIF_CHOICE_MAX  = 30;
+const float NOTIF_ANNCE_MAX   = 400;
+const float NOTIF_INFO_MAX    = 450;
+const float NOTIF_CENTER_MAX  = 350;
+const float NOTIF_MULTI_MAX   = 300;
+const float NOTIF_CHOICE_MAX  = 50;
 
 // notification entities
 entity msg_annce_notifs[NOTIF_ANNCE_MAX];
@@ -896,29 +897,6 @@ float notif_global_error;
 void RegisterNotifications_First()
 {
     notif_global_error = false;
-
-    #ifdef SVQC
-    #define dedi (server_is_dedicated ? "a dedicated " : "")
-    #else
-    #define dedi ""
-    #endif
-
-    LOG_INFOF("Beginning notification initialization on %s%s program...\n", dedi, PROGNAME);
-    #undef dedi
-
-    // maybe do another implementation of this with checksums? for now, we don't need versioning
-    /*if(autocvar_notification_version != NOTIF_VERSION)
-    {
-        #ifdef CSQC
-        if(autocvar_notification_version_mismatch_client_error)
-        #else
-        if(autocvar_notification_version_mismatch_server_error)
-        #endif
-            notif_global_error = true;
-
-        printf("^1NOTIFICATION VERSION MISMATCH: ^7program = %s, config = %d, code = %d.\n",
-            PROGNAME, autocvar_notification_version, NOTIF_VERSION);
-    }*/
 }
 
 void RegisterNotifications_Done()
@@ -927,11 +905,10 @@ void RegisterNotifications_Done()
     {
         // shit happened... stop the loading of the program now if this is unacceptable
         if(autocvar_notification_errors_are_fatal)
-            error("Notification initialization failed! Read above and fix the errors!\n");
+            LOG_FATAL("Notification initialization failed! Read above and fix the errors!\n");
         else
-            LOG_INFO("Notification initialization failed! Read above and fix the errors!\n");
+            LOG_SEVERE("Notification initialization failed! Read above and fix the errors!\n");
     }
-    else { LOG_INFO("Notification initialization successful!\n"); }
 }
 
 // NOW we actually activate the declarations

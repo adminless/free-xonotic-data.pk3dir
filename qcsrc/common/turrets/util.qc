@@ -204,7 +204,6 @@ void FireImoBeam (vector start, vector end, vector smin, vector smax,
 }
 
 #ifdef TURRET_DEBUG
-void SUB_Remove();
 void marker_think()
 {SELFPARAM();
 	if(self.cnt)
@@ -224,10 +223,7 @@ void marker_think()
 
 void mark_error(vector where,float lifetime)
 {
-	entity err;
-
-	err = spawn();
-	err.classname = "error_marker";
+	entity err = new(error_marker);
 	setmodel(err, MDL_MARKER);
 	setorigin(err,where);
 	err.movetype = MOVETYPE_NONE;
@@ -240,10 +236,7 @@ void mark_error(vector where,float lifetime)
 
 void mark_info(vector where,float lifetime)
 {
-	entity err;
-
-	err = spawn();
-	err.classname = "info_marker";
+	entity err = spawn(info_marker);
 	setmodel(err, MDL_MARKER);
 	setorigin(err,where);
 	err.movetype = MOVETYPE_NONE;
@@ -256,10 +249,7 @@ void mark_info(vector where,float lifetime)
 
 entity mark_misc(vector where,float lifetime)
 {
-	entity err;
-
-	err = spawn();
-	err.classname = "mark_misc";
+	entity err = spawn(mark_misc);
 	setmodel(err, MDL_MARKER);
 	setorigin(err,where);
 	err.movetype = MOVETYPE_NONE;

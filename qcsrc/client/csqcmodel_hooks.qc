@@ -19,7 +19,7 @@ void CSQCModel_Hook_PreDraw(bool isplayer);
 .int lodmodelindex0;
 .int lodmodelindex1;
 .int lodmodelindex2;
-void CSQCPlayer_LOD_Apply(void)
+void CSQCPlayer_LOD_Apply()
 {SELFPARAM();
 	// LOD model loading
 	if(self.lodmodelindex0 != self.modelindex)
@@ -108,14 +108,14 @@ int forceplayermodels_goodmodelindex;
 .vector glowmod;
 .vector old_glowmod;
 
-void CSQCPlayer_ModelAppearance_PreUpdate(void)
+void CSQCPlayer_ModelAppearance_PreUpdate()
 {SELFPARAM();
 	self.model = self.forceplayermodels_savemodel;
 	self.modelindex = self.forceplayermodels_savemodelindex;
 	self.skin = self.forceplayermodels_saveskin;
 	self.colormap = self.forceplayermodels_savecolormap;
 }
-void CSQCPlayer_ModelAppearance_PostUpdate(void)
+void CSQCPlayer_ModelAppearance_PostUpdate()
 {SELFPARAM();
 	self.forceplayermodels_savemodel = self.model;
 	self.forceplayermodels_savemodelindex = self.modelindex;
@@ -136,8 +136,7 @@ void CSQCPlayer_ModelAppearance_Apply(bool islocalplayer)
 	// which one is ALWAYS good?
 	if (!forceplayermodels_goodmodel)
 	{
-		entity e;
-		e = spawn();
+		entity e = spawn();
 		precache_model(cvar_defstring("_cl_playermodel"));
 		_setmodel(e, cvar_defstring("_cl_playermodel"));
 		forceplayermodels_goodmodel = e.model;
@@ -168,8 +167,8 @@ void CSQCPlayer_ModelAppearance_Apply(bool islocalplayer)
 		forceplayermodels_attempted = 1;
 
 		// only if this failed, find it out on our own
-		entity e;
-		e = spawn();
+		entity e = spawn();
+		precache_model(autocvar__cl_playermodel);
 		_setmodel(e, autocvar__cl_playermodel); // this is harmless, see below
 		forceplayermodels_modelisgoodmodel = fexists(e.model);
 		forceplayermodels_model = e.model;
@@ -180,8 +179,7 @@ void CSQCPlayer_ModelAppearance_Apply(bool islocalplayer)
 
 	if(autocvar_cl_forcemyplayermodel != "" && autocvar_cl_forcemyplayermodel != forceplayermodels_mymodel)
 	{
-		entity e;
-		e = spawn();
+		entity e = spawn();
 		_setmodel(e, autocvar_cl_forcemyplayermodel); // this is harmless, see below
 		forceplayermodels_myisgoodmodel = fexists(e.model);
 		forceplayermodels_mymodel = e.model;
@@ -313,7 +311,7 @@ void CSQCPlayer_ModelAppearance_Apply(bool islocalplayer)
 .int csqcmodel_framecount;
 
 #define IS_DEAD_FRAME(f) ((f) == 0 || (f) == 1)
-void CSQCPlayer_FallbackFrame_PreUpdate(void)
+void CSQCPlayer_FallbackFrame_PreUpdate()
 {SELFPARAM();
 	self.frame = self.csqcmodel_saveframe;
 	self.frame2 = self.csqcmodel_saveframe2;
@@ -335,10 +333,10 @@ void CSQCPlayer_FallbackFrame_PostUpdate(bool isnew)
 	// player "pops in"
 	if(isnew)
 	{
-#define FIX_FRAMETIME(f,ft) do {																					\
+#define FIX_FRAMETIME(f,ft) MACRO_BEGIN {																			\
 		if(IS_DEAD_FRAME(self.f) && self.ft != 0 && self.death_time != 0)											\
 			self.ft = self.death_time;																				\
-} while(0)
+} MACRO_END
 		FIX_FRAMETIME(frame, frame1time);
 		FIX_FRAMETIME(frame2, frame2time);
 #ifdef CSQCMODEL_HAVE_TWO_FRAMES
@@ -350,7 +348,7 @@ void CSQCPlayer_FallbackFrame_PostUpdate(bool isnew)
 }
 void CSQCPlayer_AnimDecide_PostUpdate(bool isnew)
 {SELFPARAM();
-	self.csqcmodel_isdead = !!(self.anim_state & (ANIMSTATE_DEAD1 | ANIMSTATE_DEAD2));
+	self.csqcmodel_isdead = boolean(self.anim_state & (ANIMSTATE_DEAD1 | ANIMSTATE_DEAD2));
 }
 int CSQCPlayer_FallbackFrame(int f)
 {SELFPARAM();
@@ -372,7 +370,7 @@ int CSQCPlayer_FallbackFrame(int f)
 	LOG_INFOF("Frame %d missing in model %s, and we have no fallback - FAIL!\n", f, self.model);
 	return f;
 }
-void CSQCPlayer_FallbackFrame_Apply(void)
+void CSQCPlayer_FallbackFrame_Apply()
 {SELFPARAM();
 	self.frame = CSQCPlayer_FallbackFrame(self.frame);
 	self.frame2 = CSQCPlayer_FallbackFrame(self.frame2);
@@ -386,7 +384,7 @@ void CSQCPlayer_FallbackFrame_Apply(void)
 .entity tag_entity;
 .int tag_entity_lastmodelindex;
 .int tag_index;
-void CSQCModel_AutoTagIndex_Apply(void)
+void CSQCModel_AutoTagIndex_Apply()
 {SELFPARAM();
 	if(self.tag_entity && wasfreed(self.tag_entity))
 		self.tag_entity = world;
@@ -462,33 +460,33 @@ void CSQCModel_AutoTagIndex_Apply(void)
 }
 
 // FEATURE: EF_NODRAW workalike
-const int EF_BRIGHTFIELD	= 1;
-const int EF_BRIGHTLIGHT 	= 4;
-const int EF_DIMLIGHT 		= 8;
-const int EF_DOUBLESIDED 	= 32768;
-const int EF_NOSELFSHADOW 	= 65536;
-const int EF_DYNAMICMODELLIGHT = 131072;
-const int EF_RESTARTANIM_BIT = 1048576;
-const int EF_TELEPORT_BIT = 2097152;
-const int MF_ROCKET  =   1; // leave a trail
-const int MF_GRENADE =   2; // leave a trail
-const int MF_GIB     =   4; // leave a trail
-const int MF_ROTATE  =   8; // rotate (bonus items)
-const int MF_TRACER  =  16; // green split trail
-const int MF_ZOMGIB  =  32; // small blood trail
-const int MF_TRACER2 =  64; // orange split trail
-const int MF_TRACER3 = 128; // purple trail
+const int EF_BRIGHTFIELD	= BIT(0);
+const int EF_BRIGHTLIGHT 	= BIT(2);
+const int EF_DIMLIGHT 		= BIT(3);
+const int EF_DOUBLESIDED 	= BIT(15);
+const int EF_NOSELFSHADOW 	= BIT(16);
+const int EF_DYNAMICMODELLIGHT = BIT(17);
+const int EF_RESTARTANIM_BIT = BIT(20);
+const int EF_TELEPORT_BIT = BIT(21);
+const int MF_ROCKET  =  BIT(0); // leave a trail
+const int MF_GRENADE =  BIT(1); // leave a trail
+const int MF_GIB     =  BIT(2); // leave a trail
+const int MF_ROTATE  =  BIT(3); // rotate (bonus items)
+const int MF_TRACER  =  BIT(4); // green split trail
+const int MF_ZOMGIB  =  BIT(5); // small blood trail
+const int MF_TRACER2 =  BIT(6); // orange split trail
+const int MF_TRACER3 = BIT(7); // purple trail
 .int csqcmodel_effects;
 .int csqcmodel_modelflags;
 .int csqcmodel_traileffect;
-void CSQCModel_Effects_PreUpdate(void)
+void CSQCModel_Effects_PreUpdate()
 {SELFPARAM();
 	self.effects = self.csqcmodel_effects;
 	self.modelflags = self.csqcmodel_modelflags;
 	self.traileffect = self.csqcmodel_traileffect;
 }
-void Reset_ArcBeam(void);
-void CSQCModel_Effects_PostUpdate(void)
+void Reset_ArcBeam();
+void CSQCModel_Effects_PostUpdate()
 {SELFPARAM();
 	if (self == csqcplayer) {
 		if (self.csqcmodel_teleported) {
@@ -504,7 +502,7 @@ void CSQCModel_Effects_PostUpdate(void)
 		Projectile_ResetTrail(self, self.origin);
 }
 .int snd_looping;
-void CSQCModel_Effects_Apply(void)
+void CSQCModel_Effects_Apply()
 {SELFPARAM();
 	int eff = self.csqcmodel_effects & ~CSQCMODEL_EF_RESPAWNGHOST;
 	int tref = self.csqcmodel_traileffect;
@@ -532,9 +530,9 @@ void CSQCModel_Effects_Apply(void)
 	if(eff & EF_FULLBRIGHT)
 		self.renderflags |= RF_FULLBRIGHT;
 	if(eff & EF_FLAME)
-		pointparticles(particleeffectnum(EFFECT_EF_FLAME), self.origin, '0 0 0', bound(0, frametime, 0.1));
+		pointparticles(EFFECT_EF_FLAME, self.origin, '0 0 0', bound(0, frametime, 0.1));
 	if(eff & EF_STARDUST)
-		pointparticles(particleeffectnum(EFFECT_EF_STARDUST), self.origin, '0 0 0', bound(0, frametime, 0.1));
+		pointparticles(EFFECT_EF_STARDUST, self.origin, '0 0 0', bound(0, frametime, 0.1));
 	if(eff & EF_NOSHADOW)
 		self.renderflags |= RF_NOSHADOW;
 	if(eff & EF_NODEPTHTEST)

@@ -1,48 +1,49 @@
-#ifndef MENUQC
 #ifndef DEFER_H
 #define DEFER_H
+#ifndef MENUQC
 
-#include "oo.qh"
-#include "self.qh"
+	#include "oo.qh"
+	#include "self.qh"
 
-entityclass(Defer);
-class(Defer) .entity owner;
-class(Defer) .void() think;
-class(Defer) .float nextthink;
+	entityclass(Defer);
+	class(Defer).entity owner;
+	class(Defer).void() think;
+	class(Defer).float nextthink;
 
-/*
-==================
-SUB_Remove
+	/** Remove self */
+	void SUB_Remove(entity this)
+	{
+		remove(this);
+	}
 
-Remove self
-==================
-*/
-void SUB_Remove()
-{SELFPARAM();
-	remove (self);
-}
+	/** Remove self */
+	void SUB_Remove_self()
+	{
+		SELFPARAM();
+		remove(this);
+	}
 
-void defer_think()
-{SELFPARAM();
-    self.think     = SUB_Remove;
-    self.nextthink = time;
-    WITH(entity, self, self.owner, self.use());
-}
+	void defer_think()
+	{
+		SELFPARAM();
+		this.think     = SUB_Remove_self;
+		this.nextthink = time;
+		WITH(entity, self, this.owner, this.use());
+	}
 
 /*
     Execute func() after time + fdelay.
     self when func is executed = self when defer is called
 */
-void defer(float fdelay, void() func)
-{SELFPARAM();
-    entity e;
-
-    e           = spawn();
-    e.owner     = self;
-    e.use       = func;
-    e.think     = defer_think;
-    e.nextthink = time + fdelay;
-}
+	void defer(entity this, float fdelay, void() func)
+	{
+		entity e    = new(deferred);
+		make_pure(e);
+		e.owner     = this;
+		e.use       = func;
+		e.think     = defer_think;
+		e.nextthink = time + fdelay;
+	}
 
 #endif
 #endif

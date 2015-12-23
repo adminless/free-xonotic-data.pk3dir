@@ -13,61 +13,66 @@ CLASS(Devastator, Weapon)
 /* crosshair */ ATTRIB(Devastator, w_crosshair_size, float, 0.7);
 /* wepimg    */ ATTRIB(Devastator, model2, string, "weaponrocketlauncher");
 /* refname   */ ATTRIB(Devastator, netname, string, "devastator");
-/* wepname   */ ATTRIB(Devastator, message, string, _("Devastator"));
-ENDCLASS(Devastator)
-REGISTER_WEAPON(DEVASTATOR, NEW(Devastator));
+/* wepname   */ ATTRIB(Devastator, m_name, string, _("Devastator"));
 
-#define DEVASTATOR_SETTINGS(w_cvar,w_prop) DEVASTATOR_SETTINGS_LIST(w_cvar, w_prop, DEVASTATOR, devastator)
-#define DEVASTATOR_SETTINGS_LIST(w_cvar,w_prop,id,sn) \
-	w_cvar(id, sn, NONE, ammo) \
-	w_cvar(id, sn, NONE, animtime) \
-	w_cvar(id, sn, NONE, damage) \
-	w_cvar(id, sn, NONE, damageforcescale) \
-	w_cvar(id, sn, NONE, detonatedelay) \
-	w_cvar(id, sn, NONE, edgedamage) \
-	w_cvar(id, sn, NONE, force) \
-	w_cvar(id, sn, NONE, guidedelay) \
-	w_cvar(id, sn, NONE, guidegoal) \
-	w_cvar(id, sn, NONE, guiderate) \
-	w_cvar(id, sn, NONE, guideratedelay) \
-	w_cvar(id, sn, NONE, guidestop) \
-	w_cvar(id, sn, NONE, health) \
-	w_cvar(id, sn, NONE, lifetime) \
-	w_cvar(id, sn, NONE, radius) \
-	w_cvar(id, sn, NONE, refire) \
-	w_cvar(id, sn, NONE, remote_damage) \
-	w_cvar(id, sn, NONE, remote_edgedamage) \
-	w_cvar(id, sn, NONE, remote_force) \
-	w_cvar(id, sn, NONE, remote_jump_damage) \
-	w_cvar(id, sn, NONE, remote_jump_radius) \
-	w_cvar(id, sn, NONE, remote_jump_velocity_z_add) \
-	w_cvar(id, sn, NONE, remote_jump_velocity_z_max) \
-	w_cvar(id, sn, NONE, remote_jump_velocity_z_min) \
-	w_cvar(id, sn, NONE, remote_radius) \
-	w_cvar(id, sn, NONE, speed) \
-	w_cvar(id, sn, NONE, speedaccel) \
-	w_cvar(id, sn, NONE, speedstart) \
-	w_prop(id, sn, float,  reloading_ammo, reload_ammo) \
-	w_prop(id, sn, float,  reloading_time, reload_time) \
-	w_prop(id, sn, float,  switchdelay_raise, switchdelay_raise) \
-	w_prop(id, sn, float,  switchdelay_drop, switchdelay_drop) \
-	w_prop(id, sn, string, weaponreplace, weaponreplace) \
-	w_prop(id, sn, float,  weaponstart, weaponstart) \
-	w_prop(id, sn, float,  weaponstartoverride, weaponstartoverride) \
-	w_prop(id, sn, float,  weaponthrowable, weaponthrowable)
+#define X(BEGIN, P, END, class, prefix) \
+	BEGIN(class) \
+		P(class, prefix, ammo, float, NONE) \
+        P(class, prefix, animtime, float, NONE) \
+        P(class, prefix, damageforcescale, float, NONE) \
+        P(class, prefix, damage, float, NONE) \
+        P(class, prefix, detonatedelay, float, NONE) \
+        P(class, prefix, edgedamage, float, NONE) \
+        P(class, prefix, force, float, NONE) \
+        P(class, prefix, guidedelay, float, NONE) \
+        P(class, prefix, guidegoal, float, NONE) \
+        P(class, prefix, guideratedelay, float, NONE) \
+        P(class, prefix, guiderate, float, NONE) \
+        P(class, prefix, guidestop, float, NONE) \
+        P(class, prefix, health, float, NONE) \
+        P(class, prefix, lifetime, float, NONE) \
+        P(class, prefix, radius, float, NONE) \
+        P(class, prefix, refire, float, NONE) \
+		P(class, prefix, reload_ammo, float, NONE) \
+		P(class, prefix, reload_time, float, NONE) \
+        P(class, prefix, remote_damage, float, NONE) \
+        P(class, prefix, remote_edgedamage, float, NONE) \
+        P(class, prefix, remote_force, float, NONE) \
+        P(class, prefix, remote_jump_damage, float, NONE) \
+        P(class, prefix, remote_jump_radius, float, NONE) \
+        P(class, prefix, remote_jump_velocity_z_add, float, NONE) \
+        P(class, prefix, remote_jump_velocity_z_max, float, NONE) \
+        P(class, prefix, remote_jump_velocity_z_min, float, NONE) \
+        P(class, prefix, remote_radius, float, NONE) \
+        P(class, prefix, speedaccel, float, NONE) \
+        P(class, prefix, speedstart, float, NONE) \
+        P(class, prefix, speed, float, NONE) \
+		P(class, prefix, switchdelay_drop, float, NONE) \
+		P(class, prefix, switchdelay_raise, float, NONE) \
+		P(class, prefix, weaponreplace, string,NONE) \
+		P(class, prefix, weaponstartoverride, float, NONE) \
+		P(class, prefix, weaponstart, float, NONE) \
+		P(class, prefix, weaponthrowable, float, NONE) \
+	END()
+	W_PROPS(X, Devastator, devastator)
+#undef X
+
+ENDCLASS(Devastator)
+REGISTER_WEAPON(DEVASTATOR, devastator, NEW(Devastator));
 
 #ifdef SVQC
-DEVASTATOR_SETTINGS(WEP_ADD_CVAR, WEP_ADD_PROP)
 .float rl_release;
 .float rl_detonate_later;
 #endif
 #endif
 #ifdef IMPLEMENTATION
 #ifdef SVQC
-spawnfunc(weapon_devastator) { weapon_defaultspawnfunc(WEP_DEVASTATOR.m_id); }
+spawnfunc(weapon_devastator) { weapon_defaultspawnfunc(this, WEP_DEVASTATOR); }
 spawnfunc(weapon_rocketlauncher) { spawnfunc_weapon_devastator(this); }
 
-void W_Devastator_Unregister(void)
+.entity lastrocket;
+
+void W_Devastator_Unregister()
 {SELFPARAM();
 	if(self.realowner && self.realowner.lastrocket == self)
 	{
@@ -76,7 +81,7 @@ void W_Devastator_Unregister(void)
 	}
 }
 
-void W_Devastator_Explode(void)
+void W_Devastator_Explode()
 {SELFPARAM();
 	W_Devastator_Unregister();
 
@@ -103,20 +108,22 @@ void W_Devastator_Explode(void)
 		other
 	);
 
-	if(self.realowner.weapon == WEP_DEVASTATOR.m_id)
+	Weapon thiswep = WEP_DEVASTATOR;
+	if(PS(self.realowner).m_weapon == thiswep)
 	{
-		if(self.realowner.WEP_AMMO(DEVASTATOR) < WEP_CVAR(devastator, ammo))
+		if(self.realowner.(thiswep.ammo_field) < WEP_CVAR(devastator, ammo))
 		if(!(self.realowner.items & IT_UNLIMITED_WEAPON_AMMO))
 		{
 			self.realowner.cnt = WEP_DEVASTATOR.m_id;
-			ATTACK_FINISHED(self.realowner) = time;
-			self.realowner.switchweapon = w_getbestweapon(self.realowner);
+			int slot = 0; // TODO: unhardcode
+			ATTACK_FINISHED(self.realowner, slot) = time;
+			PS(self.realowner).m_switchweapon = w_getbestweapon(self.realowner);
 		}
 	}
 	remove(self);
 }
 
-void W_Devastator_DoRemoteExplode(void)
+void W_Devastator_DoRemoteExplode(.entity weaponentity)
 {SELFPARAM();
 	W_Devastator_Unregister();
 
@@ -182,20 +189,22 @@ void W_Devastator_DoRemoteExplode(void)
 		world
 	);
 
-	if(self.realowner.weapon == WEP_DEVASTATOR.m_id)
+	Weapon thiswep = WEP_DEVASTATOR;
+	if(PS(self.realowner).m_weapon == thiswep)
 	{
-		if(self.realowner.WEP_AMMO(DEVASTATOR) < WEP_CVAR(devastator, ammo))
+		if(self.realowner.(thiswep.ammo_field) < WEP_CVAR(devastator, ammo))
 		if(!(self.realowner.items & IT_UNLIMITED_WEAPON_AMMO))
 		{
 			self.realowner.cnt = WEP_DEVASTATOR.m_id;
-			ATTACK_FINISHED(self.realowner) = time;
-			self.realowner.switchweapon = w_getbestweapon(self.realowner);
+			int slot = weaponslot(weaponentity);
+			ATTACK_FINISHED(self.realowner, slot) = time;
+			PS(self.realowner).m_switchweapon = w_getbestweapon(self.realowner);
 		}
 	}
 	remove(self);
 }
 
-void W_Devastator_RemoteExplode(void)
+void W_Devastator_RemoteExplode(.entity weaponentity)
 {SELFPARAM();
 	if(self.realowner.deadflag == DEAD_NO)
 	if(self.realowner.lastrocket)
@@ -205,7 +214,7 @@ void W_Devastator_RemoteExplode(void)
 			: (vlen(NearestPointOnBox(self.realowner, self.origin) - self.origin) > WEP_CVAR(devastator, remote_radius)) // safety device
 		)
 		{
-			W_Devastator_DoRemoteExplode();
+			W_Devastator_DoRemoteExplode(weaponentity);
 		}
 	}
 }
@@ -243,7 +252,7 @@ vector W_Devastator_SteerTo(vector thisdir, vector goaldir, float maxturn_cos)
 //   normalize(thisdir + goaldir)
 //   normalize(0)
 
-void W_Devastator_Think(void)
+void W_Devastator_Think()
 {SELFPARAM();
 	vector desireddir, olddir, newdir, desiredorigin, goal;
 	float velspeed, f;
@@ -263,7 +272,7 @@ void W_Devastator_Think(void)
 		self.velocity = self.velocity + v_forward * min(WEP_CVAR(devastator, speedaccel) * W_WeaponSpeedFactor() * frametime, velspeed);
 
 	// laser guided, or remote detonation
-	if(self.realowner.weapon == WEP_DEVASTATOR.m_id)
+	if(PS(self.realowner).m_weapon == WEP_DEVASTATOR)
 	{
 		if(self == self.realowner.lastrocket)
 		if(!self.realowner.rl_release)
@@ -302,15 +311,16 @@ void W_Devastator_Think(void)
 			}
 		}
 
+		.entity weaponentity = weaponentities[0]; // TODO: unhardcode
 		if(self.rl_detonate_later)
-			W_Devastator_RemoteExplode();
+			W_Devastator_RemoteExplode(weaponentity);
 	}
 
 	if(self.csqcprojectile_clientanimate == 0)
 		UpdateCSQCProjectile(self);
 }
 
-void W_Devastator_Touch(void)
+void W_Devastator_Touch()
 {SELFPARAM();
 	if(WarpZone_Projectile_Touch())
 	{
@@ -518,27 +528,26 @@ void W_Devastator_Attack(Weapon thiswep)
 			}
 		}
 		#endif
-		METHOD(Devastator, wr_think, void(entity thiswep, entity actor, bool fire1, bool fire2))
+		METHOD(Devastator, wr_think, void(entity thiswep, entity actor, .entity weaponentity, int fire))
 		{
 			if(WEP_CVAR(devastator, reload_ammo) && actor.clip_load < WEP_CVAR(devastator, ammo)) { // forced reload
-				Weapon w = get_weaponinfo(actor.weapon);
-				w.wr_reload(w);
+				thiswep.wr_reload(thiswep);
 			} else {
-				if(fire1)
+				if(fire & 1)
 				{
 					if(actor.rl_release || WEP_CVAR(devastator, guidestop))
-					if(weapon_prepareattack(thiswep, actor, false, WEP_CVAR(devastator, refire)))
+					if(weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR(devastator, refire)))
 					{
 						W_Devastator_Attack(thiswep);
-						weapon_thinkf(actor, WFRAME_FIRE1, WEP_CVAR(devastator, animtime), w_ready);
+						weapon_thinkf(actor, weaponentity, WFRAME_FIRE1, WEP_CVAR(devastator, animtime), w_ready);
 						actor.rl_release = 0;
 					}
 				}
 				else
 					actor.rl_release = 1;
 
-				if(fire2)
-				if(actor.switchweapon == WEP_DEVASTATOR.m_id)
+				if(fire & 2)
+				if(PS(actor).m_switchweapon == WEP_DEVASTATOR)
 				{
 					entity rock;
 					bool rockfound = false;
@@ -555,10 +564,6 @@ void W_Devastator_Attack(Weapon thiswep)
 				}
 			}
 		}
-		METHOD(Devastator, wr_init, void(entity thiswep))
-		{
-			DEVASTATOR_SETTINGS(WEP_SKIP_CVAR, WEP_SET_PROP);
-		}
 		METHOD(Devastator, wr_setup, void(entity thiswep))
 		{
 			self.rl_release = 1;
@@ -567,15 +572,15 @@ void W_Devastator_Attack(Weapon thiswep)
 		{
 			#if 0
 			// don't switch while guiding a missile
-			if(ATTACK_FINISHED(self) <= time || self.weapon != WEP_DEVASTATOR.m_id)
+			if(ATTACK_FINISHED(self, slot) <= time || PS(self).m_weapon != WEP_DEVASTATOR)
 			{
 				ammo_amount = false;
 				if(WEP_CVAR(devastator, reload_ammo))
 				{
-					if(self.WEP_AMMO(DEVASTATOR) < WEP_CVAR(devastator, ammo) && self.(weapon_load[WEP_DEVASTATOR.m_id]) < WEP_CVAR(devastator, ammo))
+					if(self.(thiswep.ammo_field) < WEP_CVAR(devastator, ammo) && self.(weapon_load[WEP_DEVASTATOR.m_id]) < WEP_CVAR(devastator, ammo))
 						ammo_amount = true;
 				}
-				else if(self.WEP_AMMO(DEVASTATOR) < WEP_CVAR(devastator, ammo))
+				else if(self.(thiswep.ammo_field) < WEP_CVAR(devastator, ammo))
 					ammo_amount = true;
 				return !ammo_amount;
 			}
@@ -583,18 +588,18 @@ void W_Devastator_Attack(Weapon thiswep)
 			#if 0
 			if(self.rl_release == 0)
 			{
-				LOG_INFOF("W_Devastator(WR_CHECKAMMO1): %d, %.2f, %d: TRUE\n", self.rl_release, self.WEP_AMMO(DEVASTATOR), WEP_CVAR(devastator, ammo));
+				LOG_INFOF("W_Devastator(WR_CHECKAMMO1): %d, %.2f, %d: TRUE\n", self.rl_release, self.(thiswep.ammo_field), WEP_CVAR(devastator, ammo));
 				return true;
 			}
 			else
 			{
-				ammo_amount = self.WEP_AMMO(DEVASTATOR) >= WEP_CVAR(devastator, ammo);
+				ammo_amount = self.(thiswep.ammo_field) >= WEP_CVAR(devastator, ammo);
 				ammo_amount += self.(weapon_load[WEP_DEVASTATOR.m_id]) >= WEP_CVAR(devastator, ammo);
-				LOG_INFOF("W_Devastator(WR_CHECKAMMO1): %d, %.2f, %d: %s\n", self.rl_release, self.WEP_AMMO(DEVASTATOR), WEP_CVAR(devastator, ammo), (ammo_amount ? "TRUE" : "FALSE"));
+				LOG_INFOF("W_Devastator(WR_CHECKAMMO1): %d, %.2f, %d: %s\n", self.rl_release, self.(thiswep.ammo_field), WEP_CVAR(devastator, ammo), (ammo_amount ? "TRUE" : "FALSE"));
 				return ammo_amount;
 			}
 			#else
-			float ammo_amount = self.WEP_AMMO(DEVASTATOR) >= WEP_CVAR(devastator, ammo);
+			float ammo_amount = self.(thiswep.ammo_field) >= WEP_CVAR(devastator, ammo);
 			ammo_amount += self.(weapon_load[WEP_DEVASTATOR.m_id]) >= WEP_CVAR(devastator, ammo);
 			return ammo_amount;
 			#endif
@@ -603,12 +608,9 @@ void W_Devastator_Attack(Weapon thiswep)
 		{
 			return false;
 		}
-		METHOD(Devastator, wr_config, void(entity thiswep))
-		{
-			DEVASTATOR_SETTINGS(WEP_CONFIG_WRITE_CVARS, WEP_CONFIG_WRITE_PROPS);
-		}
 		METHOD(Devastator, wr_resetplayer, void(entity thiswep))
 		{
+			self.lastrocket = NULL; // stop rocket guiding, no revenge from the grave!
 			self.rl_release = 0;
 		}
 		METHOD(Devastator, wr_reload, void(entity thiswep))
@@ -634,7 +636,7 @@ void W_Devastator_Attack(Weapon thiswep)
 		{
 			vector org2;
 			org2 = w_org + w_backoff * 12;
-			pointparticles(particleeffectnum(EFFECT_ROCKET_EXPLODE), org2, '0 0 0', 1);
+			pointparticles(EFFECT_ROCKET_EXPLODE, org2, '0 0 0', 1);
 			if(!w_issilent)
 				sound(self, CH_SHOTS, SND_ROCKET_IMPACT, VOL_BASE, ATTN_NORM);
 		}

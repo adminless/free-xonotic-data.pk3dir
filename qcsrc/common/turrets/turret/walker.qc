@@ -10,8 +10,8 @@ CLASS(WalkerTurret, Turret)
 /* mins       */ ATTRIB(WalkerTurret, mins, vector, '-70 -70 0');
 /* maxs       */ ATTRIB(WalkerTurret, maxs, vector, '70 70 95');
 /* modelname  */ ATTRIB(WalkerTurret, mdl, string, "walker_body.md3");
-/* model      */ ATTRIB(WalkerTurret, model, string, strzone(strcat("models/turrets/", this.mdl)));
-/* head_model */ ATTRIB(WalkerTurret, head_model, string, strzone(strcat("models/turrets/", "walker_head_minigun.md3")));
+/* model      */ ATTRIB_STRZONE(WalkerTurret, model, string, strcat("models/turrets/", this.mdl));
+/* head_model */ ATTRIB_STRZONE(WalkerTurret, head_model, string, strcat("models/turrets/", "walker_head_minigun.md3"));
 /* netname    */ ATTRIB(WalkerTurret, netname, string, "walker");
 /* fullname   */ ATTRIB(WalkerTurret, turret_name, string, _("Walker Turret"));
     ATTRIB(WalkerTurret, m_weapon, Weapon, WEP_WALKER);
@@ -233,13 +233,12 @@ void walker_fire_rocket(vector org)
 
     te_explosion (org);
 
-    rocket = spawn ();
+    rocket = new(walker_rocket);
     setorigin(rocket, org);
 
     sound (self, CH_WEAPON_A, SND_HAGAR_FIRE, VOL_BASE, ATTEN_NORM);
     setsize (rocket, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
-    rocket.classname		  = "walker_rocket";
     rocket.owner			  = self;
     rocket.bot_dodge		  = true;
     rocket.bot_dodgerating	= 50;
@@ -429,7 +428,7 @@ spawnfunc(turret_walker) { if(!turret_initialize(TUR_WALKER)) remove(self); }
                         self.animflag = ANIM_MELEE;
                     }
                 }
-                else if (self.tur_head.attack_finished_single < time)
+                else if (self.tur_head.attack_finished_single[0] < time)
                 {
                     if(self.tur_head.shot_volly)
                     {
@@ -437,9 +436,9 @@ spawnfunc(turret_walker) { if(!turret_initialize(TUR_WALKER)) remove(self); }
 
                         self.tur_head.shot_volly = self.tur_head.shot_volly -1;
                         if(self.tur_head.shot_volly == 0)
-                            self.tur_head.attack_finished_single = time + (autocvar_g_turrets_unit_walker_rocket_refire);
+                            self.tur_head.attack_finished_single[0] = time + (autocvar_g_turrets_unit_walker_rocket_refire);
                         else
-                            self.tur_head.attack_finished_single = time + 0.2;
+                            self.tur_head.attack_finished_single[0] = time + 0.2;
 
                         if(self.tur_head.shot_volly > 1)
                             walker_fire_rocket(gettaginfo(self, gettagindex(self, "tag_rocket01")));
@@ -508,15 +507,15 @@ spawnfunc(turret_walker) { if(!turret_initialize(TUR_WALKER)) remove(self); }
 
                     case ANIM_PAIN:
                         if(self.frame != ANIM_PAIN)
-                            defer(0.25, walker_setnoanim);
+                            defer(self, 0.25, walker_setnoanim);
 
                         break;
 
                     case ANIM_MELEE:
                         if(self.frame != ANIM_MELEE)
                         {
-                            defer(0.41, walker_setnoanim);
-                            defer(0.21, walker_melee_do_dmg);
+                            defer(self, 0.41, walker_setnoanim);
+                            defer(self, 0.21, walker_melee_do_dmg);
                         }
 
                         movelib_beak_simple((autocvar_g_turrets_unit_walker_speed_stop));

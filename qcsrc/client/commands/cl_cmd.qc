@@ -8,8 +8,7 @@
 
 #include "../autocvars.qh"
 #include "../defs.qh"
-#include "../hud.qh"
-#include "../hud_config.qh"
+#include "../hud/all.qh"
 #include "../main.qh"
 #include "../mapvoting.qh"
 #include "../miscfunctions.qh"
@@ -22,7 +21,7 @@
 
 void DrawDebugModel(entity this)
 {
-	if(time - floor(time) > 0.5)
+	if (time - floor(time) > 0.5)
 	{
 		PolyDrawModel(self);
 		self.drawmask = 0;
@@ -45,7 +44,7 @@ void LocalCommand_blurtest(int request)
 	// Anyway, to enable it, just compile the client with -DBLURTEST and then you can use the command.
 
 	#ifdef BLURTEST
-	switch(request)
+	switch (request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
@@ -66,7 +65,7 @@ void LocalCommand_blurtest(int request)
 		}
 	}
 	#else
-	if(request)
+	if (request)
 	{
 		LOG_INFO("Blurtest is not enabled on this client.\n");
 		return;
@@ -76,7 +75,7 @@ void LocalCommand_blurtest(int request)
 
 void LocalCommand_boxparticles(int request, int argc)
 {
-	switch(request)
+	switch (request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
@@ -87,7 +86,7 @@ void LocalCommand_boxparticles(int request, int argc)
 				{
 					int index = stoi(argv(2));
 					entity own;
-					if(index <= 0)
+					if (index <= 0)
 						own = entitybyindex(-index);
 					else
 						own = findfloat(world, entnum, index);
@@ -104,7 +103,9 @@ void LocalCommand_boxparticles(int request, int argc)
 		}
 
 		default:
+		{
 			LOG_INFO("Incorrect parameters for ^2boxparticles^7\n");
+		}
 		case CMD_REQUEST_USAGE:
 		{
 			LOG_INFO("\nUsage:^3 lv_cmd boxparticles effectname own org_from org_to, dir_from, dir_to, countmultiplier, flags\n");
@@ -127,14 +128,14 @@ void LocalCommand_boxparticles(int request, int argc)
 
 void LocalCommand_create_scrshot_ent(int request)
 {
-	switch(request)
+	switch (request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
 			string filename = strcat(MapInfo_Map_bspname, "_scrshot_ent.txt");
 			int fh = fopen(filename, FILE_WRITE);
 
-			if(fh >= 0)
+			if (fh >= 0)
 			{
 				fputs(fh, "{\n");
 				fputs(fh, strcat("\"classname\" \"info_autoscreenshot\"\n"));
@@ -165,20 +166,18 @@ void LocalCommand_create_scrshot_ent(int request)
 
 void LocalCommand_debugmodel(int request, int argc)
 {
-	switch(request)
+	switch (request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
 			string modelname = argv(1);
-			entity debugmodel_entity;
 
-			debugmodel_entity = spawn();
+			entity debugmodel_entity = new(debugmodel);
 			precache_model(modelname);
 			_setmodel(debugmodel_entity, modelname);
 			setorigin(debugmodel_entity, view_origin);
 			debugmodel_entity.angles = view_angles;
 			debugmodel_entity.draw = DrawDebugModel;
-			debugmodel_entity.classname = "debugmodel";
 
 			return;
 		}
@@ -195,14 +194,14 @@ void LocalCommand_debugmodel(int request, int argc)
 
 void LocalCommand_handlevote(int request, int argc)
 {
-	switch(request)
+	switch (request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
 			int vote_selection;
 			string vote_string;
 
-			if(InterpretBoolean(argv(1)))
+			if (InterpretBoolean(argv(1)))
 			{
 				vote_selection = 2;
 				vote_string = "yes";
@@ -213,9 +212,9 @@ void LocalCommand_handlevote(int request, int argc)
 				vote_string = "no";
 			}
 
-			if(vote_selection)
+			if (vote_selection)
 			{
-				if(uid2name_dialog) // handled by "uid2name" option
+				if (uid2name_dialog)  // handled by "uid2name" option
 				{
 					vote_active = 0;
 					vote_prev = 0;
@@ -230,7 +229,9 @@ void LocalCommand_handlevote(int request, int argc)
 		}
 
 		default:
+		{
 			LOG_INFO("Incorrect parameters for ^2handlevote^7\n");
+		}
 		case CMD_REQUEST_USAGE:
 		{
 			LOG_INFO("\nUsage:^3 cl_cmd handlevote vote\n");
@@ -252,11 +253,11 @@ void HUD_Radar_Show_Maximized(bool doshow, bool clickable);
 
 void LocalCommand_hud(int request, int argc)
 {
-	switch(request)
+	switch (request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
-			switch(argv(1))
+			switch (argv(1))
 			{
 				case "configure":
 				{
@@ -266,16 +267,23 @@ void LocalCommand_hud(int request, int argc)
 
 				case "quickmenu":
 				{
-					if(QuickMenu_IsOpened())
+					if (argv(2) == "help")
+					{
+						LOG_INFO(" quickmenu [[default | file | \"\"] submenu]\n");
+						LOG_INFO("Called without options (or with \"\") loads either the default quickmenu or a quickmenu file if hud_panel_quickmenu_file is set to a valid filename.\n");
+						LOG_INFO("A submenu name can be given to open the quickmenu directly in a submenu; it requires to specify 'default', 'file' or '\"\"' option.\n");
+						return;
+					}
+					if (QuickMenu_IsOpened())
 						QuickMenu_Close();
 					else
-						QuickMenu_Open(argv(2), argv(3)); // mode, submenu
+						QuickMenu_Open(argv(2), argv(3));  // mode, submenu
 					return;
 				}
 
 				case "minigame":
 				{
-					if(HUD_MinigameMenu_IsOpened())
+					if (HUD_MinigameMenu_IsOpened())
 						HUD_MinigameMenu_Close();
 					else
 						HUD_MinigameMenu_Open();
@@ -284,14 +292,14 @@ void LocalCommand_hud(int request, int argc)
 
 				case "save":
 				{
-					if(argv(2))
+					if (argv(2))
 					{
 						HUD_Panel_ExportCfg(argv(2));
 						return;
 					}
 					else
 					{
-						break; // go to usage, we're missing the paramater needed here.
+						break;  // go to usage, we're missing the paramater needed here.
 					}
 				}
 
@@ -309,23 +317,25 @@ void LocalCommand_hud(int request, int argc)
 
 				case "radar":
 				{
-					if(argv(2))
-						HUD_Radar_Show_Maximized(InterpretBoolean(argv(2)),0);
+					if (argv(2))
+						HUD_Radar_Show_Maximized(InterpretBoolean(argv(2)), 0);
 					else
-						HUD_Radar_Show_Maximized(!hud_panel_radar_maximized,0);
+						HUD_Radar_Show_Maximized(!hud_panel_radar_maximized, 0);
 					return;
 				}
 
 				case "clickradar":
 				{
-					HUD_Radar_Show_Maximized(!hud_panel_radar_mouse,1);
+					HUD_Radar_Show_Maximized(!hud_panel_radar_mouse, 1);
 					return;
 				}
 			}
 		}
 
 		default:
+		{
 			LOG_INFO("Incorrect parameters for ^2hud^7\n");
+		}
 		case CMD_REQUEST_USAGE:
 		{
 			LOG_INFO("\nUsage:^3 cl_cmd hud action [configname | radartoggle | layout]\n");
@@ -333,10 +343,7 @@ void LocalCommand_hud(int request, int argc)
 			LOG_INFO("  'configname' is the name to save to for \"save\" action,\n");
 			LOG_INFO("  'radartoggle' is to control hud_panel_radar_maximized for \"radar\" action,\n");
 			LOG_INFO("  and 'layout' is how to organize the scoreboard columns for the set action.\n");
-			LOG_INFO("  quickmenu [[default | file | \"\"] submenu]\n");
-			LOG_INFO("    Called without options (or with "") loads either the default quickmenu or a quickmenu file if hud_panel_quickmenu_file is set to a valid filename.\n");
-			LOG_INFO("    Submenu option allows to open quickmenu directly in a submenu, it requires to specify 'default', 'file' or '\"\"' option.\n");
-			LOG_INFO("  Full list of commands here: \"configure, minigame, save, scoreboard_columns_help, scoreboard_columns_set, radar.\"\n");
+			LOG_INFO("  Full list of commands here: \"configure, quickmenu, minigame, save, scoreboard_columns_help, scoreboard_columns_set, radar.\"\n");
 			return;
 		}
 	}
@@ -344,11 +351,11 @@ void LocalCommand_hud(int request, int argc)
 
 void LocalCommand_localprint(int request, int argc)
 {
-	switch(request)
+	switch (request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
-			if(argv(1))
+			if (argv(1))
 			{
 				centerprint_hud(argv(1));
 				return;
@@ -356,7 +363,9 @@ void LocalCommand_localprint(int request, int argc)
 		}
 
 		default:
+		{
 			LOG_INFO("Incorrect parameters for ^2localprint^7\n");
+		}
 		case CMD_REQUEST_USAGE:
 		{
 			LOG_INFO("\nUsage:^3 cl_cmd localprint \"message\"\n");
@@ -368,11 +377,11 @@ void LocalCommand_localprint(int request, int argc)
 
 void LocalCommand_mv_download(int request, int argc)
 {
-	switch(request)
+	switch (request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
-			if(argv(1))
+			if (argv(1))
 			{
 				Cmd_MapVote_MapDownload(argc);
 				return;
@@ -380,7 +389,9 @@ void LocalCommand_mv_download(int request, int argc)
 		}
 
 		default:
+		{
 			LOG_INFO("Incorrect parameters for ^2mv_download^7\n");
+		}
 		case CMD_REQUEST_USAGE:
 		{
 			LOG_INFO("\nUsage:^3 cl_cmd mv_download mapid\n");
@@ -392,20 +403,22 @@ void LocalCommand_mv_download(int request, int argc)
 
 void LocalCommand_find(int request, int argc)
 {
-	switch(request)
+	switch (request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
 			entity client;
 
-			for(client = world; (client = find(client, classname, argv(1))); )
+			for (client = world; (client = find(client, classname, argv(1))); )
 				LOG_INFO(etos(client), "\n");
 
 			return;
 		}
 
 		default:
+		{
 			LOG_INFO("Incorrect parameters for ^2find^7\n");
+		}
 		case CMD_REQUEST_USAGE:
 		{
 			LOG_INFO("\nUsage:^3 cl_cmd find classname\n");
@@ -417,19 +430,19 @@ void LocalCommand_find(int request, int argc)
 
 void LocalCommand_sendcvar(int request, int argc)
 {
-	switch(request)
+	switch (request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
-			if(argv(1))
+			if (argv(1))
 			{
 				// W_FixWeaponOrder will trash argv, so save what we need.
 				string thiscvar = strzone(argv(1));
 				string s = cvar_string(thiscvar);
 
-				if(thiscvar == "cl_weaponpriority")
+				if (thiscvar == "cl_weaponpriority")
 					s = W_FixWeaponOrder(W_NumberWeaponOrder(s), 1);
-				else if(substring(thiscvar, 0, 17) == "cl_weaponpriority" && strlen(thiscvar) == 18)
+				else if (substring(thiscvar, 0, 17) == "cl_weaponpriority" && strlen(thiscvar) == 18)
 					s = W_FixWeaponOrder(W_NumberWeaponOrder(s), 0);
 
 				localcmd("cmd sentcvar ", thiscvar, " \"", s, "\"\n");
@@ -439,7 +452,9 @@ void LocalCommand_sendcvar(int request, int argc)
 		}
 
 		default:
+		{
 			LOG_INFO("Incorrect parameters for ^2sendcvar^7\n");
+		}
 		case CMD_REQUEST_USAGE:
 		{
 			LOG_INFO("\nUsage:^3 cl_cmd sendcvar <cvar>\n");
@@ -453,22 +468,22 @@ void LocalCommand_sendcvar(int request, int argc)
 ** ADD ALL NEW COMMANDS TO commands.cfg WITH PROPER ALIASES IN THE SAME FASHION!
 void LocalCommand_(int request)
 {
-	switch(request)
-	{
-		case CMD_REQUEST_COMMAND:
-		{
+    switch(request)
+    {
+        case CMD_REQUEST_COMMAND:
+        {
 
-			return;
-		}
+            return;
+        }
 
-		default:
-		case CMD_REQUEST_USAGE:
-		{
-			print("\nUsage:^3 cl_cmd \n");
-			print("  No arguments required.\n");
-			return;
-		}
-	}
+        default:
+        case CMD_REQUEST_USAGE:
+        {
+            print("\nUsage:^3 cl_cmd \n");
+            print("  No arguments required.\n");
+            return;
+        }
+    }
 }
 */
 
@@ -478,61 +493,45 @@ void LocalCommand_(int request)
 // ==================================
 
 // Normally do not hard code aliases for these, instead create them in commands.cfg... also: keep in alphabetical order, please ;)
-#define CLIENT_COMMANDS(request,arguments) \
-	CLIENT_COMMAND("blurtest", LocalCommand_blurtest(request), "Feature for testing blur postprocessing") \
-	CLIENT_COMMAND("boxparticles", LocalCommand_boxparticles(request, arguments), "Spawn particles manually") \
-	CLIENT_COMMAND("create_scrshot_ent", LocalCommand_create_scrshot_ent(request), "Create an entity at this location for automatic screenshots") \
-	CLIENT_COMMAND("debugmodel", LocalCommand_debugmodel(request, arguments), "Spawn a debug model manually") \
-	CLIENT_COMMAND("handlevote", LocalCommand_handlevote(request, arguments), "System to handle selecting a vote or option") \
-	CLIENT_COMMAND("hud", LocalCommand_hud(request, arguments), "Commands regarding/controlling the HUD system") \
-	CLIENT_COMMAND("localprint", LocalCommand_localprint(request, arguments), "Create your own centerprint sent to yourself") \
-	CLIENT_COMMAND("find", LocalCommand_find(request, arguments), "Search through entities for matching classname") \
-	CLIENT_COMMAND("mv_download", LocalCommand_mv_download(request, arguments), "Retrieve mapshot picture from the server") \
-	CLIENT_COMMAND("sendcvar", LocalCommand_sendcvar(request, arguments), "Send a cvar to the server (like weaponpriority)") \
-	/* nothing */
+CLIENT_COMMAND(blurtest, "Feature for testing blur postprocessing") { LocalCommand_blurtest(request); }
+CLIENT_COMMAND(boxparticles, "Spawn particles manually") { LocalCommand_boxparticles(request, arguments); }
+CLIENT_COMMAND(create_scrshot_ent, "Create an entity at this location for automatic screenshots") { LocalCommand_create_scrshot_ent(request); }
+CLIENT_COMMAND(debugmodel, "Spawn a debug model manually") { LocalCommand_debugmodel(request, arguments); }
+CLIENT_COMMAND(handlevote, "System to handle selecting a vote or option") { LocalCommand_handlevote(request, arguments); }
+CLIENT_COMMAND(hud, "Commands regarding/controlling the HUD system") { LocalCommand_hud(request, arguments); }
+CLIENT_COMMAND(localprint, "Create your own centerprint sent to yourself") { LocalCommand_localprint(request, arguments); }
+CLIENT_COMMAND(find, "Search through entities for matching classname") { LocalCommand_find(request, arguments); }
+CLIENT_COMMAND(mv_download, "Retrieve mapshot picture from the server") { LocalCommand_mv_download(request, arguments); }
+CLIENT_COMMAND(sendcvar, "Send a cvar to the server (like weaponpriority)") { LocalCommand_sendcvar(request, arguments); }
 
 void LocalCommand_macro_help()
 {
-	#define CLIENT_COMMAND(name,function,description) \
-		{ if(strtolower(description) != "") { LOG_INFO("  ^2", name, "^7: ", description, "\n"); } }
-
-	CLIENT_COMMANDS(0, 0);
-	#undef CLIENT_COMMAND
-
-	return;
+	FOREACH(CLIENT_COMMANDS, true, LAMBDA(LOG_INFOF("  ^2%s^7: %s\n", it.m_name, it.m_description)));
 }
 
-bool LocalCommand_macro_command(int argc)
+bool LocalCommand_macro_command(int argc, string command)
 {
-	#define CLIENT_COMMAND(name,function,description) \
-		{ if(name == strtolower(argv(0))) { function; return true; } }
-
-	CLIENT_COMMANDS(CMD_REQUEST_COMMAND, argc);
-	#undef CLIENT_COMMAND
-
+	string c = strtolower(argv(0));
+	FOREACH(CLIENT_COMMANDS, it.m_name == c, LAMBDA(
+		it.m_invokecmd(CMD_REQUEST_COMMAND, NULL, argc, command);
+		return true;
+	));
 	return false;
 }
 
 bool LocalCommand_macro_usage(int argc)
 {
-	#define CLIENT_COMMAND(name,function,description) \
-		{ if(name == strtolower(argv(1))) { function; return true; } }
-
-	CLIENT_COMMANDS(CMD_REQUEST_USAGE, argc);
-	#undef CLIENT_COMMAND
-
+	string c = strtolower(argv(1));
+	FOREACH(CLIENT_COMMANDS, it.m_name == c, LAMBDA(
+		it.m_invokecmd(CMD_REQUEST_USAGE, NULL, argc, "");
+		return true;
+	));
 	return false;
 }
 
 void LocalCommand_macro_write_aliases(int fh)
 {
-	#define CLIENT_COMMAND(name,function,description) \
-		{ if(strtolower(description) != "") { CMD_Write_Alias("qc_cmd_cl", name, description); } }
-
-	CLIENT_COMMANDS(0, 0);
-	#undef CLIENT_COMMAND
-
-	return;
+	FOREACH(CLIENT_COMMANDS, true, LAMBDA(CMD_Write_Alias("qc_cmd_cl", it.m_name, it.m_description)));
 }
 
 
@@ -552,7 +551,7 @@ void GameCommand(string command)
 	string s = strtolower(argv(0));
 	if (s == "help")
 	{
-		if(argc == 1)
+		if (argc == 1)
 		{
 			LOG_INFO("\nClient console commands:\n");
 			LocalCommand_macro_help();
@@ -565,25 +564,23 @@ void GameCommand(string command)
 
 			return;
 		}
-		else if(GenericCommand_macro_usage(argc)) // Instead of trying to call a command, we're going to see detailed information about it
+		else if (GenericCommand_macro_usage(argc))  // Instead of trying to call a command, we're going to see detailed information about it
 		{
 			return;
 		}
-		else if(LocalCommand_macro_usage(argc)) // now try for normal commands too
+		else if (LocalCommand_macro_usage(argc))  // now try for normal commands too
 		{
 			return;
 		}
 	}
 	// continue as usual and scan for normal commands
-	if (GenericCommand(command)// handled by common/command/generic.qc
-	|| LocalCommand_macro_command(argc) // handled by one of the above LocalCommand_* functions
-	|| MUTATOR_CALLHOOK(CSQC_ConsoleCommand, s, argc, command) // handled by a mutator
-	) return;
+	if (GenericCommand(command)                                    // handled by common/command/generic.qc
+	    || LocalCommand_macro_command(argc, command)               // handled by one of the above LocalCommand_* functions
+	    || MUTATOR_CALLHOOK(CSQC_ConsoleCommand, s, argc, command) // handled by a mutator
+	   ) return;
 
 	// nothing above caught the command, must be invalid
 	LOG_INFO(((command != "") ? strcat("Unknown client command \"", command, "\"") : "No command provided"), ". For a list of supported commands, try cl_cmd help.\n");
-
-	return;
 }
 
 
@@ -622,7 +619,7 @@ void GameCommand(string command)
 void ConsoleCommand_macro_init()
 {
 	// first init normal commands
-	#define CONSOLE_COMMAND(name,execution) \
+	#define CONSOLE_COMMAND(name, execution) \
 		{ registercommand(name); }
 
 	CONSOLE_COMMANDS_NORMAL();
@@ -630,22 +627,22 @@ void ConsoleCommand_macro_init()
 
 	// then init movement commands
 	#ifndef CAMERATEST
-	if(isdemo())
+	if (isdemo())
 	{
 	#endif
-		#define CONSOLE_COMMAND(name,execution) \
-			{ registercommand(name); }
+	#define CONSOLE_COMMAND(name, execution) \
+		registercommand(name);
 
-		CONSOLE_COMMANDS_MOVEMENT();
+	CONSOLE_COMMANDS_MOVEMENT();
 		#undef CONSOLE_COMMAND
 	#ifndef CAMERATEST
-	}
+}
 	#endif
 }
 
 bool ConsoleCommand_macro_normal(string s, int argc)
 {
-	#define CONSOLE_COMMAND(name,execution) \
+	#define CONSOLE_COMMAND(name, execution) \
 		{ if (name == s) { { execution } return true; } }
 
 	CONSOLE_COMMANDS_NORMAL();
@@ -656,9 +653,9 @@ bool ConsoleCommand_macro_normal(string s, int argc)
 
 bool ConsoleCommand_macro_movement(string s, int argc)
 {
-	if(camera_active)
+	if (camera_active)
 	{
-		#define CONSOLE_COMMAND(name,execution) \
+		#define CONSOLE_COMMAND(name, execution) \
 			{ if (name == s) { { execution } return true; } }
 
 		CONSOLE_COMMANDS_MOVEMENT();
@@ -679,7 +676,7 @@ bool CSQC_ConsoleCommand(string command)
 	int argc = tokenize_console(command);
 	string s = strtolower(argv(0));
 	// Return value should be true if CSQC handled the command, otherwise return false to have the engine handle it.
-	return (ConsoleCommand_macro_normal(s, argc)
-	|| ConsoleCommand_macro_movement(s, argc)
-	);
+	return ConsoleCommand_macro_normal(s, argc)
+	       || ConsoleCommand_macro_movement(s, argc)
+	;
 }
