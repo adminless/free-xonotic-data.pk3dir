@@ -17,9 +17,11 @@ ENDCLASS(Inventory)
 REGISTER_NET_LINKED(ENT_CLIENT_INVENTORY)
 
 #ifdef CSQC
+Inventory g_inventory;
 NET_HANDLE(ENT_CLIENT_INVENTORY, bool isnew)
 {
     make_pure(this);
+    g_inventory = this;
     const int bits = ReadInt24_t();
     FOREACH(Items, bits & BIT(it.m_id), {
         .int fld = inv_items[it.m_id];

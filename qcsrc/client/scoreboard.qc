@@ -1123,6 +1123,72 @@ vector HUD_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 	return pos;
 }
 
+vector HUD_DrawScoreboardItemStats(vector pos, vector rgb, vector bg_size)
+{
+	float initial_posx = pos.x;
+	int disownedcnt = 0;
+	FOREACH(Items, true, {
+        int q = g_inventory.inv_items[it.m_id];
+        if (!q) ++disownedcnt;
+    });
+
+	int n = Items_COUNT - disownedcnt;
+	if (n <= 0) return pos;
+
+	int rows = (autocvar_scoreboard_accuracy_doublerows && n >= floor(Items_COUNT / 2)) ? 2 : 1;
+	int columnns = ceil(n / rows);
+
+	float height = 40;
+	float fontsize = height * 1/3;
+	float item_height = height * 2/3;
+	float item_width = sbwidth / columnns / rows;
+
+	drawstring(pos, _("Item stats"), hud_fontsize, '1 1 1', scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+	pos.y += 1.25 * hud_fontsize.y + autocvar_scoreboard_border_thickness;
+	vector tmp = '0 0 0';
+	tmp.x = sbwidth;
+	tmp.y = height * rows;
+
+    drawpic_tiled(pos, "gfx/scoreboard/scoreboard_bg", bg_size, tmp, rgb * (teamplay ? autocvar_scoreboard_color_bg_team : 1), scoreboard_alpha_bg, DRAWFLAG_NORMAL);
+	drawborderlines(autocvar_scoreboard_border_thickness, pos, tmp, '0 0 0', scoreboard_alpha_bg * 0.75, DRAWFLAG_NORMAL);
+
+	// column highlighting
+	for (int i = 0; i < columnns; ++i) if ((i % 2) == 0) {
+        drawfill(pos + '1 0 0' * item_width * rows * i, '0 1 0' * height * rows + '1 0 0' * item_width * rows, '0 0 0', scoreboard_alpha_bg * 0.2, DRAWFLAG_NORMAL);
+	}
+	// row highlighting
+	for (int i = 0; i < rows; ++i) {
+		drawfill(pos + '0 1 0' * item_height + '0 1 0' * height * i, '1 0 0' * sbwidth + '0 1 0' * fontsize, '1 1 1', scoreboard_highlight_alpha, DRAWFLAG_NORMAL);
+	}
+
+	if (rows == 2) pos.x += item_width / 2;
+
+	float oldposx = pos.x;
+	vector tmpos = pos;
+
+	int column = 0;
+	FOREACH(Items, true, {
+		int n = g_inventory.inv_items[it.m_id];
+		if (n <= 0) continue;
+		drawpic_aspect_skin(tmpos, it.m_icon, '1 0 0' * item_width + '0 1 0' * item_height, '1 1 1', scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+        string s = ftos(n);
+        float padding = (item_width - stringwidth(s, false, '1 0 0' * fontsize)) / 2; // center
+        drawstring(tmpos + '1 0 0' * padding + '0 1 0' * item_height, s, '1 1 0' * fontsize, '1 1 1', scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+		tmpos.x += item_width * rows;
+		pos.x += item_width * rows;
+		if (rows == 2 && column == columnns - 1) {
+			tmpos.x = oldposx;
+			tmpos.y += height;
+			pos.y += height;
+		}
+		++column;
+	});
+	pos.y += height;
+	pos.y += 1.25 * hud_fontsize.y;
+	pos.x = initial_posx;
+	return pos;
+}
+
 vector HUD_DrawKeyValue(vector pos, string key, string value) {
 	float px = pos.x;
 	pos.x += hud_fontsize.x * 0.25;
@@ -1375,17 +1441,11 @@ void HUD_DrawScoreboard()
 		pos = HUD_DrawScoreboardRankings(pos, playerslots[player_localnum], rgb, bg_size);
 	}
 	else if (autocvar_scoreboard_accuracy && !warmup_stage && gametype != MAPINFO_TYPE_NEXBALL) {
-		if(teamplay)
-			pos = HUD_DrawScoreboardAccuracyStats(pos, Team_ColorRGB(myteam), bg_size);
-		else
-			pos = HUD_DrawScoreboardAccuracyStats(pos, rgb, bg_size);
+        pos = HUD_DrawScoreboardAccuracyStats(pos, (teamplay ? Team_ColorRGB(myteam) : rgb), bg_size);
 	}
+    pos = HUD_DrawScoreboardItemStats(pos, (teamplay ? Team_ColorRGB(myteam) : rgb), bg_size);
 
-
-	if(teamplay)
-		pos = HUD_DrawMapStats(pos, Team_ColorRGB(myteam), bg_size);
-	else
-		pos = HUD_DrawMapStats(pos, rgb, bg_size);
+    pos = HUD_DrawMapStats(pos, (teamplay ? Team_ColorRGB(myteam) : rgb), bg_size);
 
 	// List spectators
 	float specs;
