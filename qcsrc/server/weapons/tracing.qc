@@ -23,7 +23,7 @@
 void W_SetupShot_Dir_ProjectileSize_Range(entity ent, .entity weaponentity, vector s_forward, vector mi, vector ma, float antilag, float recoil, Sound snd, float chan, float maxdamage, float range)
 {
 	TC(Sound, snd);
-	float nudge = 1; // added to traceline target and subtracted from result  TOOD(divVerent): do we still need this? Doesn't the engine do this now for us?
+	float nudge = 1; // added to traceline target and subtracted from result  TODO(divVerent): do we still need this? Doesn't the engine do this now for us?
 	float oldsolid;
 	vector vecs, dv;
 	oldsolid = ent.dphitcontentsmask;
