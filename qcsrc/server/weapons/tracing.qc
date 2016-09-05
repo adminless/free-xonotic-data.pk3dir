@@ -350,6 +350,7 @@ void fireBullet_trace_callback(vector start, vector hit, vector end)
 
 void fireBullet(entity this, vector start, vector dir, float spread, float max_solid_penetration, float damage, float force, float dtype, int tracereffects)
 {
+	LOG_INFOF("===> new shot %f\n", time);
 	vector  end;
 
 	dir = normalize(dir + randomvec() * spread);
@@ -445,8 +446,10 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 			}
 		}
 
-		if (is_weapclip)
+		if (is_weapclip){
+			LOG_INFOF("is_weapclip\n");
 			break;
+		}
 
 		// go through solid!
 		// outside the world? forget it
@@ -460,21 +463,27 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 			break; // -2: no solid penetration, ever
 		else if(hit.ballistics_density < 0)
 			maxdist = vlen(hit.maxs - hit.mins) + 1; // -1: infinite travel distance
-		else if(hit.ballistics_density == 0)
+		else if(hit.ballistics_density == 0){
 			maxdist = max_solid_penetration * solid_penetration_left;
-		else
+			LOG_INFOF("hit.ballistics_density =0 %f\n", hit.ballistics_density);
+		}else{
 			maxdist = max_solid_penetration * solid_penetration_left * hit.ballistics_density;
+			LOG_INFOF("hit.ballistics_density >0 %f\n", hit.ballistics_density);
+		}
+		LOG_INFOF("maxdist %f\n", maxdist);
 
 		if(maxdist <= autocvar_g_ballistics_mindistance)
 			break;
 
 		// move the entity along its velocity until it's out of solid, then let it resume
 		// The previously hit entity is ignored here!
-		traceline_inverted (start, start + dir * maxdist, MOVE_NORMAL, WarpZone_trace_forent, true, hit);
+		traceline_inverted(start, start + dir * maxdist, MOVE_NORMAL, WarpZone_trace_forent, true, hit);
 		if(trace_fraction == 1) // 1: we never got out of solid
 			break;
 
+		LOG_INFOF("start %v   trace_endpos %v   vlen() %f\n", start, trace_endpos, vlen(trace_endpos - start));
 		float dist_taken = max(autocvar_g_ballistics_mindistance, vlen(trace_endpos - start));
+		LOG_INFOF("dist_taken %f\n", dist_taken);
 		// fraction_used_of_what_is_left = dist_taken / maxdist
 		// solid_penetration_left = solid_penetration_left - solid_penetration_left * fraction_used_of_what_is_left
 		solid_penetration_left *= 1 - dist_taken / maxdist;
