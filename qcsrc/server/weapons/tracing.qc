@@ -350,7 +350,7 @@ void fireBullet_trace_callback(vector start, vector hit, vector end)
 
 void fireBullet(entity this, vector start, vector dir, float spread, float max_solid_penetration, float damage, float force, float dtype, int tracereffects)
 {
-	LOG_INFOF("===> new shot %f\n", time);
+	LOG_INFOF("new shot %f\n", time);
 	vector  end;
 
 	dir = normalize(dir + randomvec() * spread);
@@ -392,6 +392,7 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 
 	for (;;)
 	{
+		LOG_INFOF("  new iteration\n");
 		// TODO also show effect while tracing
 		WarpZone_TraceBox_ThroughZone(start, '0 0 0', '0 0 0', end, false, WarpZone_trace_forent, NULL, fireBullet_trace_callback);
 		dir = WarpZone_TransformVelocity(WarpZone_trace_transform, dir);
@@ -400,8 +401,11 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 		entity hit = trace_ent;
 
 		// When hitting sky, stop.
-		if (pointcontents(start) == CONTENT_SKY)
+		LOG_INFOF("    pointcontents %d\n", pointcontents(start));
+		if (pointcontents(start) == CONTENT_SKY){
+			LOG_INFOF("    CONTENT_SKY\n");
 			break;
+		}
 
 		// can't use noimpact, as we need to pass through walls
 		//if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
@@ -425,8 +429,10 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 		if (!(trace_dphitcontents & DPCONTENTS_OPAQUE))
 			is_weapclip = true;
 
-		if(!hit || hit.solid == SOLID_BSP || hit.solid == SOLID_SLIDEBOX)
+		if(!hit || hit.solid == SOLID_BSP || hit.solid == SOLID_SLIDEBOX){
+			LOG_INFOF("    first Damage_DamageInfo, %f\n", hit);
 			Damage_DamageInfo(start, damage * solid_penetration_left, 0, 0, max(1, force) * dir * solid_penetration_left, dtype, hit.species, this);
+		}
 
 		if (hit && hit != WarpZone_trace_forent && hit != fireBullet_last_hit)  // Avoid self-damage (except after going through a warp); avoid hitting the same entity twice (engine bug).
 		{
@@ -447,14 +453,16 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 		}
 
 		if (is_weapclip){
-			LOG_INFOF("is_weapclip\n");
+			LOG_INFOF("    is_weapclip\n");
 			break;
 		}
 
 		// go through solid!
 		// outside the world? forget it
-		if(start.x > world.maxs.x || start.y > world.maxs.y || start.z > world.maxs.z || start.x < world.mins.x || start.y < world.mins.y || start.z < world.mins.z)
+		if(start.x > world.maxs.x || start.y > world.maxs.y || start.z > world.maxs.z || start.x < world.mins.x || start.y < world.mins.y || start.z < world.mins.z){
+			LOG_INFOF("    outside world\n");
 			break;
+		}
 
 		float maxdist;
 		if(max_solid_penetration < 0)
@@ -465,12 +473,12 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 			maxdist = vlen(hit.maxs - hit.mins) + 1; // -1: infinite travel distance
 		else if(hit.ballistics_density == 0){
 			maxdist = max_solid_penetration * solid_penetration_left;
-			LOG_INFOF("hit.ballistics_density =0 %f\n", hit.ballistics_density);
+			LOG_INFOF("    hit.ballistics_density =0 %f\n", hit.ballistics_density);
 		}else{
 			maxdist = max_solid_penetration * solid_penetration_left * hit.ballistics_density;
-			LOG_INFOF("hit.ballistics_density >0 %f\n", hit.ballistics_density);
+			LOG_INFOF("    hit.ballistics_density >0 %f\n", hit.ballistics_density);
 		}
-		LOG_INFOF("maxdist %f\n", maxdist);
+		LOG_INFOF("    maxdist %f\n", maxdist);
 
 		if(maxdist <= autocvar_g_ballistics_mindistance)
 			break;
@@ -481,9 +489,9 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 		if(trace_fraction == 1) // 1: we never got out of solid
 			break;
 
-		LOG_INFOF("start %v   trace_endpos %v   vlen() %f\n", start, trace_endpos, vlen(trace_endpos - start));
+		LOG_INFOF("    start %v   trace_endpos %v   vlen() %f\n", start, trace_endpos, vlen(trace_endpos - start));
 		float dist_taken = max(autocvar_g_ballistics_mindistance, vlen(trace_endpos - start));
-		LOG_INFOF("dist_taken %f\n", dist_taken);
+		LOG_INFOF("    dist_taken %f\n", dist_taken);
 		// fraction_used_of_what_is_left = dist_taken / maxdist
 		// solid_penetration_left = solid_penetration_left - solid_penetration_left * fraction_used_of_what_is_left
 		solid_penetration_left *= 1 - dist_taken / maxdist;
@@ -496,8 +504,10 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 
 		start = trace_endpos;
 
-		if(hit.solid == SOLID_BSP)
+		if(hit.solid == SOLID_BSP){
+			LOG_INFOF("    second Damage_DamageInfo, %f\n", hit);
 			Damage_DamageInfo(start, 0, 0, 0, max(1, force) * normalize(dir) * -solid_penetration_left, dtype, 0, this);
+		}
 	}
 
 	if(lag)
