@@ -402,7 +402,7 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 
 		// When hitting sky, stop.
 		LOG_INFOF("    pointcontents %d\n", pointcontents(start));
-		if (pointcontents(start) == CONTENT_SKY){
+		if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY){
 			LOG_INFOF("    CONTENT_SKY\n");
 			break;
 		}
@@ -428,6 +428,8 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 		if (!(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NONSOLID))
 		if (!(trace_dphitcontents & DPCONTENTS_OPAQUE))
 			is_weapclip = true;
+
+		LOG_INFOF("    trace_dphitq3surfaceflags %d trace_dphitcontents %d\n", trace_dphitq3surfaceflags, trace_dphitcontents);
 
 		if(!hit || hit.solid == SOLID_BSP || hit.solid == SOLID_SLIDEBOX){
 			LOG_INFOF("    first Damage_DamageInfo, %f\n", hit);
