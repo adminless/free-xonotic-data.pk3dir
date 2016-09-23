@@ -408,8 +408,10 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 		}
 
 		// can't use noimpact, as we need to pass through walls
-		//if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+		if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT) {
+			LOG_INFOF("    NOIMPACT\n");
 			//break;
+		}
 
 		// if we hit "weapclip", bail out
 		//
