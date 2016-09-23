@@ -40,7 +40,7 @@ const vector KH_KEY_MIN = '-10 -10 -46';
 const vector KH_KEY_MAX = '10 10 3';
 const float KH_KEY_BRIGHTNESS = 2;
 
-float kh_no_radar_circles;
+bool kh_no_radar_circles;
 
 // kh_state
 //     bits  0- 4: team of key 1, or 0 for no such key, or 30 for dropped, or 31 for self
@@ -80,6 +80,8 @@ float kh_interferemsg_time, kh_interferemsg_team;
 .float kh_cp_duration;
 
 float kh_key_dropped, kh_key_carried;
+
+int kh_Key_AllOwnedByWhichTeam();
 
 const float ST_KH_CAPS = 1;
 void kh_ScoreRules(int teams)
@@ -440,7 +442,7 @@ void kh_Key_Collect(entity key, entity player)  //a player picks up a dropped ke
 		PlayerScore_Add(player, SP_KH_PICKUPS, 1);
 	}
 	key.kh_dropperteam = 0;
-	Send_Notification(NOTIF_ALL, NULL, MSG_INFO, APP_TEAM_ENT(key, INFO_KEYHUNT_PICKUP), player.netname);
+	Send_Notification(NOTIF_ALL, NULL, MSG_INFO, APP_TEAM_NUM(key.team, INFO_KEYHUNT_PICKUP), player.netname);
 
 	kh_Key_AssignTo(key, player); // this also updates .kh_state
 }
@@ -660,7 +662,7 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 		}
 	}
 
-	Send_Notification(NOTIF_ALL, NULL, MSG_INFO, APP_TEAM_ENT(lostkey, INFO_KEYHUNT_LOST), lostkey.kh_previous_owner.netname);
+	Send_Notification(NOTIF_ALL, NULL, MSG_INFO, APP_TEAM_NUM(lostkey.team, INFO_KEYHUNT_LOST), lostkey.kh_previous_owner.netname);
 
 	play2all(SND(KH_DESTROY));
 	te_tarexplosion(lostkey.origin);
@@ -782,14 +784,11 @@ void kh_Key_Spawn(entity initial_owner, float _angle, float i)  // runs every ti
 }
 
 // -1 when no team completely owns all keys yet
-float kh_Key_AllOwnedByWhichTeam()  // constantly called. check to see if all the keys are owned by the same team
+int kh_Key_AllOwnedByWhichTeam()  // constantly called. check to see if all the keys are owned by the same team
 {
 	entity key;
-	float teem;
-	float keys;
-
-	teem = -1;
-	keys = NumTeams(kh_teams);
+	int teem = -1;
+	int keys = NumTeams(kh_teams);
 	FOR_EACH_KH_KEY(key)
 	{
 		if(!key.owner)
@@ -816,7 +815,7 @@ void kh_Key_DropOne(entity key)
 
 	kh_Scores_Event(player, key, "dropkey", 0, 0);
 	PlayerScore_Add(player, SP_KH_LOSSES, 1);
-	Send_Notification(NOTIF_ALL, NULL, MSG_INFO, APP_TEAM_ENT(key, INFO_KEYHUNT_DROP), player.netname);
+	Send_Notification(NOTIF_ALL, NULL, MSG_INFO, APP_TEAM_NUM(key.team, INFO_KEYHUNT_DROP), player.netname);
 
 	kh_Key_AssignTo(key, NULL);
 	makevectors(player.v_angle);
@@ -842,7 +841,7 @@ void kh_Key_DropAll(entity player, float suicide) // runs whenever a player dies
 		{
 			kh_Scores_Event(player, key, "losekey", 0, 0);
 			PlayerScore_Add(player, SP_KH_LOSSES, 1);
-			Send_Notification(NOTIF_ALL, NULL, MSG_INFO, APP_TEAM_ENT(key, INFO_KEYHUNT_LOST), player.netname);
+			Send_Notification(NOTIF_ALL, NULL, MSG_INFO, APP_TEAM_NUM(key.team, INFO_KEYHUNT_LOST), player.netname);
 			kh_Key_AssignTo(key, NULL);
 			makevectors('-1 0 0' * (45 + 45 * random()) + '0 360 0' * random());
 			key.velocity = W_CalculateProjectileVelocity(player, player.velocity, autocvar_g_balance_keyhunt_dropvelocity * v_forward, false);
@@ -855,24 +854,23 @@ void kh_Key_DropAll(entity player, float suicide) // runs whenever a player dies
 	}
 }
 
-float kh_CheckPlayers(float num)
+int kh_GetMissingTeams()
 {
-	if(num < NumTeams(kh_teams))
+	int missing_teams = 0;
+	for(int i = 0; i < NumTeams(kh_teams); ++i)
 	{
-		float t_team = kh_Team_ByID(num);
-		float players = 0;
+		int teem = kh_Team_ByID(i);
+		int players = 0;
 		FOREACH_CLIENT(IS_PLAYER(it), LAMBDA(
-			if(!IS_DEAD(it) && !PHYS_INPUT_BUTTON_CHAT(it) && it.team == t_team)
+			if(!IS_DEAD(it) && !PHYS_INPUT_BUTTON_CHAT(it) && it.team == teem)
 				++players;
 		));
-
-		if (!players) { return t_team; }
+		if (!players)
+			missing_teams |= pow(2, i);
 	}
-	return 0;
+	return missing_teams;
 }
 
-#define KH_READY_TEAMS() (!p1 + !p2 + ((NumTeams(kh_teams) >= 3) ? !p3 : p3) + ((NumTeams(kh_teams) >= 4) ? !p4 : p4))
-#define KH_READY_TEAMS_OK() (KH_READY_TEAMS() == NumTeams(kh_teams))
 void kh_WaitForPlayers()  // delay start of the round until enough players are present
 {
 	if(time < game_starttime)
@@ -881,9 +879,9 @@ void kh_WaitForPlayers()  // delay start of the round until enough players are p
 		return;
 	}
 
-	static float prev_missing_teams_mask;
-	float p1 = kh_CheckPlayers(0), p2 = kh_CheckPlayers(1), p3 = kh_CheckPlayers(2), p4 = kh_CheckPlayers(3);
-	if(KH_READY_TEAMS_OK())
+	static int prev_missing_teams_mask;
+	int missing_teams_mask = kh_GetMissingTeams();
+	if(!missing_teams_mask)
 	{
 		if(prev_missing_teams_mask > 0)
 			Kill_Notification(NOTIF_ALL, NULL, MSG_CENTER, CPID_MISSING_TEAMS);
@@ -901,15 +899,6 @@ void kh_WaitForPlayers()  // delay start of the round until enough players are p
 		}
 		else
 		{
-			int missing_teams_mask = 0;
-			if(kh_teams & BIT(0))
-				missing_teams_mask += boolean(p1) * 1;
-			if(kh_teams & BIT(1))
-				missing_teams_mask += boolean(p2) * 2;
-			if(kh_teams & BIT(2))
-				missing_teams_mask += boolean(p3) * 4;
-			if(kh_teams & BIT(3))
-				missing_teams_mask += boolean(p4) * 8;
 			if(prev_missing_teams_mask != missing_teams_mask)
 			{
 				Send_Notification(NOTIF_ALL, NULL, MSG_CENTER, CENTER_MISSING_TEAMS, missing_teams_mask);
@@ -930,7 +919,7 @@ void kh_EnableTrackingDevice()  // runs after each round
 
 void kh_StartRound()  // runs at the start of each round
 {
-	float i, players, teem;
+	int i, players, teem;
 
 	if(time < game_starttime)
 	{
@@ -938,8 +927,7 @@ void kh_StartRound()  // runs at the start of each round
 		return;
 	}
 
-	float p1 = kh_CheckPlayers(0), p2 = kh_CheckPlayers(1), p3 = kh_CheckPlayers(2), p4 = kh_CheckPlayers(3);
-	if(!KH_READY_TEAMS_OK())
+	if(kh_GetMissingTeams())
 	{
 		kh_Controller_SetThink(1, kh_WaitForPlayers);
 		return;
@@ -1285,7 +1273,7 @@ MUTATOR_HOOKFUNCTION(kh, MatchEnd)
 	kh_finalize();
 }
 
-MUTATOR_HOOKFUNCTION(kh, GetTeamCount, CBC_ORDER_EXCLUSIVE)
+MUTATOR_HOOKFUNCTION(kh, CheckAllowedTeams, CBC_ORDER_EXCLUSIVE)
 {
 	M_ARGV(0, float) = kh_teams;
 }

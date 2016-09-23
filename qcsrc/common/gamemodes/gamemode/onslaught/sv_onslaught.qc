@@ -827,7 +827,7 @@ void ons_GeneratorDamage(entity this, entity inflictor, entity attacker, float d
 	{
 		if (this.isshielded)
 		{
-			// this is protected by a shield, so ignore the damage
+			// generator is protected by a shield, so ignore the damage
 			if (time > this.pain_finished)
 				if (IS_PLAYER(attacker))
 				{
@@ -1871,7 +1871,7 @@ MUTATOR_HOOKFUNCTION(ons, HavocBot_ChooseRole)
 	return true;
 }
 
-MUTATOR_HOOKFUNCTION(ons, GetTeamCount)
+MUTATOR_HOOKFUNCTION(ons, CheckAllowedTeams)
 {
 	// onslaught is special
 	for(entity tmp_entity = ons_worldgeneratorlist; tmp_entity; tmp_entity = tmp_entity.ons_worldgeneratornext)
