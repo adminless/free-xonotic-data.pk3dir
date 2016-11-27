@@ -169,6 +169,7 @@ void W_Hook_Attack2(Weapon thiswep, entity actor, .entity weaponentity)
 	gren.damageforcescale = WEP_CVAR_SEC(hook, damageforcescale);
 	gren.event_damage = W_Hook_Damage;
 	gren.damagedbycontents = true;
+	IL_PUSH(g_damagedbycontents, gren);
 	gren.missile_flags = MIF_SPLASH | MIF_ARC;
 
 	gren.velocity = '0 0 1' * WEP_CVAR_SEC(hook, speed);
@@ -383,13 +384,16 @@ void Draw_GrapplingHook(entity this)
 			break;
 	}
 
-	if((this.owner.sv_entnum == player_localentnum - 1) && autocvar_chase_active <= 0)
+	if((this.owner.sv_entnum == player_localentnum - 1))
 	{
 		switch(this.HookType)
 		{
 			default:
 			case NET_ENT_CLIENT_HOOK:
-				a = view_origin + view_forward * vs.x + view_right * -vs.y + view_up * vs.z;
+				if(autocvar_chase_active > 0)
+					a = csqcplayer.origin;
+				else
+					a = view_origin + view_forward * vs.x + view_right * -vs.y + view_up * vs.z;
 				b = this.origin;
 				break;
 			case NET_ENT_CLIENT_ARC_BEAM:

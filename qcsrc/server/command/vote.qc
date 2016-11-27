@@ -13,6 +13,7 @@
 #include "../mutators/_mod.qh"
 
 #include <common/constants.qh>
+#include <common/net_linked.qh>
 #include <common/mapinfo.qh>
 #include <common/notifications/all.qh>
 #include <common/playerstats.qh>
@@ -333,7 +334,13 @@ void VoteThink()
 // Resets the state of all clients, items, weapons, waypoints, ... of the map.
 void reset_map(bool dorespawn)
 {
-	if (time <= game_starttime && round_handler_IsActive()) round_handler_Reset(game_starttime);
+	if (time <= game_starttime)
+	{
+		if (gameover)
+			return;
+		if (round_handler_IsActive())
+			round_handler_Reset(game_starttime);
+	}
 
 	MUTATOR_CALLHOOK(reset_map_global);
 
@@ -398,6 +405,9 @@ void ReadyRestart_think(entity this)
 // Forces a restart of the game without actually reloading the map // this is a mess...
 void ReadyRestart_force()
 {
+	if (time <= game_starttime && gameover)
+		return;
+
 	bprint("^1Server is restarting...\n");
 
 	VoteReset();

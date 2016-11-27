@@ -62,6 +62,8 @@ void CopyBody(entity this, float keepvelocity)
 	clone.iscreature = this.iscreature;
 	clone.teleportable = this.teleportable;
 	clone.damagedbycontents = this.damagedbycontents;
+	if(clone.damagedbycontents)
+		IL_PUSH(g_damagedbycontents, clone);
 	clone.angles = this.angles;
 	clone.v_angle = this.v_angle;
 	clone.avelocity = this.avelocity;
@@ -212,6 +214,8 @@ void PlayerCorpseDamage(entity this, entity inflictor, entity attacker, float da
 		this.alpha = -1;
 		this.solid = SOLID_NOT; // restore later
 		this.takedamage = DAMAGE_NO; // restore later
+		if(this.damagedbycontents)
+			IL_REMOVE(g_damagedbycontents, this);
 		this.damagedbycontents = false;
 	}
 }
@@ -319,6 +323,9 @@ void PlayerDamage(entity this, entity inflictor, entity attacker, float damage, 
 			damage /= sqrt(bound(1.0, attacker.cvar_cl_handicap, 100.0));
 	}
 
+	if (time < this.spawnshieldtime && autocvar_g_spawnshield_blockdamage < 1)
+		damage *= 1 - max(0, autocvar_g_spawnshield_blockdamage);
+
 	if(DEATH_ISWEAPON(deathtype, WEP_TUBA))
 	{
 		// tuba causes blood to come out of the ears
@@ -353,7 +360,6 @@ void PlayerDamage(entity this, entity inflictor, entity attacker, float damage, 
 	else
 		Violence_GibSplash_At(hitloc, force, 2, bound(0, damage, 200) / 16, this, attacker);
 
-
 	v = healtharmor_applydamage(this.armorvalue, autocvar_g_balance_armor_blockpercent, deathtype, damage);
 	take = v.x;
 	save = v.y;
@@ -380,13 +386,6 @@ void PlayerDamage(entity this, entity inflictor, entity attacker, float damage, 
 	{
 		this.pushltime = 0;
 		this.istypefrag = 0;
-	}
-
-	if (time < this.spawnshieldtime && autocvar_g_spawnshield_blockdamage < 1)
-	{
-		vector v = healtharmor_applydamage(this.armorvalue, max(0, autocvar_g_spawnshield_blockdamage), deathtype, damage);
-		take = v.x;
-		save = v.y;
 	}
 
 	MUTATOR_CALLHOOK(PlayerDamage_SplitHealthArmor, inflictor, attacker, this, force, take, save, deathtype, damage);
@@ -505,9 +504,9 @@ void PlayerDamage(entity this, entity inflictor, entity attacker, float damage, 
 	{
 		WeaponStats_LogDamage(awep.m_id, abot, PS(this).m_weapon.m_id, vbot, dh + da);
 	}
-	if (dh + da)
+	if (damage)
 	{
-		MUTATOR_CALLHOOK(PlayerDamaged, attacker, this, dh, da, hitloc, deathtype);
+		MUTATOR_CALLHOOK(PlayerDamaged, attacker, this, dh, da, hitloc, deathtype, damage);
 	}
 
 	if (this.health < 1)

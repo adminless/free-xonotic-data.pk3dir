@@ -211,7 +211,7 @@ void napalm_damage(entity this, float dist, float damage, float edgedamage, floa
 			if(d < dist)
 			{
 				e.fireball_impactvec = p;
-				RandomSelection_Add(e, 0, string_null, 1 / (1 + d), !Fire_IsBurning(e));
+				RandomSelection_AddEnt(e, 1 / (1 + d), !Fire_IsBurning(e));
 			}
 		}
 	if(RandomSelection_chosen_ent)
@@ -654,7 +654,7 @@ void nade_heal_boom(entity this)
 
 void nade_monster_boom(entity this)
 {
-	entity e = spawnmonster(this.pokenade_type, 0, this.realowner, this.realowner, this.origin, false, false, 1);
+	entity e = spawnmonster(spawn(), this.pokenade_type, 0, this.realowner, this.realowner, this.origin, false, false, 1);
 
 	if(autocvar_g_nades_pokenade_monster_lifetime > 0)
 		e.monster_lifetime = time + autocvar_g_nades_pokenade_monster_lifetime;
@@ -911,7 +911,7 @@ void toss_nade(entity e, bool set_owner, vector _velocity, float _time)
 		setsize(_nade, '-16 -16 -16', '16 16 16');
 	set_movetype(_nade, MOVETYPE_BOUNCE);
 
-	tracebox(_nade.origin, _nade.mins, _nade.maxs, _nade.origin, false, _nade);
+	tracebox(_nade.origin, _nade.mins, _nade.maxs, _nade.origin, MOVE_NOMONSTERS, _nade);
 	if (trace_startsolid)
 		setorigin(_nade, e.origin);
 
@@ -941,6 +941,7 @@ void toss_nade(entity e, bool set_owner, vector _velocity, float _time)
 	_nade.gravity = 1;
 	_nade.missile_flags = MIF_SPLASH | MIF_ARC;
 	_nade.damagedbycontents = true;
+	IL_PUSH(g_damagedbycontents, _nade);
 	_nade.angles = vectoangles(_nade.velocity);
 	_nade.flags = FL_PROJECTILE;
 	IL_PUSH(g_projectiles, _nade);
@@ -1173,18 +1174,6 @@ CLASS(NadeOffhand, OffhandWeapon)
     METHOD(NadeOffhand, offhand_think, void(NadeOffhand this, entity player, bool key_pressed))
     {
     	entity held_nade = player.nade;
-		if (held_nade)
-		{
-			player.nade_timer = bound(0, (time - held_nade.nade_time_primed) / autocvar_g_nades_nade_lifetime, 1);
-			// LOG_TRACEF("%d %d", player.nade_timer, time - held_nade.nade_time_primed);
-			makevectors(player.angles);
-			held_nade.velocity = player.velocity;
-			setorigin(held_nade, player.origin + player.view_ofs + v_forward * 8 + v_right * -8 + v_up * 0);
-			held_nade.angles_y = player.angles.y;
-
-			if (time + 0.1 >= held_nade.wait)
-				toss_nade(player, false, '0 0 0', time + 0.05);
-		}
 
         if (!CanThrowNade(player)) return;
         if (!(time > player.nade_refire)) return;
@@ -1225,6 +1214,20 @@ MUTATOR_HOOKFUNCTION(nades, PlayerPreThink)
 	if (!IS_PLAYER(player)) { return; }
 
 	if (player.nade && (player.offhand != OFFHAND_NADE || (player.weapons & WEPSET(HOOK)))) OFFHAND_NADE.offhand_think(OFFHAND_NADE, player, player.nade_altbutton);
+
+	entity held_nade = player.nade;
+	if (held_nade)
+	{
+		player.nade_timer = bound(0, (time - held_nade.nade_time_primed) / autocvar_g_nades_nade_lifetime, 1);
+		// LOG_TRACEF("%d %d", player.nade_timer, time - held_nade.nade_time_primed);
+		makevectors(player.angles);
+		held_nade.velocity = player.velocity;
+		setorigin(held_nade, player.origin + player.view_ofs + v_forward * 8 + v_right * -8 + v_up * 0);
+		held_nade.angles_y = player.angles.y;
+
+		if (time + 0.1 >= held_nade.wait)
+			toss_nade(player, false, '0 0 0', time + 0.05);
+	}
 
 	if(IS_PLAYER(player))
 	{

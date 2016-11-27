@@ -216,7 +216,7 @@ void buff_NewType(entity ent, float cb)
 	FOREACH(Buffs, buff_Available(it), LAMBDA(
 		it.buff_seencount += 1;
 		// if it's already been chosen, give it a lower priority
-		RandomSelection_Add(NULL, it.m_itemid, string_null, 1, max(0.2, 1 / it.buff_seencount));
+		RandomSelection_AddFloat(it.m_itemid, 1, max(0.2, 1 / it.buff_seencount));
 	));
 	ent.buffs = RandomSelection_chosen_float;
 }
@@ -424,9 +424,9 @@ void buff_Medic_Heal(entity this)
 	});
 }
 
-float buff_Inferno_CalculateTime(float x, float offset_x, float offset_y, float intersect_x, float intersect_y, float base)
+float buff_Inferno_CalculateTime(float damg, float offset_x, float offset_y, float intersect_x, float intersect_y, float base)
 {
-	return offset_y + (intersect_y - offset_y) * logn(((x - offset_x) * ((base - 1) / intersect_x)) + 1, base);
+	return offset_y + (intersect_y - offset_y) * logn(((damg - offset_x) * ((base - 1) / intersect_x)) + 1, base);
 }
 
 // mutator hooks
@@ -826,7 +826,7 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerPreThink)
 	if(player.buffs & BUFF_MAGNET.m_itemid)
 	{
 		vector pickup_size;
-		IL_EACH(g_items, it.classname != "item_flag_team" && it.classname != "item_kh_key",
+		IL_EACH(g_items, it.itemdef,
 		{
 			if(it.buffs)
 				pickup_size = '1 1 1' * autocvar_g_buffs_magnet_range_buff;

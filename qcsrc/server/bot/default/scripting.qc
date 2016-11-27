@@ -1106,7 +1106,6 @@ void bot_setcurrentcommand(entity this)
 	if(!this.bot_cmd_current)
 	{
 		this.bot_cmd_current = new_pure(bot_cmd);
-		this.bot_cmd_current.is_bot_cmd = true;
 	}
 
 	bot_cmd = this.bot_cmd_current;
@@ -1161,16 +1160,17 @@ float bot_execute_commands_once(entity this)
 	// Find command
 	bot_setcurrentcommand(this);
 
-	// if we have no bot command, better return
-	// old logic kept pressing previously pressed keys, but that has problems
-	// (namely, it means you cannot make a bot "normal" ever again)
-	// to keep a bot walking for a while, use the "wait" bot command
-	if(bot_cmd == NULL)
-		return false;
-
 	// Ignore all commands except continue when the bot is paused
-	if(this.bot_exec_status & BOT_EXEC_STATUS_PAUSED)
-	if(bot_cmd.bot_cmd_type!=BOT_CMD_CONTINUE)
+	if(!(self.bot_exec_status & BOT_EXEC_STATUS_PAUSED))
+	{
+		// if we have no bot command, better return
+		// old logic kept pressing previously pressed keys, but that has problems
+		// (namely, it means you cannot make a bot "normal" ever again)
+		// to keep a bot walking for a while, use the "wait" bot command
+		if(bot_cmd == world)
+			return 0;
+	}
+	else if(bot_cmd.bot_cmd_type != BOT_CMD_CONTINUE)
 	{
 		if(bot_cmd.bot_cmd_type!=BOT_CMD_NULL)
 		{

@@ -21,7 +21,9 @@ bool autocvar_sv_minigames_snake_wrap = false;
 float autocvar_sv_minigames_snake_delay_initial = 0.7;
 float autocvar_sv_minigames_snake_delay_multiplier = 50;
 float autocvar_sv_minigames_snake_delay_min = 0.1;
+#ifdef SVQC
 int autocvar_sv_minigames_snake_lives = 3;
+#endif
 
 .int snake_score;
 
@@ -95,7 +97,7 @@ void snake_new_mouse(entity minigame)
 	{
 		string pos = minigame_tile_buildname(i, j);
 		if(!snake_find_piece(minigame, pos))
-			RandomSelection_Add(NULL, 0, pos, 1, 1);
+			RandomSelection_AddString(pos, 1, 1);
 	}
 
 	entity piece = msle_spawn(minigame,"minigame_board_piece");
@@ -175,7 +177,7 @@ void minigame_setup_snake(entity minigame, int pteam)
 	{
 		string pos = minigame_tile_buildname(i, j);
 		if(!snake_find_piece(minigame, pos))
-			RandomSelection_Add(NULL, 0, pos, 1, 1);
+			RandomSelection_AddString(pos, 1, 1);
 	}
 
 	entity piece = msle_spawn(minigame,"minigame_board_piece");

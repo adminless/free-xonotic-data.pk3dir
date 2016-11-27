@@ -183,6 +183,12 @@ void make_safe_for_remove(entity this);
 	void SetChangeParms() { ENGINE_EVENT(); if (_SetChangeParms) _SetChangeParms(this); }
 	#define SetChangeParms _SetChangeParms
 
+#ifdef DP_EXT_PRECONNECT
+	void _ClientPreConnect(entity this);
+	void ClientPreConnect() { ENGINE_EVENT(); if (_ClientPreConnect) _ClientPreConnect(this); }
+	#define ClientPreConnect _ClientPreConnect
+#endif
+
 	void _ClientConnect(entity this);
 	void ClientConnect() { ENGINE_EVENT(); if (_ClientConnect) _ClientConnect(this); }
 	#define ClientConnect _ClientConnect
@@ -266,6 +272,8 @@ void make_safe_for_remove(entity this);
 #endif
 #undef ENGINE_EVENT
 
+#if XONOTIC
 #ifdef GAMEQC
 	#include <ecs/_mod.qh>
+#endif
 #endif

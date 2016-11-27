@@ -15,35 +15,30 @@ int autocvar_g_invasion_monster_count;
 bool autocvar_g_invasion_zombies_only;
 float autocvar_g_invasion_spawn_delay;
 
+.string spawnmob;
+
 spawnfunc(invasion_spawnpoint)
 {
 	if(!g_invasion) { delete(this); return; }
 
 	this.classname = "invasion_spawnpoint";
 	IL_PUSH(g_invasion_spawns, this);
-
-	if(autocvar_g_invasion_zombies_only) // precache only if it hasn't been already
-	if(this.monsterid) {
-		Monster mon = get_monsterinfo(this.monsterid);
-		mon.mr_precache(mon);
-	}
 }
 
-int invasion_PickMonster(int supermonster_count)
+Monster invasion_PickMonster(int supermonster_count)
 {
-	if(autocvar_g_invasion_zombies_only)
-		return MON_ZOMBIE.monsterid;
-
 	RandomSelection_Init();
 
 	FOREACH(Monsters, it != MON_Null,
 	{
-		if((it.spawnflags & MONSTER_TYPE_FLY) || (it.spawnflags & MONSTER_TYPE_SWIM) || (it.spawnflags & MONSTER_SIZE_QUAKE) || ((it.spawnflags & MON_FLAG_SUPERMONSTER) && supermonster_count >= 1))
+		if((it.spawnflags & MONSTER_TYPE_PASSIVE) || (it.spawnflags & MONSTER_TYPE_FLY) || (it.spawnflags & MONSTER_TYPE_SWIM) || (it.spawnflags & MONSTER_SIZE_QUAKE) || ((it.spawnflags & MON_FLAG_SUPERMONSTER) && supermonster_count >= 1))
 			continue;
-        RandomSelection_Add(NULL, it.monsterid, string_null, 1, 1);
+		if(autocvar_g_invasion_zombies_only && !(it.spawnflags & MONSTER_TYPE_UNDEAD))
+			continue;
+        RandomSelection_AddEnt(it, 1, 1);
 	});
 
-	return RandomSelection_chosen_float;
+	return RandomSelection_chosen_ent;
 }
 
 entity invasion_PickSpawn()
@@ -52,14 +47,14 @@ entity invasion_PickSpawn()
 
 	IL_EACH(g_invasion_spawns, true,
 	{
-		RandomSelection_Add(it, 0, string_null, 1, ((time >= it.spawnshieldtime) ? 0.2 : 1)); // give recently used spawnpoints a very low rating
+		RandomSelection_AddEnt(it, 1, ((time >= it.spawnshieldtime) ? 0.2 : 1)); // give recently used spawnpoints a very low rating
 		it.spawnshieldtime = time + autocvar_g_invasion_spawnpoint_spawn_delay;
 	});
 
 	return RandomSelection_chosen_ent;
 }
 
-void invasion_SpawnChosenMonster(float mon)
+void invasion_SpawnChosenMonster(Monster mon)
 {
 	entity spawn_point, monster;
 
@@ -69,17 +64,21 @@ void invasion_SpawnChosenMonster(float mon)
 	{
 		LOG_TRACE("Warning: couldn't find any invasion_spawnpoint spawnpoints, attempting to spawn monsters in random locations");
 		entity e = spawn();
-		setsize(e, (get_monsterinfo(mon)).mins, (get_monsterinfo(mon)).maxs);
+		setsize(e, mon.mins, mon.maxs);
 
 		if(MoveToRandomMapLocation(e, DPCONTENTS_SOLID | DPCONTENTS_CORPSE | DPCONTENTS_PLAYERCLIP, DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER, Q3SURFACEFLAG_SKY, 10, 1024, 256))
-			monster = spawnmonster("", mon, NULL, NULL, e.origin, false, false, 2);
-		else return;
-
-		setthink(e, SUB_Remove);
-		e.nextthink = time + 0.1;
+			monster = spawnmonster(e, "", mon.monsterid, NULL, NULL, e.origin, false, false, 2);
+		else
+		{
+			delete(e);
+			return;
+		}
 	}
-	else
-		monster = spawnmonster("", ((spawn_point.monsterid) ? spawn_point.monsterid : mon), spawn_point, spawn_point, spawn_point.origin, false, false, 2);
+	else // if spawnmob field falls through (unset), fallback to mon (relying on spawnmonster for that behaviour)
+		monster = spawnmonster(spawn(), spawn_point.spawnmob, mon.monsterid, spawn_point, spawn_point, spawn_point.origin, false, false, 2);
+
+	if(!monster)
+		return;
 
 	if(spawn_point) monster.target2 = spawn_point.target2;
 	monster.spawnshieldtime = time;
@@ -91,10 +90,10 @@ void invasion_SpawnChosenMonster(float mon)
 	else
 	{
 		RandomSelection_Init();
-		if(inv_monsters_perteam[NUM_TEAM_1] > 0) RandomSelection_Add(NULL, NUM_TEAM_1, string_null, 1, 1);
-		if(inv_monsters_perteam[NUM_TEAM_2] > 0) RandomSelection_Add(NULL, NUM_TEAM_2, string_null, 1, 1);
-		if(invasion_teams >= 3) if(inv_monsters_perteam[NUM_TEAM_3] > 0) { RandomSelection_Add(NULL, NUM_TEAM_3, string_null, 1, 1); }
-		if(invasion_teams >= 4) if(inv_monsters_perteam[NUM_TEAM_4] > 0) { RandomSelection_Add(NULL, NUM_TEAM_4, string_null, 1, 1); }
+		if(inv_monsters_perteam[NUM_TEAM_1] > 0) RandomSelection_AddFloat(NUM_TEAM_1, 1, 1);
+		if(inv_monsters_perteam[NUM_TEAM_2] > 0) RandomSelection_AddFloat(NUM_TEAM_2, 1, 1);
+		if(invasion_teams >= 3) if(inv_monsters_perteam[NUM_TEAM_3] > 0) { RandomSelection_AddFloat(NUM_TEAM_3, 1, 1); }
+		if(invasion_teams >= 4) if(inv_monsters_perteam[NUM_TEAM_4] > 0) { RandomSelection_AddFloat(NUM_TEAM_4, 1, 1); }
 
 		monster.team = RandomSelection_chosen_float;
 	}
@@ -120,7 +119,7 @@ void invasion_SpawnChosenMonster(float mon)
 
 void invasion_SpawnMonsters(int supermonster_count)
 {
-	int chosen_monster = invasion_PickMonster(supermonster_count);
+	Monster chosen_monster = invasion_PickMonster(supermonster_count);
 
 	invasion_SpawnChosenMonster(chosen_monster);
 }
@@ -463,22 +462,5 @@ void invasion_DelayedInit(entity this) // Do this check with a delay so we can w
 
 void invasion_Initialize()
 {
-	if(autocvar_g_invasion_zombies_only) {
-		Monster mon = MON_ZOMBIE;
-		mon.mr_precache(mon);
-	} else
-	{
-		float i;
-		entity mon;
-		for(i = MON_FIRST; i <= MON_LAST; ++i)
-		{
-			mon = get_monsterinfo(i);
-			if((mon.spawnflags & MONSTER_TYPE_FLY) || (mon.spawnflags & MONSTER_TYPE_SWIM))
-				continue; // flying/swimming monsters not yet supported
-
-			mon.mr_precache(mon);
-		}
-	}
-
 	InitializeEntity(NULL, invasion_DelayedInit, INITPRIO_GAMETYPE);
 }

@@ -55,7 +55,6 @@ entity pathlib_mknode(vector where,entity parent)
     setsize(node, '0 0 0', '0 0 0');
 
     setorigin(node, where);
-    node.medium = pointcontents(where);
 #if DEBUGPATHING
     pathlib_showsquare(where, 1 ,15);
 #endif
@@ -298,11 +297,11 @@ void pathlib_cleanup()
 
 }
 
-float Cosine_Interpolate(float a, float b, float x)
+float Cosine_Interpolate(float a, float b, float c)
 {
     float ft,f;
 
-	ft = x * 3.1415927;
+	ft = c * 3.1415927;
 	f = (1 - cos(ft)) * 0.5;
 
 	return  a*(1-f) + b*f;

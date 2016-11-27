@@ -36,6 +36,7 @@
 #include "weapons/weaponsystem.qh"
 
 #include "../common/net_notice.qh"
+#include "../common/net_linked.qh"
 #include "../common/physics/player.qh"
 
 #include "../common/items/_mod.qh"
@@ -303,6 +304,8 @@ void PutObserverInServer(entity this)
 	TRANSMUTE(Observer, this);
 	this.iscreature = false;
 	this.teleportable = TELEPORT_SIMPLE;
+	if(this.damagedbycontents)
+		IL_REMOVE(g_damagedbycontents, this);
 	this.damagedbycontents = false;
 	this.health = FRAGS_SPECTATOR;
 	SetSpectatee_status(this, etof(this));
@@ -336,6 +339,7 @@ void PutObserverInServer(entity this)
 	this.hook_time = 0;
 	this.deadflag = DEAD_NO;
 	this.crouch = false;
+	this.revive_progress = 0;
 	this.revival_time = 0;
 
 	this.items = 0;
@@ -524,6 +528,8 @@ void PutClientInServer(entity this)
 		this.wasplayer = true;
 		this.iscreature = true;
 		this.teleportable = TELEPORT_NORMAL;
+		if(!this.damagedbycontents)
+			IL_PUSH(g_damagedbycontents, this);
 		this.damagedbycontents = true;
 		set_movetype(this, MOVETYPE_WALK);
 		this.solid = SOLID_SLIDEBOX;
@@ -611,6 +617,7 @@ void PutClientInServer(entity this)
 		this.strength_finished = 0;
 		this.invincible_finished = 0;
 		this.fire_endtime = -1;
+		this.revive_progress = 0;
 		this.revival_time = 0;
 		this.air_finished = time + 12;
 
@@ -625,9 +632,11 @@ void PutClientInServer(entity this)
 		FixPlayermodel(this);
 		this.drawonlytoclient = NULL;
 
+		this.viewloc = NULL;
+
 		this.crouch = false;
-		this.view_ofs = STAT(PL_VIEW_OFS, NULL);
-		setsize(this, STAT(PL_MIN, NULL), STAT(PL_MAX, NULL));
+		this.view_ofs = STAT(PL_VIEW_OFS, this);
+		setsize(this, STAT(PL_MIN, this), STAT(PL_MAX, this));
 		this.spawnorigin = spot.origin;
 		setorigin(this, spot.origin + '0 0 1' * (1 - this.mins.z - 24));
 		// don't reset back to last position, even if new position is stuck in solid
@@ -706,7 +715,6 @@ void PutClientInServer(entity this)
 
 void ClientInit_misc(entity this);
 
-.float ebouncefactor, ebouncestop; // electro's values
 // TODO do we need all these fields, or should we stop autodetecting runtime
 // changes and just have a console command to update this?
 bool ClientInit_SendEntity(entity this, entity to, int sf)
@@ -1044,8 +1052,8 @@ ClientPreConnect
 Called once (not at each match start) when a client begins a connection to the server
 =============
 */
-void ClientPreConnect ()
-{ENGINE_EVENT();
+void ClientPreConnect(entity this)
+{
 	if(autocvar_sv_eventlog)
 	{
 		GameLogEcho(sprintf(":connect:%d:%d:%s",
@@ -1184,12 +1192,6 @@ void ClientConnect(entity this)
 
 	if (IS_REAL_CLIENT(this))
 	{
-		if (!autocvar_g_campaign)
-		{
-			this.motd_actived_time = -1;
-			Send_Notification(NOTIF_ONE_ONLY, this, MSG_CENTER, CENTER_MOTD, getwelcomemessage(this));
-		}
-
 		if (g_weaponarena_weapons == WEPSET(TUBA))
 			stuffcmd(this, "cl_cmd settemp chase_active 1\n");
 	}
@@ -1208,11 +1210,23 @@ void ClientConnect(entity this)
 	if (IS_REAL_CLIENT(this))
 		sv_notice_join(this);
 
+	// update physics stats (players can spawn before physics runs)
+	Physics_UpdateStats(this, PHYS_HIGHSPEED(this));
+
 	IL_EACH(g_initforplayer, it.init_for_player, {
 		it.init_for_player(it, this);
 	});
 
 	MUTATOR_CALLHOOK(ClientConnect, this);
+
+	if (IS_REAL_CLIENT(this))
+	{
+		if (!autocvar_g_campaign && !IS_PLAYER(this))
+		{
+			this.motd_actived_time = -1;
+			Send_Notification(NOTIF_ONE_ONLY, this, MSG_CENTER, CENTER_MOTD, getwelcomemessage(this));
+		}
+	}
 }
 /*
 =============
@@ -1268,6 +1282,8 @@ void ClientDisconnect(entity this)
 	this.playerid = 0;
 	ReadyCount();
 	if (vote_called && IS_REAL_CLIENT(this)) VoteCount(false);
+
+	ONREMOVE(this);
 }
 
 void ChatBubbleThink(entity this)
@@ -1594,11 +1610,11 @@ void player_regen(entity this)
 }
 
 bool zoomstate_set;
-void SetZoomState(entity this, float z)
+void SetZoomState(entity this, float newzoom)
 {
-	if(z != this.zoomstate)
+	if(newzoom != this.zoomstate)
 	{
-		this.zoomstate = z;
+		this.zoomstate = newzoom;
 		ClientData_Touch(this);
 	}
 	zoomstate_set = true;
@@ -1607,7 +1623,7 @@ void SetZoomState(entity this, float z)
 void GetPressedKeys(entity this)
 {
 	MUTATOR_CALLHOOK(GetPressedKeys, this);
-	int keys = this.pressedkeys;
+	int keys = STAT(PRESSED_KEYS, this);
 	keys = BITSET(keys, KEY_FORWARD, 	this.movement.x > 0);
 	keys = BITSET(keys, KEY_BACKWARD, 	this.movement.x < 0);
 	keys = BITSET(keys, KEY_RIGHT, 		this.movement.y > 0);
@@ -1617,7 +1633,9 @@ void GetPressedKeys(entity this)
 	keys = BITSET(keys, KEY_CROUCH, 	PHYS_INPUT_BUTTON_CROUCH(this));
 	keys = BITSET(keys, KEY_ATCK, 		PHYS_INPUT_BUTTON_ATCK(this));
 	keys = BITSET(keys, KEY_ATCK2, 		PHYS_INPUT_BUTTON_ATCK2(this));
-	this.pressedkeys = keys;
+	this.pressedkeys = keys; // store for other users
+
+	STAT(PRESSED_KEYS, this) = keys;
 }
 
 /*
@@ -1650,7 +1668,7 @@ void SpectateCopy(entity this, entity spectatee)
 	this.hit_time = spectatee.hit_time;
 	this.strength_finished = spectatee.strength_finished;
 	this.invincible_finished = spectatee.invincible_finished;
-	this.pressedkeys = spectatee.pressedkeys;
+	STAT(PRESSED_KEYS, this) = STAT(PRESSED_KEYS, spectatee);
 	this.weapons = spectatee.weapons;
 	this.vortex_charge = spectatee.vortex_charge;
 	this.vortex_chargepool_ammo = spectatee.vortex_chargepool_ammo;
@@ -1667,6 +1685,7 @@ void SpectateCopy(entity this, entity spectatee)
 	this.angles = spectatee.v_angle;
 	STAT(FROZEN, this) = STAT(FROZEN, spectatee);
 	this.revive_progress = spectatee.revive_progress;
+	this.viewloc = spectatee.viewloc;
 	if(!PHYS_INPUT_BUTTON_USE(this) && STAT(CAMERA_SPECTATOR, this) != 2)
 		this.fixangle = true;
 	setorigin(this, spectatee.origin);
@@ -2333,7 +2352,7 @@ void PlayerPreThink (entity this)
 					{
 						if ((this.respawn_flags & RESPAWN_FORCE) && !(this.respawn_time < this.respawn_time_max))
 							this.deadflag = DEAD_RESPAWNING;
-						else if (!button_pressed || (this.respawn_flags & RESPAWN_FORCE))
+						else if (!button_pressed || (time >= this.respawn_time_max && (this.respawn_flags & RESPAWN_FORCE)))
 							this.deadflag = DEAD_DEAD;
 						break;
 					}

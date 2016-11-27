@@ -27,6 +27,7 @@
 
 #include <common/physics/player.qh>
 #include <common/constants.qh>
+#include <common/net_linked.qh>
 #include <common/mapinfo.qh>
 #include <common/teams.qh>
 #include <common/util.qh>
@@ -177,7 +178,7 @@ void bot_setnameandstuff(entity this)
 					break;
 				}
 			));
-			RandomSelection_Add(NULL, 0, readfile, 1, prio);
+			RandomSelection_AddString(readfile, 1, prio);
 		}
 		readfile = RandomSelection_chosen_string;
 		fclose(file);
