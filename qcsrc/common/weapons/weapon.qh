@@ -175,7 +175,7 @@ ENDCLASS(OffhandWeapon)
 .OffhandWeapon offhand;
 #endif
 
-const int MAX_SHOT_DISTANCE = 32768;
+const int MAX_SHOT_DISTANCE = 2147483647; //65536; //32768;
 
 // weapon flags
 const int WEP_TYPE_OTHER          =  0x00; // not for damaging people

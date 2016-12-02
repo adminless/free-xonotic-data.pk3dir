@@ -349,13 +349,15 @@ void fireBullet_trace_callback(vector start, vector hit, vector end)
 	fireBullet_last_hit = NULL;
 }
 
+float autocvar_max_shot_dist = 65536;
 void fireBullet(entity this, vector start, vector dir, float spread, float max_solid_penetration, float damage, float force, float dtype, int tracereffects)
 {
 	LOG_INFOF("new shot %f\n", time);
 	vector  end;
 
 	dir = normalize(dir + randomvec() * spread);
-	end = start + dir * MAX_SHOT_DISTANCE;
+	//end = start + dir * MAX_SHOT_DISTANCE;
+	end = start + dir * autocvar_max_shot_dist;
 
 	fireBullet_last_hit = NULL;
 	float solid_penetration_left = 1;
@@ -397,7 +399,12 @@ void fireBullet(entity this, vector start, vector dir, float spread, float max_s
 		// TODO also show effect while tracing
 		WarpZone_TraceBox_ThroughZone(start, '0 0 0', '0 0 0', end, false, WarpZone_trace_forent, NULL, fireBullet_trace_callback);
 		dir = WarpZone_TransformVelocity(WarpZone_trace_transform, dir);
+		vector old_end = end;
 		end = WarpZone_TransformOrigin(WarpZone_trace_transform, end);
+		if (trace_fraction == 1.0) {
+			LOG_INFOF("    reached MAX_SHOT_DISTANCE %d\n", old_end == end);
+			break;
+		}
 		start = trace_endpos;
 		entity hit = trace_ent;
 
