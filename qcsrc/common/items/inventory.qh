@@ -27,12 +27,12 @@ NET_HANDLE(ENT_CLIENT_INVENTORY, bool isnew)
     make_pure(this);
     const int majorBits = ReadShort();
     for (int i = 0; i < Inventory_groups_major; ++i) {
-        if (!majorBits & BIT(i)) {
+        if (!(majorBits & BIT(i))) {
             continue;
         }
         const int minorBits = ReadByte();
         for (int j = 0; j < Inventory_groups_minor; ++j) {
-            if (!minorBits & BIT(j)) {
+            if (!(minorBits & BIT(j))) {
                 continue;
             }
             const GameItem it = Items_from(Inventory_groups_minor * i + j);
@@ -77,7 +77,7 @@ void Inventory_Write(Inventory data)
 #define X() MACRO_BEGIN \
     WriteByte(MSG_ENTITY, minorBits); \
     for (int j = 0; j < Inventory_groups_minor; ++j) { \
-        if (!minorBits & BIT(j)) { \
+        if (!(minorBits & BIT(j))) { \
             continue; \
         } \
         const GameItem it = Items_from(Inventory_groups_minor * maj + j); \
