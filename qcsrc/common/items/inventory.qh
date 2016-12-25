@@ -90,7 +90,9 @@ MACRO_END
             minorBits = BITSET(minorBits, BIT(G_MINOR(it.m_id)), true);
         }
     });
-    X();
+    if (minorBits) {
+        X();
+    }
 #undef X
 }
 #endif
