@@ -3,6 +3,7 @@
 #include "misc.qh"
 #include "nil.qh"
 #include "static.qh"
+#include "vector.qh"
 
 .vector origin;
 .bool pure_data;
@@ -35,6 +36,14 @@ entity spawn_pure() = #600;
 #define spawn_pure() _spawn()
 #endif
 
+#ifdef SVQC
+float max_cull_dist = 4000;
+bool ent_distancecull(entity this, entity client)
+{
+	return vdist(this.origin - client.origin, <, max_cull_dist);
+}
+#endif
+
 entity __spawn(string _classname, string _sourceLoc, bool pure)
 {
 	entity this = pure ? spawn_pure() : _spawn();
@@ -49,6 +58,10 @@ entity __spawn(string _classname, string _sourceLoc, bool pure)
         setorigin(this, (world.mins + world.maxs) * 0.5);
         #endif
 	}
+#ifdef SVQC
+	else
+		setcefc(this, ent_distancecull);
+#endif
 	return this;
 }
 

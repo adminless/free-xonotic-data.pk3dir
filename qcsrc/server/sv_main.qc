@@ -381,6 +381,8 @@ LABEL(cvar_fail)
 
 	set_movetype(this, this.movetype);
 
+	setcefc(this, ent_distancecull);
+
 	// support special -1 and -2 angle from radiant
 	if (this.angles == '0 -1 0')
 		this.angles = '-90 0 0';
