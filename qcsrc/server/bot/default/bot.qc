@@ -64,7 +64,7 @@ void bot_think(entity this)
 	if(autocvar_bot_god)
 		this.flags |= FL_GODMODE;
 
-	this.bot_nextthink = max(time, this.bot_nextthink) + max(0.01, autocvar_bot_ai_thinkinterval * pow(0.5, this.bot_aiskill) * min(14 / (skill + 14), 1));
+	this.bot_nextthink = max(time, this.bot_nextthink) + max(0.01, autocvar_bot_ai_thinkinterval * (0.5 ** this.bot_aiskill) * min(14 / (skill + 14), 1));
 
 	//if (this.bot_painintensity > 0)
 	//	this.bot_painintensity = this.bot_painintensity - (skill + 1) * 40 * frametime;
@@ -533,18 +533,18 @@ void autoskill(float factor)
 			bestbot = max(bestbot, it.totalfrags - it.totalfrags_lastcheck);
 	));
 
-	LOG_TRACE("autoskill: best player got ", ftos(bestplayer), ", ");
-	LOG_TRACE("best bot got ", ftos(bestbot), "; ");
+	LOG_DEBUG("autoskill: best player got ", ftos(bestplayer), ", ");
+	LOG_DEBUG("best bot got ", ftos(bestbot), "; ");
 	if(bestbot < 0 || bestplayer < 0)
 	{
-		LOG_TRACE("not doing anything");
+		LOG_DEBUG("not doing anything");
 		// don't return, let it reset all counters below
 	}
 	else if(bestbot <= bestplayer * factor - 2)
 	{
 		if(autocvar_skill < 17)
 		{
-			LOG_TRACE("2 frags difference, increasing skill");
+			LOG_DEBUG("2 frags difference, increasing skill");
 			cvar_set("skill", ftos(autocvar_skill + 1));
 			bprint("^2SKILL UP!^7 Now at level ", ftos(autocvar_skill), "\n");
 		}
@@ -553,14 +553,14 @@ void autoskill(float factor)
 	{
 		if(autocvar_skill > 0)
 		{
-			LOG_TRACE("2 frags difference, decreasing skill");
+			LOG_DEBUG("2 frags difference, decreasing skill");
 			cvar_set("skill", ftos(autocvar_skill - 1));
 			bprint("^1SKILL DOWN!^7 Now at level ", ftos(autocvar_skill), "\n");
 		}
 	}
 	else
 	{
-		LOG_TRACE("not doing anything");
+		LOG_DEBUG("not doing anything");
 		return;
 		// don't reset counters, wait for them to accumulate
 	}

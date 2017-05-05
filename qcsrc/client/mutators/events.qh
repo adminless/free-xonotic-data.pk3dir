@@ -164,3 +164,15 @@ MUTATOR_HOOKABLE(DrawScoreboard, EV_NO_ARGS);
 	/** mySize */ 			i(vector, MUTATOR_ARGV_1_vector) \
 	/**/
 MUTATOR_HOOKABLE(DrawInfoMessages, EV_DrawInfoMessages);
+
+/** Called when drawing info messages, allows adding new info messages */
+#define EV_HUD_WriteCvars(i, o) \
+	/** file */ 			i(float, MUTATOR_ARGV_0_float) \
+	/**/
+MUTATOR_HOOKABLE(HUD_WriteCvars, EV_HUD_WriteCvars);
+
+/** Called when the view model is being animated (setorigin is called after the hook, so you only need to modify origin here if desired) */
+#define EV_DrawViewModel(i, o) \
+	/** entity id */ 		i(entity, MUTATOR_ARGV_0_entity) \
+	/**/
+MUTATOR_HOOKABLE(DrawViewModel, EV_DrawViewModel);

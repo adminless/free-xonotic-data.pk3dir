@@ -686,11 +686,11 @@ void vehicles_damage(entity this, entity inflictor, entity attacker, float damag
 			this.vehicle_shieldent.alpha = 0.75;
 
 			if(sound_allowed(MSG_BROADCAST, attacker))
-				spamsound (this, CH_PAIN, "onslaught/ons_hit2.wav", VOL_BASE, ATTEN_NORM);   // FIXME: PLACEHOLDER
+				spamsound (this, CH_PAIN, SND_ONS_HIT2, VOL_BASE, ATTEN_NORM);   // FIXME: PLACEHOLDER
 		}
 		else
 			if(sound_allowed(MSG_BROADCAST, attacker))
-				spamsound (this, CH_PAIN, "onslaught/electricity_explode.wav", VOL_BASE, ATTEN_NORM);  // FIXME: PLACEHOLDER
+				spamsound (this, CH_PAIN, SND_ONS_ELECTRICITY_EXPLODE, VOL_BASE, ATTEN_NORM);  // FIXME: PLACEHOLDER
 
 	}
 	else
@@ -698,7 +698,7 @@ void vehicles_damage(entity this, entity inflictor, entity attacker, float damag
 		this.vehicle_health -= damage;
 
 		if(sound_allowed(MSG_BROADCAST, attacker))
-			spamsound (this, CH_PAIN, "onslaught/ons_hit2.wav", VOL_BASE, ATTEN_NORM);  // FIXME: PLACEHOLDER
+			spamsound (this, CH_PAIN, SND_ONS_HIT2, VOL_BASE, ATTEN_NORM);  // FIXME: PLACEHOLDER
 	}
 
 	if(this.damageforcescale < 1 && this.damageforcescale > 0)
@@ -869,6 +869,9 @@ void vehicles_exit(entity vehic, bool eject)
 	vehic.owner = NULL;
 
 	CSQCMODEL_AUTOINIT(vehic);
+
+	if(player)
+		player.oldorigin = player.origin; // player's location is set by the exit functions, so we need to do this after everything
 
 	vehicles_exit_running = false;
 }

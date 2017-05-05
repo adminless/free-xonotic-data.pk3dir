@@ -58,8 +58,7 @@ void Item_SetAlpha(entity this)
 			this.alpha = -1;
 	}
 
-	if(!veh_hud)
-	if(this.ItemStatus & ITS_STAYWEP)
+	if((!veh_hud) && (this.ItemStatus & ITS_STAYWEP))
 	{
 		this.colormod = this.glowmod = autocvar_cl_weapon_stay_color;
 		this.alpha = autocvar_cl_weapon_stay_alpha;
@@ -449,28 +448,30 @@ void Item_Show (entity e, float mode)
 		e.spawnshieldtime = 1;
 		e.ItemStatus &= ~ITS_AVAILABLE;
 	}
-	else {
-	bool nostay = def.instanceOfWeaponPickup ? !!(def.m_weapon.weapons & WEPSET_SUPERWEAPONS) : false // no weapon-stay on superweapons
-		|| e.team // weapon stay isn't supported for teamed weapons
-		;
-	if(def.instanceOfWeaponPickup && !nostay && g_weapon_stay)
-	{
-		// make the item translucent and not touchable
-		e.model = e.mdl;
-		e.solid = SOLID_TRIGGER; // can STILL be picked up!
-		e.effects |= EF_STARDUST;
-		e.spawnshieldtime = 0; // field indicates whether picking it up may give you anything other than the weapon
-		e.ItemStatus |= (ITS_AVAILABLE | ITS_STAYWEP);
-	}
 	else
 	{
-		//setmodel(e, "null");
-		e.solid = SOLID_NOT;
-		e.colormod = '0 0 0';
-		//e.glowmod = e.colormod;
-		e.spawnshieldtime = 1;
-		e.ItemStatus &= ~ITS_AVAILABLE;
-	}}
+		bool nostay = def.instanceOfWeaponPickup ? !!(def.m_weapon.weapons & WEPSET_SUPERWEAPONS) : false // no weapon-stay on superweapons
+			|| e.team // weapon stay isn't supported for teamed weapons
+			;
+		if(def.instanceOfWeaponPickup && !nostay && g_weapon_stay)
+		{
+			// make the item translucent and not touchable
+			e.model = e.mdl;
+			e.solid = SOLID_TRIGGER; // can STILL be picked up!
+			e.effects |= EF_STARDUST;
+			e.spawnshieldtime = 0; // field indicates whether picking it up may give you anything other than the weapon
+			e.ItemStatus |= (ITS_AVAILABLE | ITS_STAYWEP);
+		}
+		else
+		{
+			//setmodel(e, "null");
+			e.solid = SOLID_NOT;
+			e.colormod = '0 0 0';
+			//e.glowmod = e.colormod;
+			e.spawnshieldtime = 1;
+			e.ItemStatus &= ~ITS_AVAILABLE;
+		}
+	}
 
 	if (def.m_glow)
 		e.ItemStatus |= ITS_GLOW;
@@ -537,7 +538,6 @@ void Item_RespawnCountdown (entity this)
 		this.count += 1;
 		if(this.count == 1)
 		{
-			MUTATOR_CALLHOOK(Item_RespawnCountdown, string_null, '0 0 0');
 			do {
 				{
 					entity wi = Weapons_from(this.weapon);
@@ -556,10 +556,11 @@ void Item_RespawnCountdown (entity this)
 					}
 				}
 			} while (0);
+			bool mutator_returnvalue = MUTATOR_CALLHOOK(Item_RespawnCountdown, this);
             if(this.waypointsprite_attached)
             {
                 GameItem def = this.itemdef;
-                if (Item_ItemsTime_SpectatorOnly(def))
+                if (Item_ItemsTime_SpectatorOnly(def) && !mutator_returnvalue)
                     WaypointSprite_UpdateRule(this.waypointsprite_attached, 0, SPRITERULE_SPECTATOR);
                 WaypointSprite_UpdateBuildFinished(this.waypointsprite_attached, time + ITEM_RESPAWN_TICKS);
             }
@@ -594,15 +595,18 @@ void Item_RespawnThink(entity this)
 void Item_ScheduleRespawnIn(entity e, float t)
 {
 	// if the respawn time is longer than 10 seconds, show a waypoint, otherwise, just respawn normally
-	if ((Item_ItemsTime_Allow(e.itemdef) || (e.weapons & WEPSET_SUPERWEAPONS)) && (t - ITEM_RESPAWN_TICKS) > 0)
+	if ((Item_ItemsTime_Allow(e.itemdef) || (e.weapons & WEPSET_SUPERWEAPONS) || MUTATOR_CALLHOOK(Item_ScheduleRespawn, e, t)) && (t - ITEM_RESPAWN_TICKS) > 0)
 	{
 		setthink(e, Item_RespawnCountdown);
 		e.nextthink = time + max(0, t - ITEM_RESPAWN_TICKS);
 		e.scheduledrespawntime = e.nextthink + ITEM_RESPAWN_TICKS;
 		e.count = 0;
-		t = Item_ItemsTime_UpdateTime(e, e.scheduledrespawntime);
-		Item_ItemsTime_SetTime(e, t);
-		Item_ItemsTime_SetTimesForAllPlayers();
+		if(Item_ItemsTime_Allow(e.itemdef) || (e.weapons & WEPSET_SUPERWEAPONS))
+		{
+			t = Item_ItemsTime_UpdateTime(e, e.scheduledrespawntime);
+			Item_ItemsTime_SetTime(e, t);
+			Item_ItemsTime_SetTimesForAllPlayers();
+		}
 	}
 	else
 	{
@@ -1010,7 +1014,6 @@ float ammo_pickupevalfunc(entity player, entity item)
 			switch(it.ammo_field)
 			{
 				case ammo_shells:  need_shells  = true; break;
-				case ammo_shells:  need_shells  = true; break;
 				case ammo_nails:   need_nails   = true; break;
 				case ammo_rockets: need_rockets = true; break;
 				case ammo_cells:   need_cells   = true; break;
@@ -1021,29 +1024,22 @@ float ammo_pickupevalfunc(entity player, entity item)
 		rating = item.bot_pickupbasevalue;
 	}
 
-	if (need_shells)
-	if (item.ammo_shells)
-	if (player.ammo_shells < g_pickup_shells_max)
+	if ((need_shells) && (item.ammo_shells) && (player.ammo_shells < g_pickup_shells_max))
 		c = item.ammo_shells / player.ammo_shells;
-	if (need_nails)
-	if (item.ammo_nails)
-	if (player.ammo_nails < g_pickup_nails_max)
+
+	if ((need_nails) && (item.ammo_nails) && (player.ammo_nails < g_pickup_nails_max))
 		c = item.ammo_nails / player.ammo_nails;
-	if (need_rockets)
-	if (item.ammo_rockets)
-	if (player.ammo_rockets < g_pickup_rockets_max)
+
+	if ((need_rockets) && (item.ammo_rockets) && (player.ammo_rockets < g_pickup_rockets_max))
 		c = item.ammo_rockets / player.ammo_rockets;
-	if (need_cells)
-	if (item.ammo_cells)
-	if (player.ammo_cells < g_pickup_cells_max)
+
+	if ((need_cells) && (item.ammo_cells) && (player.ammo_cells < g_pickup_cells_max))
 		c = item.ammo_cells / player.ammo_cells;
-	if (need_plasma)
-	if (item.ammo_plasma)
-	if (player.ammo_plasma < g_pickup_plasma_max)
+
+	if ((need_plasma) && (item.ammo_plasma) && (player.ammo_plasma < g_pickup_plasma_max))
 		c = item.ammo_plasma / player.ammo_plasma;
-	if (need_fuel)
-	if (item.ammo_fuel)
-	if (player.ammo_fuel < g_pickup_fuel_max)
+
+	if ((need_fuel) && (item.ammo_fuel) && (player.ammo_fuel < g_pickup_fuel_max))
 		c = item.ammo_fuel / player.ammo_fuel;
 
 	rating *= min(2, c);
@@ -1061,16 +1057,17 @@ float healtharmor_pickupevalfunc(entity player, entity item)
 
 	float itemarmor = item.armorvalue;
 	float itemhealth = item.health;
+
 	if(item.item_group)
 	{
 		itemarmor *= min(4, item.item_group_count);
 		itemhealth *= min(4, item.item_group_count);
 	}
-	if (itemarmor)
-	if (player.armorvalue < item.max_armorvalue)
+
+	if (itemarmor && (player.armorvalue < item.max_armorvalue))
 		c = itemarmor / max(1, player.armorvalue * 2/3 + player.health * 1/3);
-	if (itemhealth)
-	if (player.health < item.max_health)
+
+	if (itemhealth && (player.health < item.max_health))
 		c = itemhealth / max(1, player.health);
 
 	rating *= min(2, c);
@@ -1367,9 +1364,8 @@ spawnfunc(item_rockets)
 
 spawnfunc(item_bullets)
 {
-	if(!weaponswapping)
-	if(autocvar_sv_q3acompat_machineshotgunswap)
-	if(this.classname != "droppedweapon")
+	if(!weaponswapping && autocvar_sv_q3acompat_machineshotgunswap && 
+	   (this.classname != "droppedweapon"))
 	{
 		weaponswapping = true;
 		spawnfunc_item_shells(this);
@@ -1392,9 +1388,8 @@ spawnfunc(item_plasma)
 
 spawnfunc(item_shells)
 {
-	if(!weaponswapping)
-	if(autocvar_sv_q3acompat_machineshotgunswap)
-	if(this.classname != "droppedweapon")
+	if(!weaponswapping && autocvar_sv_q3acompat_machineshotgunswap &&
+	   (this.classname != "droppedweapon"))
 	{
 		weaponswapping = true;
 		spawnfunc_item_bullets(this);
@@ -1476,10 +1471,9 @@ void target_items_use(entity this, entity actor, entity trigger)
 		return;
 	}
 
-	if (!IS_PLAYER(actor))
+	if (!IS_PLAYER(actor) || IS_DEAD(actor))
 		return;
-	if(IS_DEAD(actor))
-		return;
+
 	if(trigger.solid == SOLID_TRIGGER)
 	{
 		EXACTTRIGGER_TOUCH(this, trigger);
@@ -1496,7 +1490,7 @@ void target_items_use(entity this, entity actor, entity trigger)
 
 spawnfunc(target_items)
 {
-	int n, j;
+	int n;
 	string s;
 
 	this.use = target_items_use;
@@ -1514,7 +1508,7 @@ spawnfunc(target_items)
 	}
 	else
 	{
-		for(j = 0; j < n; ++j)
+		for(int j = 0; j < n; ++j)
 		{
 			if     (argv(j) == "unlimited_ammo")         this.items |= IT_UNLIMITED_AMMO;
 			else if(argv(j) == "unlimited_weapon_ammo")  this.items |= IT_UNLIMITED_WEAPON_AMMO;
@@ -1598,7 +1592,7 @@ spawnfunc(target_items)
 	//print(this.netname, "\n");
 
 	n = tokenize_console(this.netname);
-	for(j = 0; j < n; ++j)
+	for(int j = 0; j < n; ++j)
 	{
 		FOREACH(Weapons, it != WEP_Null && W_UndeprecateName(argv(j)) == it.netname, {
             it.wr_init(it);

@@ -3,7 +3,7 @@
 CLASS(Arc, Weapon)
 /* ammotype  */ ATTRIB(Arc, ammo_field, .int, ammo_cells);
 /* impulse   */ ATTRIB(Arc, impulse, int, 3);
-/* flags     */ ATTRIB(Arc, spawnflags, int, WEP_FLAG_NORMAL);
+/* flags     */ ATTRIB(Arc, spawnflags, int, WEP_TYPE_HITSCAN);
 /* rating    */ ATTRIB(Arc, bot_pickupbasevalue, float, 8000);
 /* color     */ ATTRIB(Arc, wpcolor, vector, '1 1 1');
 /* modelname */ ATTRIB(Arc, mdl, string, "arc");
@@ -1317,7 +1317,7 @@ NET_HANDLE(ENT_CLIENT_ARC_BEAM, bool isnew)
 		IL_PUSH(g_drawables, this);
 		this.entremove = Remove_ArcBeam;
 		this.move_time = time;
-		loopsound(this, CH_SHOTS_SINGLE, SND(ARC_LOOP), VOL_BASE, ATTEN_NORM);
+		loopsound(this, CH_SHOTS_SINGLE, SND_ARC_LOOP, VOL_BASE, ATTEN_NORM);
 
 		flash = spawn();
 		flash.owner = this;
