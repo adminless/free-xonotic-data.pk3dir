@@ -41,6 +41,9 @@ entity spawn_pure() = #600;
 float max_cull_dist = 4000;
 bool ent_distancecull(entity this, entity client)
 {
+	if(!this.fade_end && !max_cull_dist)
+		return true; // show anyway
+
 	vector myorg = (this.absmax + this.absmin) * 0.5;
 	float mymax = (this.fade_end) ? this.fade_end : max_cull_dist;
 	return vdist(myorg - client.origin, <, mymax); // clients always have origin (right?)
