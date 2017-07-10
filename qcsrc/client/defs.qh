@@ -32,12 +32,14 @@ int binddb;
 
 // QUALIFYING
 float race_checkpoint;
+float race_checkpointflags;
 float race_time;
 float race_laptime;
 float race_checkpointtime;
 float race_previousbesttime;
 string race_previousbestname;
 float race_nextcheckpoint;
+float race_nextcheckpointflags;
 float race_nextbesttime;
 string race_nextbestname;
 float race_penaltyaccumulator; // qualifying: total penalty time in tenths
@@ -54,11 +56,13 @@ string race_speedaward_alltimebest_unit;
 
 // RACE
 float race_mycheckpoint;
+float race_mycheckpointflags;
 float race_mycheckpointtime;
 float race_mycheckpointdelta;
 float race_mycheckpointlapsdelta;
 string race_mycheckpointenemy;
 float race_othercheckpoint;
+float race_othercheckpointflags;
 float race_othercheckpointtime;
 float race_othercheckpointdelta;
 float race_othercheckpointlapsdelta;

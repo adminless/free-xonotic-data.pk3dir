@@ -1032,7 +1032,12 @@ NET_HANDLE(TE_CSQC_RACE, bool isNew)
 	switch (b)
 	{
 		case RACE_NET_CHECKPOINT_HIT_QUALIFYING:
-			race_checkpoint = ReadByte();
+			int cpflags00 = ReadByte();
+			if(cpflags00 & BIT(2))
+				race_checkpoint = ReadLong();
+			else
+				race_checkpoint = ReadByte();
+			race_checkpointflags = cpflags00;
 			race_time = ReadInt24_t();
 			race_previousbesttime = ReadInt24_t();
 			if(race_previousbestname)
@@ -1048,7 +1053,12 @@ NET_HANDLE(TE_CSQC_RACE, bool isNew)
 			}
 			break;
 		case RACE_NET_CHECKPOINT_HIT_SELF_QUALIFYING:
-			race_checkpoint = ReadByte();
+			int cpflags0 = ReadByte();
+			if(cpflags0 & BIT(2))
+				race_checkpoint = ReadLong();
+			else
+				race_checkpoint = ReadByte();
+			race_checkpointflags = cpflags0;
 			race_time = ReadInt24_t();
 			race_previousbesttime = ReadInt24_t();
 			if(race_previousbestname)
@@ -1074,7 +1084,12 @@ NET_HANDLE(TE_CSQC_RACE, bool isNew)
 			race_checkpointtime = -99999;
 			// fall through
 		case RACE_NET_CHECKPOINT_NEXT_QUALIFYING:
-			race_nextcheckpoint = ReadByte();
+			int cpflags1 = ReadByte();
+			if(cpflags1 & BIT(2))
+				race_nextcheckpoint = ReadLong();
+			else
+				race_nextcheckpoint = ReadByte();
+			race_nextcheckpointflags = cpflags1;
 
 			race_nextbesttime = ReadInt24_t();
 			if(race_nextbestname)
@@ -1083,7 +1098,12 @@ NET_HANDLE(TE_CSQC_RACE, bool isNew)
 			break;
 
 		case RACE_NET_CHECKPOINT_NEXT_SELF_QUALIFYING:
-			race_nextcheckpoint = ReadByte();
+			int cpflags2 = ReadByte();
+			if(cpflags2 & BIT(2))
+				race_nextcheckpoint = ReadLong();
+			else
+				race_nextcheckpoint = ReadByte();
+			race_nextcheckpointflags = cpflags2;
 
 			race_nextbesttime = ReadInt24_t();
 			if(race_nextbestname)
@@ -1092,7 +1112,12 @@ NET_HANDLE(TE_CSQC_RACE, bool isNew)
 			break;
 
 		case RACE_NET_CHECKPOINT_HIT_RACE:
-			race_mycheckpoint = ReadByte();
+			int cpflags3 = ReadByte();
+			if(cpflags3 & BIT(2))
+				race_mycheckpoint = ReadLong();
+			else
+				race_mycheckpoint = ReadByte();
+			race_mycheckpointflags = cpflags3;
 			race_mycheckpointtime = time;
 			race_mycheckpointdelta = ReadInt24_t();
 			race_mycheckpointlapsdelta = ReadByte();
@@ -1108,7 +1133,12 @@ NET_HANDLE(TE_CSQC_RACE, bool isNew)
 			break;
 
 		case RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT:
-			race_othercheckpoint = ReadByte();
+			int cpflags4 = ReadByte();
+			if(cpflags4 & BIT(2))
+				race_othercheckpoint = ReadLong();
+			else
+				race_othercheckpoint = ReadByte();
+			race_othercheckpointflags = cpflags4;
 			race_othercheckpointtime = time;
 			race_othercheckpointdelta = ReadInt24_t();
 			race_othercheckpointlapsdelta = ReadByte();

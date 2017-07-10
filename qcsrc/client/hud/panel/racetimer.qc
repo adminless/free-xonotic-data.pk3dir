@@ -5,7 +5,7 @@
 // Race timer (#6)
 
 // return the string of the onscreen race timer
-string MakeRaceString(int cp, float mytime, float theirtime, float lapdelta, string theirname)
+string MakeRaceString(int cp, int cpflags, float mytime, float theirtime, float lapdelta, string theirname)
 {
 	TC(int, cp);
 	string col;
@@ -57,9 +57,9 @@ string MakeRaceString(int cp, float mytime, float theirtime, float lapdelta, str
 		timestr = "";
 	}
 
-	if(cp == 254)
+	if(cpflags & BIT(0))
 		cpname = _("Start line");
-	else if(cp == 255)
+	else if(cpflags & BIT(1))
 		cpname = _("Finish line");
 	else if(cp)
 		cpname = sprintf(_("Intermediate %d"), cp);
@@ -143,23 +143,23 @@ void HUD_RaceTimer ()
 		forcetime = "";
 		if(a > 0) // just hit a checkpoint?
 		{
-			if(race_checkpoint != 254)
+			if(!(race_checkpointflags & BIT(0)))
 			{
 				if(race_time && race_previousbesttime)
-					s = MakeRaceString(race_checkpoint, TIME_DECODE(race_time) - TIME_DECODE(race_previousbesttime), 0, 0, race_previousbestname);
+					s = MakeRaceString(race_checkpoint, race_checkpointflags, TIME_DECODE(race_time) - TIME_DECODE(race_previousbesttime), 0, 0, race_previousbestname);
 				else
-					s = MakeRaceString(race_checkpoint, 0, -1, 0, race_previousbestname);
+					s = MakeRaceString(race_checkpoint, race_checkpointflags, 0, -1, 0, race_previousbestname);
 				if(race_time)
 					forcetime = TIME_ENCODED_TOSTRING(race_time);
 			}
 		}
 		else
 		{
-			if(race_laptime && race_nextbesttime && race_nextcheckpoint != 254)
+			if(race_laptime && race_nextbesttime && !(race_nextcheckpointflags & BIT(0)))
 			{
 				a = bound(0, 2 - ((race_laptime + TIME_DECODE(race_nextbesttime)) - (time + TIME_DECODE(race_penaltyaccumulator))), 1);
 				if(a > 0) // next one?
-					s = MakeRaceString(race_nextcheckpoint, (time + TIME_DECODE(race_penaltyaccumulator)) - race_laptime, TIME_DECODE(race_nextbesttime), 0, race_nextbestname);
+					s = MakeRaceString(race_nextcheckpoint, race_nextcheckpointflags, (time + TIME_DECODE(race_penaltyaccumulator)) - race_laptime, TIME_DECODE(race_nextbesttime), 0, race_nextbestname);
 			}
 		}
 
@@ -191,7 +191,7 @@ void HUD_RaceTimer ()
 		else
 			a = 1;
 
-		if(race_laptime && race_checkpoint != 255)
+		if(race_laptime && !(race_checkpointflags & BIT(1)))
 		{
 			s = TIME_ENCODED_TOSTRING(TIME_ENCODE(time + TIME_DECODE(race_penaltyaccumulator) - race_laptime));
 			str_pos = pos + eX * 0.5 * (mySize.x - stringwidth(s, false, '0.6 0.6 0' * mySize.y));
@@ -205,14 +205,14 @@ void HUD_RaceTimer ()
 		if(race_mycheckpointtime)
 		{
 			a = bound(0, 2 - (time - race_mycheckpointtime), 1);
-			s = MakeRaceString(race_mycheckpoint, TIME_DECODE(race_mycheckpointdelta), -(race_mycheckpointenemy == ""), race_mycheckpointlapsdelta, race_mycheckpointenemy);
+			s = MakeRaceString(race_mycheckpoint, race_mycheckpointflags, TIME_DECODE(race_mycheckpointdelta), -(race_mycheckpointenemy == ""), race_mycheckpointlapsdelta, race_mycheckpointenemy);
 			str_pos = pos + vec2(0.5 * (mySize.x - stringwidth(s, true, '1 1 0' * 0.2 * mySize.y)), 0.6 * mySize.y);
 			drawcolorcodedstring(str_pos, s, '1 1 0' * 0.2 * mySize.y, panel_fg_alpha * a, DRAWFLAG_NORMAL);
 		}
 		if(race_othercheckpointtime && race_othercheckpointenemy != "")
 		{
 			a = bound(0, 2 - (time - race_othercheckpointtime), 1);
-			s = MakeRaceString(race_othercheckpoint, -TIME_DECODE(race_othercheckpointdelta), -(race_othercheckpointenemy == ""), race_othercheckpointlapsdelta, race_othercheckpointenemy);
+			s = MakeRaceString(race_othercheckpoint, race_othercheckpointflags, -TIME_DECODE(race_othercheckpointdelta), -(race_othercheckpointenemy == ""), race_othercheckpointlapsdelta, race_othercheckpointenemy);
 			str_pos = pos + vec2(0.5 * (mySize.x - stringwidth(s, true, '1 1 0' * 0.2 * mySize.y)), 0.6 * mySize.y);
 			drawcolorcodedstring(str_pos, s, '1 1 0' * 0.2 * mySize.y, panel_fg_alpha * a, DRAWFLAG_NORMAL);
 		}

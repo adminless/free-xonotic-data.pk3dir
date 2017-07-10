@@ -223,6 +223,8 @@ MUTATOR_HOOKFUNCTION(rc, ClientConnect)
 {
 	entity player = M_ARGV(0, entity);
 
+	race_InitPersonalCheckpointCounts(player);
+
 	race_PreparePlayer(player);
 	player.race_checkpoint = -1;
 
@@ -244,6 +246,12 @@ MUTATOR_HOOKFUNCTION(rc, ClientConnect)
 			race_SendRankings(i, 0, 0, MSG_ONE);
 		}
 	}
+}
+
+MUTATOR_HOOKFUNCTION(rc, ClientDisconnect)
+{
+	entity player = M_ARGV(0, entity);
+	race_RemovePersonalCheckpointCounts(player);
 }
 
 MUTATOR_HOOKFUNCTION(rc, MakePlayerObserver)

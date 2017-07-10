@@ -110,19 +110,133 @@ spawnfunc(target_checkpoint);
 
 .entity sprite;
 
-float race_checkpoint_records[MAX_CHECKPOINTS];
-string race_checkpoint_recordholders[MAX_CHECKPOINTS];
-float race_checkpoint_lasttimes[MAX_CHECKPOINTS];
-float race_checkpoint_lastlaps[MAX_CHECKPOINTS];
-entity race_checkpoint_lastplayers[MAX_CHECKPOINTS];
+ArrayList race_checkpoint_records;
+ArrayList race_checkpoint_recordholders;
 
-.float race_checkpoint_record[MAX_CHECKPOINTS];
+ArrayList race_checkpoint_lasttimes;
+ArrayList race_checkpoint_lastlaps;
+ArrayList race_checkpoint_lastplayers;
+
+.ArrayList race_checkpoint_record;
+
+//float race_checkpoint_records[MAX_CHECKPOINTS];
+//string race_checkpoint_recordholders[MAX_CHECKPOINTS];
+//float race_checkpoint_lasttimes[MAX_CHECKPOINTS];
+//float race_checkpoint_lastlaps[MAX_CHECKPOINTS];
+//entity race_checkpoint_lastplayers[MAX_CHECKPOINTS];
+
+//.float race_checkpoint_record[MAX_CHECKPOINTS];
 
 float race_highest_checkpoint;
 float race_timed_checkpoint;
 
 float defrag_ents;
 float defragcpexists;
+
+// this... is a disaster
+// TODO: clean up the mess!
+float race_GetCheckpointRecord(int cpnumber)
+{
+	ArrayList rr = race_checkpoint_records;
+	rr.al_len = max(rr.al_len, cpnumber);
+	return AL_getf(race_checkpoint_records, cpnumber);
+}
+void race_SetCheckpointRecord(int cpnumber, float newtime)
+{
+	ArrayList rr = race_checkpoint_records;
+	rr.al_len = max(rr.al_len, cpnumber);
+	AL_setf(race_checkpoint_records, cpnumber, newtime);
+}
+
+float race_GetPersonalCheckpointRecord(entity player, int cpnumber)
+{
+	.ArrayList rr = race_checkpoint_record;
+	player.(rr).al_len = max(player.(rr).al_len, cpnumber);
+	return AL_getf(player.race_checkpoint_record, cpnumber);
+}
+void race_SetPersonalCheckpointRecord(entity player, int cpnumber, float newtime)
+{
+	.ArrayList rr = race_checkpoint_record;
+	player.(rr).al_len = max(player.(rr).al_len, cpnumber);
+
+	return AL_setf(player.race_checkpoint_record, cpnumber, newtime);
+}
+
+string race_GetCheckpointRecordHolder(int cpnumber)
+{
+	ArrayList rr = race_checkpoint_recordholders;
+	rr.al_len = max(rr.al_len, cpnumber);
+	return AL_gets(race_checkpoint_recordholders, cpnumber);
+}
+void race_SetCheckpointRecordHolder(int cpnumber, string newname)
+{
+	ArrayList rr = race_checkpoint_records;
+	rr.al_len = max(rr.al_len, cpnumber);
+
+	AL_sets(race_checkpoint_recordholders, cpnumber, newname);
+}
+
+
+entity race_GetCheckpointLastPlayer(int cpnumber)
+{
+	ArrayList rr = race_checkpoint_lastplayers;
+	rr.al_len = max(rr.al_len, cpnumber);
+	return AL_gete(race_checkpoint_lastplayers, cpnumber);
+}
+void race_SetCheckpointLastPlayer(int cpnumber, entity newplayer)
+{
+	ArrayList rr = race_checkpoint_lastplayers;
+	rr.al_len = max(rr.al_len, cpnumber);
+	AL_sete(race_checkpoint_lastplayers, cpnumber, newplayer);
+}
+
+float race_GetCheckpointLastTime(int cpnumber)
+{
+	ArrayList rr = race_checkpoint_lasttimes;
+	rr.al_len = max(rr.al_len, cpnumber);
+	return AL_getf(race_checkpoint_lasttimes, cpnumber);
+}
+void race_SetCheckpointLastTime(int cpnumber, float newtime)
+{
+	ArrayList rr = race_checkpoint_lasttimes;
+	rr.al_len = max(rr.al_len, cpnumber);
+	AL_setf(race_checkpoint_lasttimes, cpnumber, newtime);
+}
+
+float race_GetCheckpointLastLap(int cpnumber)
+{
+	ArrayList rr = race_checkpoint_lastlaps;
+	rr.al_len = max(rr.al_len, cpnumber);
+	return AL_getf(race_checkpoint_lastlaps, cpnumber);
+}
+void race_SetCheckpointLastLap(int cpnumber, float newtime)
+{
+	ArrayList rr = race_checkpoint_lastlaps;
+	rr.al_len = max(rr.al_len, cpnumber);
+	AL_setf(race_checkpoint_lastlaps, cpnumber, newtime);
+}
+
+void race_InitCheckpointCounts(int highest_cp)
+{
+	AL_NEW(race_checkpoint_records, highest_cp, 0, f);
+	AL_NEW(race_checkpoint_recordholders, highest_cp, string_null, s);
+
+	AL_NEW(race_checkpoint_lastplayers, highest_cp, NULL, e);
+	AL_NEW(race_checkpoint_lasttimes, highest_cp, 0, f);
+	AL_NEW(race_checkpoint_lastlaps, highest_cp, 0, f);
+}
+
+void race_InitPersonalCheckpointCounts(entity player)
+{
+	int highest_cp = race_highest_checkpoint; // make this local since it's called outside race code
+	AL_NEW(player.race_checkpoint_record, highest_cp, 0, f);
+}
+
+void race_RemovePersonalCheckpointCounts(entity player)
+{
+	if(player.race_checkpoint_record)
+		AL_DELETE(player.race_checkpoint_record);
+}
 
 float race_NextCheckpoint(float f)
 {
@@ -142,20 +256,22 @@ float race_PreviousCheckpoint(float f)
 		return f - 1;
 }
 
-// encode as:
-//   0 = common start/finish
-// 254 = start
-// 255 = finish
-float race_CheckpointNetworkID(float f)
+int race_CheckpointNetworkFlags(int cpnumber)
 {
+	int theflags = 0;
+
 	if(race_timed_checkpoint)
 	{
-		if(f == 0)
-			return 254; // start
-		else if(f == race_timed_checkpoint)
-			return 255; // finish
+		if(cpnumber == 0)
+			theflags |= BIT(0); // start
+		else if(cpnumber == race_timed_checkpoint)
+			theflags |= BIT(1); // finish
 	}
-	return f;
+
+	if(cpnumber > 255)
+		theflags |= BIT(2); // long
+
+	return theflags;
 }
 
 void race_SendNextCheckpoint(entity e, float spec) // qualifying only
@@ -164,8 +280,8 @@ void race_SendNextCheckpoint(entity e, float spec) // qualifying only
 		return;
 
 	int cp = e.race_checkpoint;
-	float recordtime = race_checkpoint_records[cp];
-	string recordholder = race_checkpoint_recordholders[cp];
+	float recordtime = race_GetCheckpointRecord(cp);
+	string recordholder = race_GetCheckpointRecordHolder(cp);
 	if(recordholder == e.netname)
 		recordholder = "";
 
@@ -184,20 +300,32 @@ void race_SendNextCheckpoint(entity e, float spec) // qualifying only
 		}
 		else
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_QUALIFYING);
-		WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player will be at next
+		int cpflags = race_CheckpointNetworkFlags(cp);
+		WriteByte(MSG_ONE, cpflags);
+		// checkpoint the player will be at next
+		if(cpflags & BIT(2))
+			WriteLong(MSG_ONE, cp);
+		else
+			WriteByte(MSG_ONE, cp);
 		WriteInt24_t(MSG_ONE, recordtime);
 		WriteString(MSG_ONE, recordholder);
 	});
 
 	if(!spec && e.cvar_cl_race_cptimes_onlyself) // don't send to spectators!
 	{
-		recordtime = e.race_checkpoint_record[cp];
+		recordtime = race_GetPersonalCheckpointRecord(e, cp);
 
 		// not spectatable
 		msg_entity = e;
 		WriteHeader(MSG_ONE, TE_CSQC_RACE);
 		WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_SELF_QUALIFYING);
-		WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player will be at next
+		int cpflags = race_CheckpointNetworkFlags(cp);
+		WriteByte(MSG_ONE, cpflags);
+		// checkpoint the player will be at next
+		if(cpflags & BIT(2))
+			WriteLong(MSG_ONE, cp);
+		else
+			WriteByte(MSG_ONE, cp);
 		WriteInt24_t(MSG_ONE, recordtime);
 	}
 }
@@ -429,9 +557,9 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 
 		if(tvalid)
 		{
-			recordtime = race_checkpoint_records[cp];
-			myrecordtime = e.race_checkpoint_record[cp];
-			recordholder = strcat1(race_checkpoint_recordholders[cp]); // make a tempstring copy, as we'll possibly strunzone it!
+			recordtime = race_GetCheckpointRecord(cp);
+			myrecordtime = race_GetPersonalCheckpointRecord(e, cp);
+			recordholder = strcat1(race_GetCheckpointRecordHolder(cp)); // make a tempstring copy, as we'll possibly strunzone it!
 			if(recordholder == e.netname)
 				recordholder = "";
 
@@ -444,16 +572,14 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				}
 				if(t < recordtime || recordtime == 0)
 				{
-					race_checkpoint_records[cp] = t;
-					if(race_checkpoint_recordholders[cp])
-						strunzone(race_checkpoint_recordholders[cp]);
-					race_checkpoint_recordholders[cp] = strzone(e.netname);
+					race_SetCheckpointRecord(cp, t);
+					race_SetCheckpointRecordHolder(cp, e.netname);
 					if(g_race_qualifying)
 						FOREACH_CLIENT(IS_PLAYER(it) && IS_REAL_CLIENT(it) && it.race_checkpoint == cp, LAMBDA(race_SendNextCheckpoint(it, 0)));
 				}
 
 				if(t < myrecordtime || myrecordtime == 0)
-					e.race_checkpoint_record[cp] = t; // resending done below
+					race_SetPersonalCheckpointRecord(e, cp, t); // resending done below
 			}
 		}
 		else
@@ -475,7 +601,12 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 						continue;
 					WriteHeader(MSG_ONE, TE_CSQC_RACE);
 					WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_QUALIFYING);
-					WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player now is at
+					int cpflags = race_CheckpointNetworkFlags(cp);
+					WriteByte(MSG_ONE, cpflags);
+					if(cpflags & BIT(2))
+						WriteLong(MSG_ONE, cp);
+					else
+						WriteByte(MSG_ONE, cp);
 					WriteInt24_t(MSG_ONE, t); // time to that intermediate
 					WriteInt24_t(MSG_ONE, recordtime); // previously best time
 					WriteString(MSG_ONE, recordholder); // record holder
@@ -486,7 +617,12 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 					msg_entity = e;
 					WriteHeader(MSG_ONE, TE_CSQC_RACE);
 					WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_SELF_QUALIFYING);
-					WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player now is at
+					int cpflags = race_CheckpointNetworkFlags(cp);
+					WriteByte(MSG_ONE, cpflags);
+					if(cpflags & BIT(2))
+						WriteLong(MSG_ONE, cp);
+					else
+						WriteByte(MSG_ONE, cp);
 					WriteInt24_t(MSG_ONE, t); // time to that intermediate
 					WriteInt24_t(MSG_ONE, myrecordtime); // previously best time
 				}
@@ -496,12 +632,12 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 	else // RACE! Not Qualifying
 	{
 		float mylaps, lother, othtime;
-		entity oth = race_checkpoint_lastplayers[cp];
+		entity oth = race_GetCheckpointLastPlayer(cp);
 		if(oth)
 		{
 			mylaps = PlayerScore_Add(e, SP_RACE_LAPS, 0);
-			lother = race_checkpoint_lastlaps[cp];
-			othtime = race_checkpoint_lasttimes[cp];
+			lother = race_GetCheckpointLastLap(cp);
+			othtime = race_GetCheckpointLastTime(cp);
 		}
 		else
 			mylaps = lother = othtime = 0;
@@ -512,7 +648,13 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			WRITESPECTATABLE_MSG_ONE(msg_entity, {
 				WriteHeader(MSG_ONE, TE_CSQC_RACE);
 				WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_RACE);
-				WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player now is at
+				// checkpoint the player will be at next
+				int cpflags = race_CheckpointNetworkFlags(cp);
+				WriteByte(MSG_ONE, cpflags);
+				if(cpflags & BIT(2))
+					WriteLong(MSG_ONE, cp);
+				else
+					WriteByte(MSG_ONE, cp);
 				if(e == oth)
 				{
 					WriteInt24_t(MSG_ONE, 0);
@@ -521,16 +663,16 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				}
 				else
 				{
-					WriteInt24_t(MSG_ONE, TIME_ENCODE(time - race_checkpoint_lasttimes[cp]));
+					WriteInt24_t(MSG_ONE, TIME_ENCODE(time - race_GetCheckpointLastTime(cp)));
 					WriteByte(MSG_ONE, mylaps - lother);
 					WriteByte(MSG_ONE, etof(oth)); // record holder
 				}
 			});
 		}
 
-		race_checkpoint_lastplayers[cp] = e;
-		race_checkpoint_lasttimes[cp] = time;
-		race_checkpoint_lastlaps[cp] = mylaps;
+		race_SetCheckpointLastPlayer(cp, e);
+		race_SetCheckpointLastTime(cp, time);
+		race_SetCheckpointLastLap(cp, mylaps);
 
 		if(IS_REAL_CLIENT(oth))
 		{
@@ -538,7 +680,12 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			WRITESPECTATABLE_MSG_ONE(msg_entity, {
 				WriteHeader(MSG_ONE, TE_CSQC_RACE);
 				WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT);
-				WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player now is at
+				int cpflags = race_CheckpointNetworkFlags(cp);
+				WriteByte(MSG_ONE, cpflags);
+				if(cpflags & BIT(2))
+					WriteLong(MSG_ONE, cp);
+				else
+					WriteByte(MSG_ONE, cp);
 				if(e == oth)
 				{
 					WriteInt24_t(MSG_ONE, 0);
@@ -914,6 +1061,8 @@ void trigger_race_checkpoint_verify(entity this)
             }
         }
 	}
+
+	race_InitCheckpointCounts(race_highest_checkpoint);
 }
 
 vector trigger_race_checkpoint_spawn_evalfunc(entity this, entity player, entity spot, vector current)
@@ -1094,21 +1243,19 @@ spawnfunc(info_player_race)
 
 void race_ClearRecords()
 {
-	float i;
+	AL_DELETE(race_checkpoint_recordholders);
+	AL_DELETE(race_checkpoint_records);
 
-	for(i = 0; i < MAX_CHECKPOINTS; ++i)
+	race_InitCheckpointCounts(race_highest_checkpoint);
+
+	FOREACH_CLIENT(true,
 	{
-		race_checkpoint_records[i] = 0;
-		if(race_checkpoint_recordholders[i])
-			strunzone(race_checkpoint_recordholders[i]);
-		race_checkpoint_recordholders[i] = string_null;
-	}
-
-	FOREACH_CLIENT(true, LAMBDA(
+		race_RemovePersonalCheckpointCounts(it);
+		race_InitPersonalCheckpointCounts(it);
 		float p = it.race_place;
 		race_PreparePlayer(it);
 		it.race_place = p;
-	));
+	});
 }
 
 void race_ImposePenaltyTime(entity pl, float penalty, string reason)

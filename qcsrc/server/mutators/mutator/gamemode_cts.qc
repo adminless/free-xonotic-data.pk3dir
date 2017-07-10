@@ -171,6 +171,8 @@ MUTATOR_HOOKFUNCTION(cts, ClientConnect)
 {
 	entity player = M_ARGV(0, entity);
 
+	race_InitPersonalCheckpointCounts(player);
+
 	race_PreparePlayer(player);
 	player.race_checkpoint = -1;
 
@@ -192,6 +194,12 @@ MUTATOR_HOOKFUNCTION(cts, ClientConnect)
 			race_SendRankings(i, 0, 0, MSG_ONE);
 		}
 	}
+}
+
+MUTATOR_HOOKFUNCTION(cts, ClientDisconnect)
+{
+	entity player = M_ARGV(0, entity);
+	race_RemovePersonalCheckpointCounts(player);
 }
 
 MUTATOR_HOOKFUNCTION(cts, AbortSpeedrun)

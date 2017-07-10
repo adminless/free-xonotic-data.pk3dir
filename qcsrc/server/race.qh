@@ -33,6 +33,8 @@ IntrusiveList g_racecheckpoints;
 STATIC_INIT(g_racecheckpoints) { g_racecheckpoints = IL_NEW(); }
 
 // definitions for functions used outside race.qc
+void race_InitPersonalCheckpointCounts(entity player);
+void race_RemovePersonalCheckpointCounts(entity player);
 float race_PreviousCheckpoint(float f);
 float race_NextCheckpoint(float f);
 void race_AbandonRaceCheck(entity p);

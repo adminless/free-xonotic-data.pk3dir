@@ -4,14 +4,14 @@ USING(ArrayList, entity);
 .int al_buf;
 .int al_len;
 
-#define AL_NEW(this, n, default, T) \
+#define AL_NEW(this, n, def, T) \
 	MACRO_BEGIN \
 	{ \
 		ArrayList _al = this = new_pure(ArrayList); \
 		_al.al_buf = buf_create(); \
 		for (int i = 0, _n = _al.al_len = n; i < _n; ++i) \
 		{ \
-			const _AL_type__##T() it = default; \
+			_AL_type__##T() it = def; \
 			AL_set##T(this, i, it); \
 		} \
 	} MACRO_END
