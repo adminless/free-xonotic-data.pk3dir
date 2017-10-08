@@ -528,7 +528,7 @@ void readplayerstartcvars()
 	start_ammo_plasma = 0;
 	if (random_start_ammo == NULL)
 	{
-		random_start_ammo = spawn();
+		random_start_ammo = new(random_start_ammo);
 	}
 	start_health = cvar("g_balance_health_start");
 	start_armorvalue = cvar("g_balance_armor_start");
@@ -653,7 +653,7 @@ void readplayerstartcvars()
 			"g_random_start_shells"));
 		SetResourceAmount(random_start_ammo, RESOURCE_BULLETS, cvar(
 			"g_random_start_bullets"));
-		SetResourceAmount(random_start_ammo, RESOURCE_ROCKETS, 
+		SetResourceAmount(random_start_ammo, RESOURCE_ROCKETS,
 			cvar("g_random_start_rockets"));
 		SetResourceAmount(random_start_ammo, RESOURCE_CELLS, cvar(
 			"g_random_start_cells"));
@@ -984,7 +984,7 @@ void EliminatedPlayers_Init(float(entity) isEliminated_func)
 		backtrace("Can't spawn eliminatedPlayers again!");
 		return;
 	}
-	Net_LinkEntity(eliminatedPlayers = spawn(), false, 0, EliminatedPlayers_SendEntity);
+	Net_LinkEntity(eliminatedPlayers = new(eliminatedPlayers), false, 0, EliminatedPlayers_SendEntity);
 	eliminatedPlayers.isEliminated = isEliminated_func;
 }
 
@@ -1382,7 +1382,7 @@ vector gettaginfo_relative(entity e, float tag)
 {
     if (!gettaginfo_relative_ent)
     {
-        gettaginfo_relative_ent = spawn();
+        gettaginfo_relative_ent = new(gettaginfo_relative_ent);
         gettaginfo_relative_ent.effects = EF_NODRAW;
     }
     gettaginfo_relative_ent.model = e.model;

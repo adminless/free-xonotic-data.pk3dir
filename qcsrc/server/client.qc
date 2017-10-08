@@ -988,7 +988,7 @@ void ClientKill_TeamChange (entity this, float targetteam) // 0 = don't change, 
 		{
 			starttime = max(time, clientkilltime);
 
-			this.killindicator = spawn();
+			this.killindicator = new(killindicator);
 			this.killindicator.owner = this;
 			this.killindicator.scale = 0.5;
 			setattachment(this.killindicator, this, "");
@@ -1002,7 +1002,7 @@ void ClientKill_TeamChange (entity this, float targetteam) // 0 = don't change, 
 
 			IL_EACH(g_clones, it.enemy == this && !(it.effects & CSQCMODEL_EF_RESPAWNGHOST),
 			{
-				it.killindicator = spawn();
+				it.killindicator = new(killindicator);
 				it.killindicator.owner = it;
 				it.killindicator.scale = 0.5;
 				setattachment(it.killindicator, it, "");

@@ -341,7 +341,7 @@ void W_Devastator_Attack(Weapon thiswep, entity actor, .entity weaponentity)
 	CSQCProjectile(missile, WEP_CVAR(devastator, guiderate) == 0 && WEP_CVAR(devastator, speedaccel) == 0, PROJECTILE_ROCKET, false); // because of fly sound
 
 	// muzzle flash for 1st person view
-	entity flash = spawn();
+	entity flash = new(devastator_flash);
 	setmodel(flash, MDL_DEVASTATOR_MUZZLEFLASH); // precision set below
 	SUB_SetFade(flash, time, 0.1);
 	flash.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;

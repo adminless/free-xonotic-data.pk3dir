@@ -388,8 +388,7 @@ void W_Electro_Attack_Orb(Weapon thiswep, entity actor, .entity weaponentity)
 	proj.missile_flags = MIF_SPLASH | MIF_ARC;
 
 #if 0
-	entity p2;
-	p2 = spawn();
+	entity p2 = spawn();
 	copyentity(proj, p2);
 	setmodel(p2, MDL_PROJECTILE_ELECTRO);
 	setsize(p2, proj.mins, proj.maxs);

@@ -136,7 +136,7 @@ NET_HANDLE(casings, bool isNew)
 
     if (!autocvar_cl_casings) return;
 
-    Casing casing = RubbleNew("casing");
+    Casing casing = RubbleNew(new(casing));
     casing.silent = (_state & 0x80);
     casing.state = (_state & 0x7F);
     casing.origin = org;

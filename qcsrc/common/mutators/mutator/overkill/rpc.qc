@@ -65,7 +65,7 @@ void W_RocketPropelledChainsaw_Think(entity this)
 
 void W_RocketPropelledChainsaw_Attack (Weapon thiswep, entity actor, .entity weaponentity)
 {
-	entity missile = spawn(); //WarpZone_RefSys_SpawnSameRefSys(actor);
+	entity missile = new(rpc_missile); //WarpZone_RefSys_SpawnSameRefSys(actor);
 	entity flash = spawn ();
 
 	W_DecreaseAmmo(thiswep, actor, WEP_CVAR(rpc, ammo), weaponentity);

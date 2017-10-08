@@ -36,7 +36,7 @@ void W_MachineGun_MuzzleFlash(entity actor, .entity weaponentity)
 	entity wepent = actor.(weaponentity);
 
 	if(wepent.muzzle_flash == NULL)
-		wepent.muzzle_flash = spawn();
+		wepent.muzzle_flash = new(machinegun_flash);
 
 	// muzzle flash for 1st person view
 	setmodel(wepent.muzzle_flash, MDL_MACHINEGUN_MUZZLEFLASH); // precision set below

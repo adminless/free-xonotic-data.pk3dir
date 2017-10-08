@@ -162,10 +162,8 @@ MODEL(TUR_C512, "models/turrets/c512.md3");
 */
 void paint_target(entity onwho, float f_size, vector v_color, float f_time)
 {
-	entity e;
-
-	e = spawn();
-	setmodel(e, MDL_TUR_C512); // precision set above
+	entity e = spawn();
+	setmodel(e, MDL_TUR_C512);
 	e.scale = (f_size/512);
 	//setsize(e, '0 0 0', '0 0 0');
 	//setattachment(e,onwho,"");
@@ -181,10 +179,8 @@ void paint_target(entity onwho, float f_size, vector v_color, float f_time)
 
 void paint_target2(entity onwho, float f_size, vector v_color, float f_time)
 {
-	entity e;
-
-	e = spawn();
-	setmodel(e, MDL_TUR_C512); // precision set above
+	entity e = spawn();
+	setmodel(e, MDL_TUR_C512);
 	e.scale = (f_size/512);
 	setsize(e, '0 0 0', '0 0 0');
 
@@ -201,9 +197,8 @@ void paint_target2(entity onwho, float f_size, vector v_color, float f_time)
 
 void paint_target3(vector where, float f_size, vector v_color, float f_time)
 {
-	entity e;
-	e = spawn();
-	setmodel(e, MDL_TUR_C512); // precision set above
+	entity e = spawn();
+	setmodel(e, MDL_TUR_C512);
 	e.scale = (f_size/512);
 	setsize(e, '0 0 0', '0 0 0');
 	setorigin(e, where + '0 0 1');

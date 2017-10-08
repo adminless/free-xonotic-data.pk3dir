@@ -277,7 +277,7 @@ void FireRailgunBullet (entity this, .entity weaponentity, vector start, vector 
 					continue;
 
 				if(!pseudoprojectile)
-					pseudoprojectile = spawn(); // we need this so the sound uses the "entchannel4" volume
+					pseudoprojectile = new(pseudoprojectile); // we need this so the sound uses the "entchannel4" volume
 				soundtoat(MSG_ONE, pseudoprojectile, beampos, CH_SHOTS, SND(NEXWHOOSH_RANDOM()), VOL_BASE * f, ATTEN_NONE);
 			}
 		});

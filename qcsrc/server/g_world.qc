@@ -574,7 +574,7 @@ spawnfunc(__init_dedicated_server)
 
 	delete_fn = remove_unsafely;
 
-	entity e = spawn();
+	entity e = new(GotoFirstMap);
 	setthink(e, GotoFirstMap);
 	e.nextthink = time; // this is usually 1 at this point
 

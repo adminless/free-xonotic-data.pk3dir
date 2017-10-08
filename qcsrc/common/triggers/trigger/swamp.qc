@@ -75,7 +75,7 @@ void swamp_touch(entity this, entity toucher)
 	{
 		// If not attach one.
 		//centerprint(toucher,"Entering swamp!\n");
-		toucher.swampslug = spawn();
+		toucher.swampslug = new(swampslug);
 		toucher.swampslug.health = 2;
 		setthink(toucher.swampslug, swampslug_think);
 		toucher.swampslug.nextthink = time;

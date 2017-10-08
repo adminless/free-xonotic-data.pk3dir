@@ -328,7 +328,7 @@ void W_MineLayer_Attack(Weapon thiswep, entity actor, .entity weaponentity)
 	CSQCProjectile(mine, true, PROJECTILE_MINE, true);
 
 	// muzzle flash for 1st person view
-	flash = spawn();
+	flash = new(minelayer_flash);
 	setmodel(flash, MDL_MINELAYER_MUZZLEFLASH); // precision set below
 	SUB_SetFade(flash, time, 0.1);
 	flash.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;

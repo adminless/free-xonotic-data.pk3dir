@@ -53,7 +53,7 @@ void cts_EventLog(string mode, entity actor) // use an alias for easy changing a
 void KillIndicator_Think(entity this);
 void CTS_ClientKill(entity e) // silent version of ClientKill, used when player finishes a CTS run. Useful to prevent cheating by running back to the start line and starting out with more speed
 {
-    e.killindicator = spawn();
+    e.killindicator = new(killindicator);
     e.killindicator.owner = e;
     setthink(e.killindicator, KillIndicator_Think);
     e.killindicator.nextthink = time + (e.lip) * 0.05;

@@ -22,7 +22,7 @@ void W_Shotgun_Attack(Weapon thiswep, entity actor, .entity weaponentity, float 
 	}
 
 	// muzzle flash for 1st person view
-	entity flash = spawn();
+	entity flash = new(shotgun_flash);
 	setmodel(flash, MDL_SHOTGUN_MUZZLEFLASH); // precision set below
 	setthink(flash, SUB_Remove);
 	flash.nextthink = time + 0.06;
