@@ -19,26 +19,40 @@ string XonoticStatsList_convertDate(string input)
 {
 	// 2013-12-21
 	// 0123456789
-	if(strlen(input) != 10)
+	if (strlen(input) != 10)
+	{
 		return input;
+	}
 
 	string monthname = "";
 
-	switch(stof(substring(input, 5, 2)))
+	switch (stof(substring(input, 5, 2)))
 	{
-		case 1:  monthname = _("January");    break;
-		case 2:  monthname = _("February");   break;
-		case 3:  monthname = _("March");      break;
-		case 4:  monthname = _("April");      break;
-		case 5:  monthname = _("May");        break;
-		case 6:  monthname = _("June");       break;
-		case 7:  monthname = _("July");       break;
-		case 8:  monthname = _("August");     break;
-		case 9:  monthname = _("September");  break;
-		case 10: monthname = _("October");    break;
-		case 11: monthname = _("November");   break;
-		case 12: monthname = _("December");   break;
-		default: return input; // failed, why?
+	case 1:  monthname = _("January");
+		break;
+	case 2:  monthname = _("February");
+		break;
+	case 3:  monthname = _("March");
+		break;
+	case 4:  monthname = _("April");
+		break;
+	case 5:  monthname = _("May");
+		break;
+	case 6:  monthname = _("June");
+		break;
+	case 7:  monthname = _("July");
+		break;
+	case 8:  monthname = _("August");
+		break;
+	case 9:  monthname = _("September");
+		break;
+	case 10: monthname = _("October");
+		break;
+	case 11: monthname = _("November");
+		break;
+	case 12: monthname = _("December");
+		break;
+	default: return input; // failed, why?
 	}
 
 	return sprintf(
@@ -53,15 +67,19 @@ void XonoticStatsList_getStats(entity me)
 {
 	LOG_TRACE("XonoticStatsList_getStats() at time: ", ftos(time));
 	// delete the old buffer if it exists
-	if(me.listStats >= 0)
+	if (me.listStats >= 0)
+	{
 		buf_del(me.listStats);
+	}
 
 	// create the new buffer if we have a stats buffer
-	if(PS_D_IN_DB >= 0)
+	if (PS_D_IN_DB >= 0)
+	{
 		me.listStats = buf_create();
+	}
 
 	// now confirmation, if we didn't create a buffer then just return now
-	if(me.listStats < 0)
+	if (me.listStats < 0)
 	{
 		me.nItems = 0;
 		return;
@@ -80,7 +98,7 @@ void XonoticStatsList_getStats(entity me)
 	float out_total_kills = -1;
 	float out_total_deaths = -1;
 
-	for(e = PS_D_IN_EVL; (en = db_get(PS_D_IN_DB, e)) != ""; e = en)
+	for (e = PS_D_IN_EVL; (en = db_get(PS_D_IN_DB, e)) != ""; e = en)
 	{
 		order = 0;
 		outstr = "";
@@ -88,67 +106,67 @@ void XonoticStatsList_getStats(entity me)
 		data = db_get(PS_D_IN_DB, sprintf("#%s", e));
 
 		// non-gamemode specific stuff
-		switch(e)
+		switch (e)
 		{
-			case "overall/joined_dt":
-			{
-				order = 1;
-				outstr = _("Joined:");
-				data = XonoticStatsList_convertDate(car(data));
-				break;
-			}
-			case "overall/last_seen_dt":
-			{
-				order = 1;
-				outstr = _("Last_Seen:");
-				data = XonoticStatsList_convertDate(car(data));
-				break;
-			}
-			case "overall/alivetime":
-			{
-				order = 1;
-				outstr = _("Time_Played:");
-				data = process_time(3, stof(data));
-				break;
-			}
-			case "overall/favorite-map":
-			{
-				order = 2;
-				outstr = _("Favorite_Map:");
-				data = car(data);
-				break;
-			}
-			case "overall/matches":
-			{
-				order = -1;
-				out_total_matches = stof(data);
-				break;
-			}
-			case "overall/wins":
-			{
-				order = -1;
-				out_total_wins = stof(data);
-				break;
-			}
-			case "overall/total-kills":
-			{
-				order = -1;
-				out_total_kills = stof(data);
-				break;
-			}
-			case "overall/total-deaths":
-			{
-				order = -1;
-				out_total_deaths = stof(data);
-				break;
-			}
+		case "overall/joined_dt":
+		{
+			order = 1;
+			outstr = _("Joined:");
+			data = XonoticStatsList_convertDate(car(data));
+			break;
+		}
+		case "overall/last_seen_dt":
+		{
+			order = 1;
+			outstr = _("Last_Seen:");
+			data = XonoticStatsList_convertDate(car(data));
+			break;
+		}
+		case "overall/alivetime":
+		{
+			order = 1;
+			outstr = _("Time_Played:");
+			data = process_time(3, stof(data));
+			break;
+		}
+		case "overall/favorite-map":
+		{
+			order = 2;
+			outstr = _("Favorite_Map:");
+			data = car(data);
+			break;
+		}
+		case "overall/matches":
+		{
+			order = -1;
+			out_total_matches = stof(data);
+			break;
+		}
+		case "overall/wins":
+		{
+			order = -1;
+			out_total_wins = stof(data);
+			break;
+		}
+		case "overall/total-kills":
+		{
+			order = -1;
+			out_total_kills = stof(data);
+			break;
+		}
+		case "overall/total-deaths":
+		{
+			order = -1;
+			out_total_deaths = stof(data);
+			break;
+		}
 		}
 
-		if((order == -1) && (out_total_matches >= 0) && (out_total_wins >= 0))
+		if ((order == -1) && (out_total_matches >= 0) && (out_total_wins >= 0))
 		{
 			bufstr_add(me.listStats, sprintf("003Matches: %d", out_total_matches), true);
 
-			if(out_total_matches > 0) // don't show extra info if there are no matches played
+			if (out_total_matches > 0) // don't show extra info if there are no matches played
 			{
 				out_total_losses = max(0, (out_total_matches - out_total_wins));
 				bufstr_add(me.listStats, sprintf("003Wins/Losses: %d/%d", out_total_wins, out_total_losses), true);
@@ -161,15 +179,19 @@ void XonoticStatsList_getStats(entity me)
 			continue;
 		}
 
-		if((order == -1) && (out_total_kills >= 0) && (out_total_deaths >= 0))
+		if ((order == -1) && (out_total_kills >= 0) && (out_total_deaths >= 0))
 		{
 			bufstr_add(me.listStats, sprintf("005Kills/Deaths: %d/%d", out_total_kills, out_total_deaths), true);
 
 			// if there are no deaths, just show kill count
-			if(out_total_deaths > 0)
+			if (out_total_deaths > 0)
+			{
 				bufstr_add(me.listStats, sprintf("006Kill_Ratio: %.2f", (out_total_kills / out_total_deaths)), true);
+			}
 			else
+			{
 				bufstr_add(me.listStats, sprintf("006Kill_Ratio: %.2f", out_total_kills), true);
+			}
 
 			out_total_kills = -1;
 			out_total_deaths = -1;
@@ -177,7 +199,7 @@ void XonoticStatsList_getStats(entity me)
 		}
 
 		// game mode specific stuff
-		if(order > 0)
+		if (order > 0)
 		{
 			orderstr = sprintf("%03d", order);
 		}
@@ -186,61 +208,61 @@ void XonoticStatsList_getStats(entity me)
 			float dividerpos = strstrofs(e, "/", 0);
 
 			string gametype = substring(e, 0, dividerpos);
-			if(gametype == "overall") { continue; }
+			if (gametype == "overall") { continue; }
 
 			string event = substring(e, (dividerpos + 1), strlen(e) - (dividerpos + 1));
 
 			// if we are ranked, read these sets of possible options
-			if(stof(db_get(PS_D_IN_DB, sprintf("#%s/rank", gametype))))
+			if (stof(db_get(PS_D_IN_DB, sprintf("#%s/rank", gametype))))
 			{
-				switch(event)
+				switch (event)
 				{
-					case "matches":
-					{
-						order = 1;
-						outstr = sprintf(_("%s_Matches:"), strtoupper(gametype));
-						//data = sprintf(_("%d (unranked)"), data);
-						break;
-					}
-					case "elo":
-					{
-						order = 2;
-						outstr = sprintf(_("%s_ELO:"), strtoupper(gametype));
-						data = sprintf("%d", stof(data));
-						break;
-					}
-					case "rank":
-					{
-						order = 3;
-						outstr = sprintf(_("%s_Rank:"), strtoupper(gametype));
-						data = sprintf("%d", stof(data));
-						break;
-					}
-					case "percentile":
-					{
-						order = 4;
-						outstr = sprintf(_("%s_Percentile:"), strtoupper(gametype));
-						data = sprintf("%d%%", stof(data));
-						break;
-					}
+				case "matches":
+				{
+					order = 1;
+					outstr = sprintf(_("%s_Matches:"), strtoupper(gametype));
+					// data = sprintf(_("%d (unranked)"), data);
+					break;
+				}
+				case "elo":
+				{
+					order = 2;
+					outstr = sprintf(_("%s_ELO:"), strtoupper(gametype));
+					data = sprintf("%d", stof(data));
+					break;
+				}
+				case "rank":
+				{
+					order = 3;
+					outstr = sprintf(_("%s_Rank:"), strtoupper(gametype));
+					data = sprintf("%d", stof(data));
+					break;
+				}
+				case "percentile":
+				{
+					order = 4;
+					outstr = sprintf(_("%s_Percentile:"), strtoupper(gametype));
+					data = sprintf("%d%%", stof(data));
+					break;
+				}
 
-					#if 0
-					case "favorite-map":
-					{
-						order = 5;
-						outstr = sprintf(_("%s_Favorite_Map:"), strtoupper(gametype));
-						//data = sprintf(_("%d (unranked)"), data);
-						break;
-					}
-					#endif
+#if 0
+				case "favorite-map":
+				{
+					order = 5;
+					outstr = sprintf(_("%s_Favorite_Map:"), strtoupper(gametype));
+					// data = sprintf(_("%d (unranked)"), data);
+					break;
+				}
+#endif
 
-					default: continue; // nothing to see here
+				default: continue; // nothing to see here
 				}
 
 				// now set up order for sorting later
 				orderstr = sprintf("%2.2s%d", gametype, order);
 			}
-			else if(event == "matches")
+			else if (event == "matches")
 			{
 				outstr = sprintf(_("%s_Matches:"), strtoupper(gametype));
 				data = sprintf(_("%d (unranked)"), stof(data));
@@ -255,14 +277,18 @@ void XonoticStatsList_getStats(entity me)
 	}
 
 	me.nItems = buf_getsize(me.listStats);
-	if(me.nItems > 0)
+	if (me.nItems > 0)
+	{
 		buf_sort(me.listStats, 128, false);
+	}
 }
 
 void XonoticStatsList_destroy(entity me)
 {
-	if(me.nItems > 0)
+	if (me.nItems > 0)
+	{
 		buf_del(me.listStats);
+	}
 }
 
 void XonoticStatsList_resizeNotify(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
@@ -287,7 +313,7 @@ void XonoticStatsList_resizeNotify(entity me, vector relOrigin, vector relSize, 
 
 void XonoticStatsList_drawListBoxItem(entity me, int i, vector absSize, bool isSelected, bool isFocused)
 {
-	if(isFocused)
+	if (isFocused)
 	{
 		me.focusedItemAlpha = getFadedAlpha(me.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
 		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, me.focusedItemAlpha);
@@ -313,14 +339,14 @@ void XonoticStatsList_showNotify(entity me)
 
 void XonoticStatsList_doubleClickListBoxItem(entity me, float i, vector where)
 {
-	//DemoConfirm_ListClick_Check_Gamestatus(me);
+	// DemoConfirm_ListClick_Check_Gamestatus(me);
 }
 
 float XonoticStatsList_keyDown(entity me, float scan, float ascii, float shift)
 {
-	if(scan == K_ENTER || scan == K_KP_ENTER)
+	if (scan == K_ENTER || scan == K_KP_ENTER)
 	{
-		//DemoConfirm_ListClick_Check_Gamestatus(me);
+		// DemoConfirm_ListClick_Check_Gamestatus(me);
 		return 1;
 	}
 	else

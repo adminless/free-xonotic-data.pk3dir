@@ -17,7 +17,7 @@ void func_fourier_controller_think(entity this)
 	float n, i, t;
 
 	this.nextthink = time + 0.1;
-	if(this.owner.active != ACTIVE_ACTIVE)
+	if (this.owner.active != ACTIVE_ACTIVE)
 	{
 		this.owner.velocity = '0 0 0';
 		return;
@@ -29,15 +29,16 @@ void func_fourier_controller_think(entity this)
 
 	v = this.owner.destvec;
 
-	for(i = 0; i < n; ++i)
+	for (i = 0; i < n; ++i)
 	{
 		makevectors((t * stof(argv(i*5)) + stof(argv(i*5+1)) * 360) * '0 1 0');
 		v = v + ('1 0 0' * stof(argv(i*5+2)) + '0 1 0' * stof(argv(i*5+3)) + '0 0 1' * stof(argv(i*5+4))) * this.owner.height * v_forward_y;
 	}
 
-	if(this.owner.classname == "func_fourier") // don't brake stuff if the func_fourier was killtarget'ed
-		// * 10 so it will arrive in 0.1 sec
+	if (this.owner.classname == "func_fourier") // don't brake stuff if the func_fourier was killtarget'ed
+	{ // * 10 so it will arrive in 0.1 sec
 		this.owner.velocity = (v - this.owner.origin) * 10;
+	}
 }
 
 spawnfunc(func_fourier)
@@ -50,26 +51,40 @@ spawnfunc(func_fourier)
 	}
 
 	if (!this.speed)
+	{
 		this.speed = 4;
+	}
 	if (!this.height)
+	{
 		this.height = 32;
+	}
 	this.destvec = this.origin;
 	this.cnt = 360 / this.speed;
 
 	setblocked(this, generic_plat_blocked);
-	if(this.dmg && (this.message == ""))
+	if (this.dmg && (this.message == ""))
+	{
 		this.message = " was squished";
-    if(this.dmg && (this.message2 == ""))
+	}
+	if (this.dmg && (this.message2 == ""))
+	{
 		this.message2 = "was squished by";
-	if(this.dmg && (!this.dmgtime))
+	}
+	if (this.dmg && (!this.dmgtime))
+	{
 		this.dmgtime = 0.25;
+	}
 	this.dmgtime2 = time;
 
-	if(this.netname == "")
+	if (this.netname == "")
+	{
 		this.netname = "1 0 0 0 1";
+	}
 
 	if (!InitMovingBrushTrigger(this))
+	{
 		return;
+	}
 
 	this.active = ACTIVE_ACTIVE;
 

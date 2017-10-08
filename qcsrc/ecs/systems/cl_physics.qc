@@ -8,7 +8,9 @@ void sys_phys_fix(entity this, float dt)
 	this.items = STAT(ITEMS, this);
 	this.spectatorspeed = STAT(SPECTATORSPEED, this);
 	if (!(PHYS_INPUT_BUTTON_JUMP(this))) // !jump
-		UNSET_JUMP_HELD(this);           // canjump = true
+	{
+		UNSET_JUMP_HELD(this); // canjump = true
+	}
 	PM_ClientMovement_UpdateStatus(this);
 }
 

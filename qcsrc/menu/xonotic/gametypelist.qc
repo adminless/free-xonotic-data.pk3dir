@@ -15,10 +15,12 @@ void XonoticGametypeList_configureXonoticGametypeList(entity me)
 	me.configureXonoticListBox(me);
 	me.nItems = GameType_GetCount();
 
-	if(SKINBOOL_GAMETYPELIST_ICON_BLUR)
+	if (SKINBOOL_GAMETYPELIST_ICON_BLUR)
 	{
-		for(int i = 0; i < GameType_GetTotalCount(); ++i)
+		for (int i = 0; i < GameType_GetTotalCount(); ++i)
+		{
 			draw_PreloadPictureWithFlags(GameType_GetIcon(i), PRECACHE_PIC_MIPMAP);
+		}
 	}
 
 	me.loadCvars(me);
@@ -32,16 +34,26 @@ void XonoticGametypeList_loadCvars(entity me)
 {
 	Gametype t = MapInfo_CurrentGametype();
 	float i;
-	for(i = 0; i < GameType_GetCount(); ++i)
-		if(t == GameType_GetID(i))
-			break;
-	if(i >= GameType_GetCount())
+	for (i = 0; i < GameType_GetCount(); ++i)
 	{
-		for(i = 0; i < GameType_GetCount(); ++i)
-			if(t == MAPINFO_TYPE_DEATHMATCH)
+		if (t == GameType_GetID(i))
+		{
+			break;
+		}
+	}
+	if (i >= GameType_GetCount())
+	{
+		for (i = 0; i < GameType_GetCount(); ++i)
+		{
+			if (t == MAPINFO_TYPE_DEATHMATCH)
+			{
 				break;
-		if(i >= GameType_GetCount())
+			}
+		}
+		if (i >= GameType_GetCount())
+		{
 			i = 0;
+		}
 	}
 	me.setSelected(me, i);
 	// do we need this: me.parent.gameTypeChangeNotify(me.parent); // to make sure
@@ -49,18 +61,20 @@ void XonoticGametypeList_loadCvars(entity me)
 void XonoticGametypeList_saveCvars(entity me)
 {
 	Gametype t = GameType_GetID(me.selectedItem);
-	if (t == MapInfo_CurrentGametype()) {
+	if (t == MapInfo_CurrentGametype())
+	{
 		return;
 	}
 	MapInfo_SwitchGameType(t);
 	entity owner = me.parent;
-	if (owner) { // not set immediately
+	if (owner) // not set immediately
+	{
 		owner.gameTypeChangeNotify(owner);
 	}
 }
 void XonoticGametypeList_draw(entity me)
 {
-	if(me.nItems != GameType_GetCount())
+	if (me.nItems != GameType_GetCount())
 	{
 		me.nItems = GameType_GetCount();
 		me.setSelected(me, 0);
@@ -71,9 +85,11 @@ void XonoticGametypeList_drawListBoxItem(entity me, int i, vector absSize, bool 
 {
 	string s1, s2;
 
-	if(isSelected)
+	if (isSelected)
+	{
 		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
-	else if(isFocused)
+	}
+	else if (isFocused)
 	{
 		me.focusedItemAlpha = getFadedAlpha(me.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
 		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, me.focusedItemAlpha);
@@ -82,10 +98,14 @@ void XonoticGametypeList_drawListBoxItem(entity me, int i, vector absSize, bool 
 	draw_Picture(me.columnIconOrigin * eX, GameType_GetIcon(i), me.columnIconSize * eX + eY, '1 1 1', SKINALPHA_LISTBOX_SELECTED);
 	s1 = GameType_GetName(i);
 
-	if(_MapInfo_GetTeamPlayBool(GameType_GetID(i)))
+	if (_MapInfo_GetTeamPlayBool(GameType_GetID(i)))
+	{
 		s2 = _("teamplay");
+	}
 	else
+	{
 		s2 = _("free for all");
+	}
 
 	vector save_fontscale = draw_fontscale;
 	float f = draw_CondensedFontFactor(strcat(s1, " ", s2), false, me.realFontSize, 1);
@@ -111,7 +131,7 @@ void XonoticGametypeList_resizeNotify(entity me, vector relOrigin, vector relSiz
 }
 float XonoticGametypeList_keyDown(entity me, float scan, float ascii, float shift)
 {
-	if(scan == K_ENTER || scan == K_KP_ENTER)
+	if (scan == K_ENTER || scan == K_KP_ENTER)
 	{
 		m_play_click_sound(MENU_SOUND_EXECUTE);
 		me.parent.gameTypeSelectNotify(me.parent);
@@ -126,8 +146,12 @@ void XonoticGametypeList_clickListBoxItem(entity me, float i, vector where)
 }
 void XonoticGametypeList_focusedItemChangeNotify(entity me)
 {
-	if(me.focusedItem >= 0)
+	if (me.focusedItem >= 0)
+	{
 		setZonedTooltip(me, MapInfo_Type_Description(GameType_GetID(me.focusedItem)), string_null);
+	}
 	else
+	{
 		clearTooltip(me);
+	}
 }

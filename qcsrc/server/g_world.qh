@@ -3,7 +3,7 @@
 float checkrules_equality;
 float checkrules_suddendeathwarning;
 float checkrules_suddendeathend;
-float checkrules_overtimesadded; //how many overtimes have been already added
+float checkrules_overtimesadded; // how many overtimes have been already added
 
 const int WINNING_NO = 0; // no winner, but time limits may terminate the game
 const int WINNING_YES = 1; // winner found

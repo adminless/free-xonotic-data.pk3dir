@@ -10,11 +10,13 @@ void orb_draw(entity this)
 {
 	float dt = time - this.move_time;
 	this.move_time = time;
-	if(dt <= 0)
+	if (dt <= 0)
+	{
 		return;
+	}
 
 	this.alpha = (this.ltime - time) / this.orb_lifetime;
-	this.scale = min((1 - this.alpha)*this.orb_lifetime*4,1)*this.orb_radius;
+	this.scale = min((1 - this.alpha)*this.orb_lifetime*4, 1)*this.orb_radius;
 	this.angles = this.angles + dt * this.avelocity;
 }
 
@@ -27,7 +29,7 @@ void orb_setup(entity e)
 
 	float model_radius = e.maxs.x;
 	vector size = '1 1 1' * e.orb_radius / 2;
-	setsize(e,-size,size);
+	setsize(e, -size, size);
 	e.orb_radius = e.orb_radius/model_radius*0.6;
 
 	e.draw = orb_draw;
@@ -49,7 +51,8 @@ NET_HANDLE(Nade_Orb, bool isNew)
 {
 	Net_Accept(Nade_Orb);
 	int sf = ReadByte();
-	if (sf & 1) {
+	if (sf & 1)
+	{
 		this.origin_x = ReadCoord();
 		this.origin_y = ReadCoord();
 		this.origin_z = ReadCoord();
@@ -73,7 +76,8 @@ bool orb_send(entity this, entity to, int sf)
 	int channel = MSG_ENTITY;
 	WriteHeader(channel, Nade_Orb);
 	WriteByte(channel, sf);
-	if (sf & 1) {
+	if (sf & 1)
+	{
 		WriteCoord(channel, this.origin.x);
 		WriteCoord(channel, this.origin.y);
 		WriteCoord(channel, this.origin.z);
@@ -83,7 +87,7 @@ bool orb_send(entity this, entity to, int sf)
 		WriteCoord(channel, this.colormod.z);
 
 		WriteByte(channel, this.orb_lifetime);
-		//WriteByte(MSG_ENTITY, this.ltime - time + 1);
+		// WriteByte(MSG_ENTITY, this.ltime - time + 1);
 		WriteShort(channel, this.orb_radius);
 		// round time delta to a 1/10th of a second
 		WriteByte(channel, (this.ltime - time)*10.0+0.5);

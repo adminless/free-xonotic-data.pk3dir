@@ -3,17 +3,17 @@
 entity makeXonoticCheckBox_T(float isInverted, string theCvar, string theText, string theTooltip)
 {
 	float m, n;
-	if(isInverted > 1)
+	if (isInverted > 1)
 	{
 		n = isInverted - 1;
 		m = -n;
 	}
-	else if(isInverted < -1)
+	else if (isInverted < -1)
 	{
 		n = isInverted + 1;
 		m = -n;
 	}
-	else if(isInverted == 1)
+	else if (isInverted == 1)
 	{
 		n = 1;
 		m = 0;
@@ -54,12 +54,14 @@ void XonoticCheckBox_configureXonoticCheckBox(entity me, float theYesValue, floa
 }
 void XonoticCheckBox_setChecked(entity me, float val)
 {
-	if(val != me.checked)
+	if (val != me.checked)
 	{
 		me.checked = val;
 		me.saveCvars(me);
-		if(me.linkedCheckBox)
+		if (me.linkedCheckBox)
+		{
 			me.linkedCheckBox.loadCvars(me.linkedCheckBox);
+		}
 	}
 }
 void XonoticCheckBox_loadCvars(entity me)
@@ -67,7 +69,9 @@ void XonoticCheckBox_loadCvars(entity me)
 	float m, d;
 
 	if (!me.cvarName)
+	{
 		return;
+	}
 
 	m = (me.yesValue + me.noValue) * 0.5;
 	d = (cvar(me.cvarName) - m) / (me.yesValue - m);
@@ -76,12 +80,18 @@ void XonoticCheckBox_loadCvars(entity me)
 void XonoticCheckBox_saveCvars(entity me)
 {
 	if (!me.cvarName)
+	{
 		return;
+	}
 
-	if(me.checked)
+	if (me.checked)
+	{
 		cvar_set(me.cvarName, ftos_mindecimals(me.yesValue));
+	}
 	else
+	{
 		cvar_set(me.cvarName, ftos_mindecimals(me.noValue));
+	}
 
 	CheckSendCvars(me, me.cvarName);
 }

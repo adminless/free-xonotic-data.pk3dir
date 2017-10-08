@@ -23,9 +23,9 @@ void XonoticWeaponarenaCheckBox_loadCvars(entity me)
 {
 	float n = tokenize_console(cvar_string("menu_weaponarena"));
 	float i;
-	for(i=0; i<n; ++i)
+	for (i = 0; i < n; ++i)
 	{
-		if(argv(i) == me.netname)
+		if (argv(i) == me.netname)
 		{
 			me.checked = true;
 			break;
@@ -35,9 +35,13 @@ void XonoticWeaponarenaCheckBox_loadCvars(entity me)
 
 void XonoticWeaponarenaCheckBox_saveCvars(entity me)
 {
-	if(me.checked)
+	if (me.checked)
+	{
 		localcmd(strcat("\nmenu_cmd addtolist menu_weaponarena ", me.netname, "\n"));
+	}
 	else
+	{
 		localcmd(strcat("\nmenu_cmd removefromlist menu_weaponarena ", me.netname, "\n"));
+	}
 	localcmd("\ng_weaponarena \"$menu_weaponarena\"\n");
 }

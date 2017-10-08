@@ -1,14 +1,18 @@
 #include "walk.qh"
-void _Movetype_Physics_Walk(entity this, float dt)  // SV_WalkMove
+void _Movetype_Physics_Walk(entity this, float dt) // SV_WalkMove
 {
 	vector stepnormal = '0 0 0';
 
 	// if frametime is 0 (due to client sending the same timestamp twice), don't move
 	if (dt <= 0)
+	{
 		return;
+	}
 
 	if (GAMEPLAYFIX_UNSTICKPLAYERS(this))
+	{
 		_Movetype_UnstickEntity(this);
+	}
 
 	bool applygravity = (!_Movetype_CheckWater(this) && this.move_movetype == MOVETYPE_WALK && !(this.flags & FL_WATERJUMP));
 
@@ -31,32 +35,48 @@ void _Movetype_Physics_Walk(entity this, float dt)  // SV_WalkMove
 		vector downmove = this.origin - '0 0 1';
 		int type;
 		if (this.move_movetype == MOVETYPE_FLYMISSILE)
+		{
 			type = MOVE_MISSILE;
+		}
 		else if (this.move_movetype == MOVETYPE_FLY_WORLDONLY)
+		{
 			type = MOVE_WORLDONLY;
+		}
 		else if (this.solid == SOLID_TRIGGER || this.solid == SOLID_NOT)
+		{
 			type = MOVE_NOMONSTERS;
-		else type = MOVE_NORMAL;
+		}
+		else { type = MOVE_NORMAL; }
 		tracebox(upmove, this.mins, this.maxs, downmove, type, this);
 		if (trace_fraction < 1 && trace_plane_normal.z > 0.7)
-			clip |= 1;  // but we HAVE found a floor
+		{
+			clip |= 1; // but we HAVE found a floor
+		}
 	}
 
 	// if the move did not hit the ground at any point, we're not on ground
 	if (!(clip & 1))
+	{
 		UNSET_ONGROUND(this);
+	}
 
 	_Movetype_CheckVelocity(this);
 	_Movetype_LinkEdict(this, true);
 
-	if (clip & 8)  // teleport
+	if (clip & 8) // teleport
+	{
 		return;
+	}
 
 	if (this.flags & FL_WATERJUMP)
+	{
 		return;
+	}
 
 	if (PHYS_NOSTEP(this))
+	{
 		return;
+	}
 
 	vector originalorigin = this.origin;
 	vector originalvelocity = this.velocity;
@@ -69,18 +89,26 @@ void _Movetype_Physics_Walk(entity this, float dt)  // SV_WalkMove
 	{
 		// if move was not trying to move into the step, return
 		if (fabs(start_velocity.x) < 0.03125 && fabs(start_velocity.y) < 0.03125)
+		{
 			return;
+		}
 
 		if (this.move_movetype != MOVETYPE_FLY)
 		{
 			// return if gibbed by a trigger
 			if (this.move_movetype != MOVETYPE_WALK)
+			{
 				return;
+			}
 
 			// return if attempting to jump while airborn (unless sv_jumpstep)
 			if (!PHYS_JUMPSTEP(this))
+			{
 				if (!oldonground && this.waterlevel == 0)
+				{
 					return;
+				}
+			}
 		}
 
 		// try moving up and forward to go up a step
@@ -91,9 +119,11 @@ void _Movetype_Physics_Walk(entity this, float dt)  // SV_WalkMove
 		// move up
 		vector upmove = '0 0 1' * PHYS_STEPHEIGHT(this);
 		_Movetype_PushEntity(this, upmove, true);
-		if(wasfreed(this))
+		if (wasfreed(this))
+		{
 			return;
-		if(trace_startsolid)
+		}
+		if (trace_startsolid)
 		{
 			// we got teleported when upstepping... must abort the move
 			return;
@@ -116,8 +146,8 @@ void _Movetype_Physics_Walk(entity this, float dt)  // SV_WalkMove
 		// check for stuckness, possibly due to the limited precision of floats
 		// in the clipping hulls
 		if (clip
-		    && fabs(originalorigin.y - this.origin.y) < 0.03125
-		    && fabs(originalorigin.x - this.origin.x) < 0.03125)
+			&& fabs(originalorigin.y - this.origin.y) < 0.03125
+			&& fabs(originalorigin.x - this.origin.x) < 0.03125)
 		{
 			// Con_Printf("wall\n");
 			// stepping up didn't make any progress, revert to original move
@@ -135,7 +165,9 @@ void _Movetype_Physics_Walk(entity this, float dt)  // SV_WalkMove
 
 		// extra friction based on view angle
 		if ((clip & 2) && PHYS_WALLFRICTION(this))
+		{
 			_Movetype_WallFriction(this, stepnormal);
+		}
 	}
 	// don't do the down move if stepdown is disabled, moving upward, not in water, or the move started offground or ended onground
 	else if (!GAMEPLAYFIX_STEPDOWN(this) || this.waterlevel >= 3 || start_velocity.z >= (1.0 / 32.0) || !oldonground || IS_ONGROUND(this))
@@ -146,10 +178,12 @@ void _Movetype_Physics_Walk(entity this, float dt)  // SV_WalkMove
 	// move down
 	vector downmove = '0 0 1' * (-PHYS_STEPHEIGHT(this) + start_velocity.z * dt);
 	_Movetype_PushEntity(this, downmove, true);
-	if(wasfreed(this))
+	if (wasfreed(this))
+	{
 		return;
+	}
 
-	if(trace_startsolid)
+	if (trace_startsolid)
 	{
 		// we got teleported when downstepping... must abort the move
 		return;

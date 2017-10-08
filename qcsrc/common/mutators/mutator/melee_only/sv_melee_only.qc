@@ -26,9 +26,9 @@ MUTATOR_HOOKFUNCTION(melee_only, FilterItem)
 
 	switch (item.itemdef)
 	{
-		case ITEM_HealthSmall:
-		case ITEM_ArmorSmall:
-			return false;
+	case ITEM_HealthSmall:
+	case ITEM_ArmorSmall:
+		return false;
 	}
 
 	return true;

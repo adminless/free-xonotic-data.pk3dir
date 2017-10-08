@@ -5,20 +5,20 @@
 #endif
 
 #if POSITIVE_PITCH_IS_DOWN
-    #define fixedmakevectors makevectors
-    noref vector _fixedvectoangles;
-    #define fixedvectoangles(a) (_fixedvectoangles = vectoangles(a), _fixedvectoangles.x *= -1, _fixedvectoangles)
-    noref vector _fixedvectoangles2;
-    #define fixedvectoangles2(a, b) (_fixedvectoangles2 = vectoangles2(a, b), _fixedvectoangles2.x *= -1, _fixedvectoangles2)
+#define fixedmakevectors makevectors
+noref vector _fixedvectoangles;
+#define fixedvectoangles(a) (_fixedvectoangles = vectoangles(a), _fixedvectoangles.x *= -1, _fixedvectoangles)
+noref vector _fixedvectoangles2;
+#define fixedvectoangles2(a, b) (_fixedvectoangles2 = vectoangles2(a, b), _fixedvectoangles2.x *= -1, _fixedvectoangles2)
 #else
-    void fixedmakevectors(vector a)
-    {
-        // a makevectors that actually inverts vectoangles
-        a.x = -a.x;
-        makevectors(a);
-    }
-    #define fixedvectoangles2 vectoangles2
-    #define fixedvectoangles vectoangles
+void fixedmakevectors(vector a)
+{
+	// a makevectors that actually inverts vectoangles
+	a.x = -a.x;
+	makevectors(a);
+}
+#define fixedvectoangles2 vectoangles2
+#define fixedvectoangles vectoangles
 #endif
 
 vector AnglesTransform_Apply(vector transform, vector v);

@@ -44,7 +44,7 @@ ENDCLASS(ModalController)
 .entity tabSelectingButton;
 .vector origin;
 .vector size;
-void TabButton_Click(entity button, entity tab);         // assumes a button has set the above fields to its own absolute origin, its size, and the tab to activate
-void DialogOpenButton_Click(entity button, entity tab);  // assumes a button has set the above fields to its own absolute origin, its size, and the tab to activate
+void TabButton_Click(entity button, entity tab); // assumes a button has set the above fields to its own absolute origin, its size, and the tab to activate
+void DialogOpenButton_Click(entity button, entity tab); // assumes a button has set the above fields to its own absolute origin, its size, and the tab to activate
 void DialogOpenButton_Click_withCoords(entity button, entity tab, vector theOrigin, vector theSize);
 void DialogCloseButton_Click(entity button, entity tab); // assumes a button has set the above fields to the tab to close

@@ -46,7 +46,7 @@ float FullTraceFraction(vector a, vector mi, vector ma, vector b)
 		c = trace_endpos;
 	}
 
-	if (n > 200) LOG_TRACE("HOLY SHIT! FullTraceFraction: ", ftos(n), " total traces, ", ftos(m), " iterations");
+	if (n > 200) { LOG_TRACE("HOLY SHIT! FullTraceFraction: ", ftos(n), " total traces, ", ftos(m), " iterations"); }
 
 	return white / (black + white);
 }
@@ -75,10 +75,10 @@ float RadarMapAtPoint_LineBlock(float e, float f, float w, float h, float zmin, 
 	ma = '1 0 0' * w + '0 1 0' * h + dz;
 	o = '1 0 0' * e + '0 1 0' * f + '0 0 1' * zmin;
 
-	if (e < world.absmin.x - w) return 0;
-	if (f < world.absmin.y - h) return 0;
-	if (e > world.absmax.x) return 0;
-	if (f > world.absmax.y) return 0;
+	if (e < world.absmin.x - w) { return 0; }
+	if (f < world.absmin.y - h) { return 0; }
+	if (e > world.absmax.x) { return 0; }
+	if (f > world.absmax.y) { return 0; }
 
 	r = 0;
 	for (i = 0; i < q; ++i)
@@ -92,7 +92,7 @@ float RadarMapAtPoint_LineBlock(float e, float f, float w, float h, float zmin, 
 		v2_y += random() * (ma.y - mi.y);
 		v2_z += random() * (ma.z - mi.z);
 		traceline(v1, v2, MOVE_WORLDONLY, NULL);
-		if (trace_startsolid || trace_fraction < 1) ++r;
+		if (trace_startsolid || trace_fraction < 1) { ++r; }
 	}
 	return r / q;
 }
@@ -110,16 +110,16 @@ float RadarMapAtPoint_Block(float e, float f, float w, float h, float zmin, floa
 	ma = '1 0 0' * w + '0 1 0' * h + dz;
 	o = '1 0 0' * e + '0 1 0' * f + '0 0 1' * zmin;
 
-	if (e < world.absmin.x - w) return 0;
-	if (f < world.absmin.y - h) return 0;
-	if (e > world.absmax.x) return 0;
-	if (f > world.absmax.y) return 0;
+	if (e < world.absmin.x - w) { return 0; }
+	if (f < world.absmin.y - h) { return 0; }
+	if (e > world.absmax.x) { return 0; }
+	if (f > world.absmax.y) { return 0; }
 
 	r = 0;
 	for (i = 0; i < q; ++i)
 	{
 		tracebox(o + dz * i, mi, ma, o + dz * i, MOVE_WORLDONLY, NULL);
-		if (trace_startsolid) ++r;
+		if (trace_startsolid) { ++r; }
 	}
 	return r / q;
 }
@@ -127,7 +127,7 @@ float RadarMapAtPoint_Sample(float e, float f, float w, float h, float zmin, flo
 {
 	vector a, b, mi, ma;
 
-	q *= 4;  // choose q so it matches the regular algorithm in speed
+	q *= 4; // choose q so it matches the regular algorithm in speed
 
 	q = 256 * q - 1;
 	// 256q-1 is the ideal sample count to map equal amount of sample values to one pixel value
@@ -147,7 +147,7 @@ float RadarMapAtPoint_Sample(float e, float f, float w, float h, float zmin, flo
 		v.y = a.y + random() * b.y;
 		v.z = a.z + random() * b.z;
 		traceline(v, v, MOVE_WORLDONLY, NULL);
-		if (trace_startsolid) ++c;
+		if (trace_startsolid) { ++c; }
 	}
 
 	return c / q;
@@ -158,16 +158,16 @@ void sharpen_set(int b, float v)
 }
 float sharpen_getpixel(int b, int c)
 {
-	if (b < 0) return 0;
-	if (b >= RADAR_WIDTH_MAX) return 0;
-	if (c < 0) return 0;
-	if (c > 2) return 0;
+	if (b < 0) { return 0; }
+	if (b >= RADAR_WIDTH_MAX) { return 0; }
+	if (c < 0) { return 0; }
+	if (c > 2) { return 0; }
 	return sharpen_buffer[b + c * RADAR_WIDTH_MAX];
 }
 float sharpen_get(float b, float a)
 {
 	float sum = sharpen_getpixel(b, 1);
-	if (a == 0) return sum;
+	if (a == 0) { return sum; }
 	sum *= (8 + 1 / a);
 	sum -= sharpen_getpixel(b - 1, 0);
 	sum -= sharpen_getpixel(b - 1, 1);
@@ -235,12 +235,12 @@ void RadarMap_Think(entity this)
 		if (!(this.count & 1))
 		{
 			this.cnt = fopen(this.netname, FILE_READ);
-			if (this.cnt < 0) this.cnt = fopen(strcat("gfx/", mi_shortname, "_radar.tga"), FILE_READ);
-			if (this.cnt < 0) this.cnt = fopen(strcat("gfx/", mi_shortname, "_radar.png"), FILE_READ);
-			if (this.cnt < 0) this.cnt = fopen(strcat("gfx/", mi_shortname, "_radar.jpg"), FILE_READ);
-			if (this.cnt < 0) this.cnt = fopen(strcat("gfx/", mi_shortname, "_mini.tga"), FILE_READ);
-			if (this.cnt < 0) this.cnt = fopen(strcat("gfx/", mi_shortname, "_mini.png"), FILE_READ);
-			if (this.cnt < 0) this.cnt = fopen(strcat("gfx/", mi_shortname, "_mini.jpg"), FILE_READ);
+			if (this.cnt < 0) { this.cnt = fopen(strcat("gfx/", mi_shortname, "_radar.tga"), FILE_READ); }
+			if (this.cnt < 0) { this.cnt = fopen(strcat("gfx/", mi_shortname, "_radar.png"), FILE_READ); }
+			if (this.cnt < 0) { this.cnt = fopen(strcat("gfx/", mi_shortname, "_radar.jpg"), FILE_READ); }
+			if (this.cnt < 0) { this.cnt = fopen(strcat("gfx/", mi_shortname, "_mini.tga"), FILE_READ); }
+			if (this.cnt < 0) { this.cnt = fopen(strcat("gfx/", mi_shortname, "_mini.png"), FILE_READ); }
+			if (this.cnt < 0) { this.cnt = fopen(strcat("gfx/", mi_shortname, "_mini.jpg"), FILE_READ); }
 			if (this.cnt >= 0)
 			{
 				fclose(this.cnt);
@@ -280,35 +280,35 @@ void RadarMap_Think(entity this)
 
 		switch (i)
 		{
-			case 0:
-			default:
-				for (x = 0; x < this.size.x; ++x)
-				{
-					l = RadarMapAtPoint_Block(this.mins.x + x * this.maxs.x, this.mins.y + (this.size.y - this.frame) * this.maxs.y, this.maxs.x, this.maxs.y, this.mins.z, this.maxs.z, this.size.z);
-					sharpen_set(x, l);
-				}
-				break;
-			case 8:
-				for (x = 0; x < this.size.x; ++x)
-				{
-					l = RadarMapAtPoint_Trace(this.mins.x + x * this.maxs.x, this.mins.y + (this.size.y - this.frame) * this.maxs.y, this.maxs.x, this.maxs.y, this.mins.z, this.maxs.z, this.size.z);
-					sharpen_set(x, l);
-				}
-				break;
-			case 16:
-				for (x = 0; x < this.size.x; ++x)
-				{
-					l = RadarMapAtPoint_Sample(this.mins.x + x * this.maxs.x, this.mins.y + (this.size.y - this.frame) * this.maxs.y, this.maxs.x, this.maxs.y, this.mins.z, this.maxs.z, this.size.z);
-					sharpen_set(x, l);
-				}
-				break;
-			case 24:
-				for (x = 0; x < this.size.x; ++x)
-				{
-					l = RadarMapAtPoint_LineBlock(this.mins.x + x * this.maxs.x, this.mins.y + (this.size.y - this.frame) * this.maxs.y, this.maxs.x, this.maxs.y, this.mins.z, this.maxs.z, this.size.z);
-					sharpen_set(x, l);
-				}
-				break;
+		case 0:
+		default:
+			for (x = 0; x < this.size.x; ++x)
+			{
+				l = RadarMapAtPoint_Block(this.mins.x + x * this.maxs.x, this.mins.y + (this.size.y - this.frame) * this.maxs.y, this.maxs.x, this.maxs.y, this.mins.z, this.maxs.z, this.size.z);
+				sharpen_set(x, l);
+			}
+			break;
+		case 8:
+			for (x = 0; x < this.size.x; ++x)
+			{
+				l = RadarMapAtPoint_Trace(this.mins.x + x * this.maxs.x, this.mins.y + (this.size.y - this.frame) * this.maxs.y, this.maxs.x, this.maxs.y, this.mins.z, this.maxs.z, this.size.z);
+				sharpen_set(x, l);
+			}
+			break;
+		case 16:
+			for (x = 0; x < this.size.x; ++x)
+			{
+				l = RadarMapAtPoint_Sample(this.mins.x + x * this.maxs.x, this.mins.y + (this.size.y - this.frame) * this.maxs.y, this.maxs.x, this.maxs.y, this.mins.z, this.maxs.z, this.size.z);
+				sharpen_set(x, l);
+			}
+			break;
+		case 24:
+			for (x = 0; x < this.size.x; ++x)
+			{
+				l = RadarMapAtPoint_LineBlock(this.mins.x + x * this.maxs.x, this.mins.y + (this.size.y - this.frame) * this.maxs.y, this.maxs.x, this.maxs.y, this.mins.z, this.maxs.z, this.size.z);
+				sharpen_set(x, l);
+			}
+			break;
 		}
 
 		// do we have enough lines?
@@ -376,80 +376,80 @@ bool RadarMap_Make(float argc)
 		radarmapper = new(radarmapper);
 		setthink(radarmapper, RadarMap_Think);
 		radarmapper.nextthink = time;
-		radarmapper.count = 8;  // default to the --trace method, as it is faster now
+		radarmapper.count = 8; // default to the --trace method, as it is faster now
 		radarmapper.ltime = 1;
 		radarmapper.size = '512 512 1';
 		for (i = 1; i < argc; ++i)
 		{
 			switch (argv(i))
 			{
-				case "--force":
-				{ radarmapper.count |= 1;
-				  break;
-				}
-				case "--loop":
-				{ radarmapper.count |= 2;
-				  break;
-				}
-				case "--quit":
-				{ radarmapper.count |= 4;
-				  break;
-				}
-				case "--block":
-				{ radarmapper.count &= ~24;
-				  break;
-				}
-				case "--trace":
-				{ radarmapper.count &= ~24;
-				  radarmapper.count |= 8;
-				  break;
-				}
-				case "--sample":
-				{ radarmapper.count &= ~24;
-				  radarmapper.count |= 16;
-				  break;
-				}
-				case "--lineblock":
-				{ radarmapper.count |= 24;
-				  break;
-				}
-				case "--flags":
-				{ ++i;
-				  radarmapper.count = stof(argv(i));
-				  break;
-				}  // for the recursive call
-				case "--sharpen":
-				{ ++i;
-				  radarmapper.ltime = stof(argv(i));
-				  break;
-				}  // for the recursive call
-				case "--res":  // minor alias
-				case "--resolution":
-				{ ++i;
-				  radarmapper.size_x = stof(argv(i));
-				  ++i;
-				  radarmapper.size_y = stof(argv(i));
-				  break;
-				}
-				case "--qual":  // minor alias
-				case "--quality":
-				{ ++i;
-				  radarmapper.size_z = stof(argv(i));
-				  break;
-				}
+			case "--force":
+			{ radarmapper.count |= 1;
+			  break;
+			}
+			case "--loop":
+			{ radarmapper.count |= 2;
+			  break;
+			}
+			case "--quit":
+			{ radarmapper.count |= 4;
+			  break;
+			}
+			case "--block":
+			{ radarmapper.count &= ~24;
+			  break;
+			}
+			case "--trace":
+			{ radarmapper.count &= ~24;
+			  radarmapper.count |= 8;
+			  break;
+			}
+			case "--sample":
+			{ radarmapper.count &= ~24;
+			  radarmapper.count |= 16;
+			  break;
+			}
+			case "--lineblock":
+			{ radarmapper.count |= 24;
+			  break;
+			}
+			case "--flags":
+			{ ++i;
+			  radarmapper.count = stof(argv(i));
+			  break;
+			} // for the recursive call
+			case "--sharpen":
+			{ ++i;
+			  radarmapper.ltime = stof(argv(i));
+			  break;
+			} // for the recursive call
+			case "--res": // minor alias
+			case "--resolution":
+			{ ++i;
+			  radarmapper.size_x = stof(argv(i));
+			  ++i;
+			  radarmapper.size_y = stof(argv(i));
+			  break;
+			}
+			case "--qual": // minor alias
+			case "--quality":
+			{ ++i;
+			  radarmapper.size_z = stof(argv(i));
+			  break;
+			}
 
-				default:
-					i = argc;
-					delete(radarmapper);
-					radarmapper = NULL;
-					break;
+			default:
+				i = argc;
+				delete(radarmapper);
+				radarmapper = NULL;
+				break;
 			}
 		}
 
-		if (radarmapper)  // after doing the arguments, see if we successfully went forward.
+		if (radarmapper) // after doing the arguments, see if we successfully went forward.
 		{
 			LOG_INFO("Radarmap entity spawned.");
-			return true;  // if so, don't print usage.
+			return true; // if so, don't print usage.
 		}
 	}
 

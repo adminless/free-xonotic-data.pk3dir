@@ -12,21 +12,29 @@ MUTATOR_HOOKFUNCTION(midair, Damage_Calculate)
 	entity frag_attacker = M_ARGV(1, entity);
 	entity frag_target = M_ARGV(2, entity);
 
-	if(IS_PLAYER(frag_attacker))
-	if(IS_PLAYER(frag_target))
-	if(time < frag_target.midair_shieldtime)
-		M_ARGV(4, float) = 0;
+	if (IS_PLAYER(frag_attacker))
+	{
+		if (IS_PLAYER(frag_target))
+		{
+			if (time < frag_target.midair_shieldtime)
+			{
+				M_ARGV(4, float) = 0;
+			}
+		}
+	}
 }
 
 MUTATOR_HOOKFUNCTION(midair, PlayerPowerups)
 {
 	entity player = M_ARGV(0, entity);
 
-	if(time >= game_starttime)
-	if(IS_ONGROUND(player))
+	if (time >= game_starttime)
 	{
-		player.effects |= (EF_ADDITIVE | EF_FULLBRIGHT);
-		player.midair_shieldtime = max(player.midair_shieldtime, time + autocvar_g_midair_shieldtime);
+		if (IS_ONGROUND(player))
+		{
+			player.effects |= (EF_ADDITIVE | EF_FULLBRIGHT);
+			player.midair_shieldtime = max(player.midair_shieldtime, time + autocvar_g_midair_shieldtime);
+		}
 	}
 }
 
@@ -34,8 +42,10 @@ MUTATOR_HOOKFUNCTION(midair, PlayerSpawn)
 {
 	entity player = M_ARGV(0, entity);
 
-	if(IS_BOT_CLIENT(player))
+	if (IS_BOT_CLIENT(player))
+	{
 		player.bot_moveskill = 0; // disable bunnyhopping
+	}
 }
 
 MUTATOR_HOOKFUNCTION(midair, BuildMutatorsString)

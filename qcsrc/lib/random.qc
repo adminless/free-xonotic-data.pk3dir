@@ -45,8 +45,8 @@ void DistributeEvenly_Init(float amount, float totalweight)
 	{
 		LOG_TRACE("DistributeEvenly_Init: UNFINISHED DISTRIBUTION (", ftos(DistributeEvenly_amount), " for ", ftos(DistributeEvenly_totalweight), " left!)");
 	}
-	if (totalweight == 0) DistributeEvenly_amount = 0;
-	else DistributeEvenly_amount = amount;
+	if (totalweight == 0) { DistributeEvenly_amount = 0; }
+	else { DistributeEvenly_amount = amount; }
 	DistributeEvenly_totalweight = totalweight;
 }
 
@@ -54,7 +54,7 @@ ERASEABLE
 float DistributeEvenly_Get(float weight)
 {
 	float f;
-	if (weight <= 0) return 0;
+	if (weight <= 0) { return 0; }
 	f = floor(0.5 + DistributeEvenly_amount * weight / DistributeEvenly_totalweight);
 	DistributeEvenly_totalweight -= weight;
 	DistributeEvenly_amount -= f;
@@ -65,7 +65,7 @@ ERASEABLE
 float DistributeEvenly_GetRandomized(float weight)
 {
 	float f;
-	if (weight <= 0) return 0;
+	if (weight <= 0) { return 0; }
 	f = floor(random() + DistributeEvenly_amount * weight / DistributeEvenly_totalweight);
 	DistributeEvenly_totalweight -= weight;
 	DistributeEvenly_amount -= f;
@@ -96,47 +96,47 @@ float gsl_ran_gaussian(float sigma)
 // prandom - PREDICTABLE random number generator (not seeded yet)
 
 #ifdef USE_PRANDOM
-	float prandom_seed;
-	float prandom()
+float prandom_seed;
+float prandom()
+{
+	float c;
+	c = crc16(false, strcat(ftos(prandom_seed), ftos(prandom_seed + M_PI)));
+	prandom_seed = c;
+
+#ifdef USE_PRANDOM_DEBUG
+	LOG_TRACE("RANDOM -> ", ftos(c));
+#endif
+
+	return c / 65536; // in [0..1[
+}
+
+vector prandomvec()
+{
+	vector v;
+
+	do
 	{
-		float c;
-		c = crc16(false, strcat(ftos(prandom_seed), ftos(prandom_seed + M_PI)));
-		prandom_seed = c;
-
-	#ifdef USE_PRANDOM_DEBUG
-			LOG_TRACE("RANDOM -> ", ftos(c));
-	#endif
-
-		return c / 65536;  // in [0..1[
+		v.x = prandom();
+		v.y = prandom();
+		v.z = prandom();
 	}
+	while (v * v > 1);
 
-	vector prandomvec()
-	{
-		vector v;
+	return v;
+}
 
-		do
-		{
-			v.x = prandom();
-			v.y = prandom();
-			v.z = prandom();
-		}
-		while (v * v > 1);
+void psrandom(float seed)
+{
+	prandom_seed = seed;
+#ifdef USE_PRANDOM_DEBUG
+	LOG_TRACE("SRANDOM ", ftos(seed));
+#endif
+}
 
-		return v;
-	}
-
-	void psrandom(float seed)
-	{
-		prandom_seed = seed;
-	#ifdef USE_PRANDOM_DEBUG
-			LOG_TRACE("SRANDOM ", ftos(seed));
-	#endif
-	}
-
-	#ifdef USE_PRANDOM_DEBUG
-		void prandom_debug()
-		{
-			LOG_TRACE("Current random seed = ", ftos(prandom_seed));
-		}
-	#endif
+#ifdef USE_PRANDOM_DEBUG
+void prandom_debug()
+{
+	LOG_TRACE("Current random seed = ", ftos(prandom_seed));
+}
+#endif
 #endif

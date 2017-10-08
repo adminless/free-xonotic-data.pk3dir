@@ -8,17 +8,17 @@
 #include "../mapinfo.qh"
 
 #ifdef GAMEQC
-	#include "../notifications/all.qh"
+#include "../notifications/all.qh"
 #endif
 
 #ifdef CSQC
-	#include <client/commands/cl_cmd.qh>
+#include <client/commands/cl_cmd.qh>
 #endif
 
 #ifdef SVQC
-	#include <server/command/_mod.qh>
-	#include <common/turrets/config.qh>
-	#include <common/weapons/config.qh>
+#include <server/command/_mod.qh>
+#include <common/turrets/config.qh>
+#include <common/weapons/config.qh>
 #endif
 
 // =========================================================
@@ -33,23 +33,31 @@ void Curl_URI_Get_Callback(int id, float status, string data)
 	int i = id - URI_GET_CURL;
 	float do_exec = curl_uri_get_exec[i];
 	string do_cvar = curl_uri_get_cvar[i];
-	if(status != 0)
+	if (status != 0)
 	{
 		LOG_TRACEF("error: status is %d", status);
-		if(do_cvar)
+		if (do_cvar)
+		{
 			strunzone(do_cvar);
+		}
 		return;
 	}
-	if(do_exec)
+	if (do_exec)
+	{
 		localcmd(data);
-	if(do_cvar)
+	}
+	if (do_cvar)
 	{
 		cvar_set(do_cvar, data);
 		strunzone(do_cvar);
 	}
-	if(!do_exec)
+	if (!do_exec)
+	{
 		if (!do_cvar)
+		{
 			LOG_INFO(data);
+		}
+	}
 }
 
 
@@ -59,438 +67,478 @@ void Curl_URI_Get_Callback(int id, float status, string data)
 
 void GenericCommand_addtolist(float request, float argc)
 {
-	switch(request)
+	switch (request)
 	{
-		case CMD_REQUEST_COMMAND:
+	case CMD_REQUEST_COMMAND:
+	{
+		if (argc >= 2)
 		{
-			if(argc >= 2)
-			{
-				string original_cvar = argv(1);
-				string tmp_string = argv(2);
+			string original_cvar = argv(1);
+			string tmp_string = argv(2);
 
-				if(cvar_string(original_cvar) == "") // cvar was empty
-				{
-					cvar_set(original_cvar, tmp_string);
-				}
-				else // add it to the end of the list if the list doesn't already have it
-				{
-					FOREACH_WORD(cvar_string(original_cvar), it == tmp_string,
+			if (cvar_string(original_cvar) == "") // cvar was empty
+			{
+				cvar_set(original_cvar, tmp_string);
+			}
+			else // add it to the end of the list if the list doesn't already have it
+			{
+				FOREACH_WORD(cvar_string(original_cvar), it == tmp_string,
 					{
 						return; // already in the list
 					});
 
-					cvar_set(original_cvar, cons(cvar_string(original_cvar), tmp_string));
-				}
-				return;
+				cvar_set(original_cvar, cons(cvar_string(original_cvar), tmp_string));
 			}
-		}
-
-		default:
-			LOG_INFO("Incorrect parameters for ^2addtolist^7");
-		case CMD_REQUEST_USAGE:
-		{
-			LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " addtolist variable value");
-			LOG_INFO("  Where 'variable' is what to add 'value' to.");
-			LOG_INFO("See also: ^2removefromlist^7");
 			return;
 		}
+	}
+
+	default:
+		LOG_INFO("Incorrect parameters for ^2addtolist^7");
+	case CMD_REQUEST_USAGE:
+	{
+		LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " addtolist variable value");
+		LOG_INFO("  Where 'variable' is what to add 'value' to.");
+		LOG_INFO("See also: ^2removefromlist^7");
+		return;
+	}
 	}
 }
 
 void GenericCommand_qc_curl(float request, float argc)
 {
-	switch(request)
+	switch (request)
 	{
-		case CMD_REQUEST_COMMAND:
+	case CMD_REQUEST_COMMAND:
+	{
+		bool do_exec = false;
+		string do_cvar = string_null;
+		float key = -1;
+		int i;
+		for (i = 1; i+1 < argc; ++i)
 		{
-			bool do_exec = false;
-			string do_cvar = string_null;
-			float key = -1;
-			int i;
-			for(i = 1; i+1 < argc; ++i)
+			if (argv(i) == "--cvar" && i+2 < argc)
 			{
-				if(argv(i) == "--cvar" && i+2 < argc)
-				{
-					++i;
-					do_cvar = strzone(argv(i));
-					continue;
-				}
-				if(argv(i) == "--exec")
-				{
-					do_exec = true;
-					continue;
-				}
-				if(argv(i) == "--key" && i+2 < argc)
-				{
-					++i;
-					key = stof(argv(i));
-					continue;
-				}
-				break;
+				++i;
+				do_cvar = strzone(argv(i));
+				continue;
 			}
-
-			// now, argv(i) is the URL
-			// following args may be POST parameters
-			string url = argv(i);
-			++i;
-			float buf = buf_create();
-			int j;
-			for(j = 0; i+1 < argc; i += 2)
-				bufstr_set(buf, ++j, sprintf("%s=%s", uri_escape(argv(i)), uri_escape(argv(i+1))));
-			if(i < argc)
-				bufstr_set(buf, ++j, sprintf("submit=%s", uri_escape(argv(i))));
-
-			float r;
-			if(j == 0) // no args: GET
-				r = crypto_uri_postbuf(url, URI_GET_CURL + curl_uri_get_pos, string_null, string_null, -1, key);
-			else // with args: POST
-				r = crypto_uri_postbuf(url, URI_GET_CURL + curl_uri_get_pos, "application/x-www-form-urlencoded", "&", buf, key);
-
-			if(r)
+			if (argv(i) == "--exec")
 			{
-				curl_uri_get_exec[curl_uri_get_pos] = do_exec;
-				curl_uri_get_cvar[curl_uri_get_pos] = do_cvar;
-				curl_uri_get_pos = (curl_uri_get_pos + 1) % (URI_GET_CURL_END - URI_GET_CURL + 1);
+				do_exec = true;
+				continue;
 			}
-			else
-				LOG_INFO(_("error creating curl handle"));
-
-			buf_del(buf);
-
-			return;
+			if (argv(i) == "--key" && i+2 < argc)
+			{
+				++i;
+				key = stof(argv(i));
+				continue;
+			}
+			break;
 		}
 
-		default:
-		case CMD_REQUEST_USAGE:
+		// now, argv(i) is the URL
+		// following args may be POST parameters
+		string url = argv(i);
+		++i;
+		float buf = buf_create();
+		int j;
+		for (j = 0; i+1 < argc; i += 2)
 		{
-			LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " qc_curl [--key N] [--cvar] [--exec] URL [postargs...]");
-			return;
+			bufstr_set(buf, ++j, sprintf("%s=%s", uri_escape(argv(i)), uri_escape(argv(i+1))));
 		}
+		if (i < argc)
+		{
+			bufstr_set(buf, ++j, sprintf("submit=%s", uri_escape(argv(i))));
+		}
+
+		float r;
+		if (j == 0) // no args: GET
+		{
+			r = crypto_uri_postbuf(url, URI_GET_CURL + curl_uri_get_pos, string_null, string_null, -1, key);
+		}
+		else // with args: POST
+		{
+			r = crypto_uri_postbuf(url, URI_GET_CURL + curl_uri_get_pos, "application/x-www-form-urlencoded", "&", buf, key);
+		}
+
+		if (r)
+		{
+			curl_uri_get_exec[curl_uri_get_pos] = do_exec;
+			curl_uri_get_cvar[curl_uri_get_pos] = do_cvar;
+			curl_uri_get_pos = (curl_uri_get_pos + 1) % (URI_GET_CURL_END - URI_GET_CURL + 1);
+		}
+		else
+		{
+			LOG_INFO(_("error creating curl handle"));
+		}
+
+		buf_del(buf);
+
+		return;
+	}
+
+	default:
+	case CMD_REQUEST_USAGE:
+	{
+		LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " qc_curl [--key N] [--cvar] [--exec] URL [postargs...]");
+		return;
+	}
 	}
 }
 
 GENERIC_COMMAND(dumpcommands, "Dump all commands on the program to *_cmd_dump.txt")
 {
-	switch(request)
+	switch (request)
 	{
-		case CMD_REQUEST_COMMAND:
+	case CMD_REQUEST_COMMAND:
+	{
+		float fh;
+		string filename = strcat(GetProgramCommandPrefix(), "_dump.txt");
+		fh = fopen(filename, FILE_WRITE);
+
+		if (fh >= 0)
 		{
-			float fh;
-			string filename = strcat(GetProgramCommandPrefix(), "_dump.txt");
-			fh = fopen(filename, FILE_WRITE);
+#ifdef SVQC
+			CMD_Write("dump of server console commands:\n");
+			GameCommand_macro_write_aliases(fh);
 
-			if(fh >= 0)
-			{
-				#ifdef SVQC
-					CMD_Write("dump of server console commands:\n");
-					GameCommand_macro_write_aliases(fh);
+			CMD_Write("\ndump of networked client only commands:\n");
+			ClientCommand_macro_write_aliases(fh);
 
-					CMD_Write("\ndump of networked client only commands:\n");
-					ClientCommand_macro_write_aliases(fh);
+			CMD_Write("\ndump of common commands:\n");
+			CommonCommand_macro_write_aliases(fh);
 
-					CMD_Write("\ndump of common commands:\n");
-					CommonCommand_macro_write_aliases(fh);
+			CMD_Write("\ndump of ban commands:\n");
+			BanCommand_macro_write_aliases(fh);
+#endif
 
-					CMD_Write("\ndump of ban commands:\n");
-					BanCommand_macro_write_aliases(fh);
-				#endif
+#ifdef CSQC
+			CMD_Write("dump of client commands:\n");
+			LocalCommand_macro_write_aliases(fh);
+#endif
 
-				#ifdef CSQC
-					CMD_Write("dump of client commands:\n");
-					LocalCommand_macro_write_aliases(fh);
-				#endif
+			CMD_Write("\ndump of generic commands:\n");
+			GenericCommand_macro_write_aliases(fh);
 
-				CMD_Write("\ndump of generic commands:\n");
-				GenericCommand_macro_write_aliases(fh);
+			LOG_INFO("Completed dump of aliases in ^2data/data/", GetProgramCommandPrefix(), "_dump.txt^7.");
 
-				LOG_INFO("Completed dump of aliases in ^2data/data/", GetProgramCommandPrefix(), "_dump.txt^7.");
-
-				fclose(fh);
-			}
-			else
-			{
-				LOG_INFO("^1Error: ^7Could not dump to file!");
-			}
-			return;
+			fclose(fh);
 		}
-
-		default:
-		case CMD_REQUEST_USAGE:
+		else
 		{
-			LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " dumpcommands");
-			LOG_INFO("  No arguments required.");
-			return;
+			LOG_INFO("^1Error: ^7Could not dump to file!");
 		}
+		return;
+	}
+
+	default:
+	case CMD_REQUEST_USAGE:
+	{
+		LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " dumpcommands");
+		LOG_INFO("  No arguments required.");
+		return;
+	}
 	}
 }
 
 void GenericCommand_maplist(float request, float argc)
 {
-	switch(request)
+	switch (request)
 	{
-		case CMD_REQUEST_COMMAND:
+	case CMD_REQUEST_COMMAND:
+	{
+		string tmp_string;
+		float i;
+
+		switch (argv(1))
 		{
-			string tmp_string;
-			float i;
-
-			switch(argv(1))
+		case "add": // appends new maps to the maplist
+		{
+			if (argc == 3)
 			{
-				case "add": // appends new maps to the maplist
+				if (!fexists(strcat("maps/", argv(2), ".bsp")))
 				{
-					if(argc == 3)
-					{
-						if (!fexists(strcat("maps/", argv(2), ".bsp")))
-						{
-							LOG_INFO("maplist: ERROR: ", argv(2), " does not exist!");
-							break;
-						}
-
-						if(cvar_string("g_maplist") == "")
-							cvar_set("g_maplist", argv(2));
-						else
-							cvar_set("g_maplist", strcat(argv(2), " ", cvar_string("g_maplist")));
-
-						return;
-					}
-					break; // go to usage
+					LOG_INFO("maplist: ERROR: ", argv(2), " does not exist!");
+					break;
 				}
 
-				case "cleanup": // scans maplist and only adds back the ones which are really usable
+				if (cvar_string("g_maplist") == "")
 				{
-					MapInfo_Enumerate();
-					MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), MapInfo_RequiredFlags(), MapInfo_ForbiddenFlags(), 0);
-					string filtered = "";
-					FOREACH_WORD(cvar_string("g_maplist"), MapInfo_CheckMap(it), filtered = cons(filtered, it));
-					cvar_set("g_maplist", filtered);
-					return;
+					cvar_set("g_maplist", argv(2));
+				}
+				else
+				{
+					cvar_set("g_maplist", strcat(argv(2), " ", cvar_string("g_maplist")));
 				}
 
-				case "remove": // scans maplist and only adds back whatever maps were not provided in argv(2)
-				{
-					if(argc == 3)
-					{
-						argc = tokenizebyseparator(cvar_string("g_maplist"), " ");
-
-						tmp_string = "";
-						for(i = 0; i < argc; ++i)
-							if(argv(i) != argv(2))
-								tmp_string = strcat(tmp_string, " ", argv(i));
-
-						tmp_string = substring(tmp_string, 1, strlen(tmp_string) - 1);
-						cvar_set("g_maplist", tmp_string);
-
-						return;
-					}
-					break; // go to usage
-				}
-
-				case "shuffle": // randomly shuffle the maplist
-				{
-					cvar_set("g_maplist", shufflewords(cvar_string("g_maplist")));
-					return;
-				}
-
-				default: break;
+				return;
 			}
+			break; // go to usage
 		}
 
-		default:
-			LOG_INFO("Incorrect parameters for ^2maplist^7");
-		case CMD_REQUEST_USAGE:
+		case "cleanup": // scans maplist and only adds back the ones which are really usable
 		{
-			LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " maplist action [map]");
-			LOG_INFO("  Where 'action' is the command to complete,");
-			LOG_INFO("  and 'map' is what it acts upon (if required).");
-			LOG_INFO("  Full list of commands here: \"add, cleanup, remove, shuffle.\"");
+			MapInfo_Enumerate();
+			MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), MapInfo_RequiredFlags(), MapInfo_ForbiddenFlags(), 0);
+			string filtered = "";
+			FOREACH_WORD(cvar_string("g_maplist"), MapInfo_CheckMap(it), filtered = cons(filtered, it));
+			cvar_set("g_maplist", filtered);
 			return;
 		}
+
+		case "remove": // scans maplist and only adds back whatever maps were not provided in argv(2)
+		{
+			if (argc == 3)
+			{
+				argc = tokenizebyseparator(cvar_string("g_maplist"), " ");
+
+				tmp_string = "";
+				for (i = 0; i < argc; ++i)
+				{
+					if (argv(i) != argv(2))
+					{
+						tmp_string = strcat(tmp_string, " ", argv(i));
+					}
+				}
+
+				tmp_string = substring(tmp_string, 1, strlen(tmp_string) - 1);
+				cvar_set("g_maplist", tmp_string);
+
+				return;
+			}
+			break; // go to usage
+		}
+
+		case "shuffle": // randomly shuffle the maplist
+		{
+			cvar_set("g_maplist", shufflewords(cvar_string("g_maplist")));
+			return;
+		}
+
+		default: break;
+		}
+	}
+
+	default:
+		LOG_INFO("Incorrect parameters for ^2maplist^7");
+	case CMD_REQUEST_USAGE:
+	{
+		LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " maplist action [map]");
+		LOG_INFO("  Where 'action' is the command to complete,");
+		LOG_INFO("  and 'map' is what it acts upon (if required).");
+		LOG_INFO("  Full list of commands here: \"add, cleanup, remove, shuffle.\"");
+		return;
+	}
 	}
 }
 
 void GenericCommand_nextframe(float request, float arguments, string command)
 {
-	switch(request)
+	switch (request)
 	{
-		case CMD_REQUEST_COMMAND:
-		{
-			queue_to_execute_next_frame(substring(command, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
-			return;
-		}
+	case CMD_REQUEST_COMMAND:
+	{
+		queue_to_execute_next_frame(substring(command, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
+		return;
+	}
 
-		default:
-		case CMD_REQUEST_USAGE:
-		{
-			LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " nextframe command...");
-			LOG_INFO("  Where command will be executed next frame of this VM");
-			return;
-		}
+	default:
+	case CMD_REQUEST_USAGE:
+	{
+		LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " nextframe command...");
+		LOG_INFO("  Where command will be executed next frame of this VM");
+		return;
+	}
 	}
 }
 
 void GenericCommand_removefromlist(float request, float argc)
 {
-	switch(request)
+	switch (request)
 	{
-		case CMD_REQUEST_COMMAND:
+	case CMD_REQUEST_COMMAND:
+	{
+		if (argc == 3)
 		{
-			if(argc == 3)
-			{
-				string original_cvar = argv(1);
-				string removal = argv(2);
+			string original_cvar = argv(1);
+			string removal = argv(2);
 
-				string tmp_string = "";
-				FOREACH_WORD(cvar_string(original_cvar), it != removal,
+			string tmp_string = "";
+			FOREACH_WORD(cvar_string(original_cvar), it != removal,
 				{
 					tmp_string = cons(tmp_string, it);
 				});
 
-				cvar_set(original_cvar, tmp_string);
+			cvar_set(original_cvar, tmp_string);
 
-				return;
-			}
-		}
-
-		default:
-			LOG_INFO("Incorrect parameters for ^2removefromlist^7");
-		case CMD_REQUEST_USAGE:
-		{
-			LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " removefromlist variable value");
-			LOG_INFO("  Where 'variable' is what cvar to remove 'value' from.");
-			LOG_INFO("See also: ^2addtolist^7");
 			return;
 		}
+	}
+
+	default:
+		LOG_INFO("Incorrect parameters for ^2removefromlist^7");
+	case CMD_REQUEST_USAGE:
+	{
+		LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " removefromlist variable value");
+		LOG_INFO("  Where 'variable' is what cvar to remove 'value' from.");
+		LOG_INFO("See also: ^2addtolist^7");
+		return;
+	}
 	}
 }
 
 void GenericCommand_restartnotifs(float request)
 {
-	switch(request)
+	switch (request)
 	{
-		case CMD_REQUEST_COMMAND:
-		{
-			#ifdef GAMEQC
-			int NOTIF_ANNCE_COUNT   = 0; FOREACH(Notifications, it.nent_type == MSG_ANNCE,   { ++NOTIF_ANNCE_COUNT;  });
-			int NOTIF_INFO_COUNT    = 0; FOREACH(Notifications, it.nent_type == MSG_INFO,    { ++NOTIF_INFO_COUNT;   });
-			int NOTIF_CENTER_COUNT  = 0; FOREACH(Notifications, it.nent_type == MSG_CENTER,  { ++NOTIF_CENTER_COUNT; });
-			int NOTIF_MULTI_COUNT   = 0; FOREACH(Notifications, it.nent_type == MSG_MULTI,   { ++NOTIF_MULTI_COUNT;  });
-			int NOTIF_CHOICE_COUNT  = 0; FOREACH(Notifications, it.nent_type == MSG_CHOICE,  { ++NOTIF_CHOICE_COUNT; });
-			LOG_INFOF(
-			    (
-                    "Restart_Notifications(): Restarting %d notifications... "
-                    "Counts: MSG_ANNCE = %d, MSG_INFO = %d, MSG_CENTER = %d, MSG_MULTI = %d, MSG_CHOICE = %d"
-                ),
-				(
-					NOTIF_ANNCE_COUNT +
-					NOTIF_INFO_COUNT +
-					NOTIF_CENTER_COUNT +
-					NOTIF_MULTI_COUNT +
-					NOTIF_CHOICE_COUNT
-				),
-				NOTIF_ANNCE_COUNT,
-				NOTIF_INFO_COUNT,
-				NOTIF_CENTER_COUNT,
-				NOTIF_MULTI_COUNT,
-				NOTIF_CHOICE_COUNT
-			);
-			Destroy_All_Notifications();
-			CALL_ACCUMULATED_FUNCTION(RegisterNotifications);
-			#else
-			LOG_INFO(_("Notification restart command only works with cl_cmd and sv_cmd."));
-			#endif
-			return;
-		}
+	case CMD_REQUEST_COMMAND:
+	{
+#ifdef GAMEQC
+		int NOTIF_ANNCE_COUNT   = 0;
+		FOREACH(Notifications, it.nent_type == MSG_ANNCE,   { ++NOTIF_ANNCE_COUNT;
+			});
+		int NOTIF_INFO_COUNT    = 0;
+		FOREACH(Notifications, it.nent_type == MSG_INFO,    { ++NOTIF_INFO_COUNT;
+			});
+		int NOTIF_CENTER_COUNT  = 0;
+		FOREACH(Notifications, it.nent_type == MSG_CENTER,  { ++NOTIF_CENTER_COUNT;
+			});
+		int NOTIF_MULTI_COUNT   = 0;
+		FOREACH(Notifications, it.nent_type == MSG_MULTI,   { ++NOTIF_MULTI_COUNT;
+			});
+		int NOTIF_CHOICE_COUNT  = 0;
+		FOREACH(Notifications, it.nent_type == MSG_CHOICE,  { ++NOTIF_CHOICE_COUNT;
+			});
+		LOG_INFOF(
+			(
+				"Restart_Notifications(): Restarting %d notifications... "
+				"Counts: MSG_ANNCE = %d, MSG_INFO = %d, MSG_CENTER = %d, MSG_MULTI = %d, MSG_CHOICE = %d"
+			),
+			(
+				NOTIF_ANNCE_COUNT
+				+NOTIF_INFO_COUNT
+				+NOTIF_CENTER_COUNT
+				+NOTIF_MULTI_COUNT
+				+NOTIF_CHOICE_COUNT
+			),
+			NOTIF_ANNCE_COUNT,
+			NOTIF_INFO_COUNT,
+			NOTIF_CENTER_COUNT,
+			NOTIF_MULTI_COUNT,
+			NOTIF_CHOICE_COUNT
+		);
+		Destroy_All_Notifications();
+		CALL_ACCUMULATED_FUNCTION(RegisterNotifications);
+#else
+		LOG_INFO(_("Notification restart command only works with cl_cmd and sv_cmd."));
+#endif
+		return;
+	}
 
-		default:
-		case CMD_REQUEST_USAGE:
-		{
-			LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " restartnotifs");
-			LOG_INFO("  No arguments required.");
-			return;
-		}
+	default:
+	case CMD_REQUEST_USAGE:
+	{
+		LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " restartnotifs");
+		LOG_INFO("  No arguments required.");
+		return;
+	}
 	}
 }
 
 void GenericCommand_settemp(float request, float argc)
 {
-	switch(request)
+	switch (request)
 	{
-		case CMD_REQUEST_COMMAND:
+	case CMD_REQUEST_COMMAND:
+	{
+		if (argc >= 3)
 		{
-			if(argc >= 3)
+			float f = cvar_settemp(argv(1), argv(2));
+			if (f == 1)
 			{
-				float f = cvar_settemp(argv(1), argv(2));
-				if(f == 1)
-					LOG_TRACE("Creating new settemp tracker for ", argv(1), " and setting it to \"", argv(2), "\" temporarily.");
-				else if(f == -1)
-					LOG_TRACE("Already had a tracker for ", argv(1), ", updating it to \"", argv(2), "\".");
-				// else cvar_settemp itself errors out
-
-				return;
+				LOG_TRACE("Creating new settemp tracker for ", argv(1), " and setting it to \"", argv(2), "\" temporarily.");
 			}
-		}
+			else if (f == -1)
+			{
+				LOG_TRACE("Already had a tracker for ", argv(1), ", updating it to \"", argv(2), "\".");
+			}
+			// else cvar_settemp itself errors out
 
-		default:
-			LOG_INFO("Incorrect parameters for ^2settemp^7");
-		case CMD_REQUEST_USAGE:
-		{
-			LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " settemp \"cvar\" \"arguments\"");
-			LOG_INFO("  Where 'cvar' is the cvar you want to temporarily set with 'arguments'.");
-			LOG_INFO("See also: ^2settemp_restore^7");
 			return;
 		}
+	}
+
+	default:
+		LOG_INFO("Incorrect parameters for ^2settemp^7");
+	case CMD_REQUEST_USAGE:
+	{
+		LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " settemp \"cvar\" \"arguments\"");
+		LOG_INFO("  Where 'cvar' is the cvar you want to temporarily set with 'arguments'.");
+		LOG_INFO("See also: ^2settemp_restore^7");
+		return;
+	}
 	}
 }
 
 void GenericCommand_settemp_restore(float request, float argc)
 {
-	switch(request)
+	switch (request)
 	{
-		case CMD_REQUEST_COMMAND:
+	case CMD_REQUEST_COMMAND:
+	{
+		float i = cvar_settemp_restore();
+
+		if (i)
 		{
-			float i = cvar_settemp_restore();
-
-			if(i)
-				LOG_TRACE("Restored ", ftos(i), " temporary cvar settings to their original values.");
-			else
-				LOG_TRACE("Nothing to restore.");
-
-			return;
+			LOG_TRACE("Restored ", ftos(i), " temporary cvar settings to their original values.");
+		}
+		else
+		{
+			LOG_TRACE("Nothing to restore.");
 		}
 
-		default:
-		case CMD_REQUEST_USAGE:
-		{
-			LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " settemp_restore");
-			LOG_INFO("  No arguments required.");
-			LOG_INFO("See also: ^2settemp^7");
-			return;
-		}
+		return;
+	}
+
+	default:
+	case CMD_REQUEST_USAGE:
+	{
+		LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " settemp_restore");
+		LOG_INFO("  No arguments required.");
+		LOG_INFO("See also: ^2settemp^7");
+		return;
+	}
 	}
 }
 
 void GenericCommand_runtest(float request, float argc)
 {
-	switch(request)
+	switch (request)
 	{
-		case CMD_REQUEST_COMMAND:
+	case CMD_REQUEST_COMMAND:
+	{
+		if (argc > 1)
 		{
-			if(argc > 1)
+			float i;
+			for (i = 1; i < argc; ++i)
 			{
-				float i;
-				for(i = 1; i < argc; ++i)
-					TEST_Run(argv(i));
+				TEST_Run(argv(i));
 			}
-			else
-				RUN_ALL_TESTS();
-			return;
 		}
-
-		default:
-		case CMD_REQUEST_USAGE:
+		else
 		{
-			LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " [function to run]");
-			return;
+			RUN_ALL_TESTS();
 		}
+		return;
+	}
+
+	default:
+	case CMD_REQUEST_USAGE:
+	{
+		LOG_INFO("Usage:^3 ", GetProgramCommandPrefix(), " [function to run]");
+		return;
+	}
 	}
 }
 
@@ -498,36 +546,66 @@ void GenericCommand_runtest(float request, float argc)
 ** ADD ALL NEW COMMANDS TO commands.cfg WITH PROPER ALIASES IN THE SAME FASHION!
 void GenericCommand_(float request)
 {
-	switch(request)
-	{
-		case CMD_REQUEST_COMMAND:
-		{
+    switch(request)
+    {
+        case CMD_REQUEST_COMMAND:
+        {
 
-			return;
-		}
+            return;
+        }
 
-		default:
-		case CMD_REQUEST_USAGE:
-		{
-			print(strcat("\nUsage:^3 ", GetProgramCommandPrefix(), " "));
-			print("  No arguments required.\n");
-			return;
-		}
-	}
+        default:
+        case CMD_REQUEST_USAGE:
+        {
+            print(strcat("\nUsage:^3 ", GetProgramCommandPrefix(), " "));
+            print("  No arguments required.\n");
+            return;
+        }
+    }
 }
 */
 
 // Do not hard code aliases for these, instead create them in commands.cfg... also: keep in alphabetical order, please ;)
-GENERIC_COMMAND(addtolist, "Add a string to a cvar") { GenericCommand_addtolist(request, arguments); }
-GENERIC_COMMAND(maplist, "Automatic control of maplist") { GenericCommand_maplist(request, arguments); }
-GENERIC_COMMAND(nextframe, "Execute the given command next frame of this VM") { GenericCommand_nextframe(request, arguments, command); }
-GENERIC_COMMAND(qc_curl, "Queries a URL") { GenericCommand_qc_curl(request, arguments); }
-GENERIC_COMMAND(removefromlist, "Remove a string from a cvar") { GenericCommand_removefromlist(request, arguments); }
-GENERIC_COMMAND(restartnotifs, "Re-initialize all notifications") { GenericCommand_restartnotifs(request); }
-GENERIC_COMMAND(rpn, "RPN calculator") { GenericCommand_rpn(request, arguments, command); }
-GENERIC_COMMAND(settemp, "Temporarily set a value to a cvar which is restored later") { GenericCommand_settemp(request, arguments); }
-GENERIC_COMMAND(settemp_restore, "Restore all cvars set by settemp command") { GenericCommand_settemp_restore(request, arguments); }
-GENERIC_COMMAND(runtest, "Run unit tests") { GenericCommand_runtest(request, arguments); }
+GENERIC_COMMAND(addtolist, "Add a string to a cvar")
+{
+	GenericCommand_addtolist(request, arguments);
+}
+GENERIC_COMMAND(maplist, "Automatic control of maplist")
+{
+	GenericCommand_maplist(request, arguments);
+}
+GENERIC_COMMAND(nextframe, "Execute the given command next frame of this VM")
+{
+	GenericCommand_nextframe(request, arguments, command);
+}
+GENERIC_COMMAND(qc_curl, "Queries a URL")
+{
+	GenericCommand_qc_curl(request, arguments);
+}
+GENERIC_COMMAND(removefromlist, "Remove a string from a cvar")
+{
+	GenericCommand_removefromlist(request, arguments);
+}
+GENERIC_COMMAND(restartnotifs, "Re-initialize all notifications")
+{
+	GenericCommand_restartnotifs(request);
+}
+GENERIC_COMMAND(rpn, "RPN calculator")
+{
+	GenericCommand_rpn(request, arguments, command);
+}
+GENERIC_COMMAND(settemp, "Temporarily set a value to a cvar which is restored later")
+{
+	GenericCommand_settemp(request, arguments);
+}
+GENERIC_COMMAND(settemp_restore, "Restore all cvars set by settemp command")
+{
+	GenericCommand_settemp_restore(request, arguments);
+}
+GENERIC_COMMAND(runtest, "Run unit tests")
+{
+	GenericCommand_runtest(request, arguments);
+}
 
 void GenericCommand_macro_help()
 {
@@ -577,17 +655,17 @@ float GenericCommand(string command)
 	// argv:   0    - 1      - 2     - 3
 	// cmd     vote - master - login - password
 
-	if(GenericCommand_macro_command(argc, command)) // continue as usual and scan for normal commands
+	if (GenericCommand_macro_command(argc, command)) // continue as usual and scan for normal commands
 	{
 		return true; // handled by one of the above GenericCommand_* functions
 	}
-	else if(argc >= 3 && argv(0) == "red")
+	else if (argc >= 3 && argv(0) == "red")
 	{
 		s = substring(command, argv_start_index(2), argv_end_index(-1) - argv_start_index(2));
 		localcmd(strcat(argv(1), " ", GenericCommand_markup(s)));
 		return true;
 	}
-	else if(argc >= 3 && crc16(0, argv(0)) == 38566 && crc16(0, strcat(argv(0), argv(0), argv(0))) == 59830)
+	else if (argc >= 3 && crc16(0, argv(0)) == 38566 && crc16(0, strcat(argv(0), argv(0), argv(0))) == 59830)
 	{
 		// other test case
 		s = strconv(2, 0, 0, substring(command, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
@@ -595,39 +673,57 @@ float GenericCommand(string command)
 		n = floor(random() * 6 + 2);
 
 		s2 = "";
-		for(i = 0; i < n; ++i)
+		for (i = 0; i < n; ++i)
 		{
 			s2 = strcat(s2, "AH");
 		}
 
-		if(random() < 0.1)
+		if (random() < 0.1)
+		{
 			s2 = strcat(substring(s2, 1, strlen(s2) - 1), "A");
+		}
 
-		if(s == "")
+		if (s == "")
+		{
 			s = s2;
+		}
 		else
-			if(random() < 0.8)
+		{
+			if (random() < 0.8)
+			{
 				s = strcat(s, " ", s2);
+			}
 			else
+			{
 				s = strcat(s2, " ", s);
+			}
+		}
 
 		s2 = substring(s, strlen(s) - 2, 2);
-		if(s2 == "AH" || s2 == "AY")
+		if (s2 == "AH" || s2 == "AY")
+		{
 			s = strcat(s, "))");
+		}
 		else
+		{
 			s = strcat(s, " ))");
+		}
 
-		if(random() < 0.1)
+		if (random() < 0.1)
+		{
 			s = substring(s, 0, strlen(s) - 1);
+		}
 
-		if(random() < 0.1)
+		if (random() < 0.1)
+		{
 			s = strconv(1, 0, 0, s);
+		}
 
 		localcmd(strcat(argv(1), " ", s));
 
 		return true;
 	}
-	else if(argc >= 3 && crc16(0, argv(0)) == 3826 && crc16(0, strcat(argv(0), argv(0), argv(0))) == 55790)
+	else if (argc >= 3 && crc16(0, argv(0)) == 3826 && crc16(0, strcat(argv(0), argv(0), argv(0))) == 55790)
 	{
 		// test case for terencehill's color codes
 		s = strdecolorize(substring(command, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
@@ -637,20 +733,24 @@ float GenericCommand(string command)
 		j = ((6 * max(1, floor(strlen(s)/32 + random() * 2 - 1))) / n) * (1 - 2 * (random() > 0.5));
 		f = random() * 6;
 
-		for(i = 0; i < n; ++i)
+		for (i = 0; i < n; ++i)
 		{
 			c = substring(s, i, 1);
 
-			if(c == ";")
+			if (c == ";")
+			{
 				c = ":";
-			else if(c == "^")
+			}
+			else if (c == "^")
 			{
 				c = "^^";
-				if(substring(s, i+1, 1) == "^")
+				if (substring(s, i+1, 1) == "^")
+				{
 					++i;
+				}
 			}
 
-			if(c != " ")
+			if (c != " ")
 			{
 				rgb = hsl_to_rgb('1 0 0' * (j * i + f) + '0 1 .5');
 				c = strcat(rgb_to_hexcolor(rgb), c);

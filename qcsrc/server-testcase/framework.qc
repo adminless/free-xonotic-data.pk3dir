@@ -9,10 +9,16 @@ spawnfunc(worldspawn)
 	float r;
 	LOG_TRACE("TESTCASE: START");
 	r = test();
-	if(r == 1)
+	if (r == 1)
+	{
 		error("TESTCASE: PASS");
-	else if(r == 0)
+	}
+	else if (r == 0)
+	{
 		error("TESTCASE: FAIL");
+	}
 	else
+	{
 		error("TESTCASE: INVALID");
+	}
 }

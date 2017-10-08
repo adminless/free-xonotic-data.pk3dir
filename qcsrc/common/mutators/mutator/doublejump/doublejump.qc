@@ -2,7 +2,7 @@
 
 #ifdef GAMEQC
 #ifdef SVQC
-	#include <server/antilag.qh>
+#include <server/antilag.qh>
 #endif
 #include <common/physics/player.qh>
 
@@ -12,12 +12,12 @@ REGISTER_MUTATOR(doublejump, autocvar_sv_doublejump);
 REGISTER_MUTATOR(doublejump, true);
 #endif
 
-#define PHYS_DOUBLEJUMP(s)                     STAT(DOUBLEJUMP, s)
+#define PHYS_DOUBLEJUMP(s) STAT(DOUBLEJUMP, s)
 
 
 MUTATOR_HOOKFUNCTION(doublejump, PlayerJump)
 {
-    entity player = M_ARGV(0, entity);
+	entity player = M_ARGV(0, entity);
 
 	if (PHYS_DOUBLEJUMP(player))
 	{
@@ -29,7 +29,9 @@ MUTATOR_HOOKFUNCTION(doublejump, PlayerJump)
 			// we MUST clip velocity here!
 			float f = player.velocity * trace_plane_normal;
 			if (f < 0)
+			{
 				player.velocity -= f * trace_plane_normal;
+			}
 		}
 	}
 }

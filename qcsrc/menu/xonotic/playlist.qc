@@ -33,16 +33,18 @@ void XonoticPlayList_resizeNotify(entity me, vector relOrigin, vector relSize, v
 void XonoticPlayList_addToPlayList(entity me, string track)
 {
 	me.nItems = tokenize_console(cvar_string("music_playlist_list0"));
-	if(me.nItems == 0)
+	if (me.nItems == 0)
 	{
 		cvar_set("music_playlist_list0", track);
 		return;
 	}
 	float i;
-	for(i = 0; i < me.nItems; ++i)
+	for (i = 0; i < me.nItems; ++i)
 	{
-		if(argv(i) == track)
+		if (argv(i) == track)
+		{
 			return; // track is already in playlist
+		}
 	}
 	cvar_set("music_playlist_list0", strcat(cvar_string("music_playlist_list0"), " ", track));
 }
@@ -52,20 +54,28 @@ void XonoticPlayList_removeSelectedFromPlayList(entity me)
 	float i, cpt = false;
 	string s = "";
 	me.nItems = tokenize_console(cvar_string("music_playlist_list0"));
-	if(me.nItems == 0)
-		return;
-	for(i = 0; i < me.nItems; ++i)
+	if (me.nItems == 0)
 	{
-		if(i == me.selectedItem)
+		return;
+	}
+	for (i = 0; i < me.nItems; ++i)
+	{
+		if (i == me.selectedItem)
 		{
-			if(i == me.nItems - 1)
-				me.setSelected(me, me.selectedItem - 1);
-			if(cvar("music_playlist_index") == 0 || cvar("music_playlist_index") == 999)
+			if (i == me.nItems - 1)
 			{
-				if(cvar("music_playlist_current0") == i)
+				me.setSelected(me, me.selectedItem - 1);
+			}
+			if (cvar("music_playlist_index") == 0 || cvar("music_playlist_index") == 999)
+			{
+				if (cvar("music_playlist_current0") == i)
+				{
 					cpt = true; // current playing track (we can't start next track here because startSound calls tokenize_console)
-				else if(cvar("music_playlist_current0") > i)
+				}
+				else if (cvar("music_playlist_current0") > i)
+				{
 					cvar_set("music_playlist_current0", ftos(cvar("music_playlist_current0") - 1));
+				}
 			}
 			continue;
 		}
@@ -73,17 +83,21 @@ void XonoticPlayList_removeSelectedFromPlayList(entity me)
 	}
 	// we must stop the current playing track if it has been removed
 	// otherwise pause/play button will resume from another track
-	if(s == "")
+	if (s == "")
 	{
 		cvar_set("music_playlist_list0", "");
-		if(cpt)
+		if (cpt)
+		{
 			me.stopSound(me);
+		}
 	}
 	else
 	{
 		cvar_set("music_playlist_list0", substring(s, 1, strlen(s))); // remove initial space
-		if(cpt)
+		if (cpt)
+		{
 			me.startSound(me, 0);
+		}
 	}
 }
 
@@ -105,16 +119,20 @@ float XonoticPlayList_mouseDrag(entity me, vector pos)
 	i = me.selectedItem;
 	f = SUPER(XonoticPlayList).mouseDrag(me, pos);
 
-	if(me.pressed != 1) // don't change priority if the person is just scrolling
+	if (me.pressed != 1) // don't change priority if the person is just scrolling
 	{
-		if(me.selectedItem != i)
+		if (me.selectedItem != i)
 		{
 			cvar_set("music_playlist_list0", swapInPriorityList(cvar_string("music_playlist_list0"), me.selectedItem, i));
 			float c = cvar("music_playlist_current0");
-			if(c == i)
+			if (c == i)
+			{
 				cvar_set("music_playlist_current0", ftos(me.selectedItem));
-			else if(c == me.selectedItem)
+			}
+			else if (c == me.selectedItem)
+			{
 				cvar_set("music_playlist_current0", ftos(i));
+			}
 		}
 	}
 
@@ -124,29 +142,37 @@ float XonoticPlayList_mouseDrag(entity me, vector pos)
 void XonoticPlayList_draw(entity me)
 {
 	me.nItems = tokenize_console(cvar_string("music_playlist_list0"));
-	if(cvar("music_playlist_index") == 0 || cvar("music_playlist_index") == 999)
+	if (cvar("music_playlist_index") == 0 || cvar("music_playlist_index") == 999)
+	{
 		me.playingTrack = cvar("music_playlist_current0");
+	}
 	else
+	{
 		me.playingTrack = -1;
+	}
 	SUPER(XonoticPlayList).draw(me);
 }
 
 void XonoticPlayList_drawListBoxItem(entity me, int i, vector absSize, bool isSelected, bool isFocused)
 {
 	string s;
-	if(isSelected)
+	if (isSelected)
+	{
 		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
-	else if(isFocused)
+	}
+	else if (isFocused)
 	{
 		me.focusedItemAlpha = getFadedAlpha(me.focusedItemAlpha, SKINALPHA_LISTBOX_FOCUSED, SKINFADEALPHA_LISTBOX_FOCUSED);
 		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_FOCUSED, me.focusedItemAlpha);
 	}
 
-	if(i == me.playingTrack)
+	if (i == me.playingTrack)
 	{
 		float f = cvar("music_playlist_sampleposition0");
-		if(f <= 0 || (((time * 2) & 1) && f > 0))
+		if (f <= 0 || (((time * 2) & 1) && f > 0))
+		{
 			draw_Text(me.realUpperMargin * eY + (me.columnNumberOrigin + me.columnNumberSize) * eX, "\xE2\x96\xB6", me.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
+		}
 	}
 
 	s = ftos(i+1);
@@ -160,7 +186,7 @@ void XonoticPlayList_stopSound(entity me)
 {
 	// STOP: list 0 is disabled by setting the index to -1
 	// we set sampleposition0 to 0 to forget the position that the engine saves in this frame (for this reason we need to wait a frame)
-	if(cvar("music_playlist_index") == 0 || cvar("music_playlist_index") == 999)
+	if (cvar("music_playlist_index") == 0 || cvar("music_playlist_index") == 999)
 	{
 		cvar_set("music_playlist_index", "-1");
 		localcmd("\nwait; music_playlist_sampleposition0 0\n");
@@ -177,23 +203,29 @@ void XonoticPlayList_startSound(entity me, float offset)
 {
 	float f;
 	me.nItems = tokenize_console(cvar_string("music_playlist_list0"));
-	if(offset)
+	if (offset)
 	{
-		if(cvar("music_playlist_index") == -1)
+		if (cvar("music_playlist_index") == -1)
+		{
 			return;
+		}
 		f = bound(0, cvar("music_playlist_current0") + offset, me.nItems - 1);
-		if(f == cvar("music_playlist_current0"))
+		if (f == cvar("music_playlist_current0"))
+		{
 			return;
+		}
 	}
 	else
 	{
 		f = me.selectedItem;
 		// if it was paused then resume
-		if(f == cvar("music_playlist_current0"))
-		if(cvar("music_playlist_index") == 999)
+		if (f == cvar("music_playlist_current0"))
 		{
-			me.resumeSound(me);
-			return;
+			if (cvar("music_playlist_index") == 999)
+			{
+				me.resumeSound(me);
+				return;
+			}
 		}
 		// if it was not paused then proceed with restart
 	}
@@ -225,16 +257,20 @@ void XonoticPlayList_resumeSound(entity me)
 {
 	// RESUME: list 0 is enabled by setting the index to 0
 	// (we reset sampleposition0 to 0 to mark the track as in playing back state)
-	if(cvar("music_playlist_index") == 999)
+	if (cvar("music_playlist_index") == 999)
+	{
 		localcmd("\nmusic_playlist_index 0; wait; music_playlist_sampleposition0 0\n");
+	}
 }
 void XonoticPlayList_pauseSound(entity me)
 {
 	// PAUSE: list 0 is disabled by setting the index to 999
 	// (we know the track is paused because the engine sets sampleposition0 to remember current position)
-	if(cvar("music_playlist_index") == 0)
+	if (cvar("music_playlist_index") == 0)
+	{
 		localcmd("\nmusic_playlist_index 999\n");
-	else me.resumeSound(me);
+	}
+	else { me.resumeSound(me); }
 }
 
 void PauseSound_Click(entity btn, entity me)
@@ -249,18 +285,23 @@ void XonoticPlayList_doubleClickListBoxItem(entity me, float i, vector where)
 
 float XonoticPlayList_keyDown(entity me, float scan, float ascii, float shift)
 {
-	if(scan == K_ENTER || scan == K_KP_ENTER) {
+	if (scan == K_ENTER || scan == K_KP_ENTER)
+	{
 		me.startSound(me, 0);
 		return 1;
 	}
-	else if(scan == K_SPACE) {
+	else if (scan == K_SPACE)
+	{
 		me.pauseSound(me);
 		return 1;
 	}
-	else if(scan == K_DEL || scan == K_KP_DEL || scan == K_BACKSPACE || scan == K_MOUSE3) {
+	else if (scan == K_DEL || scan == K_KP_DEL || scan == K_BACKSPACE || scan == K_MOUSE3)
+	{
 		me.removeSelectedFromPlayList(me);
 		return 1;
 	}
 	else
+	{
 		return SUPER(XonoticPlayList).keyDown(me, scan, ascii, shift);
+	}
 }
