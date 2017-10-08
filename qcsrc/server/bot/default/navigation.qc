@@ -183,13 +183,11 @@ bool tracewalk(entity e, vector start, vector m1, vector m2, vector end, float m
 						if(autocvar_bot_debug_tracewalk)
 							debugnodestatus(trace_endpos, DEBUG_NODE_WARNING);
 
-						IL_EACH(g_ladders, it.classname == "func_ladder",
-							{ it.solid = SOLID_BSP; });
+						IL_EACH(g_ladders, true, { it.solid = SOLID_BSP; });
 
 						traceline( org, move, movemode, e);
 
-						IL_EACH(g_ladders, it.classname == "func_ladder",
-							{ it.solid = SOLID_TRIGGER; });
+						IL_EACH(g_ladders, true, { it.solid = SOLID_TRIGGER; });
 
 						if ( trace_ent.classname == "door_rotating" || trace_ent.classname == "door")
 						{
