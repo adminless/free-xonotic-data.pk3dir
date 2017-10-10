@@ -696,7 +696,7 @@ float bot_cmd_eval(entity this, string expr)
 	case "speed":
 		return vlen(this.velocity);
 	case "flagcarrier":
-		return (this.flagcarried != NULL);
+		return this.flagcarried != NULL;
 	}
 
 	LOG_INFO("ERROR: Unable to convert the expression '", expr, "' into a numeric value");

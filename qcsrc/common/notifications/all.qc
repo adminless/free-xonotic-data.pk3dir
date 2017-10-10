@@ -90,28 +90,25 @@ bool Notification_ShouldSend(NOTIF broadcast, entity to_client, entity other_cli
 	switch (broadcast)
 	{
 	case NOTIF_ONE:
-		return
-			(to_client == other_client)
-			||
-			(IS_SPEC(to_client) && (to_client.enemy == other_client))
+		return (to_client == other_client)
+			   ||
+			   (IS_SPEC(to_client) && (to_client.enemy == other_client))
 		;
 	case NOTIF_ONE_ONLY:
 		return to_client == other_client;
 	case NOTIF_TEAM:
-		return
-			(to_client.team == other_client.team)
-			||
-			(
+		return (to_client.team == other_client.team)
+			   ||
+			   (
 			IS_SPEC(to_client)
 			&&
 			(to_client.enemy.team == other_client.team)
-			)
+			   )
 		;
 	case NOTIF_TEAM_EXCEPT:
-		return
-			(to_client != other_client)
-			&&
-			(
+		return (to_client != other_client)
+			   &&
+			   (
 			(to_client.team == other_client.team)
 			||
 			(
@@ -123,19 +120,18 @@ bool Notification_ShouldSend(NOTIF broadcast, entity to_client, entity other_cli
 					(to_client.enemy.team == other_client.team)
 				)
 			)
-			)
+			   )
 		;
 	case NOTIF_ALL:
 		return true;
 	case NOTIF_ALL_EXCEPT:
-		return
-			(to_client != other_client)
-			&&
-			!(
+		return (to_client != other_client)
+			   &&
+			   !(
 			IS_SPEC(to_client)
 			&&
 			(to_client.enemy == other_client)
-			)
+			   )
 		;
 	default:
 		return false;
