@@ -45,12 +45,12 @@ void turret_draw(entity this)
 			te_spark(this.origin + '0 0 40', randomvec() * 256 + '0 0 256', 16);
 	}
 
-	if(this.health < 85)
-	if(dt < 0.01)
+	if(this.health < 85
+		&& dt < 0.01)
 		pointparticles(EFFECT_SMOKE_LARGE, (this.origin + (randomvec() * 80)), '0 0 0', 1);
 
-	if(this.health < 32)
-	if(dt < 0.015)
+	if(this.health < 32
+		&& dt < 0.015)
 		pointparticles(EFFECT_SMOKE_SMALL, (this.origin + (randomvec() * 80)), '0 0 0', 1);
 
 }
@@ -72,8 +72,8 @@ void turret_draw2d(entity this)
 	vector o;
 	string txt;
 
-	if(autocvar_cl_vehicles_hud_tactical)
-	if(dist < 10240 && t != this.team)
+	if(autocvar_cl_vehicles_hud_tactical
+		&& dist < 10240 && t != this.team)
 	{
 		// TODO: Vehicle tactical hud
 		o = project_3d_to_2d(this.origin + '0 0 32');

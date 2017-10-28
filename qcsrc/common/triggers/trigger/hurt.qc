@@ -21,8 +21,8 @@ void trigger_hurt_touch(entity this, entity toucher)
 	// only do the EXACTTRIGGER_TOUCH checks when really needed (saves some cpu)
 	if (toucher.iscreature)
 	{
-		if (toucher.takedamage)
-		if (toucher.triggerhurttime < time)
+		if (toucher.takedamage
+			&& toucher.triggerhurttime < time)
 		{
 			EXACTTRIGGER_TOUCH(this, toucher);
 			toucher.triggerhurttime = time + 1;

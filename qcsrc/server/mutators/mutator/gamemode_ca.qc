@@ -251,8 +251,8 @@ entity ca_LastPlayerForTeam(entity this)
 
 void ca_LastPlayerForTeam_Notify(entity this)
 {
-	if (round_handler_IsActive())
-	if (round_handler_IsRoundStarted())
+	if (round_handler_IsActive()
+		&& round_handler_IsRoundStarted())
 	{
 		entity pl = ca_LastPlayerForTeam(this);
 		if (pl)
@@ -332,9 +332,9 @@ MUTATOR_HOOKFUNCTION(ca, Damage_Calculate)
 	float frag_damage = M_ARGV(4, float);
 	float frag_mirrordamage = M_ARGV(5, float);
 
-	if (IS_PLAYER(frag_target))
-	if (!IS_DEAD(frag_target))
-	if (frag_target == frag_attacker || SAME_TEAM(frag_target, frag_attacker) || frag_deathtype == DEATH_FALL.m_id)
+	if (IS_PLAYER(frag_target)
+		&& !IS_DEAD(frag_target)
+		&& (frag_target == frag_attacker || SAME_TEAM(frag_target, frag_attacker) || frag_deathtype == DEATH_FALL.m_id))
 		frag_damage = 0;
 
 	frag_mirrordamage = 0;
@@ -347,8 +347,8 @@ MUTATOR_HOOKFUNCTION(ca, FilterItem)
 {
     entity item = M_ARGV(0, entity);
 
-	if (autocvar_g_powerups <= 0)
-	if (item.flags & FL_POWERUP)
+	if (autocvar_g_powerups <= 0
+		&& item.flags & FL_POWERUP)
 		return true;
 
 	if (autocvar_g_pickup_items <= 0)
@@ -386,8 +386,8 @@ MUTATOR_HOOKFUNCTION(ca, SpectateSet)
     entity client = M_ARGV(0, entity);
     entity targ = M_ARGV(1, entity);
 
-	if (!autocvar_g_ca_spectate_enemies && client.caplayer)
-	if (DIFF_TEAM(targ, client))
+	if (!autocvar_g_ca_spectate_enemies && client.caplayer
+		&& DIFF_TEAM(targ, client))
 		return true;
 }
 

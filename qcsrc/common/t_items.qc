@@ -866,8 +866,8 @@ float Item_GiveTo(entity item, entity player)
 		for(int slot = 0; slot < MAX_WEAPONSLOTS; ++slot)
 		{
 			.entity weaponentity = weaponentities[slot];
-			if(_switchweapon & BIT(slot))
-			if(player.(weaponentity).m_switchweapon != w_getbestweapon(player, weaponentity))
+			if(_switchweapon & BIT(slot)
+				&& player.(weaponentity).m_switchweapon != w_getbestweapon(player, weaponentity))
 				W_SwitchWeapon_Force(player, w_getbestweapon(player, weaponentity), weaponentity);
 		}
 	}
@@ -1793,8 +1793,8 @@ float GiveItems(entity e, float beginarg, float endarg)
 		for(int slot = 0; slot < MAX_WEAPONSLOTS; ++slot)
 		{
 			.entity weaponentity = weaponentities[slot];
-			if(e.(weaponentity).m_weapon != WEP_Null || slot == 0)
-			if(e.(weaponentity).m_switchweapon == w_getbestweapon(e, weaponentity))
+			if((e.(weaponentity).m_weapon != WEP_Null || slot == 0)
+				&& e.(weaponentity).m_switchweapon == w_getbestweapon(e, weaponentity))
 				_switchweapon |= BIT(slot);
 		}
 	}
@@ -1973,8 +1973,8 @@ float GiveItems(entity e, float beginarg, float endarg)
 	for(int slot = 0; slot < MAX_WEAPONSLOTS; ++slot)
 	{
 		.entity weaponentity = weaponentities[slot];
-		if(e.(weaponentity).m_weapon != WEP_Null || slot == 0)
-		if(!(e.weapons & WepSet_FromWeapon(e.(weaponentity).m_switchweapon)))
+		if((e.(weaponentity).m_weapon != WEP_Null || slot == 0)
+			&& !(e.weapons & WepSet_FromWeapon(e.(weaponentity).m_switchweapon)))
 			_switchweapon |= BIT(slot);
 	}
 

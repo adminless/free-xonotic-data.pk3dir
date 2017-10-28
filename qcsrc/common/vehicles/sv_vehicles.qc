@@ -101,8 +101,8 @@ void vehicles_locktarget(entity this, float incr, float decr, float _lock_time)
 
 	if(this.lock_time > time)
 	{
-		if(this.lock_target)
-		if(this.lock_soundtime < time)
+		if(this.lock_target
+			&& this.lock_soundtime < time)
 		{
 			this.lock_soundtime = time + 0.5;
 			play2(this.owner, "vehicles/locked.wav");
@@ -584,8 +584,8 @@ void vehicle_use(entity this, entity actor, entity trigger)
 
 void vehicles_regen(entity this, float timer, .float regen_field, float field_max, float rpause, float regen, float delta_time, float _healthscale)
 {
-	if(this.(regen_field) < field_max)
-	if(timer + rpause < time)
+	if(this.(regen_field) < field_max
+		&& timer + rpause < time)
 	{
 		if(_healthscale)
 			regen = regen * (this.vehicle_health / this.max_health);
@@ -616,8 +616,8 @@ void vehicles_painframe(entity this)
 {
 	int myhealth = ((this.owner) ? this.owner.vehicle_health : ((this.vehicle_health / this.max_health) * 100));
 
-	if(myhealth <= 50)
-	if(this.pain_frame < time)
+	if(myhealth <= 50
+		&& this.pain_frame < time)
 	{
 		float _ftmp = myhealth / 50;
 		this.pain_frame = time + max(0.1, 0.1 + (random() * 0.5 * _ftmp));
@@ -894,10 +894,10 @@ void vehicles_touch(entity this, entity toucher)
 	// Vehicle currently in use
 	if(this.owner)
 	{
-		if(!forbidWeaponUse(this.owner))
-		if(toucher != NULL)
-		if((this.origin_z + this.maxs_z) > (toucher.origin_z))
-		if(vehicles_crushable(toucher))
+		if(!forbidWeaponUse(this.owner)
+			&& toucher != NULL
+			&& (this.origin_z + this.maxs_z) > (toucher.origin_z)
+			&& vehicles_crushable(toucher))
 		{
 			if(vdist(this.velocity, >=, 30))
 				Damage(toucher, this, this.owner, autocvar_g_vehicles_crush_dmg, DEATH_VH_CRUSH.m_id, '0 0 0', normalize(toucher.origin - this.origin) * autocvar_g_vehicles_crush_force);
@@ -953,9 +953,9 @@ void vehicles_enter(entity pl, entity veh)
 
 	Vehicle info = Vehicles_from(veh.vehicleid);
 
-	if(autocvar_g_vehicles_enter) // vehicle's touch function should handle this if entering via use key is disabled (TODO)
-	if(veh.vehicle_flags & VHF_MULTISLOT)
-	if(veh.owner && SAME_TEAM(pl, veh))
+	if(autocvar_g_vehicles_enter // vehicle's touch function should handle this if entering via use key is disabled (TODO)
+		&& veh.vehicle_flags & VHF_MULTISLOT
+		&& veh.owner && SAME_TEAM(pl, veh))
 	{
 		// we don't need a return value or anything here
 		// if successful the owner check below will prevent anything weird

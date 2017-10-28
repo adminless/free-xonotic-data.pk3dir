@@ -119,8 +119,8 @@ bool bot_shouldattack(entity this, entity targ)
 	{
 		if (targ == this)
 			return false;
-		if (teamplay)
-		if (targ.team != 0)
+		if (teamplay
+			&& targ.team != 0)
 			return false;
 	}
 
@@ -307,8 +307,8 @@ float bot_aimdir(entity this, vector v, float maxfiredeviation)
 	//dprint("e ", vtos(diffang), " < ", ftos(maxfiredeviation), "\n");
 
 	// decide whether to fire this time
-	if (v * shotdir >= cos(maxfiredeviation * DEG2RAD))
-	if(vdist(trace_endpos-shotorg, <, 500 + 500 * bound(0, skill + this.bot_aggresskill, 10)) || random()*random()>bound(0,(skill+this.bot_aggresskill)*0.05,1))
+	if (v * shotdir >= cos(maxfiredeviation * DEG2RAD)
+		&& (vdist(trace_endpos-shotorg, <, 500 + 500 * bound(0, skill + this.bot_aggresskill, 10)) || random()*random()>bound(0,(skill+this.bot_aggresskill)*0.05,1)))
 		this.bot_firetimer = time + bound(0.1, 0.5-(skill+this.bot_aggresskill)*0.05, 0.5);
 	//traceline(shotorg,shotorg+shotdir*1000,false,NULL);
 	//dprint(ftos(maxfiredeviation),"\n");
@@ -379,9 +379,9 @@ bool bot_aim(entity this, .entity weaponentity, float shotspeed, float shotspeed
 		//if (!bot_shouldattack(this, trace_ent))
 		//	return false;
 		traceline(shotorg, this.bot_aimtargorigin, false, this);
-		if (trace_fraction < 1)
-		if (trace_ent != this.enemy)
-		if (!bot_shouldattack(this, trace_ent))
+		if (trace_fraction < 1
+			&& trace_ent != this.enemy
+			&& !bot_shouldattack(this, trace_ent))
 		{
 			this.dphitcontentsmask = hf;
 			return false;

@@ -276,8 +276,8 @@ MUTATOR_HOOKFUNCTION(rc, PutClientInServer)
 {
 	entity player = M_ARGV(0, entity);
 
-	if(IS_PLAYER(player))
-	if(!game_stopped)
+	if(IS_PLAYER(player)
+		&& !game_stopped)
 	{
 		if(CS(player).killcount == FRAGS_SPECTATOR /* initial spawn */ || g_race_qualifying) // spawn
 			race_PreparePlayer(player);

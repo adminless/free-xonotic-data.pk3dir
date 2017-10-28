@@ -420,8 +420,8 @@ METHOD(WalkerTurret, tr_think, void(WalkerTurret thistur, entity it))
             vector wish_angle;
 
             wish_angle = angleofs(it, it.enemy);
-            if (it.animflag != ANIM_SWIM)
-            if (fabs(wish_angle_y) < 15)
+            if (it.animflag != ANIM_SWIM
+            	&& fabs(wish_angle_y) < 15)
             {
                 it.moveto   = it.enemy.origin;
                 it.steerto  = steerlib_attract2(it, it.moveto, 0.5, 500, 0.95);
@@ -447,8 +447,8 @@ METHOD(WalkerTurret, tr_think, void(WalkerTurret thistur, entity it))
             }
             else
             {
-                if (it.tur_dist_enemy > (autocvar_g_turrets_unit_walker_rocket_range_min))
-                if (it.tur_dist_enemy < (autocvar_g_turrets_unit_walker_rocket_range))
+                if (it.tur_dist_enemy > (autocvar_g_turrets_unit_walker_rocket_range_min)
+                	&& it.tur_dist_enemy < (autocvar_g_turrets_unit_walker_rocket_range))
                     it.tur_head.shot_volly = 4;
             }
         }
@@ -627,8 +627,8 @@ void walker_draw(entity this)
     setorigin(this, this.origin + this.velocity * dt);
     this.tur_head.angles += dt * this.tur_head.avelocity;
 
-    if (this.health < 127)
-    if(random() < 0.15)
+    if (this.health < 127
+    	&& random() < 0.15)
         te_spark(this.origin + '0 0 40', randomvec() * 256 + '0 0 256', 16);
 }
 

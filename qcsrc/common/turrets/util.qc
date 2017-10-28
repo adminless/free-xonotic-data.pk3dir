@@ -99,8 +99,8 @@ void FireImoBeam(entity this, vector start, vector end, vector smin, vector smax
 #ifdef TURRET_DEBUG
 void marker_think(entity this, )
 {
-	if(this.cnt)
-	if(this.cnt < time)
+	if(this.cnt
+		&& this.cnt < time)
 	{
 		setthink(this, SUB_Remove);
 		this.nextthink = time;

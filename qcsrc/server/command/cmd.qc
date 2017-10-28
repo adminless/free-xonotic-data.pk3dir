@@ -173,9 +173,9 @@ void ClientCommand_join(entity caller, float request)
 	{
 		case CMD_REQUEST_COMMAND:
 		{
-			if (!game_stopped)
-			if (IS_CLIENT(caller) && !IS_PLAYER(caller))
-			if (joinAllowed(caller))
+			if (!game_stopped
+				&& IS_CLIENT(caller) && !IS_PLAYER(caller)
+				&& joinAllowed(caller))
 				Join(caller);
 
 			return;  // never fall through to usage
@@ -502,8 +502,8 @@ void ClientCommand_spectate(entity caller, float request)
 
 				if (mutator_returnvalue == MUT_SPECCMD_RETURN) return;
 
-				if ((IS_PLAYER(caller) || mutator_returnvalue == MUT_SPECCMD_FORCE))
-				if (autocvar_sv_spectate == 1)
+				if (((IS_PLAYER(caller) || mutator_returnvalue == MUT_SPECCMD_FORCE))
+					&& autocvar_sv_spectate == 1)
 					ClientKill_TeamChange(caller, -2); // observe
 			}
 			return; // never fall through to usage

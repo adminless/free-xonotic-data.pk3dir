@@ -415,8 +415,8 @@ float waypoint_load_links()
 			found = false;
 			while(wp_from)
 			{
-				if(vdist(wp_from.origin - wp_from_pos, <, 1))
-				if(wp_from.classname == "waypoint")
+				if(vdist(wp_from.origin - wp_from_pos, <, 1)
+					&& wp_from.classname == "waypoint")
 				{
 					found = true;
 					break;
@@ -437,8 +437,8 @@ float waypoint_load_links()
 		found = false;
 		while(wp_to)
 		{
-			if(vdist(wp_to.origin - wp_to_pos, <, 1))
-			if(wp_to.classname == "waypoint")
+			if(vdist(wp_to.origin - wp_to_pos, <, 1)
+				&& wp_to.classname == "waypoint")
 			{
 				found = true;
 				break;
@@ -506,8 +506,8 @@ void waypoint_load_or_remove_links_hardwired(bool removal_mode)
 			found = false;
 			while(wp_from)
 			{
-				if(vdist(wp_from.origin - wp_from_pos, <, 5))
-				if(wp_from.classname == "waypoint")
+				if(vdist(wp_from.origin - wp_from_pos, <, 5)
+					&& wp_from.classname == "waypoint")
 				{
 					found = true;
 					break;
@@ -528,8 +528,8 @@ void waypoint_load_or_remove_links_hardwired(bool removal_mode)
 		found = false;
 		while(wp_to)
 		{
-			if(vdist(wp_to.origin - wp_to_pos, <, 5))
-			if(wp_to.classname == "waypoint")
+			if(vdist(wp_to.origin - wp_to_pos, <, 5)
+				&& wp_to.classname == "waypoint")
 			{
 				found = true;
 				break;
@@ -942,9 +942,9 @@ float botframe_autowaypoints_fix_from(entity p, float walkfromwp, entity wp, .en
 		IL_EACH(g_waypoints, it != wp && !(it.wpflags & WAYPOINTFLAG_NORELINK),
 		{
 			float d = vlen(wp.origin - it.origin) + vlen(it.origin - porg);
-			if(d < bestdist)
-			if(navigation_waypoint_will_link(wp.origin, it.origin, p, walkfromwp, 1050))
-			if(navigation_waypoint_will_link(it.origin, porg, p, walkfromwp, 1050))
+			if(d < bestdist
+				&& navigation_waypoint_will_link(wp.origin, it.origin, p, walkfromwp, 1050)
+				&& navigation_waypoint_will_link(it.origin, porg, p, walkfromwp, 1050))
 			{
 				bestdist = d;
 				p.(fld) = it;

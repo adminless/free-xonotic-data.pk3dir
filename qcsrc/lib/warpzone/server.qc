@@ -818,15 +818,15 @@ void WarpZone_StartFrame()
 		if(warpzone_warpzones_exist)
 			WarpZone_StoreProjectileData(it); // TODO: not actually needed
 
-		if(IS_OBSERVER(it) || it.solid == SOLID_NOT)
-		if(IS_CLIENT(it)) // we don't care about it being a bot
+		if((IS_OBSERVER(it) || it.solid == SOLID_NOT)
+			&& IS_CLIENT(it)) // we don't care about it being a bot
 		{
 			// warpzones
 			if (warpzone_warpzones_exist) {
 				entity e = WarpZone_Find(it.origin + it.mins, it.origin + it.maxs);
-				if (e)
-				if (!WarpZoneLib_ExactTrigger_Touch(e, it))
-				if (WarpZone_PlaneDist(e, it.origin + it.view_ofs) <= 0)
+				if (e
+					&& !WarpZoneLib_ExactTrigger_Touch(e, it)
+					&& WarpZone_PlaneDist(e, it.origin + it.view_ofs) <= 0)
 					WarpZone_Teleport(e, it, -1, 0); // NOT triggering targets by this!
 			}
 
@@ -834,8 +834,8 @@ void WarpZone_StartFrame()
 			if(it.teleportable)
 			{
 				entity ent = Teleport_Find(it.origin + it.mins, it.origin + it.maxs);
-				if (ent)
-				if (!WarpZoneLib_ExactTrigger_Touch(ent, it))
+				if (ent
+					&& !WarpZoneLib_ExactTrigger_Touch(ent, it))
 					Simple_TeleportPlayer(ent, it); // NOT triggering targets by this!
 			}
 		}
@@ -886,9 +886,9 @@ spawnfunc(target_warpzone_reconnect)
 void WarpZone_PlayerPhysics_FixVAngle(entity this)
 {
 #ifndef WARPZONE_DONT_FIX_VANGLE
-	if(IS_REAL_CLIENT(this))
-	if(this.v_angle.z <= 360) // if not already adjusted
-	if(time - CS(this).ping * 0.001 < this.warpzone_teleport_time)
+	if(IS_REAL_CLIENT(this)
+		&& this.v_angle.z <= 360 // if not already adjusted
+		&& time - CS(this).ping * 0.001 < this.warpzone_teleport_time)
 	{
 		this.v_angle = WarpZone_TransformVAngles(this.warpzone_teleport_zone, this.v_angle);
 		this.v_angle_z += 720; // mark as adjusted

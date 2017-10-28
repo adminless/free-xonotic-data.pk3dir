@@ -15,13 +15,13 @@ MUTATOR_HOOKFUNCTION(rm, Damage_Calculate)
 	float frag_deathtype = M_ARGV(3, float);
 	float frag_damage = M_ARGV(4, float);
 
-	if(DEATH_ISWEAPON(frag_deathtype, WEP_DEVASTATOR))
-	if(frag_attacker == frag_target || frag_target.classname == "nade")
+	if(DEATH_ISWEAPON(frag_deathtype, WEP_DEVASTATOR)
+		&& (frag_attacker == frag_target || frag_target.classname == "nade"))
 		frag_damage = 0;
 
-	if(autocvar_g_rm_laser)
-	if(DEATH_ISWEAPON(frag_deathtype, WEP_ELECTRO))
-	if(frag_attacker == frag_target || (round_handler_IsActive() && !round_handler_IsRoundStarted()))
+	if(autocvar_g_rm_laser
+		&& DEATH_ISWEAPON(frag_deathtype, WEP_ELECTRO)
+		&& (frag_attacker == frag_target || (round_handler_IsActive() && !round_handler_IsRoundStarted())))
 		frag_damage = 0;
 
 	M_ARGV(4, float) = frag_damage;

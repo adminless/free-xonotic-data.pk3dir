@@ -160,8 +160,8 @@
 				v = median(0, (pos.x - me.pressOffset - 0.5 * me.controlWidth) / (1 - me.textSpace - me.controlWidth), 1) * (me.valueMax - me.valueMin) + me.valueMin;
 				if (me.valueStep) v = floor(0.5 + v / me.valueStep) * me.valueStep;
 				me.setValue_noAnim(me, v);
-				if(me.applyButton)
-				if(me.previousValue != me.value)
+				if(me.applyButton
+					&& me.previousValue != me.value)
 					me.applyButton.disabled = false;
 			}
 			else
@@ -239,8 +239,8 @@
 		save = draw_alpha;
 		if (me.disabled) draw_alpha *= me.disabledAlpha;
 		draw_ButtonPicture('0 0 0', strcat(me.src, "_s"), eX * (1 - me.textSpace) + eY, me.color2, 1);
-		if (me.valueMax > me.valueMin) // valid?
-		if (almost_in_bounds(me.valueMin, me.sliderValue, me.valueMax))
+		if (me.valueMax > me.valueMin // valid?
+			&& almost_in_bounds(me.valueMin, me.sliderValue, me.valueMax))
 		{
 			controlLeft = (me.sliderValue - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.textSpace - me.controlWidth);
 			if (me.disabled) draw_Picture(eX * controlLeft, strcat(me.src, "_d"), eX * me.controlWidth + eY, me.colorD, 1);

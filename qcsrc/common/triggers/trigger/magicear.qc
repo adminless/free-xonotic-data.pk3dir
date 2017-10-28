@@ -153,8 +153,8 @@ string trigger_magicear_processmessage_forallears(entity source, float teamsay, 
 	for(ear = magicears; ear; ear = ear.enemy)
 	{
 		msgout = trigger_magicear_processmessage(ear, source, teamsay, privatesay, msgin);
-		if(!(ear.spawnflags & 64))
-		if(magicear_matched)
+		if(!(ear.spawnflags & 64)
+			&& magicear_matched)
 			return msgout;
 		msgin = msgout;
 	}

@@ -86,8 +86,8 @@ void Casing_Touch(entity this, entity toucher)
         return;
     }
 
-    if (!this.silent)
-    if (!trace_ent || trace_ent.solid == SOLID_BSP)
+    if (!this.silent
+    	&& (!trace_ent || trace_ent.solid == SOLID_BSP))
     {
         if(vdist(this.velocity, >, 50))
         {

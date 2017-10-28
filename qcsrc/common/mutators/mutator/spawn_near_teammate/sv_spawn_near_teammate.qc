@@ -199,8 +199,8 @@ LABEL(skip)
 			}
 		});
 
-		if(autocvar_g_spawn_near_teammate_ignore_spawnpoint_closetodeath)
-		if(best_mate)
+		if(autocvar_g_spawn_near_teammate_ignore_spawnpoint_closetodeath
+			&& best_mate)
 		{
 			setorigin(player, best_pos);
 			player.angles = best_mate.angles;

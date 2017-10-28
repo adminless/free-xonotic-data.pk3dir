@@ -64,8 +64,8 @@ spawnfunc(trigger_secret)
 		this.message = "You found a secret!";
 
 	// set default sound
-	if (this.noise == "")
-	if (!this.sounds)
+	if (this.noise == ""
+		&& !this.sounds)
 		this.sounds = 1; // misc/secret.wav
 
 	// this entity can't be a target itself!!!!

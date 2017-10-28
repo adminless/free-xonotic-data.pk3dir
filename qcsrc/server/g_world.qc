@@ -993,8 +993,8 @@ float GetMaplistPosition()
 float MapHasRightSize(string map)
 {
 	float fh;
-	if(currentbots || autocvar_bot_number || player_count < autocvar_minplayers)
-	if(autocvar_g_maplist_check_waypoints)
+	if((currentbots || autocvar_bot_number || player_count < autocvar_minplayers)
+		&& autocvar_g_maplist_check_waypoints)
 	{
 		LOG_TRACE("checkwp "); LOG_TRACE(map);
 		if(!fexists(strcat("maps/", map, ".waypoints")))
@@ -1974,8 +1974,8 @@ string GotoMap(string m)
 	m = GameTypeVote_MapInfo_FixName(m);
 	if (!m)
 		return "The map you suggested is not available on this server.";
-	if (!autocvar_sv_vote_gametype)
-	if(!MapInfo_CheckMap(m))
+	if (!autocvar_sv_vote_gametype
+		&& !MapInfo_CheckMap(m))
 		return "The map you suggested does not support the current game mode.";
 	cvar_set("nextmap", m);
 	cvar_set("timelimit", "-1");

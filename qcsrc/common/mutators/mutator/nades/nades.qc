@@ -200,10 +200,10 @@ void napalm_damage(entity this, float dist, float damage, float edgedamage, floa
 
 	RandomSelection_Init();
 	for(e = WarpZone_FindRadius(this.origin, dist, true); e; e = e.chain)
-		if(e.takedamage == DAMAGE_AIM)
-		if(this.realowner != e || autocvar_g_nades_napalm_selfdamage)
-		if(!IS_PLAYER(e) || !this.realowner || DIFF_TEAM(e, this))
-		if(!STAT(FROZEN, e))
+		if(e.takedamage == DAMAGE_AIM
+			&& (this.realowner != e || autocvar_g_nades_napalm_selfdamage)
+			&& (!IS_PLAYER(e) || !this.realowner || DIFF_TEAM(e, this))
+			&& !STAT(FROZEN, e))
 		{
 			p = e.origin;
 			p.x += e.mins.x + random() * (e.maxs.x - e.mins.x);
@@ -229,8 +229,8 @@ void napalm_damage(entity this, float dist, float damage, float edgedamage, floa
 
 void napalm_ball_think(entity this)
 {
-	if(round_handler_IsActive())
-	if(!round_handler_IsRoundStarted())
+	if(round_handler_IsActive()
+		&& !round_handler_IsRoundStarted())
 	{
 		delete(this);
 		return;
@@ -305,8 +305,8 @@ void nade_napalm_ball(entity this)
 void napalm_fountain_think(entity this)
 {
 
-	if(round_handler_IsActive())
-	if(!round_handler_IsRoundStarted())
+	if(round_handler_IsActive()
+		&& !round_handler_IsRoundStarted())
 	{
 		delete(this);
 		return;
@@ -381,8 +381,8 @@ void nade_ice_freeze(entity freezefield, entity frost_target, float freeze_time)
 
 void nade_ice_think(entity this)
 {
-	if(round_handler_IsActive())
-	if(!round_handler_IsRoundStarted())
+	if(round_handler_IsActive()
+		&& !round_handler_IsRoundStarted())
 	{
 		delete(this);
 		return;
@@ -433,9 +433,9 @@ void nade_ice_think(entity this)
 
 	FOREACH_ENTITY_RADIUS(this.origin, autocvar_g_nades_nade_radius, it != this && it.takedamage && !IS_DEAD(it) && GetResourceAmount(it, RESOURCE_HEALTH) > 0 && current_freeze_time > 0,
 	{
-		if(!autocvar_g_nades_ice_teamcheck || (DIFF_TEAM(it, this.realowner) || it == this.realowner))
-		if(!it.revival_time || ((time - it.revival_time) >= 1.5))
-		if(!STAT(FROZEN, it))
+		if((!autocvar_g_nades_ice_teamcheck || (DIFF_TEAM(it, this.realowner) || it == this.realowner))
+			&& (!it.revival_time || ((time - it.revival_time) >= 1.5))
+			&& !STAT(FROZEN, it))
 			nade_ice_freeze(this, it, current_freeze_time);
 	});
 }
@@ -608,9 +608,9 @@ void nade_heal_touch(entity this, entity toucher)
 {
 	float maxhealth;
 	float health_factor;
-	if(IS_PLAYER(toucher) || IS_MONSTER(toucher))
-	if(!IS_DEAD(toucher))
-	if(!STAT(FROZEN, toucher))
+	if((IS_PLAYER(toucher) || IS_MONSTER(toucher))
+		&& !IS_DEAD(toucher)
+		&& !STAT(FROZEN, toucher))
 	{
 		health_factor = autocvar_g_nades_heal_rate*frametime/2;
 		if ( toucher != this.realowner )
@@ -768,11 +768,11 @@ void nade_touch(entity this, entity toucher)
 	if(toucher == this.realowner)
 		return; // no this impacts
 
-	if(autocvar_g_nades_pickup)
-	if(time >= this.spawnshieldtime)
-	if(!toucher.nade && GetResourceAmount(this, RESOURCE_HEALTH) == this.max_health) // no boosted shot pickups, thank you very much
-	if(CanThrowNade(toucher)) // prevent some obvious things, like dead players
-	if(IS_REAL_CLIENT(toucher)) // above checks for IS_PLAYER, don't need to do it here
+	if(autocvar_g_nades_pickup
+		&& time >= this.spawnshieldtime
+		&& !toucher.nade && GetResourceAmount(this, RESOURCE_HEALTH) == this.max_health // no boosted shot pickups, thank you very much
+		&& CanThrowNade(toucher) // prevent some obvious things, like dead players
+		&& IS_REAL_CLIENT(toucher)) // above checks for IS_PLAYER, don't need to do it here
 	{
 		nade_pickup(toucher, this);
 		sound(this, CH_SHOTS_SINGLE, SND_Null, VOL_BASE, 0.5 *(ATTEN_LARGE + ATTEN_MAX));
@@ -780,9 +780,9 @@ void nade_touch(entity this, entity toucher)
 		return;
 	}
 	/*float is_weapclip = 0;
-	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NODRAW)
-	if (!(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NONSOLID))
-	if (!(trace_dphitcontents & DPCONTENTS_OPAQUE))
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NODRAW
+		&& !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NONSOLID)
+		&& !(trace_dphitcontents & DPCONTENTS_OPAQUE))
 		is_weapclip = 1;*/
 	if(ITEM_TOUCH_NEEDKILL()) // || is_weapclip)
 	{
@@ -973,12 +973,12 @@ void toss_nade(entity e, bool set_owner, vector _velocity, float _time)
 
 void nades_GiveBonus(entity player, float score)
 {
-	if (autocvar_g_nades)
-	if (autocvar_g_nades_bonus)
-	if (IS_REAL_CLIENT(player))
-	if (IS_PLAYER(player) && player.bonus_nades < autocvar_g_nades_bonus_max)
-	if (STAT(FROZEN, player) == 0)
-	if (!IS_DEAD(player))
+	if (autocvar_g_nades
+		&& autocvar_g_nades_bonus
+		&& IS_REAL_CLIENT(player)
+		&& IS_PLAYER(player) && player.bonus_nades < autocvar_g_nades_bonus_max
+		&& STAT(FROZEN, player) == 0
+		&& !IS_DEAD(player))
 	{
 		if ( player.bonus_nade_score < 1 )
 			player.bonus_nade_score += score/autocvar_g_nades_bonus_score_max;
@@ -1073,8 +1073,8 @@ void spawn_held_nade(entity player, entity nowner, float ntime, int ntype, strin
 
 void nade_prime(entity this)
 {
-	if(autocvar_g_nades_bonus_only)
-	if(!this.bonus_nades)
+	if(autocvar_g_nades_bonus_only
+		&& !this.bonus_nades)
 		return; // only allow bonus nades
 
 	if(this.nade)
@@ -1282,10 +1282,10 @@ MUTATOR_HOOKFUNCTION(nades, PlayerPreThink)
 		vector revive_extra_size = '1 1 1' * autocvar_g_freezetag_revive_extra_size;
 		n = 0;
 		FOREACH_CLIENT(IS_PLAYER(it) && it != player, {
-			if(!IS_DEAD(it))
-			if(STAT(FROZEN, it) == 0)
-			if(SAME_TEAM(it, player))
-			if(boxesoverlap(player.absmin - revive_extra_size, player.absmax + revive_extra_size, it.absmin, it.absmax))
+			if(!IS_DEAD(it)
+				&& STAT(FROZEN, it) == 0
+				&& SAME_TEAM(it, player)
+				&& boxesoverlap(player.absmin - revive_extra_size, player.absmax + revive_extra_size, it.absmin, it.absmax))
 			{
 				if(!o)
 					o = it;
@@ -1372,8 +1372,8 @@ MUTATOR_HOOKFUNCTION(nades, PlayerDies, CBC_ORDER_LAST)
 	entity frag_attacker = M_ARGV(1, entity);
 	entity frag_target = M_ARGV(2, entity);
 
-	if(frag_target.nade)
-	if(!STAT(FROZEN, frag_target) || !autocvar_g_freezetag_revive_nade)
+	if(frag_target.nade
+		&& (!STAT(FROZEN, frag_target) || !autocvar_g_freezetag_revive_nade))
 		toss_nade(frag_target, true, '0 0 100', max(frag_target.nade.wait, time + 0.05));
 
 	if(IS_PLAYER(frag_attacker))
@@ -1409,11 +1409,11 @@ MUTATOR_HOOKFUNCTION(nades, Damage_Calculate)
 	entity frag_target = M_ARGV(2, entity);
 	float frag_deathtype = M_ARGV(3, float);
 
-	if(STAT(FROZEN, frag_target))
-	if(autocvar_g_freezetag_revive_nade)
-	if(frag_attacker == frag_target)
-	if(frag_deathtype == DEATH_NADE.m_id)
-	if(time - frag_inflictor.toss_time <= 0.1)
+	if(STAT(FROZEN, frag_target)
+		&& autocvar_g_freezetag_revive_nade
+		&& frag_attacker == frag_target
+		&& frag_deathtype == DEATH_NADE.m_id
+		&& time - frag_inflictor.toss_time <= 0.1)
 	{
 		Unfreeze(frag_target);
 		SetResourceAmount(frag_target, RESOURCE_HEALTH, autocvar_g_freezetag_revive_nade_health);
@@ -1430,9 +1430,9 @@ MUTATOR_HOOKFUNCTION(nades, MonsterDies)
 	entity frag_target = M_ARGV(0, entity);
 	entity frag_attacker = M_ARGV(1, entity);
 
-	if(IS_PLAYER(frag_attacker))
-	if(DIFF_TEAM(frag_attacker, frag_target))
-	if(!(frag_target.spawnflags & MONSTERFLAG_SPAWNED))
+	if(IS_PLAYER(frag_attacker)
+		&& DIFF_TEAM(frag_attacker, frag_target)
+		&& !(frag_target.spawnflags & MONSTERFLAG_SPAWNED))
 		nades_GiveBonus(frag_attacker, autocvar_g_nades_bonus_score_minor);
 }
 

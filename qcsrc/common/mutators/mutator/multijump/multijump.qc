@@ -81,8 +81,8 @@ MUTATOR_HOOKFUNCTION(multijump, PlayerJump)
 
 			if(M_ARGV(2, bool))
 			{
-				if(PHYS_MULTIJUMP_DODGING(player))
-				if(PHYS_CS(player).movement_x != 0 || PHYS_CS(player).movement_y != 0) // don't remove all speed if player isnt pressing any movement keys
+				if(PHYS_MULTIJUMP_DODGING(player)
+					&& (PHYS_CS(player).movement_x != 0 || PHYS_CS(player).movement_y != 0)) // don't remove all speed if player isnt pressing any movement keys
 				{
 					float curspeed;
 					vector wishvel, wishdir;

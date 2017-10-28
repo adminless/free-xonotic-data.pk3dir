@@ -327,8 +327,8 @@ float PlayerScore_Add(entity player, PlayerScoreField scorefield, float score)
 	bool mutator_returnvalue = MUTATOR_CALLHOOK(AddPlayerScore, scorefield, score, player);
 	score = M_ARGV(1, float);
 
-	if(game_stopped)
-	if(!mutator_returnvalue)
+	if(game_stopped
+		&& !mutator_returnvalue)
 		score = 0;
 
 	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
@@ -581,8 +581,8 @@ string GetPlayerScoreString(entity pl, float shortString)
         });
 		if(shortString < 1)
 		FOREACH(Scores, true, {
-			if((scores_flags(it) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_PRIMARY)
-			if((scores_flags(it) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_SECONDARY)
+			if((scores_flags(it) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_PRIMARY
+				&& (scores_flags(it) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_SECONDARY)
 			{
 				f = scores_flags(it);
 				l = scores_label(it);
@@ -604,8 +604,8 @@ string GetPlayerScoreString(entity pl, float shortString)
         });
 		if(shortString < 1)
 		FOREACH(Scores, true, {
-			if((scores_flags(it) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_PRIMARY)
-			if((scores_flags(it) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_SECONDARY)
+			if((scores_flags(it) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_PRIMARY
+				&& (scores_flags(it) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_SECONDARY)
 				out = strcat(out, ftos(sk.(scores(it))), ",");
         });
 		out = substring(out, 0, strlen(out) - 1);
@@ -641,8 +641,8 @@ string GetTeamScoreString(float tm, float shortString)
 			}
 		if(shortString < 1)
 		for(i = 0; i < MAX_TEAMSCORE; ++i)
-			if((teamscores_flags(i) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_PRIMARY)
-			if((teamscores_flags(i) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_SECONDARY)
+			if((teamscores_flags(i) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_PRIMARY
+				&& (teamscores_flags(i) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_SECONDARY)
 			{
 				f = teamscores_flags(i);
 				l = teamscores_label(i);
@@ -661,8 +661,8 @@ string GetTeamScoreString(float tm, float shortString)
 				out = strcat(out, ftos(sk.(teamscores(i))), ",");
 		if(shortString < 1)
 		for(i = 0; i < MAX_TEAMSCORE; ++i)
-			if((teamscores_flags(i) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_PRIMARY)
-			if((teamscores_flags(i) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_SECONDARY)
+			if((teamscores_flags(i) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_PRIMARY
+				&& (teamscores_flags(i) & SFL_SORT_PRIO_MASK) != SFL_SORT_PRIO_SECONDARY)
 				out = strcat(out, ftos(sk.(teamscores(i))), ",");
 		out = substring(out, 0, strlen(out) - 1);
 	}

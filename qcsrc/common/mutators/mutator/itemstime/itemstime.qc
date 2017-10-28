@@ -177,8 +177,8 @@ MUTATOR_HOOKFUNCTION(itemstime, ClientConnect, CBC_ORDER_LAST)
 	if(IS_PLAYER(player))
 	{
 		// client became player on connection skipping putObserverInServer step
-		if (IS_REAL_CLIENT(player))
-		if (warmup_stage || autocvar_sv_itemstime == 2)
+		if (IS_REAL_CLIENT(player)
+			&& (warmup_stage || autocvar_sv_itemstime == 2))
 			Item_ItemsTime_SetTimesForPlayer(player);
 	}
 }
@@ -338,8 +338,8 @@ void HUD_ItemsTime()
     float newSize;
     if (autocvar_hud_panel_itemstime_dynamicsize)
     {
-        if (autocvar__hud_configure)
-        if (hud_configure_menu_open != 2)
+        if (autocvar__hud_configure
+        	&& hud_configure_menu_open != 2)
             HUD_Panel_DrawBg(); // also draw the bg of the entire panel
 
         // reduce panel to avoid spacing items

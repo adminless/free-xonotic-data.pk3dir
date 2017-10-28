@@ -367,8 +367,8 @@ void bumblebee_touch(entity this, entity toucher)
 	{
 		float phase_time = (time >= this.gun1.phase) + (time >= this.gun2.phase);
 
-		if(time >= toucher.vehicle_enter_delay && phase_time)
-		if(bumblebee_gunner_enter(this, toucher))
+		if(time >= toucher.vehicle_enter_delay && phase_time
+			&& bumblebee_gunner_enter(this, toucher))
 			return;
 	}
 
@@ -492,10 +492,10 @@ bool bumblebee_pilot_frame(entity this, float dt)
 		if(vehic.tur_head.lock_time < time || IS_DEAD(vehic.tur_head.enemy) || STAT(FROZEN, vehic.tur_head.enemy))
 			vehic.tur_head.enemy = NULL;
 
-		if(trace_ent)
-		if(trace_ent.move_movetype)
-		if(trace_ent.takedamage)
-		if(!IS_DEAD(trace_ent) && !STAT(FROZEN, trace_ent))
+		if(trace_ent
+			&& trace_ent.move_movetype
+			&& trace_ent.takedamage
+			&& !IS_DEAD(trace_ent) && !STAT(FROZEN, trace_ent))
 		{
 			if(teamplay)
 			{
@@ -725,16 +725,16 @@ METHOD(Bumblebee, vr_enter, void(Bumblebee thisveh, entity instance))
 }
 METHOD(Bumblebee, vr_gunner_enter, void(Bumblebee thisveh, entity instance, entity actor))
 {
-	if(!instance.gunner1)
-	if(time >= instance.gun1.phase)
-	if(instance.gun1.vehicle_enter)
-	if(instance.gun1.vehicle_enter(instance, actor))
+	if(!instance.gunner1
+		&& time >= instance.gun1.phase
+		&& instance.gun1.vehicle_enter
+		&& instance.gun1.vehicle_enter(instance, actor))
 		return;
 
-	if(!instance.gunner2)
-	if(time >= instance.gun2.phase)
-	if(instance.gun2.vehicle_enter)
-	if(instance.gun2.vehicle_enter(instance, actor))
+	if(!instance.gunner2
+		&& time >= instance.gun2.phase
+		&& instance.gun2.vehicle_enter
+		&& instance.gun2.vehicle_enter(instance, actor))
 		return;
 }
 METHOD(Bumblebee, vr_think, void(Bumblebee thisveh, entity instance))
@@ -900,8 +900,8 @@ METHOD(Bumblebee, vr_spawn, void(Bumblebee thisveh, entity instance))
 }
 METHOD(Bumblebee, vr_setup, void(Bumblebee thisveh, entity instance))
 {
-    if(autocvar_g_vehicle_bumblebee_energy)
-    if(autocvar_g_vehicle_bumblebee_energy_regen)
+    if(autocvar_g_vehicle_bumblebee_energy
+    	&& autocvar_g_vehicle_bumblebee_energy_regen)
         instance.vehicle_flags |= VHF_ENERGYREGEN;
 
     if(autocvar_g_vehicle_bumblebee_shield)

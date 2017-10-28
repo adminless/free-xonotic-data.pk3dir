@@ -403,18 +403,18 @@ METHOD(Mage, mr_think, bool(Mage thismon, entity actor))
     	});
     }
 
-    if(actor.health < (autocvar_g_monster_mage_heal_minhealth) || need_help)
-    if(time >= actor.attack_finished_single[0])
-    if(random() < 0.5)
+    if((actor.health < (autocvar_g_monster_mage_heal_minhealth) || need_help)
+    	&& time >= actor.attack_finished_single[0]
+    	&& random() < 0.5)
         M_Mage_Defend_Heal(actor);
 
     if(time >= actor.mage_shield_time && actor.armorvalue)
         M_Mage_Defend_Shield_Remove(actor);
 
-    if(actor.enemy)
-    if(actor.health < actor.max_health)
-    if(time >= actor.mage_shield_delay)
-    if(random() < 0.5)
+    if(actor.enemy
+    	&& actor.health < actor.max_health
+    	&& time >= actor.mage_shield_delay
+    	&& random() < 0.5)
         M_Mage_Defend_Shield(actor);
 
     return true;

@@ -62,8 +62,8 @@ void GiveFrags (entity attacker, entity targ, float f, int deathtype)
 
 	.entity weaponentity = weaponentities[0]; // TODO: unhardcode
 
-	if(targ != attacker) // not for suicides
-	if(g_weaponarena_random)
+	if(targ != attacker // not for suicides
+		&& g_weaponarena_random)
 	{
 		// after a frag, exchange the current weapon (or the culprit, if detectable) by a new random weapon
 		Weapon culprit = DEATH_WEAPONOF(deathtype);
@@ -641,8 +641,8 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, int d
 	else
 	{
 		// nullify damage if teamplay is on
-		if(deathtype != DEATH_TELEFRAG.m_id)
-		if(IS_PLAYER(attacker))
+		if(deathtype != DEATH_TELEFRAG.m_id
+			&& IS_PLAYER(attacker))
 		{
 			if(IS_PLAYER(targ) && targ != attacker && (IS_INDEPENDENT_PLAYER(attacker) || IS_INDEPENDENT_PLAYER(targ)))
 			{
@@ -722,12 +722,12 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, int d
 		    }
 		}
 
-		if(STAT(FROZEN, targ))
-		if(deathtype != DEATH_HURTTRIGGER.m_id && deathtype != DEATH_TEAMCHANGE.m_id && deathtype != DEATH_AUTOTEAMCHANGE.m_id)
+		if(STAT(FROZEN, targ)
+			&& deathtype != DEATH_HURTTRIGGER.m_id && deathtype != DEATH_TEAMCHANGE.m_id && deathtype != DEATH_AUTOTEAMCHANGE.m_id)
 		{
-			if(autocvar_g_frozen_revive_falldamage > 0)
-			if(deathtype == DEATH_FALL.m_id)
-			if(damage >= autocvar_g_frozen_revive_falldamage)
+			if(autocvar_g_frozen_revive_falldamage > 0
+				&& deathtype == DEATH_FALL.m_id
+				&& damage >= autocvar_g_frozen_revive_falldamage)
 			{
 				Unfreeze(targ);
 				SetResourceAmount(targ, RESOURCE_HEALTH, autocvar_g_frozen_revive_falldamage_health);
@@ -799,11 +799,11 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, int d
 			damage = damage * autocvar_g_balance_selfdamagepercent;	// Partial damage if the attacker hits himself
 
 		// count the damage
-		if(attacker)
-		if(!IS_DEAD(targ))
-		if(deathtype != DEATH_BUFF.m_id)
-		if(targ.takedamage == DAMAGE_AIM)
-		if(targ != attacker)
+		if(attacker
+			&& !IS_DEAD(targ)
+			&& deathtype != DEATH_BUFF.m_id
+			&& targ.takedamage == DAMAGE_AIM
+			&& targ != attacker)
 		{
 			entity victim;
 			if(IS_VEHICLE(targ) && targ.owner)
@@ -830,8 +830,8 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, int d
 
 						if (!DEATH_ISSPECIAL(deathtype))
 						{
-							if(IS_PLAYER(targ)) // don't do this for vehicles
-							if(IsFlying(victim))
+							if(IS_PLAYER(targ) // don't do this for vehicles
+								&& IsFlying(victim))
 								yoda = 1;
 						}
 					}
@@ -855,9 +855,9 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, int d
 	}
 
 	// apply push
-	if (targ.damageforcescale)
-	if (force)
-	if (!IS_PLAYER(targ) || time >= targ.spawnshieldtime || targ == attacker)
+	if (targ.damageforcescale
+		&& force
+		&& (!IS_PLAYER(targ) || time >= targ.spawnshieldtime || targ == attacker))
 	{
 		vector farce = damage_explosion_calcpush(targ.damageforcescale * force, targ.velocity, autocvar_g_balance_damagepush_speedfactor);
 		if(targ.move_movetype == MOVETYPE_PHYSICS)
@@ -880,13 +880,13 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, int d
 		UpdateCSQCProjectile(targ);
 	}
 	// apply damage
-	if (damage != 0 || (targ.damageforcescale && force))
-	if (targ.event_damage)
+	if ((damage != 0 || (targ.damageforcescale && force))
+		&& targ.event_damage)
 		targ.event_damage (targ, inflictor, attacker, damage, deathtype, hitloc, force);
 
 	// apply mirror damage if any
-	if(!autocvar_g_mirrordamage_onlyweapons || DEATH_WEAPONOF(deathtype) != WEP_Null)
-	if(mirrordamage > 0 || mirrorforce > 0)
+	if((!autocvar_g_mirrordamage_onlyweapons || DEATH_WEAPONOF(deathtype) != WEP_Null)
+		&& (mirrordamage > 0 || mirrorforce > 0))
 	{
 		attacker = attacker_save;
 
@@ -940,9 +940,9 @@ float RadiusDamageForSource (entity inflictor, vector inflictororigin, vector in
 	while (targ)
 	{
 		next = targ.chain;
-		if ((targ != inflictor) || inflictorselfdamage)
-		if (((cantbe != targ) && !mustbe) || (mustbe == targ))
-		if (targ.takedamage)
+		if (((targ != inflictor) || inflictorselfdamage)
+			&& (((cantbe != targ) && !mustbe) || (mustbe == targ))
+			&& targ.takedamage)
 		{
 			vector nearest;
 			vector diff;
@@ -1226,8 +1226,8 @@ void Fire_ApplyDamage(entity e)
 		o = e.fire_owner;
 
 	// water and slime stop fire
-	if(e.waterlevel)
-	if(e.watertype != CONTENT_LAVA)
+	if(e.waterlevel
+		&& e.watertype != CONTENT_LAVA)
 		e.fire_endtime = 0;
 
 	// ice stops fire
@@ -1247,12 +1247,12 @@ void Fire_ApplyDamage(entity e)
 	}
 	e.fire_hitsound = true;
 
-	if(!IS_INDEPENDENT_PLAYER(e))
-	if(!STAT(FROZEN, e))
+	if(!IS_INDEPENDENT_PLAYER(e)
+		&& !STAT(FROZEN, e))
 		FOREACH_CLIENT(IS_PLAYER(it) && it != e, {
-			if(!IS_DEAD(it))
-			if(!IS_INDEPENDENT_PLAYER(it))
-			if(boxesoverlap(e.absmin, e.absmax, it.absmin, it.absmax))
+			if(!IS_DEAD(it)
+				&& !IS_INDEPENDENT_PLAYER(it)
+				&& boxesoverlap(e.absmin, e.absmax, it.absmin, it.absmax))
 			{
 				t = autocvar_g_balance_firetransfer_time * (e.fire_endtime - time);
 				d = autocvar_g_balance_firetransfer_damage * e.fire_damagepersec * t;

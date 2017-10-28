@@ -189,8 +189,8 @@ void XonoticPlayList_startSound(entity me, float offset)
 	{
 		f = me.selectedItem;
 		// if it was paused then resume
-		if(f == cvar("music_playlist_current0"))
-		if(cvar("music_playlist_index") == 999)
+		if(f == cvar("music_playlist_current0")
+			&& cvar("music_playlist_index") == 999)
 		{
 			me.resumeSound(me);
 			return;

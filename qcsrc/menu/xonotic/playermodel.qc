@@ -100,8 +100,8 @@ void XonoticPlayerModelSelector_loadCvars(entity me)
 
 	for(i = 0; i < me.numModels; ++i)
 	{
-		if(bufstr_get(me.bufModels, BUFMODELS_COUNT*i+BUFMODELS_MODEL) == modelname)
-		if(bufstr_get(me.bufModels, BUFMODELS_COUNT*i+BUFMODELS_SKIN) == skin)
+		if(bufstr_get(me.bufModels, BUFMODELS_COUNT*i+BUFMODELS_MODEL) == modelname
+			&& bufstr_get(me.bufModels, BUFMODELS_COUNT*i+BUFMODELS_SKIN) == skin)
 			break;
 	}
 	if(i >= me.numModels) // fail

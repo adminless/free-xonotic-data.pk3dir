@@ -402,9 +402,9 @@ void W_Electro_Attack_Orb(Weapon thiswep, entity actor, .entity weaponentity)
 
 void W_Electro_CheckAttack(Weapon thiswep, entity actor, .entity weaponentity, int fire)
 {
-	if(actor.(weaponentity).electro_count > 1)
-	if(PHYS_INPUT_BUTTON_ATCK2(actor))
-	if(weapon_prepareattack(thiswep, actor, weaponentity, true, -1))
+	if(actor.(weaponentity).electro_count > 1
+		&& PHYS_INPUT_BUTTON_ATCK2(actor)
+		&& weapon_prepareattack(thiswep, actor, weaponentity, true, -1))
 	{
 		W_Electro_Attack_Orb(WEP_ELECTRO, actor, weaponentity);
 		actor.(weaponentity).electro_count -= 1;
@@ -472,8 +472,8 @@ METHOD(Electro, wr_think, void(entity thiswep, entity actor, .entity weaponentit
     }
     else if(fire & 2)
     {
-        if(time >= actor.(weaponentity).electro_secondarytime)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, true, WEP_CVAR_SEC(electro, refire)))
+        if(time >= actor.(weaponentity).electro_secondarytime
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, true, WEP_CVAR_SEC(electro, refire)))
         {
             W_Electro_Attack_Orb(thiswep, actor, weaponentity);
             actor.(weaponentity).electro_count = WEP_CVAR_SEC(electro, count);

@@ -545,8 +545,8 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 	}
 	// if we replace someone, will we be banned longer than him (so long-term
 	// bans never get overridden by short-term bans)
-	if(i < ban_count)
-	if(ban_expire[i] > time + bantime)
+	if(i < ban_count
+		&& ban_expire[i] > time + bantime)
 	{
 		LOG_INFO(ip, " could not get banned due to no free ban slot");
 		return false;

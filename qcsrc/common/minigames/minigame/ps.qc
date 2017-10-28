@@ -153,11 +153,11 @@ bool ps_move_piece(entity minigame, entity piece, string pos, int leti, int numb
 // make a move
 void ps_move(entity minigame, entity player, string thepiece, string pos )
 {
-	if ( minigame.minigame_flags & PS_TURN_MOVE )
-	if ( pos )
+	if ( minigame.minigame_flags & PS_TURN_MOVE 
+		&&  pos )
 	{
-		if ( ps_valid_tile(pos) )
-		if ( !ps_find_piece(minigame, pos) && ps_find_piece(minigame, thepiece) )
+		if ( ps_valid_tile(pos) 
+			&&  !ps_find_piece(minigame, pos) && ps_find_piece(minigame, thepiece) )
 		{
 			entity piece = ps_find_piece(minigame, thepiece);
 			int number = minigame_tile_number(thepiece);
@@ -367,9 +367,9 @@ void ps_hud_board(vector pos, vector mySize)
 
 			vector tile_color = '1 1 1';
 
-			if(highlight)
-			if(e.netname == ps_curr_pos)
-			if(ps_curr_piece.netname != ps_curr_pos)
+			if(highlight
+				&& e.netname == ps_curr_pos
+				&& ps_curr_piece.netname != ps_curr_pos)
 			{
 				minigame_drawpic_centered( tile_pos,
 						minigame_texture("ps/tile_available"),

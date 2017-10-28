@@ -33,8 +33,8 @@ void havocbot_ai(entity this)
 	if(bot_execute_commands(this))
 		return;
 
-	if (bot_strategytoken == this)
-	if (!bot_strategytoken_taken)
+	if (bot_strategytoken == this
+		&& !bot_strategytoken_taken)
 	{
 		if(this.havocbot_blockhead)
 		{
@@ -48,9 +48,9 @@ void havocbot_ai(entity this)
 
 		// TODO: tracewalk() should take care of this job (better path finding under water)
 		// if we don't have a goal and we're under water look for a waypoint near the "shore" and push it
-		if(!(IS_DEAD(this) || STAT(FROZEN, this)))
-		if(!this.goalcurrent)
-		if(this.waterlevel == WATERLEVEL_SWIMMING || (this.aistatus & AI_STATUS_OUT_WATER))
+		if((!(IS_DEAD(this) || STAT(FROZEN, this)))
+			&& !this.goalcurrent
+			&& (this.waterlevel == WATERLEVEL_SWIMMING || (this.aistatus & AI_STATUS_OUT_WATER)))
 		{
 			// Look for the closest waypoint out of water
 			entity newgoal = NULL;
@@ -93,8 +93,8 @@ void havocbot_ai(entity this)
 	for(int slot = 0; slot < MAX_WEAPONSLOTS; ++slot)
 	{
 		.entity weaponentity = weaponentities[slot];
-		if(this.(weaponentity).m_weapon != WEP_Null || slot == 0)
-		if(this.(weaponentity).bot_chooseweapontime < time)
+		if((this.(weaponentity).m_weapon != WEP_Null || slot == 0)
+			&& this.(weaponentity).bot_chooseweapontime < time)
 		{
 			this.(weaponentity).bot_chooseweapontime = time + autocvar_bot_ai_chooseweaponinterval;
 			havocbot_chooseweapon(this, weaponentity);
@@ -180,14 +180,14 @@ void havocbot_ai(entity this)
 				continue;
 
 			// we are currently holding a weapon that's not fully loaded, reload it
-			if(skill >= 2) // bots can only reload the held weapon on purpose past this skill
-			if(this.(weaponentity).clip_load < this.(weaponentity).clip_size)
+			if(skill >= 2 // bots can only reload the held weapon on purpose past this skill
+				&& this.(weaponentity).clip_load < this.(weaponentity).clip_size)
 				CS(this).impulse = IMP_weapon_reload.impulse; // not sure if this is done right
 
 			// if we're not reloading a weapon, switch to any weapon in our invnetory that's not fully loaded to reload it next
 			// the code above executes next frame, starting the reloading then
-			if(skill >= 5) // bots can only look for unloaded weapons past this skill
-			if(this.(weaponentity).clip_load >= 0) // only if we're not reloading a weapon already
+			if(skill >= 5 // bots can only look for unloaded weapons past this skill
+				&& this.(weaponentity).clip_load >= 0) // only if we're not reloading a weapon already
 			{
 				FOREACH(Weapons, it != WEP_Null, {
 					if((this.weapons & (it.m_wepset)) && (it.spawnflags & WEP_FLAG_RELOADABLE) && (this.(weaponentity).weapon_load[it.m_id] < it.reloading_ammo))
@@ -339,23 +339,23 @@ void havocbot_bunnyhop(entity this, vector dir)
 					if(this.bot_canruntogoal != 1)
 						return;
 
-					if(this.aistatus & AI_STATUS_ROAMING)
-					if(this.goalcurrent.classname=="waypoint")
-					if (!(this.goalcurrent.wpflags & WAYPOINTFLAG_PERSONAL))
-					if(fabs(gco.z - this.origin.z) < this.maxs.z - this.mins.z)
-					if(this.goalstack01 && !wasfreed(this.goalstack01))
+					if(this.aistatus & AI_STATUS_ROAMING
+						&& this.goalcurrent.classname=="waypoint"
+						&& !(this.goalcurrent.wpflags & WAYPOINTFLAG_PERSONAL)
+						&& fabs(gco.z - this.origin.z) < this.maxs.z - this.mins.z
+						&& this.goalstack01 && !wasfreed(this.goalstack01))
 					{
 						gno = (this.goalstack01.absmin + this.goalstack01.absmax) * 0.5;
 						deviation = vectoangles(gno - this.origin) - vectoangles(gco - this.origin);
 						while (deviation.y < -180) deviation.y = deviation.y + 360;
 						while (deviation.y > 180) deviation.y = deviation.y - 360;
 
-						if(fabs(deviation.y) < 20)
-						if(bunnyhopdistance < vlen(this.origin - gno))
-						if(fabs(gno.z - gco.z) < this.maxs.z - this.mins.z)
+						if(fabs(deviation.y) < 20
+							&& bunnyhopdistance < vlen(this.origin - gno)
+							&& fabs(gno.z - gco.z) < this.maxs.z - this.mins.z)
 						{
-							if(vdist(gco - gno, >, autocvar_bot_ai_bunnyhop_startdistance))
-							if(checkpvs(this.origin + this.view_ofs, this.goalstack01))
+							if(vdist(gco - gno, >, autocvar_bot_ai_bunnyhop_startdistance)
+								&& checkpvs(this.origin + this.view_ofs, this.goalstack01))
 							{
 								checkdistance = false;
 							}
@@ -388,15 +388,15 @@ void havocbot_bunnyhop(entity this, vector dir)
 
 #if 0
 	// Release jump button
-	if(!cvar("sv_pogostick"))
-	if((IS_ONGROUND(this)) == 0)
+	if(!cvar("sv_pogostick")
+		&& (IS_ONGROUND(this)) == 0)
 	{
 		if(this.velocity.z < 0 || vlen(this.velocity)<maxspeed)
 			PHYS_INPUT_BUTTON_JUMP(this) = false;
 
 		// Strafe
-		if(this.aistatus & AI_STATUS_RUNNING)
-		if(vlen(this.velocity)>maxspeed)
+		if(this.aistatus & AI_STATUS_RUNNING
+			&& vlen(this.velocity)>maxspeed)
 		{
 			deviation = vectoangles(dir) - vectoangles(this.velocity);
 			while (deviation.y < -180) deviation.y = deviation.y + 360;
@@ -438,10 +438,10 @@ void havocbot_movetogoal(entity this)
 	maxspeed = autocvar_sv_maxspeed;
 
 	// Jetpack navigation
-	if(this.goalcurrent)
-	if(this.navigation_jetpack_goal)
-	if(this.goalcurrent==this.navigation_jetpack_goal)
-	if(this.ammo_fuel)
+	if(this.goalcurrent
+		&& this.navigation_jetpack_goal
+		&& this.goalcurrent==this.navigation_jetpack_goal
+		&& this.ammo_fuel)
 	{
 		if(autocvar_bot_debug_goalstack)
 		{
@@ -565,8 +565,8 @@ void havocbot_movetogoal(entity this)
 		this.aistatus &= ~AI_STATUS_OUT_JUMPPAD;
 
 	// If there is a trigger_hurt right below try to use the jetpack or make a rocketjump
-	if(skill>6)
-	if (!(IS_ONGROUND(this)))
+	if(skill>6
+		&& !(IS_ONGROUND(this)))
 	{
 		tracebox(this.origin, this.mins, this.maxs, this.origin + '0 0 -65536', MOVE_NOMONSTERS, this);
 		if(tracebox_hits_trigger_hurt(this.origin, this.mins, this.maxs, trace_endpos ))
@@ -653,8 +653,8 @@ void havocbot_movetogoal(entity this)
 	}
 
 	// If we are under water with no goals, swim up
-	if(this.waterlevel)
-	if(this.goalcurrent==NULL)
+	if(this.waterlevel
+		&& this.goalcurrent==NULL)
 	{
 		dir = '0 0 0';
 		if(this.waterlevel>WATERLEVEL_SWIMMING)
@@ -768,13 +768,13 @@ void havocbot_movetogoal(entity this)
 			// can walk up directly
 			offset = (vdist(this.velocity, >, 32) ? this.velocity * 0.2 : v_forward * 32);
 			tracebox(this.origin, this.mins, this.maxs, this.origin + offset, false, this);
-			if (trace_fraction < 1)
-			if (trace_plane_normal.z < 0.7)
+			if (trace_fraction < 1
+				&& trace_plane_normal.z < 0.7)
 			{
 				s = trace_fraction;
 				tracebox(this.origin + stepheightvec, this.mins, this.maxs, this.origin + offset + stepheightvec, false, this);
-				if (trace_fraction < s + 0.01)
-				if (trace_plane_normal.z < 0.7)
+				if (trace_fraction < s + 0.01
+					&& trace_plane_normal.z < 0.7)
 				{
 					s = trace_fraction;
 					tracebox(this.origin + jumpstepheightvec, this.mins, this.maxs, this.origin + offset + jumpstepheightvec, false, this);
@@ -823,8 +823,8 @@ void havocbot_movetogoal(entity this)
 			bool unreachable = false;
 			bool ignorehazards = false;
 			s = CONTENT_SOLID;
-			if(trace_fraction == 1 && this.jumppadcount == 0 && !this.goalcurrent.wphardwired )
-			if((IS_ONGROUND(this)) || (this.aistatus & AI_STATUS_RUNNING) || (this.aistatus & AI_STATUS_ROAMING) || PHYS_INPUT_BUTTON_JUMP(this))
+			if(trace_fraction == 1 && this.jumppadcount == 0 && !this.goalcurrent.wphardwired 
+				&& ((IS_ONGROUND(this)) || (this.aistatus & AI_STATUS_RUNNING) || (this.aistatus & AI_STATUS_ROAMING) || PHYS_INPUT_BUTTON_JUMP(this)))
 			{
 				// Look downwards
 				traceline(dst_ahead , dst_down, true, NULL);
@@ -924,8 +924,8 @@ void havocbot_movetogoal(entity this)
 
 	// Bunnyhop!
 //	if(this.aistatus & AI_STATUS_ROAMING)
-	if(this.goalcurrent)
-	if(skill+this.bot_moveskill >= autocvar_bot_ai_bunnyhop_skilloffset)
+	if(this.goalcurrent
+		&& skill+this.bot_moveskill >= autocvar_bot_ai_bunnyhop_skilloffset)
 		havocbot_bunnyhop(this, dir);
 
 	if ((dir * v_up) >= autocvar_sv_jumpvelocity*0.5 && (IS_ONGROUND(this))) PHYS_INPUT_BUTTON_JUMP(this) = true;
@@ -940,9 +940,9 @@ entity havocbot_gettarget(entity this, bool secondary)
 	IL_EACH(g_bot_targets, boolean((secondary) ? it.classname == "misc_breakablemodel" : it.classname != "misc_breakablemodel"),
 	{
 		vector v = CENTER_OR_VIEWOFS(it);
-		if(vdist(v - eye, <, autocvar_bot_ai_enemydetectionradius))
-		if(!best || vlen2(CENTER_OR_VIEWOFS(best) - eye) > vlen2(v - eye))
-		if(bot_shouldattack(this, it))
+		if(vdist(v - eye, <, autocvar_bot_ai_enemydetectionradius)
+			&& (!best || vlen2(CENTER_OR_VIEWOFS(best) - eye) > vlen2(v - eye))
+			&& bot_shouldattack(this, it))
 		{
 			traceline(eye, v, true, this);
 			if (trace_ent == it || trace_fraction >= 1)
@@ -976,9 +976,9 @@ void havocbot_chooseenemy(entity this)
 			// and we're not severely injured
 			// then keep tracking for a half second into the future
 			traceline(this.origin+this.view_ofs, ( this.enemy.absmin + this.enemy.absmax ) * 0.5,false,NULL);
-			if (trace_ent == this.enemy || trace_fraction == 1)
-			if (vdist(((this.enemy.absmin + this.enemy.absmax) * 0.5) - this.origin, <, 1000))
-			if (this.health > 30)
+			if ((trace_ent == this.enemy || trace_fraction == 1)
+				&& vdist(((this.enemy.absmin + this.enemy.absmax) * 0.5) - this.origin, <, 1000)
+				&& this.health > 30)
 			{
 				// remain tracking him for a shot while (case he went after a small corner or pilar
 				this.havocbot_chooseenemy_finished = time + 0.5;
@@ -1026,9 +1026,9 @@ LABEL(scan_targets)
 
 			vector v = (it.absmin + it.absmax) * 0.5;
 			float rating = vlen2(v - eye);
-			if (vdist(v - eye, <, autocvar_bot_ai_enemydetectionradius))
-			if (bestrating > rating)
-			if (bot_shouldattack(this, it))
+			if (vdist(v - eye, <, autocvar_bot_ai_enemydetectionradius)
+				&& bestrating > rating
+				&& bot_shouldattack(this, it))
 			{
 				traceline(eye, v, true, this);
 				if (trace_ent == it || trace_fraction >= 1)
@@ -1135,9 +1135,9 @@ void havocbot_chooseweapon(entity this, .entity weaponentity)
 
 	combo = false;
 
-	if(autocvar_bot_ai_weapon_combo)
-	if(this.(weaponentity).m_weapon.m_id == this.(weaponentity).lastfiredweapon)
-	if(af > combo_time)
+	if(autocvar_bot_ai_weapon_combo
+		&& this.(weaponentity).m_weapon.m_id == this.(weaponentity).lastfiredweapon
+		&& af > combo_time)
 	{
 		combo = true;
 		this.lastcombotime = time;
@@ -1235,8 +1235,8 @@ float havocbot_moveto(entity this, vector pos)
 			return CMD_STATUS_ERROR;
 		}
 
-		if (!bot_strategytoken_taken)
-		if(this.havocbot_personal_waypoint_searchtime<time)
+		if (!bot_strategytoken_taken
+			&& this.havocbot_personal_waypoint_searchtime<time)
 		{
 			bot_strategytoken_taken = true;
 			if(havocbot_moveto_refresh_route(this))
@@ -1370,8 +1370,8 @@ vector havocbot_dodge(entity this)
 				n = normalize(head.velocity);
 				v = this.origin - head.origin;
 				d = v * n;
-				if (d > (0 - head.bot_dodgerating))
-				if (d < (vl * 0.2 + head.bot_dodgerating))
+				if (d > (0 - head.bot_dodgerating)
+					&& d < (vl * 0.2 + head.bot_dodgerating))
 				{
 					// calculate direction and distance from the flight path, by removing the forward axis
 					v = v - (n * (v * n));

@@ -675,8 +675,8 @@ METHOD(Arc, wr_think, void(entity thiswep, entity actor, .entity weaponentity, i
     actor.(weaponentity).arc_BUTTON_ATCK_prev = false;
 
     #if 0
-    if(fire & 2)
-    if(weapon_prepareattack(thiswep, actor, weaponentity, true, autocvar_g_balance_arc_secondary_refire))
+    if(fire & 2
+    	&& weapon_prepareattack(thiswep, actor, weaponentity, true, autocvar_g_balance_arc_secondary_refire))
     {
         W_Arc_Attack2();
         actor.arc_count = autocvar_g_balance_arc_secondary_count;

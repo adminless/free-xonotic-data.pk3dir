@@ -184,8 +184,8 @@ vector steerlib_flock(entity this, float _radius, float standoff,float separatio
     flock_member = findradius(this.origin, _radius);
     while(flock_member)
     {
-        if(flock_member != this)
-        if(flock_member.flock_id == this.flock_id)
+        if(flock_member != this
+        	&& flock_member.flock_id == this.flock_id)
         {
             ++ccount;
             push = push + (steerlib_repell(this, flock_member.origin,standoff) * separation_force);
@@ -210,8 +210,8 @@ vector steerlib_flock2d(entity this, float _radius, float standoff,float separat
     flock_member = findradius(this.origin,_radius);
     while(flock_member)
     {
-        if(flock_member != this)
-        if(flock_member.flock_id == this.flock_id)
+        if(flock_member != this
+        	&& flock_member.flock_id == this.flock_id)
         {
             ++ccount;
             push = push + (steerlib_repell(this, flock_member.origin, standoff) * separation_force);
@@ -550,8 +550,8 @@ void flocker_hunter_think(entity this)
     makevectors(this.angles);
     this.angles_x = this.angles.x * -1;
 
-    if(this.enemy)
-    if(vdist(this.enemy.origin - this.origin, <, 64))
+    if(this.enemy
+    	&& vdist(this.enemy.origin - this.origin, <, 64))
     {
         ee = this.enemy;
         ee.health = -1;

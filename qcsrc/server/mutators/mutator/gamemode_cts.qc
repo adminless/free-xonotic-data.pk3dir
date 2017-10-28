@@ -233,8 +233,8 @@ MUTATOR_HOOKFUNCTION(cts, PutClientInServer)
 {
 	entity player = M_ARGV(0, entity);
 
-	if(IS_PLAYER(player))
-	if(!game_stopped)
+	if(IS_PLAYER(player)
+		&& !game_stopped)
 	{
 		if(CS(player).killcount == FRAGS_SPECTATOR /* initial spawn */ || g_race_qualifying) // spawn
 			race_PreparePlayer(player);
@@ -325,8 +325,8 @@ MUTATOR_HOOKFUNCTION(cts, Damage_Calculate)
 	float frag_deathtype = M_ARGV(3, float);
 	float frag_damage = M_ARGV(4, float);
 
-	if(frag_target == frag_attacker || frag_deathtype == DEATH_FALL.m_id)
-	if(!autocvar_g_cts_selfdamage)
+	if((frag_target == frag_attacker || frag_deathtype == DEATH_FALL.m_id)
+		&& !autocvar_g_cts_selfdamage)
 	{
 		frag_damage = 0;
 		M_ARGV(4, float) = frag_damage;

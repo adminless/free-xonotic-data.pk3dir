@@ -269,8 +269,8 @@ void Portal_Touch(entity this, entity toucher)
 	if(toucher.classname == "grapplinghook")
 		return; // handled by think
 
-	if(!autocvar_g_vehicles_teleportable)
-	if(IS_VEHICLE(toucher))
+	if(!autocvar_g_vehicles_teleportable
+		&& IS_VEHICLE(toucher))
 		return; // no teleporting vehicles?
 
 	if(!this.enemy)

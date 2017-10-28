@@ -64,8 +64,8 @@ float pathlib_expandnode_starf(entity node, vector start, vector goal)
         else
             c = true;
 
-        if(c)
-        if(plib_fvals[i] < fc)
+        if(c
+        	&& plib_fvals[i] < fc)
         {
             bp = plib_points[i];
             fc = plib_fvals[i];

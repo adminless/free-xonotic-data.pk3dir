@@ -39,26 +39,26 @@ bool ttt_winning_piece(entity piece)
 	int number = minigame_tile_number(piece.netname);
 	int letter = minigame_tile_letter(piece.netname);
 
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(0,number)).team == piece.team )
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(1,number)).team == piece.team )
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(2,number)).team == piece.team )
+	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(0,number)).team == piece.team 
+		&&  ttt_find_piece(piece.owner,minigame_tile_buildname(1,number)).team == piece.team 
+		&&  ttt_find_piece(piece.owner,minigame_tile_buildname(2,number)).team == piece.team )
 		return true;
 
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(letter,0)).team == piece.team )
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(letter,1)).team == piece.team )
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(letter,2)).team == piece.team )
+	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(letter,0)).team == piece.team 
+		&&  ttt_find_piece(piece.owner,minigame_tile_buildname(letter,1)).team == piece.team 
+		&&  ttt_find_piece(piece.owner,minigame_tile_buildname(letter,2)).team == piece.team )
 		return true;
 
-	if ( number == letter )
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(0,0)).team == piece.team )
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(1,1)).team == piece.team )
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(2,2)).team == piece.team )
+	if ( number == letter 
+		&&  ttt_find_piece(piece.owner,minigame_tile_buildname(0,0)).team == piece.team 
+		&&  ttt_find_piece(piece.owner,minigame_tile_buildname(1,1)).team == piece.team 
+		&&  ttt_find_piece(piece.owner,minigame_tile_buildname(2,2)).team == piece.team )
 		return true;
 
-	if ( number == 2-letter )
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(0,2)).team == piece.team )
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(1,1)).team == piece.team )
-	if ( ttt_find_piece(piece.owner,minigame_tile_buildname(2,0)).team == piece.team )
+	if ( number == 2-letter 
+		&&  ttt_find_piece(piece.owner,minigame_tile_buildname(0,2)).team == piece.team 
+		&&  ttt_find_piece(piece.owner,minigame_tile_buildname(1,1)).team == piece.team 
+		&&  ttt_find_piece(piece.owner,minigame_tile_buildname(2,0)).team == piece.team )
 		return true;
 
 	return false;
@@ -77,11 +77,11 @@ bool ttt_valid_tile(string tile)
 // make a move
 void ttt_move(entity minigame, entity player, string pos )
 {
-	if ( minigame.minigame_flags & TTT_TURN_PLACE )
-	if ( pos && player.team == (minigame.minigame_flags & TTT_TURN_TEAM) )
+	if ( minigame.minigame_flags & TTT_TURN_PLACE 
+		&&  pos && player.team == (minigame.minigame_flags & TTT_TURN_TEAM) )
 	{
-		if ( ttt_valid_tile(pos) )
-		if ( !ttt_find_piece(minigame,pos) )
+		if ( ttt_valid_tile(pos) 
+			&&  !ttt_find_piece(minigame,pos) )
 		{
 			entity piece = msle_spawn(minigame,"minigame_board_piece");
 			piece.team = player.team;
@@ -230,8 +230,8 @@ void ttt_hud_board(vector pos, vector mySize)
 	vector tile_size = minigame_hud_denormalize_size('1 1 0'/TTT_TILE_SIZE,pos,mySize);
 	vector tile_pos;
 
-	if ( (active_minigame.minigame_flags & TTT_TURN_TEAM) == minigame_self.team )
-	if ( ttt_valid_tile(ttt_curr_pos) )
+	if ( (active_minigame.minigame_flags & TTT_TURN_TEAM) == minigame_self.team 
+		&&  ttt_valid_tile(ttt_curr_pos) )
 	{
 		tile_pos = minigame_tile_pos(ttt_curr_pos,TTT_LET_CNT,TTT_NUM_CNT);
 		tile_pos = minigame_hud_denormalize(tile_pos,pos,mySize);
@@ -248,8 +248,8 @@ void ttt_hud_board(vector pos, vector mySize)
 			tile_pos = minigame_tile_pos(e.netname,TTT_LET_CNT,TTT_NUM_CNT);
 			tile_pos = minigame_hud_denormalize(tile_pos,pos,mySize);
 
-			if ( active_minigame.minigame_flags & TTT_TURN_WIN )
-			if ( !e.ttt_checkwin )
+			if ( active_minigame.minigame_flags & TTT_TURN_WIN 
+				&&  !e.ttt_checkwin )
 				e.ttt_checkwin = ttt_winning_piece(e) ? 1 : -1;
 
 			float icon_color = 1;

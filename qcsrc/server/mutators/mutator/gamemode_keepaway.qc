@@ -323,8 +323,8 @@ MUTATOR_HOOKFUNCTION(ka, PlayerUseKey)
 {
 	entity player = M_ARGV(0, entity);
 
-	if(MUTATOR_RETURNVALUE == 0)
-	if(player.ballcarried)
+	if(MUTATOR_RETURNVALUE == 0
+		&& player.ballcarried)
 	{
 		ka_DropEvent(player);
 		return true;

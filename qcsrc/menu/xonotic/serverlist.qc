@@ -911,11 +911,11 @@ void XonoticServerList_drawListBoxItem(entity me, int i, vector absSize, bool is
 	*/
 
 	// list the mods here on which the pure server check actually works
-	if(modname != "xonotic")
-	if(modname != "instagib" || modname != "minstagib")
-	if(modname != "cts")
-	if(modname != "nix")
-	if(modname != "newtoys")
+	if(modname != "xonotic"
+		&& (modname != "instagib" || modname != "minstagib")
+		&& modname != "cts"
+		&& modname != "nix"
+		&& modname != "newtoys")
 		pure_available = false;
 
 	if(gethostcachenumber(SLIST_FIELD_FREESLOTS, i) <= 0)

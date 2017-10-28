@@ -547,8 +547,8 @@ float bot_cmd_barrier(entity this)
 	if(this.bot_barrier == 1) // find other bots
 	{
 		FOREACH_CLIENT(it.isbot, {
-			if(it.bot_cmdqueuebuf_allocated)
-			if(it.bot_barrier != 1)
+			if(it.bot_cmdqueuebuf_allocated
+				&& it.bot_barrier != 1)
 				return CMD_STATUS_EXECUTING; // not all are at the barrier yet
 		});
 

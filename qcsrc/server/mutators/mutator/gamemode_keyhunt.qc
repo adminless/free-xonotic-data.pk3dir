@@ -682,8 +682,8 @@ void kh_Key_Think(entity this)  // runs all the time
 		if(time > this.pain_finished)
 			kh_LoserTeam(this.team, this);
 
-	if(this.owner)
-	if(kh_Key_AllOwnedByWhichTeam() != -1)
+	if(this.owner
+		&& kh_Key_AllOwnedByWhichTeam() != -1)
 	{
 		if(this.siren_time < time)
 		{

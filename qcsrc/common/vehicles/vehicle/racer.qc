@@ -288,9 +288,9 @@ bool racer_frame(entity this, float dt)
 
 	Weapon wep1 = WEP_RACER;
 	.entity weaponentity = weaponentities[0]; // TODO: unhardcode
-	if (!forbidWeaponUse(this))
-	if (PHYS_INPUT_BUTTON_ATCK(this))
-	if (wep1.wr_checkammo1(wep1, vehic, weaponentity))
+	if (!forbidWeaponUse(this)
+		&& PHYS_INPUT_BUTTON_ATCK(this)
+		&& wep1.wr_checkammo1(wep1, vehic, weaponentity))
 	{
 		string tagname = (vehic.cnt)
 		    ? (vehic.cnt = 0, "tag_fire1")
@@ -612,8 +612,8 @@ METHOD(Racer, vr_setup, void(Racer thisveh, entity instance))
     instance.vehicle_exit = racer_exit;
 
     // we have no need to network energy
-    if(autocvar_g_vehicle_racer_energy)
-    if(autocvar_g_vehicle_racer_energy_regen)
+    if(autocvar_g_vehicle_racer_energy
+    	&& autocvar_g_vehicle_racer_energy_regen)
         instance.vehicle_flags |= VHF_ENERGYREGEN;
 
     if(autocvar_g_vehicle_racer_shield)

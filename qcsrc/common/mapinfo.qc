@@ -173,10 +173,10 @@ float _MapInfo_FilterGametype(int pGametype, int pFeatures, int pFlagsRequired, 
 				MapInfo_progress = i / _MapInfo_globcount;
 				return 0;
 			}
-		if((MapInfo_Map_supportedGametypes & pGametype) != 0)
-		if((MapInfo_Map_supportedFeatures & pFeatures) == pFeatures)
-		if((MapInfo_Map_flags & pFlagsForbidden) == 0)
-		if((MapInfo_Map_flags & pFlagsRequired) == pFlagsRequired)
+		if((MapInfo_Map_supportedGametypes & pGametype) != 0
+			&& (MapInfo_Map_supportedFeatures & pFeatures) == pFeatures
+			&& (MapInfo_Map_flags & pFlagsForbidden) == 0
+			&& (MapInfo_Map_flags & pFlagsRequired) == pFlagsRequired)
 			bufstr_set(_MapInfo_filtered, ++j, ftos(i));
 	}
 	MapInfo_count = j + 1;
@@ -391,8 +391,8 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 		FOREACH(Gametypes, it.m_isAlwaysSupported(it, spawnpoints, diameter), MapInfo_Map_supportedGametypes |= it.m_flags);
 	}
 
-	if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RACE.m_flags)
-	if(!spawnplaces)
+	if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RACE.m_flags
+		&& !spawnplaces)
 	{
 		MapInfo_Map_supportedGametypes &= ~MAPINFO_TYPE_RACE.m_flags;
 		MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_CTS.m_flags;

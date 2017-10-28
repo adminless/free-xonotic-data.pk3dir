@@ -129,8 +129,8 @@ string MapVote_Suggest(entity this, string m)
 		return "That's not how to use this command.";
 	if(!autocvar_g_maplist_votable_suggestions)
 		return "Suggestions are not accepted on this server.";
-	if(mapvote_initialized)
-	if(!gametypevote)
+	if(mapvote_initialized
+		&& !gametypevote)
 		return "Can't suggest - voting is already in progress!";
 	m = GameTypeVote_MapInfo_FixName(m);
 	if (!m)
@@ -139,8 +139,8 @@ string MapVote_Suggest(entity this, string m)
 		if(Map_IsRecent(m))
 			return "This server does not allow for recent maps to be played again. Please be patient for some rounds.";
 
-	if (!autocvar_sv_vote_gametype)
-	if(!MapInfo_CheckMap(m))
+	if (!autocvar_sv_vote_gametype
+		&& !MapInfo_CheckMap(m))
 		return "The map you suggested does not support the current game mode.";
 	for(i = 0; i < mapvote_suggestion_ptr; ++i)
 		if(mapvote_suggestions[i] == m)
@@ -543,8 +543,8 @@ bool MapVote_CheckRules_2()
 
 	RandomSelection_Init();
 	for(i = 0; i < mapvote_count_real; ++i)
-		if(i != firstPlace)
-		if ( mapvote_maps_flags[i] & GTV_AVAILABLE )
+		if(i != firstPlace
+			&&  mapvote_maps_flags[i] & GTV_AVAILABLE )
 			RandomSelection_AddFloat(i, 1, mapvote_selections[i]);
 	secondPlace = RandomSelection_chosen_float;
 	secondPlaceVotes = RandomSelection_best_priority;
@@ -787,8 +787,8 @@ bool GameTypeVote_Start()
 	which_available = -1;
 	for(int j = 0; j < n; ++j)
 	{
-		if ( GameTypeVote_AddVotable(argv(j)) )
-		if ( mapvote_maps_flags[j] & GTV_AVAILABLE )
+		if ( GameTypeVote_AddVotable(argv(j)) 
+			&&  mapvote_maps_flags[j] & GTV_AVAILABLE )
 		{
 			really_available++;
 			which_available = j;

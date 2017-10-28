@@ -450,8 +450,8 @@ vector GetCurrentFov(float fov)
 	if(zoomfactor < 1 || zoomfactor > 30)
 		zoomfactor = 2.5;
 	zoomspeed = autocvar_cl_zoomspeed;
-	if(zoomspeed >= 0)
-	if(zoomspeed < 0.5 || zoomspeed > 16)
+	if(zoomspeed >= 0
+		&& (zoomspeed < 0.5 || zoomspeed > 16))
 			zoomspeed = 3.5;
 
 	zoomdir = button_zoom;
@@ -461,8 +461,8 @@ vector GetCurrentFov(float fov)
 		for(int slot = 0; slot < MAX_WEAPONSLOTS; ++slot)
 		{
 			entity wepent = viewmodels[slot];
-			if(wepent.switchweapon == wepent.activeweapon)
-			if((wepent.activeweapon == WEP_VORTEX && !WEP_CVAR(vortex, secondary)) || (wepent.activeweapon == WEP_RIFLE && !WEP_CVAR(rifle, secondary))) // do NOT use switchweapon here
+			if(wepent.switchweapon == wepent.activeweapon
+				&& ((wepent.activeweapon == WEP_VORTEX && !WEP_CVAR(vortex, secondary)) || (wepent.activeweapon == WEP_RIFLE && !WEP_CVAR(rifle, secondary)))) // do NOT use switchweapon here
 				zoomdir += button_attack2;
 		}
 	}
@@ -1983,8 +1983,8 @@ void CSQC_UpdateView(entity this, float w, float h)
 	// next R_RenderScene call
 	drawstring('0 0 0', "", '1 1 0', '1 1 1', 0, 0);
 
-	if(autocvar_r_fakelight >= 2 || autocvar_r_fullbright)
-	if (!(serverflags & SERVERFLAG_ALLOW_FULLBRIGHT))
+	if((autocvar_r_fakelight >= 2 || autocvar_r_fullbright)
+		&& !(serverflags & SERVERFLAG_ALLOW_FULLBRIGHT))
 	{
 		// apply night vision effect
 		vector tc_00, tc_01, tc_10, tc_11;

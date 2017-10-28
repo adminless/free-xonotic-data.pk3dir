@@ -104,8 +104,8 @@ void Announcer_Gamestart()
 				setthink(announcer_countdown, Announcer_Countdown);
 			}
 
-			if(time + 5.0 < startTime) // if connecting to server while restart was active don't always play prepareforbattle
-			if(time > announcer_countdown.nextthink) // don't play it again if countdown was already going
+			if(time + 5.0 < startTime // if connecting to server while restart was active don't always play prepareforbattle
+				&& time > announcer_countdown.nextthink) // don't play it again if countdown was already going
 				Local_Notification(MSG_ANNCE, ANNCE_PREPARE);
 
 			announcer_countdown.nextthink = startTime - floor(startTime - time); //synchronize nextthink to startTime

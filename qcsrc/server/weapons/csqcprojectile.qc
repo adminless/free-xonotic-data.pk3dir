@@ -76,9 +76,9 @@ bool CSQCProjectile_SendEntity(entity this, entity to, int sf)
 .vector csqcprojectile_oldorigin;
 void CSQCProjectile_Check(entity e)
 {
-	if(e.csqcprojectile_clientanimate)
-	if(IS_ONGROUND(e))
-	if(e.origin != e.csqcprojectile_oldorigin)
+	if(e.csqcprojectile_clientanimate
+		&& IS_ONGROUND(e)
+		&& e.origin != e.csqcprojectile_oldorigin)
 		UpdateCSQCProjectile(e);
 	e.csqcprojectile_oldorigin = e.origin;
 }

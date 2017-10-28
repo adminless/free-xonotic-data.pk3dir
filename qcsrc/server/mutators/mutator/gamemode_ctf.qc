@@ -112,8 +112,8 @@ void ctf_CaptureRecord(entity flag, entity player)
 		Send_Notification(NOTIF_ALL, NULL, MSG_CHOICE, APP_TEAM_NUM(flag.team, CHOICE_CTF_CAPTURE_UNBROKEN), player.netname, refername, TIME_ENCODE(cap_time), TIME_ENCODE(cap_record));
 
 	// write that shit in the database
-	if(!ctf_oneflag) // but not in 1-flag mode
-	if((!ctf_captimerecord) || (cap_time < cap_record))
+	if(!ctf_oneflag // but not in 1-flag mode
+		&& ((!ctf_captimerecord) || (cap_time < cap_record)))
 	{
 		ctf_captimerecord = cap_time;
 		db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(cap_time));
@@ -803,9 +803,9 @@ void ctf_CheckStalemate()
 	// build list of stale flags
 	for(tmp_entity = ctf_worldflaglist; tmp_entity; tmp_entity = tmp_entity.ctf_worldflagnext)
 	{
-		if(autocvar_g_ctf_stalemate)
-		if(tmp_entity.ctf_status != FLAG_BASE)
-		if(time >= tmp_entity.ctf_pickuptime + autocvar_g_ctf_stalemate_time || !tmp_entity.team) // instant stalemate in oneflag
+		if(autocvar_g_ctf_stalemate
+			&& tmp_entity.ctf_status != FLAG_BASE
+			&& (time >= tmp_entity.ctf_pickuptime + autocvar_g_ctf_stalemate_time || !tmp_entity.team)) // instant stalemate in oneflag
 		{
 			tmp_entity.ctf_staleflagnext = ctf_staleflaglist; // link flag into staleflaglist
 			ctf_staleflaglist = tmp_entity;
@@ -906,9 +906,9 @@ void ctf_FlagThink(entity this)
 			if(autocvar_g_ctf_dropped_capture_radius)
 			{
 				for(tmp_entity = ctf_worldflaglist; tmp_entity; tmp_entity = tmp_entity.ctf_worldflagnext)
-					if(tmp_entity.ctf_status == FLAG_DROPPED)
-					if(vdist(this.origin - tmp_entity.origin, <, autocvar_g_ctf_dropped_capture_radius))
-					if(time > tmp_entity.ctf_droptime + autocvar_g_ctf_dropped_capture_delay)
+					if(tmp_entity.ctf_status == FLAG_DROPPED
+						&& vdist(this.origin - tmp_entity.origin, <, autocvar_g_ctf_dropped_capture_radius)
+						&& time > tmp_entity.ctf_droptime + autocvar_g_ctf_dropped_capture_delay)
 						ctf_Handle_Capture(this, tmp_entity, CAPTURE_DROPPED);
 			}
 			return;
@@ -1464,8 +1464,8 @@ void havocbot_goalrating_ctf_ourbase(entity this, float ratingscale)
 	{
 		if (CTF_SAMETEAM(this, head))
 		{
-			if (this.flagcarried)
-			if ((this.flagcarried.cnt || head.cnt) && this.flagcarried.cnt != head.cnt)
+			if (this.flagcarried
+				&& ((this.flagcarried.cnt || head.cnt) && this.flagcarried.cnt != head.cnt))
 			{
 				head = head.ctf_worldflagnext; // skip base if it has a different group
 				continue;
@@ -1545,8 +1545,8 @@ void havocbot_goalrating_ctf_droppedflags(entity this, float ratingscale, vector
 	while (head)
 	{
 		// flag is out in the field
-		if(head.ctf_status != FLAG_BASE)
-		if(head.tag_entity==NULL)	// dropped
+		if(head.ctf_status != FLAG_BASE
+			&& head.tag_entity==NULL)	// dropped
 		{
 			if(df_radius)
 			{
@@ -1566,9 +1566,9 @@ void havocbot_goalrating_ctf_carrieritems(entity this, float ratingscale, vector
 	IL_EACH(g_items, it.bot_pickup,
 	{
 		// gather health and armor only
-		if (it.solid)
-		if (it.health || it.armorvalue)
-		if (vdist(it.origin - org, <, sradius))
+		if (it.solid
+			&& (it.health || it.armorvalue)
+			&& vdist(it.origin - org, <, sradius))
 		{
 			// get the value of the item
 			float t = it.bot_pickupevalfunc(this, it) * 0.0001;
@@ -1707,8 +1707,8 @@ void havocbot_role_ctf_escort(entity this)
 
 	// If the flag carrier reached the base switch to defense
 	mf = havocbot_ctf_find_flag(this);
-	if(mf.ctf_status!=FLAG_BASE)
-	if(vdist(ef.origin - mf.dropped_origin, <, 300))
+	if(mf.ctf_status!=FLAG_BASE
+		&& vdist(ef.origin - mf.dropped_origin, <, 300))
 	{
 		havocbot_role_ctf_setrole(this, HAVOCBOT_CTF_ROLE_DEFENSE);
 		return;
@@ -1977,10 +1977,10 @@ void havocbot_role_ctf_defense(entity this)
 			}
 		});
 
-		if(closestplayer)
-		if(DIFF_TEAM(closestplayer, this))
-		if(vdist(org - this.origin, >, 1000))
-		if(checkpvs(this.origin,closestplayer)||random()<0.5)
+		if(closestplayer
+			&& DIFF_TEAM(closestplayer, this)
+			&& vdist(org - this.origin, >, 1000)
+			&& (checkpvs(this.origin,closestplayer)||random()<0.5))
 			havocbot_goalrating_ctf_ourbase(this, 30000);
 
 		havocbot_goalrating_ctf_ourstolenflag(this, 20000);
@@ -2122,8 +2122,8 @@ MUTATOR_HOOKFUNCTION(ctf, Damage_Calculate) // for changing damage and force val
 	}
 	else if(frag_target.flagcarried && !IS_DEAD(frag_target) && CTF_DIFFTEAM(frag_target, frag_attacker)) // if the target is a flagcarrier
 	{
-		if(autocvar_g_ctf_flagcarrier_auto_helpme_damage > ('1 0 0' * healtharmor_maxdamage(frag_target.health, frag_target.armorvalue, autocvar_g_balance_armor_blockpercent, DEATH_WEAPON.m_id)))
-		if(time > frag_target.wps_helpme_time + autocvar_g_ctf_flagcarrier_auto_helpme_time)
+		if(autocvar_g_ctf_flagcarrier_auto_helpme_damage > ('1 0 0' * healtharmor_maxdamage(frag_target.health, frag_target.armorvalue, autocvar_g_balance_armor_blockpercent, DEATH_WEAPON.m_id))
+			&& time > frag_target.wps_helpme_time + autocvar_g_ctf_flagcarrier_auto_helpme_time)
 		{
 			frag_target.wps_helpme_time = time;
 			WaypointSprite_HelpMePing(frag_target.wps_flagcarrier);
@@ -2224,8 +2224,8 @@ MUTATOR_HOOKFUNCTION(ctf, PortalTeleport)
 {
 	entity player = M_ARGV(0, entity);
 
-	if(player.flagcarried)
-	if(!autocvar_g_ctf_portalteleport)
+	if(player.flagcarried
+		&& !autocvar_g_ctf_portalteleport)
 		{ ctf_Handle_Throw(player, NULL, DROP_NORMAL); }
 }
 
@@ -2245,9 +2245,9 @@ MUTATOR_HOOKFUNCTION(ctf, PlayerUseKey)
 
 			while(head) // find the closest acceptable target to pass to
 			{
-				if(IS_PLAYER(head) && !IS_DEAD(head))
-				if(head != player && SAME_TEAM(head, player))
-				if(!head.speedrunning && !head.vehicle)
+				if(IS_PLAYER(head) && !IS_DEAD(head)
+					&& head != player && SAME_TEAM(head, player)
+					&& !head.speedrunning && !head.vehicle)
 				{
 					// if it's a player, use the view origin as reference (stolen from RadiusDamage functions in g_damage.qc)
 					vector head_center = WarpZone_UnTransformOrigin(head, CENTER_OR_VIEWOFS(head));

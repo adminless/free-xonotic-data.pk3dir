@@ -219,9 +219,9 @@ void SUB_UseTargets_Ex(entity this, entity actor, entity trigger, bool preventRe
 // print the message
 //
 #ifdef SVQC
-	if(this)
-	if(IS_PLAYER(actor) && this.message != "")
-	if(IS_REAL_CLIENT(actor))
+	if(this
+		&& IS_PLAYER(actor) && this.message != ""
+		&& IS_REAL_CLIENT(actor))
 	{
 		centerprint(actor, this.message);
 		if (this.noise == "")

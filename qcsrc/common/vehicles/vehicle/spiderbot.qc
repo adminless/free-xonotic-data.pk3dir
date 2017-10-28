@@ -113,8 +113,8 @@ bool spiderbot_frame(entity this, float dt)
 
 	//if(IS_ONGROUND(vehic))
 	{
-		if(IS_ONGROUND(vehic))
-		if(vehic.frame == 4 && vehic.tur_head.wait != 0)
+		if(IS_ONGROUND(vehic)
+			&& vehic.frame == 4 && vehic.tur_head.wait != 0)
 		{
 			sound (vehic, CH_TRIGGER_SINGLE, SND_VEH_SPIDERBOT_LAND, VOL_VEHICLEENGINE, ATTEN_NORM);
 			vehic.frame = 5;
@@ -200,8 +200,8 @@ bool spiderbot_frame(entity this, float dt)
 					float g = ((autocvar_sv_gameplayfix_gravityunaffectedbyticrate) ? 0.5 : 1);
 					if(vehic.velocity_z <= 20) // not while jumping
 						vehic.velocity_z -= g * PHYS_INPUT_FRAMETIME * autocvar_sv_gravity;
-					if(IS_ONGROUND(vehic))
-					if(vehic.sound_nexttime < time || vehic.delay != 1)
+					if(IS_ONGROUND(vehic)
+						&& (vehic.sound_nexttime < time || vehic.delay != 1))
 					{
 						vehic.delay = 1;
 						vehic.sound_nexttime = time + 6.486500; //soundlength("vehicles/spiderbot_walk.wav");
@@ -230,8 +230,8 @@ bool spiderbot_frame(entity this, float dt)
 					float g = ((autocvar_sv_gameplayfix_gravityunaffectedbyticrate) ? 0.5 : 1);
 					if(vehic.velocity_z <= 20) // not while jumping
 						vehic.velocity_z -= g * PHYS_INPUT_FRAMETIME * autocvar_sv_gravity;
-					if(IS_ONGROUND(vehic))
-					if(vehic.sound_nexttime < time || vehic.delay != 2)
+					if(IS_ONGROUND(vehic)
+						&& (vehic.sound_nexttime < time || vehic.delay != 2))
 					{
 						vehic.delay = 2;
 						vehic.sound_nexttime = time + 6.486500; //soundlength("vehicles/spiderbot_strafe.wav");

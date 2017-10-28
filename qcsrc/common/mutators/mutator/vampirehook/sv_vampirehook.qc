@@ -16,13 +16,13 @@ MUTATOR_HOOKFUNCTION(vh, GrappleHookThink)
 
 	entity dmgent = ((SAME_TEAM(thehook.owner, thehook.aiment) && autocvar_g_vampirehook_teamheal) ? thehook.owner : thehook.aiment);
 
-	if(IS_PLAYER(thehook.aiment))
-	if(thehook.last_dmg < time)
-	if(!STAT(FROZEN, thehook.aiment))
-	if(time >= game_starttime)
-	if(DIFF_TEAM(thehook.owner, thehook.aiment) || autocvar_g_vampirehook_teamheal)
-	if(thehook.aiment.health > 0)
-	if(autocvar_g_vampirehook_damage)
+	if(IS_PLAYER(thehook.aiment)
+		&& thehook.last_dmg < time
+		&& !STAT(FROZEN, thehook.aiment)
+		&& time >= game_starttime
+		&& (DIFF_TEAM(thehook.owner, thehook.aiment) || autocvar_g_vampirehook_teamheal)
+		&& thehook.aiment.health > 0
+		&& autocvar_g_vampirehook_damage)
 	{
 		thehook.last_dmg = time + autocvar_g_vampirehook_damagerate;
 		thehook.owner.damage_dealt += autocvar_g_vampirehook_damage;

@@ -17,8 +17,8 @@ void W_Fireball_Explode(entity this, entity directhitentity)
 	// 1. dist damage
 	d = (this.realowner.health + this.realowner.armorvalue);
 	RadiusDamage(this, this.realowner, WEP_CVAR_PRI(fireball, damage), WEP_CVAR_PRI(fireball, edgedamage), WEP_CVAR_PRI(fireball, radius), NULL, NULL, WEP_CVAR_PRI(fireball, force), this.projectiledeathtype, directhitentity);
-	if(this.realowner.health + this.realowner.armorvalue >= d)
-	if(!this.cnt)
+	if(this.realowner.health + this.realowner.armorvalue >= d
+		&& !this.cnt)
 	{
 		modeleffect_spawn("models/sphere/sphere.md3", 0, 0, this.origin, '0 0 0', '0 0 0', '0 0 0', 0, WEP_CVAR_PRI(fireball, bfgradius), 0.2, 0.05, 0.25);
 
@@ -33,8 +33,8 @@ void W_Fireball_Explode(entity this, entity directhitentity)
 				continue;
 			// can we see player who shot fireball?
 			traceline(e.origin + e.view_ofs, this.realowner.origin + this.realowner.view_ofs, MOVE_NORMAL, e);
-			if(trace_ent != this.realowner)
-			if(/* trace_startsolid || */ trace_fraction != 1)
+			if(trace_ent != this.realowner
+				&& (/* trace_startsolid || */ trace_fraction != 1))
 				continue;
 			dist = vlen(this.origin - e.origin - e.view_ofs);
 			points = (1 - sqrt(dist / WEP_CVAR_PRI(fireball, bfgradius)));
@@ -239,8 +239,8 @@ void W_Fireball_Firemine_Think(entity this)
 void W_Fireball_Firemine_Touch(entity this, entity toucher)
 {
 	PROJECTILE_TOUCH(this, toucher);
-	if(toucher.takedamage == DAMAGE_AIM)
-	if(Fire_AddDamage(toucher, this.realowner, WEP_CVAR_SEC(fireball, damage), WEP_CVAR_SEC(fireball, damagetime), this.projectiledeathtype) >= 0)
+	if(toucher.takedamage == DAMAGE_AIM
+		&& Fire_AddDamage(toucher, this.realowner, WEP_CVAR_SEC(fireball, damage), WEP_CVAR_SEC(fireball, damagetime), this.projectiledeathtype) >= 0)
 	{
 		delete(this);
 		return;
@@ -329,8 +329,8 @@ METHOD(Fireball, wr_think, void(entity thiswep, entity actor, .entity weaponenti
 {
     if(fire & 1)
     {
-        if(time >= actor.(weaponentity).fireball_primarytime)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR_PRI(fireball, refire)))
+        if(time >= actor.(weaponentity).fireball_primarytime
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR_PRI(fireball, refire)))
         {
             W_Fireball_Attack1_Frame0(thiswep, actor, weaponentity, fire);
             actor.(weaponentity).fireball_primarytime = time + WEP_CVAR_PRI(fireball, refire2) * W_WeaponRateFactor(actor);

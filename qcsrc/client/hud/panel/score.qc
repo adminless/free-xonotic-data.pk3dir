@@ -103,8 +103,8 @@ void HUD_Score_Rankings(vector pos, vector mySize, entity me)
 		if ((team_count && pl.team != tm.team) || pl.team == NUM_SPECTATOR)
 			continue;
 
-		if (i == entries-1 && !me_printed && pl != me)
-		if (autocvar_hud_panel_score_rankings == 1 && spectatee_status != -1)
+		if (i == entries-1 && !me_printed && pl != me
+			&& autocvar_hud_panel_score_rankings == 1 && spectatee_status != -1)
 		{
 			for (pl = me.sort_next; pl; pl = pl.sort_next)
 				if (pl.team != NUM_SPECTATOR)

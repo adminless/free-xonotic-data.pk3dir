@@ -114,10 +114,10 @@ float XonoticColorpicker_mouseDrag(entity me, vector coords)
 
 	vector margin;
 	margin = me.imagemargin;
-	if(coords.x >= margin.x)
-	if(coords.y >= margin.y)
-	if(coords.x <= 1 - margin.x)
-	if(coords.y <= 1 - margin.y)
+	if(coords.x >= margin.x
+		&& coords.y >= margin.y
+		&& coords.x <= 1 - margin.x
+		&& coords.y <= 1 - margin.y)
 		me.controlledTextbox.enterText(me.controlledTextbox, rgb_to_hexcolor(hslimage_color(coords, margin)));
 
 	return 1;

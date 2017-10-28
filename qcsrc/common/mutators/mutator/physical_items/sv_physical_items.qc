@@ -71,8 +71,8 @@ void physical_item_think(entity this)
 
 void physical_item_touch(entity this, entity toucher)
 {
-	if(!this.cnt) // not for dropped items
-	if (ITEM_TOUCH_NEEDKILL())
+	if(!this.cnt // not for dropped items
+		&& ITEM_TOUCH_NEEDKILL())
 	{
 		setorigin(this, this.spawn_origin);
 		this.angles = this.spawn_angles;
@@ -81,8 +81,8 @@ void physical_item_touch(entity this, entity toucher)
 
 void physical_item_damage(entity this, entity inflictor, entity attacker, float damage, int deathtype, vector hitloc, vector force)
 {
-	if(!this.cnt) // not for dropped items
-	if(ITEM_DAMAGE_NEEDKILL(deathtype))
+	if(!this.cnt // not for dropped items
+		&& ITEM_DAMAGE_NEEDKILL(deathtype))
 	{
 		setorigin(this, this.spawn_origin);
 		this.angles = this.spawn_angles;

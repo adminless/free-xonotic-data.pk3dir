@@ -60,8 +60,8 @@ void spawnpoint_think(entity this)
 
 void spawnpoint_use(entity this, entity actor, entity trigger)
 {
-	if(teamplay)
-	if(have_team_spawns > 0)
+	if(teamplay
+		&& have_team_spawns > 0)
 	{
 		this.team = actor.team;
 		some_spawn_has_been_used = true;

@@ -489,10 +489,10 @@ void PlayerDamage(entity this, entity inflictor, entity attacker, float damage, 
 	Weapon awep = WEP_Null;
 	.entity weaponentity = weaponentities[0]; // TODO: unhardcode
 
-	if(vbot || IS_REAL_CLIENT(this))
-	if(abot || IS_REAL_CLIENT(attacker))
-	if(attacker && this != attacker)
-	if(DIFF_TEAM(this, attacker))
+	if((vbot || IS_REAL_CLIENT(this))
+		&& (abot || IS_REAL_CLIENT(attacker))
+		&& attacker && this != attacker
+		&& DIFF_TEAM(this, attacker))
 	{
 		if(DEATH_ISSPECIAL(deathtype))
 			awep = attacker.(weaponentity).m_weapon;
@@ -524,8 +524,8 @@ void PlayerDamage(entity this, entity inflictor, entity attacker, float damage, 
 		if(valid_damage_for_weaponstats)
 			WeaponStats_LogKill(awep.m_id, abot, this.(weaponentity).m_weapon.m_id, vbot);
 
-		if(autocvar_sv_gentle < 1)
-		if(sound_allowed(MSG_BROADCAST, attacker))
+		if(autocvar_sv_gentle < 1
+			&& sound_allowed(MSG_BROADCAST, attacker))
 		{
 			if(deathtype == DEATH_DROWN.m_id)
 				PlayerSound(this, playersound_drown, CH_PAIN, VOL_BASE, VOICETYPE_PLAYERSOUND);
@@ -541,8 +541,8 @@ void PlayerDamage(entity this, entity inflictor, entity attacker, float damage, 
 			if(CS(this).killindicator_teamchange)
 				defer_ClientKill_Now_TeamChange = true;
 
-			if(this.classname == "body")
-			if(deathtype == DEATH_KILL.m_id)
+			if(this.classname == "body"
+				&& deathtype == DEATH_KILL.m_id)
 			{
 				// for the lemmings fans, a small harmless explosion
 				Send_Effect(EFFECT_ROCKET_EXPLODE, this.origin, '0 0 0', 1);
@@ -940,8 +940,8 @@ int Say(entity source, int teamsay, entity privatesay, string msgin, bool floodc
 
 	if (!privatesay && source && !IS_PLAYER(source))
 	{
-		if (!game_stopped)
-		if (teamsay || (autocvar_g_chat_nospectators == 1) || (autocvar_g_chat_nospectators == 2 && !warmup_stage))
+		if (!game_stopped
+			&& (teamsay || (autocvar_g_chat_nospectators == 1) || (autocvar_g_chat_nospectators == 2 && !warmup_stage)))
 			teamsay = -1; // spectators
 	}
 
@@ -975,8 +975,8 @@ int Say(entity source, int teamsay, entity privatesay, string msgin, bool floodc
 
 	if (privatesay && source && !IS_PLAYER(source))
 	{
-		if (!game_stopped)
-		if ((privatesay && !IS_PLAYER(privatesay)) || (autocvar_g_chat_nospectators == 1) || (autocvar_g_chat_nospectators == 2 && !warmup_stage))
+		if (!game_stopped
+			&& ((privatesay && !IS_PLAYER(privatesay)) || (autocvar_g_chat_nospectators == 1) || (autocvar_g_chat_nospectators == 2 && !warmup_stage)))
 			ret = -1; // just hide the message completely
 	}
 

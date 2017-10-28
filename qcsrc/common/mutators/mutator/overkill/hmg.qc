@@ -72,8 +72,8 @@ METHOD(HeavyMachineGun, wr_think, void(entity thiswep, entity actor, .entity wea
         thiswep.wr_reload(thiswep, actor, weaponentity);
     } else
     {
-        if (fire & 1)
-        if (weapon_prepareattack(thiswep, actor, weaponentity, false, 0))
+        if (fire & 1
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, false, 0))
         {
             actor.(weaponentity).misc_bulletcounter = 0;
             W_HeavyMachineGun_Attack_Auto(thiswep, actor, weaponentity, fire);

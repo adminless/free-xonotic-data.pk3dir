@@ -909,8 +909,8 @@ MUTATOR_HOOKFUNCTION(nb, FilterItem)
 {
 	entity item = M_ARGV(0, entity);
 
-	if(item.classname == "droppedweapon")
-	if(item.weapon == WEP_NEXBALL.m_id)
+	if(item.classname == "droppedweapon"
+		&& item.weapon == WEP_NEXBALL.m_id)
 		return true;
 
 	return false;

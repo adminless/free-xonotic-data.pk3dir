@@ -85,8 +85,8 @@ void W_SetupShot_Dir_ProjectileSize_Range(entity ent, .entity weaponentity, vect
 	//vector prevorg = w_shotorg;
 	//vector prevend = w_shotend;
 
-	if (antilag)
-	if (!CS(ent).cvar_cl_noantilag)
+	if (antilag
+		&& !CS(ent).cvar_cl_noantilag)
 	{
 		if (autocvar_g_antilag == 1) // switch to "ghost" if not hitting original
 		{
@@ -107,10 +107,10 @@ void W_SetupShot_Dir_ProjectileSize_Range(entity ent, .entity weaponentity, vect
 		else if(autocvar_g_antilag == 3) // client side hitscan
 		{
 			// this part MUST use prydon cursor
-			if (CS(ent).cursor_trace_ent)                 // client was aiming at someone
-			if (CS(ent).cursor_trace_ent != ent)         // just to make sure
-			if (CS(ent).cursor_trace_ent.takedamage)      // and that person is killable
-			if (IS_PLAYER(CS(ent).cursor_trace_ent)) // and actually a player
+			if (CS(ent).cursor_trace_ent                 // client was aiming at someone
+				&& CS(ent).cursor_trace_ent != ent         // just to make sure
+				&& CS(ent).cursor_trace_ent.takedamage      // and that person is killable
+				&& IS_PLAYER(CS(ent).cursor_trace_ent)) // and actually a player
 			{
 				// verify that the shot would miss without antilag
 				// (avoids an issue where guns would always shoot at their origin)
@@ -265,8 +265,8 @@ void FireRailgunBullet (entity this, .entity weaponentity, vector start, vector 
 	if(deathtype == WEP_VAPORIZER.m_id || deathtype == WEP_VORTEX.m_id)
 	{
 		FOREACH_CLIENT(IS_REAL_CLIENT(it) && it != this, {
-			if(!it.railgunhit)
-			if(!(IS_SPEC(it) && it.enemy == this))
+			if(!it.railgunhit
+				&& !(IS_SPEC(it) && it.enemy == this))
 			{
 				msg_entity = it;
 				// nearest point on the beam
@@ -406,9 +406,9 @@ void fireBullet(entity this, .entity weaponentity, vector start, vector dir, flo
 		//   common/weapclip (intended)
 		//   common/noimpact (is supposed to eat projectiles, but is erased anyway)
 		bool is_weapclip = false;
-		if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NODRAW)
-		if (!(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NONSOLID))
-		if (!(trace_dphitcontents & DPCONTENTS_OPAQUE))
+		if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NODRAW
+			&& !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NONSOLID)
+			&& !(trace_dphitcontents & DPCONTENTS_OPAQUE))
 			is_weapclip = true;
 
 		if(!hit || hit.solid == SOLID_BSP || hit.solid == SOLID_SLIDEBOX)

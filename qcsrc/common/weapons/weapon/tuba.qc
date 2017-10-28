@@ -334,14 +334,14 @@ METHOD(Tuba, wr_aim, void(Tuba this, entity actor, .entity weaponentity))
 
 METHOD(Tuba, wr_think, void(Tuba this, entity actor, .entity weaponentity, int fire))
 {
-	if (fire & 1)
-	if (weapon_prepareattack(this, actor, weaponentity, false, WEP_CVAR(tuba, refire)))
+	if (fire & 1
+		&& weapon_prepareattack(this, actor, weaponentity, false, WEP_CVAR(tuba, refire)))
 	{
 		W_Tuba_NoteOn(actor, weaponentity, 0);
 		weapon_thinkf(actor, weaponentity, WFRAME_IDLE, WEP_CVAR(tuba, animtime), w_ready);
 	}
-	if (fire & 2)
-	if (weapon_prepareattack(this, actor, weaponentity, true, WEP_CVAR(tuba, refire)))
+	if (fire & 2
+		&& weapon_prepareattack(this, actor, weaponentity, true, WEP_CVAR(tuba, refire)))
 	{
 		W_Tuba_NoteOn(actor, weaponentity, HITTYPE_SECONDARY);
 		weapon_thinkf(actor, weaponentity, WFRAME_IDLE, WEP_CVAR(tuba, animtime), w_ready);

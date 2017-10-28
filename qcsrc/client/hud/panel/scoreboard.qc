@@ -403,9 +403,9 @@ void Cmd_Scoreboard_SetFields(int argc)
 			string s;
 			s = "ping pl name |";
 			FOREACH(Scores, true, {
-				if(it != ps_primary)
-				if(it != ps_secondary)
-				if(scores_label(it) != "")
+				if(it != ps_primary
+					&& it != ps_secondary
+					&& scores_label(it) != "")
 					s = strcat(s, " ", scores_label(it));
 			});
 			if(ps_secondary != ps_primary)
@@ -921,8 +921,8 @@ vector Scoreboard_DrawOthers(vector item_pos, vector rgb, int this_team, entity 
 
 	bool complete = (this_team == NUM_SPECTATOR);
 
-	if(!complete)
-	if((sbt_highlight) && (!(pl_number % 2)))
+	if(!complete
+		&& (sbt_highlight) && (!(pl_number % 2)))
 		drawfill(h_pos, h_size, rgb, sbt_highlight_alpha, DRAWFLAG_NORMAL);
 
 	vector pos = item_pos;
@@ -1676,8 +1676,8 @@ void Scoreboard_Draw()
 
 	// print information about respawn status
 	float respawn_time = STAT(RESPAWN_TIME);
-	if(!intermission)
-	if(respawn_time)
+	if(!intermission
+		&& respawn_time)
 	{
 		if(respawn_time < 0)
 		{

@@ -21,8 +21,8 @@ void Teleport_Touch(entity this, entity toucher)
 	if (!toucher.teleportable)
 		return;
 
-	if(toucher.vehicle)
-	if(!toucher.vehicle.teleportable)
+	if(toucher.vehicle
+		&& !toucher.vehicle.teleportable)
 		return;
 
 	if(IS_TURRET(toucher))

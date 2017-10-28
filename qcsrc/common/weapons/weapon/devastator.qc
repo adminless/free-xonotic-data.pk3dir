@@ -47,8 +47,8 @@ void W_Devastator_Explode(entity this, entity directhitentity)
 	.entity weaponentity = this.weaponentity_fld;
 	if(this.realowner.(weaponentity).m_weapon == thiswep)
 	{
-		if(GetResourceAmount(this.realowner, thiswep.ammo_type) < WEP_CVAR(devastator, ammo))
-		if(!(this.realowner.items & IT_UNLIMITED_WEAPON_AMMO))
+		if(GetResourceAmount(this.realowner, thiswep.ammo_type) < WEP_CVAR(devastator, ammo)
+			&& !(this.realowner.items & IT_UNLIMITED_WEAPON_AMMO))
 		{
 			this.realowner.cnt = WEP_DEVASTATOR.m_id;
 			int slot = weaponslot(weaponentity);
@@ -139,8 +139,8 @@ void W_Devastator_DoRemoteExplode(entity this, .entity weaponentity)
 	Weapon thiswep = WEP_DEVASTATOR;
 	if(this.realowner.(weaponentity).m_weapon == thiswep)
 	{
-		if(GetResourceAmount(this.realowner, thiswep.ammo_type) < WEP_CVAR(devastator, ammo))
-		if(!(this.realowner.items & IT_UNLIMITED_WEAPON_AMMO))
+		if(GetResourceAmount(this.realowner, thiswep.ammo_type) < WEP_CVAR(devastator, ammo)
+			&& !(this.realowner.items & IT_UNLIMITED_WEAPON_AMMO))
 		{
 			this.realowner.cnt = WEP_DEVASTATOR.m_id;
 			int slot = weaponslot(weaponentity);
@@ -153,8 +153,8 @@ void W_Devastator_DoRemoteExplode(entity this, .entity weaponentity)
 
 void W_Devastator_RemoteExplode(entity this, .entity weaponentity)
 {
-	if(!IS_DEAD(this.realowner))
-	if(this.realowner.(weaponentity).lastrocket)
+	if(!IS_DEAD(this.realowner)
+		&& this.realowner.(weaponentity).lastrocket)
 	{
 		if((this.spawnshieldtime >= 0)
 			? (time >= this.spawnshieldtime) // timer
@@ -221,12 +221,12 @@ void W_Devastator_Think(entity this)
 	.entity weaponentity = this.weaponentity_fld;
 	if(this.realowner.(weaponentity).m_weapon == WEP_DEVASTATOR)
 	{
-		if(this == this.realowner.(weaponentity).lastrocket)
-		if(!this.realowner.(weaponentity).rl_release)
-		if(!PHYS_INPUT_BUTTON_ATCK2(this))
-		if(WEP_CVAR(devastator, guiderate))
-		if(time > this.pushltime)
-		if(!IS_DEAD(this.realowner))
+		if(this == this.realowner.(weaponentity).lastrocket
+			&& !this.realowner.(weaponentity).rl_release
+			&& !PHYS_INPUT_BUTTON_ATCK2(this)
+			&& WEP_CVAR(devastator, guiderate)
+			&& time > this.pushltime
+			&& !IS_DEAD(this.realowner))
 		{
 			f = WEP_CVAR(devastator, guideratedelay);
 			if(f)
@@ -437,8 +437,8 @@ METHOD(Devastator, wr_think, void(entity thiswep, entity actor, .entity weaponen
     } else {
         if(fire & 1)
         {
-            if(actor.(weaponentity).rl_release || WEP_CVAR(devastator, guidestop))
-            if(weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR(devastator, refire)))
+            if((actor.(weaponentity).rl_release || WEP_CVAR(devastator, guidestop))
+            	&& weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR(devastator, refire)))
             {
                 W_Devastator_Attack(thiswep, actor, weaponentity);
                 weapon_thinkf(actor, weaponentity, WFRAME_FIRE1, WEP_CVAR(devastator, animtime), w_ready);
@@ -448,8 +448,8 @@ METHOD(Devastator, wr_think, void(entity thiswep, entity actor, .entity weaponen
         else
             actor.(weaponentity).rl_release = 1;
 
-        if(fire & 2)
-        if(actor.(weaponentity).m_switchweapon == WEP_DEVASTATOR)
+        if(fire & 2
+        	&& actor.(weaponentity).m_switchweapon == WEP_DEVASTATOR)
         {
             bool rockfound = false;
             IL_EACH(g_projectiles, it.realowner == actor && it.classname == "rocket",

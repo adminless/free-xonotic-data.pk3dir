@@ -289,8 +289,8 @@ MUTATOR_HOOKFUNCTION(mutator_instagib, Damage_Calculate)
 				break;
 		}
 
-		if(IS_PLAYER(frag_attacker))
-		if(DEATH_ISWEAPON(frag_deathtype, WEP_VAPORIZER))
+		if(IS_PLAYER(frag_attacker)
+			&& DEATH_ISWEAPON(frag_deathtype, WEP_VAPORIZER))
 		{
 			if(!autocvar_g_instagib_friendlypush && SAME_TEAM(frag_target, frag_attacker))
 				frag_force = '0 0 0';
@@ -328,9 +328,9 @@ MUTATOR_HOOKFUNCTION(mutator_instagib, Damage_Calculate)
 		}
 	}
 
-	if(!autocvar_g_instagib_mirrordamage) // only apply the taking lives hack if we don't want to support real damage mirroring
-	if(IS_PLAYER(frag_attacker))
-	if(frag_mirrordamage > 0)
+	if(!autocvar_g_instagib_mirrordamage // only apply the taking lives hack if we don't want to support real damage mirroring
+		&& IS_PLAYER(frag_attacker)
+		&& frag_mirrordamage > 0)
 	{
 		// just lose extra LIVES, don't kill the player for mirror damage
 		float armor = GetResourceAmount(frag_attacker, RESOURCE_ARMOR);
@@ -344,8 +344,8 @@ MUTATOR_HOOKFUNCTION(mutator_instagib, Damage_Calculate)
 		frag_mirrordamage = 0;
 	}
 
-	if(frag_target.alpha && frag_target.alpha < 1)
-	if(IS_PLAYER(frag_target))
+	if(frag_target.alpha && frag_target.alpha < 1
+		&& IS_PLAYER(frag_target))
 		yoda = 1;
 
 	M_ARGV(4, float) = frag_damage;
@@ -457,8 +457,8 @@ MUTATOR_HOOKFUNCTION(mutator_instagib, CustomizeWaypoint)
 
 	// if you have the invisibility powerup, sprites ALWAYS are restricted to your team
 	// but only apply this to real players, not to spectators
-	if((wp.owner.flags & FL_CLIENT) && (wp.owner.items & ITEM_Invisibility.m_itemid) && (e == player))
-	if(DIFF_TEAM(wp.owner, e))
+	if((wp.owner.flags & FL_CLIENT) && (wp.owner.items & ITEM_Invisibility.m_itemid) && (e == player)
+		&& DIFF_TEAM(wp.owner, e))
 		return true;
 }
 

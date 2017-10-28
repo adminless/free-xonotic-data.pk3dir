@@ -144,8 +144,8 @@ bool PM_dodging_checkpressedkeys(entity this)
 
 	bool wall_dodge = false;
 
-	if(!PHYS_DODGING_AIR)
-	if(!check_close_to_ground(this, PHYS_DODGING_HEIGHT_THRESHOLD))
+	if(!PHYS_DODGING_AIR
+		&& !check_close_to_ground(this, PHYS_DODGING_HEIGHT_THRESHOLD))
 	{
 		wall_dodge = check_close_to_wall(this, PHYS_DODGING_DISTANCE_THRESHOLD);
 		if(!wall_dodge) // we're not on the ground, and wall dodging isn't allowed, end it!

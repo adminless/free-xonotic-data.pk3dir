@@ -36,8 +36,8 @@ METHOD(HunterKillerAttack, wr_think, void(entity thiswep, entity actor, .entity 
         missile.ticrate = max(autocvar_sys_ticrate, 0.05);
         missile.missile_flags = MIF_SPLASH | MIF_PROXY | MIF_GUIDED_AI;
 
-        if (!isPlayer)
-        if (actor.tur_head.frame == 0)
+        if (!isPlayer
+        	&& actor.tur_head.frame == 0)
             actor.tur_head.frame = actor.tur_head.frame + 1;
 	}
 }

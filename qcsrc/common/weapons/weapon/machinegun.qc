@@ -4,8 +4,8 @@
 
 spawnfunc(weapon_machinegun)
 {
-	if(autocvar_sv_q3acompat_machineshotgunswap)
-	if(this.classname != "droppedweapon")
+	if(autocvar_sv_q3acompat_machineshotgunswap
+		&& this.classname != "droppedweapon")
 	{
 		weapon_defaultspawnfunc(this, WEP_SHOCKWAVE);
 		return;
@@ -96,8 +96,8 @@ void W_MachineGun_Attack_Frame(Weapon thiswep, entity actor, .entity weaponentit
 	}
 	if(PHYS_INPUT_BUTTON_ATCK(actor))
 	{
-		if(!thiswep.wr_checkammo2(thiswep, actor, weaponentity))
-		if(!(actor.items & IT_UNLIMITED_WEAPON_AMMO))
+		if(!thiswep.wr_checkammo2(thiswep, actor, weaponentity)
+			&& !(actor.items & IT_UNLIMITED_WEAPON_AMMO))
 		{
 			W_SwitchWeapon_Force(actor, w_getbestweapon(actor, weaponentity), weaponentity);
 			w_ready(thiswep, actor, weaponentity, fire);
@@ -122,8 +122,8 @@ void W_MachineGun_Attack_Auto(Weapon thiswep, entity actor, .entity weaponentity
 		return;
 	}
 
-	if(!thiswep.wr_checkammo1(thiswep, actor, weaponentity))
-	if(!(actor.items & IT_UNLIMITED_WEAPON_AMMO))
+	if(!thiswep.wr_checkammo1(thiswep, actor, weaponentity)
+		&& !(actor.items & IT_UNLIMITED_WEAPON_AMMO))
 	{
 		W_SwitchWeapon_Force(actor, w_getbestweapon(actor, weaponentity), weaponentity);
 		w_ready(thiswep, actor, weaponentity, fire);
@@ -210,18 +210,18 @@ METHOD(MachineGun, wr_think, void(entity thiswep, entity actor, .entity weaponen
     } else
     if(WEP_CVAR(machinegun, mode) == 1)
     {
-        if(fire & 1)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, false, 0))
+        if(fire & 1
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, false, 0))
         {
             actor.(weaponentity).misc_bulletcounter = 0;
             W_MachineGun_Attack_Auto(thiswep, actor, weaponentity, fire);
         }
 
-        if(fire & 2)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, true, 0))
+        if(fire & 2
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, true, 0))
         {
-            if(!thiswep.wr_checkammo2(thiswep, actor, weaponentity))
-            if(!(actor.items & IT_UNLIMITED_WEAPON_AMMO))
+            if(!thiswep.wr_checkammo2(thiswep, actor, weaponentity)
+            	&& !(actor.items & IT_UNLIMITED_WEAPON_AMMO))
             {
                 W_SwitchWeapon_Force(actor, w_getbestweapon(actor, weaponentity), weaponentity);
                 w_ready(thiswep, actor, weaponentity, fire);
@@ -237,16 +237,16 @@ METHOD(MachineGun, wr_think, void(entity thiswep, entity actor, .entity weaponen
     else
     {
 
-        if(fire & 1)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, false, 0))
+        if(fire & 1
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, false, 0))
         {
             actor.(weaponentity).misc_bulletcounter = 1;
             W_MachineGun_Attack(WEP_MACHINEGUN, WEP_MACHINEGUN.m_id, actor, weaponentity); // sets attack_finished
             weapon_thinkf(actor, weaponentity, WFRAME_FIRE1, WEP_CVAR(machinegun, sustained_refire), W_MachineGun_Attack_Frame);
         }
 
-        if((fire & 2) && WEP_CVAR(machinegun, first))
-        if(weapon_prepareattack(thiswep, actor, weaponentity, true, 0))
+        if((fire & 2) && WEP_CVAR(machinegun, first)
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, true, 0))
         {
             actor.(weaponentity).misc_bulletcounter = 1;
             W_MachineGun_Attack(WEP_MACHINEGUN, WEP_MACHINEGUN.m_id | HITTYPE_SECONDARY, actor, weaponentity); // sets attack_finished

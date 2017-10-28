@@ -24,9 +24,9 @@ MUTATOR_HOOKFUNCTION(campcheck, Damage_Calculate)
 	entity frag_attacker = M_ARGV(1, entity);
 	entity frag_target = M_ARGV(2, entity);
 
-	if(IS_PLAYER(frag_target))
-	if(IS_PLAYER(frag_attacker))
-	if(frag_attacker != frag_target)
+	if(IS_PLAYER(frag_target)
+		&& IS_PLAYER(frag_attacker)
+		&& frag_attacker != frag_target)
 	{
 		frag_target.campcheck_traveled_distance = autocvar_g_campcheck_distance;
 		frag_attacker.campcheck_traveled_distance = autocvar_g_campcheck_distance;
@@ -38,14 +38,14 @@ MUTATOR_HOOKFUNCTION(campcheck, PlayerPreThink)
 	entity player = M_ARGV(0, entity);
 	bool checked = false;
 
-	if(autocvar_g_campcheck_interval)
-	if(!game_stopped && !warmup_stage && time >= game_starttime)
-	if(IS_PLAYER(player))
-	if(!IS_DEAD(player))
-	if(!STAT(FROZEN, player))
-	if(!PHYS_INPUT_BUTTON_CHAT(player))
-	if(IS_REAL_CLIENT(player)) // bots may camp, but that's no reason to constantly kill them
-	if(!forbidWeaponUse(player))
+	if(autocvar_g_campcheck_interval
+		&& !game_stopped && !warmup_stage && time >= game_starttime
+		&& IS_PLAYER(player)
+		&& !IS_DEAD(player)
+		&& !STAT(FROZEN, player)
+		&& !PHYS_INPUT_BUTTON_CHAT(player)
+		&& IS_REAL_CLIENT(player) // bots may camp, but that's no reason to constantly kill them
+		&& !forbidWeaponUse(player))
 	{
 		// calculate player movement (in 2 dimensions only, so jumping on one spot doesn't count as movement)
 		vector dist = vec2(player.campcheck_prevorigin - player.origin);

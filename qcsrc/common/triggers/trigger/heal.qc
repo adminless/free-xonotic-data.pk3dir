@@ -9,9 +9,9 @@ void trigger_heal_touch(entity this, entity toucher)
 	// only do the EXACTTRIGGER_TOUCH checks when really needed (saves some cpu)
 	if (toucher.iscreature)
 	{
-		if (toucher.takedamage)
-		if (!IS_DEAD(toucher))
-		if (toucher.triggerhealtime < time)
+		if (toucher.takedamage
+			&& !IS_DEAD(toucher)
+			&& toucher.triggerhealtime < time)
 		{
 			EXACTTRIGGER_TOUCH(this, toucher);
 			toucher.triggerhealtime = time + 1;

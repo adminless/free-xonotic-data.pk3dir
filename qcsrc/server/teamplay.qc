@@ -273,8 +273,8 @@ void CheckAllowedTeams(entity for_whom)
 	}
 
 	// TODO: Balance quantity of bots across > 2 teams when bot_vs_human is set (and remove next line)
-	if(AvailableTeams() == 2)
-	if(autocvar_bot_vs_human && for_whom)
+	if(AvailableTeams() == 2
+		&& autocvar_bot_vs_human && for_whom)
 	{
 		if(autocvar_bot_vs_human > 0)
 		{

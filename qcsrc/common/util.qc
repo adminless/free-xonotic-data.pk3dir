@@ -700,10 +700,10 @@ int skipIncompleteTag(string theText, float pos, int len)
 
 	if(tag_start >= 0)
 	{
-		if(tag_start + 5 < len)
-		if(IS_HEXDIGIT(substring(theText, tag_start + 2, 1)))
-		if(IS_HEXDIGIT(substring(theText, tag_start + 3, 1)))
-		if(IS_HEXDIGIT(substring(theText, tag_start + 4, 1)))
+		if(tag_start + 5 < len
+			&& IS_HEXDIGIT(substring(theText, tag_start + 2, 1))
+			&& IS_HEXDIGIT(substring(theText, tag_start + 3, 1))
+			&& IS_HEXDIGIT(substring(theText, tag_start + 4, 1)))
 		{
 			if(!isCaretEscaped(theText, tag_start))
 				return 5 - (pos - tag_start); // ^xRGB color code found
@@ -794,15 +794,15 @@ string find_last_color_code(string s)
 		// check if carets aren't all escaped
 		if (carets & 1)
 		{
-			if(i+1 <= len)
-			if(IS_DIGIT(substring(s, i+1, 1)))
+			if(i+1 <= len
+				&& IS_DIGIT(substring(s, i+1, 1)))
 				return substring(s, i, 2);
 
-			if(i+4 <= len)
-			if(substring(s, i+1, 1) == "x")
-			if(IS_HEXDIGIT(substring(s, i + 2, 1)))
-			if(IS_HEXDIGIT(substring(s, i + 3, 1)))
-			if(IS_HEXDIGIT(substring(s, i + 4, 1)))
+			if(i+4 <= len
+				&& substring(s, i+1, 1) == "x"
+				&& IS_HEXDIGIT(substring(s, i + 2, 1))
+				&& IS_HEXDIGIT(substring(s, i + 3, 1))
+				&& IS_HEXDIGIT(substring(s, i + 4, 1)))
 				return substring(s, i, 5);
 		}
 		i -= carets; // this also skips one char before the carets
@@ -952,9 +952,9 @@ float isGametypeInFilter(Gametype gt, float tp, float ts, string pattern)
 	{
 		if(substring(pattern, 0, 1) == "+")
 			pattern = substring(pattern, 1, strlen(pattern) - 1);
-		if(strstrofs(strcat(",", pattern, ","), subpattern, 0) < 0)
-		if(strstrofs(strcat(",", pattern, ","), subpattern2, 0) < 0)
-		if(strstrofs(strcat(",", pattern, ","), subpattern3, 0) < 0)
+		if(strstrofs(strcat(",", pattern, ","), subpattern, 0) < 0
+			&& strstrofs(strcat(",", pattern, ","), subpattern2, 0) < 0
+			&& strstrofs(strcat(",", pattern, ","), subpattern3, 0) < 0)
 		{
 			if (!subpattern4)
 				return 0;

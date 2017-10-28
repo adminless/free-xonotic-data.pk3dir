@@ -24,8 +24,8 @@ void multi_trigger(entity this)
 		return;		// allready been triggered
 	}
 
-	if(this.spawnflags & 16384)
-	if(!IS_PLAYER(this.enemy))
+	if(this.spawnflags & 16384
+		&& !IS_PLAYER(this.enemy))
 		return; // only players
 
 	if (this.classname == "trigger_secret")
@@ -69,8 +69,8 @@ void multi_use(entity this, entity actor, entity trigger)
 
 void multi_touch(entity this, entity toucher)
 {
-	if(!(this.spawnflags & 2))
-	if(!toucher.iscreature)
+	if(!(this.spawnflags & 2)
+		&& !toucher.iscreature)
 			return;
 
 	if(this.team)
@@ -86,8 +86,8 @@ void multi_touch(entity this, entity toucher)
 	}
 
 	// if the trigger has pressed keys, check that the player is pressing those keys
-	if(this.pressedkeys && IS_PLAYER(toucher)) // only for players
-	if(!(CS(toucher).pressedkeys & this.pressedkeys))
+	if(this.pressedkeys && IS_PLAYER(toucher) // only for players
+		&& !(CS(toucher).pressedkeys & this.pressedkeys))
 		return;
 
 	EXACTTRIGGER_TOUCH(this, toucher);

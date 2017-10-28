@@ -48,8 +48,8 @@ bool client_hasweapon(entity this, Weapon wpn, .entity weaponentity, float andam
 		complain = 0;
 
 	// ignore hook button when using other offhand equipment
-	if (this.offhand != OFFHAND_HOOK)
-	if (wpn == WEP_HOOK && !((this.weapons | weaponsInMap) & WepSet_FromWeapon(wpn)))
+	if (this.offhand != OFFHAND_HOOK
+		&& wpn == WEP_HOOK && !((this.weapons | weaponsInMap) & WepSet_FromWeapon(wpn)))
 	    complain = 0;
 
 	if (complain)
@@ -85,8 +85,8 @@ bool client_hasweapon(entity this, Weapon wpn, .entity weaponentity, float andam
 			}
 			if (!f)
 			{
-				if (complain)
-				if(IS_REAL_CLIENT(this))
+				if (complain
+					&& IS_REAL_CLIENT(this))
 				{
 					play2(this, SND(UNAVAILABLE));
 					Send_WeaponComplain (this, wpn.m_id, 0);
@@ -150,22 +150,22 @@ float W_GetCycleWeapon(entity this, string weaponorder, float dir, float imp, fl
 		weaponwant = stof(car(rest)); rest = cdr(rest);
 		wep = Weapons_from(weaponwant);
 		wepset = wep.m_wepset;
-		if(imp >= 0)
-		if(wep.impulse != imp)
+		if(imp >= 0
+			&& wep.impulse != imp)
 			continue;
 
 		bool have_other = false;
 		FOREACH(Weapons, it != WEP_Null, {
-			if(i != weaponwant)
-			if(it.impulse == imp || imp < 0)
-			if((this.weapons & (it.m_wepset)) || (weaponsInMap & (it.m_wepset)))
+			if(i != weaponwant
+				&& (it.impulse == imp || imp < 0)
+				&& ((this.weapons & (it.m_wepset)) || (weaponsInMap & (it.m_wepset))))
 				have_other = true;
 		});
 
 		// skip weapons we don't own that aren't normal and aren't in the map
-		if(!(this.weapons & wepset))
-		if(!(weaponsInMap & wepset))
-		if((wep.spawnflags & WEP_FLAG_MUTATORBLOCKED) || have_other)
+		if(!(this.weapons & wepset)
+			&& !(weaponsInMap & wepset)
+			&& ((wep.spawnflags & WEP_FLAG_MUTATORBLOCKED) || have_other))
 			continue;
 
 		++c;
@@ -212,16 +212,16 @@ float W_GetCycleWeapon(entity this, string weaponorder, float dir, float imp, fl
 
 			bool have_other = false;
 			FOREACH(Weapons, it != WEP_Null, {
-				if(i != weaponwant)
-				if(it.impulse == imp || imp < 0)
-				if((this.weapons & (it.m_wepset)) || (weaponsInMap & (it.m_wepset)))
+				if(i != weaponwant
+					&& (it.impulse == imp || imp < 0)
+					&& ((this.weapons & (it.m_wepset)) || (weaponsInMap & (it.m_wepset))))
 					have_other = true;
 			});
 
 			// skip weapons we don't own that aren't normal and aren't in the map
-			if(!(this.weapons & wepset))
-			if(!(weaponsInMap & wepset))
-			if((wep.spawnflags & WEP_FLAG_MUTATORBLOCKED) || have_other)
+			if(!(this.weapons & wepset)
+				&& !(weaponsInMap & wepset)
+				&& ((wep.spawnflags & WEP_FLAG_MUTATORBLOCKED) || have_other))
 				continue;
 
 			--c;

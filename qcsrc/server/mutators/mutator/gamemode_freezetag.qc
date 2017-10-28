@@ -148,8 +148,8 @@ entity freezetag_LastPlayerForTeam(entity this)
 
 void freezetag_LastPlayerForTeam_Notify(entity this)
 {
-	if(round_handler_IsActive())
-	if(round_handler_IsRoundStarted())
+	if(round_handler_IsActive()
+		&& round_handler_IsRoundStarted())
 	{
 		entity pl = freezetag_LastPlayerForTeam(this);
 		if(pl)
@@ -331,8 +331,8 @@ MUTATOR_HOOKFUNCTION(ft, PlayerDies)
 	entity frag_target = M_ARGV(2, entity);
 	float frag_deathtype = M_ARGV(3, float);
 
-	if(round_handler_IsActive())
-	if(round_handler_CountdownRunning())
+	if(round_handler_IsActive()
+		&& round_handler_CountdownRunning())
 	{
 		if(STAT(FROZEN, frag_target))
 			freezetag_Unfreeze(frag_target);
@@ -394,8 +394,8 @@ MUTATOR_HOOKFUNCTION(ft, PlayerSpawn)
 
 	freezetag_count_alive_players();
 
-	if(round_handler_IsActive())
-	if(round_handler_IsRoundStarted())
+	if(round_handler_IsActive()
+		&& round_handler_IsRoundStarted())
 	{
 		Send_Notification(NOTIF_ONE, player, MSG_CENTER, CENTER_FREEZETAG_SPAWN_LATE);
 		freezetag_Freeze(player, NULL);
@@ -427,8 +427,8 @@ MUTATOR_HOOKFUNCTION(ft, PlayerPreThink, CBC_ORDER_FIRST)
 	if(game_stopped)
 		return true;
 
-	if(round_handler_IsActive())
-	if(!round_handler_IsRoundStarted())
+	if(round_handler_IsActive()
+		&& !round_handler_IsRoundStarted())
 		return true;
 
 	int n;
@@ -445,10 +445,10 @@ MUTATOR_HOOKFUNCTION(ft, PlayerPreThink, CBC_ORDER_FIRST)
 		vector revive_extra_size = '1 1 1' * autocvar_g_freezetag_revive_extra_size;
 		n = 0;
 		FOREACH_CLIENT(IS_PLAYER(it) && it != player, {
-			if(STAT(FROZEN, it) == 0)
-			if(!IS_DEAD(it))
-			if(SAME_TEAM(it, player))
-			if(boxesoverlap(player.absmin - revive_extra_size, player.absmax + revive_extra_size, it.absmin, it.absmax))
+			if(STAT(FROZEN, it) == 0
+				&& !IS_DEAD(it)
+				&& SAME_TEAM(it, player)
+				&& boxesoverlap(player.absmin - revive_extra_size, player.absmax + revive_extra_size, it.absmin, it.absmax))
 			{
 				if(!o)
 					o = it;

@@ -8,8 +8,8 @@ float music_playlist_index_backup;
 void XonoticScreenshotViewerDialog_loadScreenshot(entity me, string scrImage)
 {
 	// disable music as it can lag depending on image loading time
-	if(!cvar("menu_screenshotviewer_enablemusic"))
-	if(cvar("music_playlist_index") != 999) // if the playlist isn't paused
+	if(!cvar("menu_screenshotviewer_enablemusic")
+		&& cvar("music_playlist_index") != 999) // if the playlist isn't paused
 	{
 		// pause music
 		if(cvar("music_playlist_index") != -1)

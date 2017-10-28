@@ -594,8 +594,8 @@ void Accuracy_LoadLevels()
 
 void Accuracy_LoadColors()
 {
-	if(time > acc_col_loadtime)
-	if(acc_levels >= 2)
+	if(time > acc_col_loadtime
+		&& acc_levels >= 2)
 	{
 		int i;
 		for(i = 0; i < acc_levels; ++i)

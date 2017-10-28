@@ -42,8 +42,8 @@ void HUD_Radar_Show_Maximized(bool doshow, bool clickable)
 	{
 		hud_panel_radar_mouse = 0;
 		mouseClicked = 0;
-		if(autocvar_hud_cursormode)
-		if(!mv_active)
+		if(autocvar_hud_cursormode
+			&& !mv_active)
 			setcursormode(0);
 	}
 }
@@ -353,9 +353,9 @@ void HUD_Radar()
 	IL_EACH(g_radarlinks, true, draw_teamradar_link(it.origin, it.velocity, it.team));
 
 	IL_EACH(g_radaricons, it.teamradar_icon, {
-		if ( hud_panel_radar_mouse )
-		if ( it.health >= 0 )
-		if ( it.team == myteam + 1 || gametype == MAPINFO_TYPE_RACE || !teamplay )
+		if ( hud_panel_radar_mouse 
+			&&  it.health >= 0 
+			&& ( it.team == myteam + 1 || gametype == MAPINFO_TYPE_RACE || !teamplay ))
 		{
 			vector coord = teamradar_texcoord_to_2dcoord(teamradar_3dcoord_to_texcoord(it.origin));
 			if(vdist((mousepos - coord), <, 8))

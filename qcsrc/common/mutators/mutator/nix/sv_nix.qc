@@ -232,8 +232,8 @@ void NIX_GiveCurrentWeapon(entity this)
     	if(this.(weaponentity).m_weapon == WEP_Null && slot != 0)
     		continue;
 
-		if(this.(weaponentity).m_switchweapon != w)
-		if(!client_hasweapon(this, this.(weaponentity).m_switchweapon, weaponentity, true, false))
+		if(this.(weaponentity).m_switchweapon != w
+			&& !client_hasweapon(this, this.(weaponentity).m_switchweapon, weaponentity, true, false))
 		{
 			if(client_hasweapon(this, w, weaponentity, true, false))
 				W_SwitchWeapon(this, w, weaponentity);
@@ -284,9 +284,9 @@ MUTATOR_HOOKFUNCTION(nix, PlayerPreThink)
 {
 	entity player = M_ARGV(0, entity);
 
-	if(!game_stopped)
-	if(!IS_DEAD(player))
-	if(IS_PLAYER(player))
+	if(!game_stopped
+		&& !IS_DEAD(player)
+		&& IS_PLAYER(player))
 		NIX_GiveCurrentWeapon(player);
 }
 

@@ -263,8 +263,8 @@ int WinningCondition_Assault()
 				game_stopped = true;
 
 				// make sure timelimit isn't hit while the game is blocked
-				if(autocvar_timelimit > 0)
-				if(time + AS_ROUND_DELAY >= game_starttime + autocvar_timelimit * 60)
+				if(autocvar_timelimit > 0
+					&& time + AS_ROUND_DELAY >= game_starttime + autocvar_timelimit * 60)
 					cvar_set("timelimit", ftos(autocvar_timelimit + AS_ROUND_DELAY / 60));
 			}
 		}
@@ -429,8 +429,8 @@ void havocbot_goalrating_ast_targets(entity this, float ratingscale)
 
 			this.havocbot_attack_time = 0;
 
-			if(checkpvs(this.origin + this.view_ofs, it))
-			if(checkpvs(this.origin + this.view_ofs, best))
+			if(checkpvs(this.origin + this.view_ofs, it)
+				&& checkpvs(this.origin + this.view_ofs, best))
 			{
 			//	dprint("increasing attack time for this target\n");
 				this.havocbot_attack_time = time + 2;

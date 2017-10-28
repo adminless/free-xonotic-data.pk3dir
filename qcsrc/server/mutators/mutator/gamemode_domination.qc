@@ -163,8 +163,8 @@ void dompointthink(entity this)
 
 	// give credit to the team
 	// NOTE: this defaults to 0
-	if (!domination_roundbased)
-	if (this.goalentity.netname != "")
+	if (!domination_roundbased
+		&& this.goalentity.netname != "")
 	{
 		if(autocvar_g_domination_point_amt)
 			fragamt = autocvar_g_domination_point_amt;

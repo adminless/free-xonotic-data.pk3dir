@@ -93,8 +93,8 @@ void CreatureFrame_Liquids(entity this)
 
 void CreatureFrame_FallDamage(entity this)
 {
-	if(!IS_VEHICLE(this) && !(this.flags & FL_PROJECTILE)) // vehicles don't get falling damage
-	if(this.velocity || this.oldvelocity) // moving or has moved
+	if(!IS_VEHICLE(this) && !(this.flags & FL_PROJECTILE) // vehicles don't get falling damage
+		&& (this.velocity || this.oldvelocity)) // moving or has moved
 	{
 		// check for falling damage
 		float velocity_len = vlen(this.velocity);
@@ -319,9 +319,9 @@ bool expr_evaluate(string s)
 
 void SV_OnEntityPreSpawnFunction(entity this)
 {
-	if (this)
-	if (this.gametypefilter != "")
-	if (!isGametypeInFilter(MapInfo_LoadedGametype, teamplay, have_team_spawns, this.gametypefilter))
+	if (this
+		&& this.gametypefilter != ""
+		&& !isGametypeInFilter(MapInfo_LoadedGametype, teamplay, have_team_spawns, this.gametypefilter))
 	{
 		goto cleanup;
 	}

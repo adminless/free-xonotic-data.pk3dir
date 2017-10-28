@@ -380,9 +380,9 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 
 	t = TIME_ENCODE(t); // make integer
 
-	if(tvalid)
-	if(cp == race_timed_checkpoint) // finish line
-	if (!CS(e).race_completed)
+	if(tvalid
+		&& cp == race_timed_checkpoint // finish line
+		&& !CS(e).race_completed)
 	{
 		float s;
 		if(g_race_qualifying)

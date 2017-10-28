@@ -391,8 +391,8 @@ NET_HANDLE(ENT_CLIENT_DAMAGEINFO, bool isNew)
 	MUTATOR_CALLHOOK(DamageInfo, this, w_deathtype, w_org);
 
 	// TODO spawn particle effects and sounds based on w_deathtype
-	if(!DEATH_ISSPECIAL(w_deathtype))
-	if(!hitplayer || rad) // don't show ground impacts for hitscan weapons if a player was hit
+	if(!DEATH_ISSPECIAL(w_deathtype)
+		&& (!hitplayer || rad)) // don't show ground impacts for hitscan weapons if a player was hit
 	{
 		Weapon hitwep = DEATH_WEAPONOF(w_deathtype);
 		w_random = prandom();

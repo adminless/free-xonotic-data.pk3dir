@@ -182,11 +182,11 @@ string CheckPlayerModel(string plyermodel) {
 	if( substring(plyermodel,0,14) != "models/player/")
 		return FallbackPlayerModel;
 	// only good file extensions
-	if(substring(plyermodel,-4,4) != ".zym")
-	if(substring(plyermodel,-4,4) != ".dpm")
-	if(substring(plyermodel,-4,4) != ".iqm")
-	if(substring(plyermodel,-4,4) != ".md3")
-	if(substring(plyermodel,-4,4) != ".psk")
+	if(substring(plyermodel,-4,4) != ".zym"
+		&& substring(plyermodel,-4,4) != ".dpm"
+		&& substring(plyermodel,-4,4) != ".iqm"
+		&& substring(plyermodel,-4,4) != ".md3"
+		&& substring(plyermodel,-4,4) != ".psk")
 		return FallbackPlayerModel;
 	// forbid the LOD models
 	if(substring(plyermodel, -9,5) == "_lod1")
@@ -291,8 +291,8 @@ void PutObserverInServer(entity this)
 	if (CS(this).killcount != FRAGS_SPECTATOR)
 	{
 		Send_Notification(NOTIF_ALL, NULL, MSG_INFO, INFO_QUIT_SPECTATE, this.netname);
-		if(!game_stopped)
-		if(autocvar_g_chat_nospectators == 1 || (!warmup_stage && autocvar_g_chat_nospectators == 2))
+		if(!game_stopped
+			&& (autocvar_g_chat_nospectators == 1 || (!warmup_stage && autocvar_g_chat_nospectators == 2)))
 			Send_Notification(NOTIF_ONE_ONLY, this, MSG_INFO, INFO_CHAT_NOSPECTATORS);
 
 		if(!CS(this).just_joined)
@@ -1020,29 +1020,29 @@ void ClientKill_TeamChange (entity this, float targetteam) // 0 = don't change, 
 		if(targetteam == 0) // just die
 		{
 			this.killindicator.colormod = '0 0 0';
-			if(IS_REAL_CLIENT(this))
-			if(this.killindicator.cnt > 0)
+			if(IS_REAL_CLIENT(this)
+				&& this.killindicator.cnt > 0)
 				Send_Notification(NOTIF_ONE_ONLY, this, MSG_CENTER, CENTER_TEAMCHANGE_SUICIDE, this.killindicator.cnt);
 		}
 		else if(targetteam == -1) // auto
 		{
 			this.killindicator.colormod = '0 1 0';
-			if(IS_REAL_CLIENT(this))
-			if(this.killindicator.cnt > 0)
+			if(IS_REAL_CLIENT(this)
+				&& this.killindicator.cnt > 0)
 				Send_Notification(NOTIF_ONE_ONLY, this, MSG_CENTER, CENTER_TEAMCHANGE_AUTO, this.killindicator.cnt);
 		}
 		else if(targetteam == -2) // spectate
 		{
 			this.killindicator.colormod = '0.5 0.5 0.5';
-			if(IS_REAL_CLIENT(this))
-			if(this.killindicator.cnt > 0)
+			if(IS_REAL_CLIENT(this)
+				&& this.killindicator.cnt > 0)
 				Send_Notification(NOTIF_ONE_ONLY, this, MSG_CENTER, CENTER_TEAMCHANGE_SPECTATE, this.killindicator.cnt);
 		}
 		else
 		{
 			this.killindicator.colormod = Team_ColorRGB(targetteam);
-			if(IS_REAL_CLIENT(this))
-			if(this.killindicator.cnt > 0)
+			if(IS_REAL_CLIENT(this)
+				&& this.killindicator.cnt > 0)
 				Send_Notification(NOTIF_ONE_ONLY, this, MSG_CENTER, APP_TEAM_NUM(targetteam, CENTER_TEAMCHANGE), this.killindicator.cnt);
 		}
 	}
@@ -1564,8 +1564,8 @@ void player_powerups(entity this)
 	if(autocvar_g_fullbrightplayers)
 		this.effects = this.effects | EF_FULLBRIGHT;
 
-	if (time >= game_starttime)
-	if (time < this.spawnshieldtime)
+	if (time >= game_starttime
+		&& time < this.spawnshieldtime)
 		this.effects = this.effects | (EF_ADDITIVE | EF_FULLBRIGHT);
 
 	MUTATOR_CALLHOOK(PlayerPowerups, this, items_prev);
@@ -1640,8 +1640,8 @@ void player_regen(entity this)
 	regen_health_stable = M_ARGV(9, float);
 	regen_health_rotstable = M_ARGV(10, float);
 
-	if(!mutator_returnvalue)
-	if(!STAT(FROZEN, this))
+	if(!mutator_returnvalue
+		&& !STAT(FROZEN, this))
 	{
 		float mina, maxa, limith, limita;
 		maxa = autocvar_g_balance_armor_rotstable;
@@ -1998,8 +1998,8 @@ void Join(entity this)
 {
 	TRANSMUTE(Player, this);
 
-	if(!this.team_selected)
-	if(autocvar_g_campaign || autocvar_g_balance_teams)
+	if(!this.team_selected
+		&& (autocvar_g_campaign || autocvar_g_balance_teams))
 		JoinBestTeam(this, false, true);
 
 	if(autocvar_g_campaign)
@@ -2044,8 +2044,8 @@ int nJoinAllowed(entity this, entity ignore)
 	FOREACH_CLIENT(true, {
 		if(it != ignore)
 			++totalClients;
-		if(IS_REAL_CLIENT(it))
-		if(IS_PLAYER(it) || it.caplayer)
+		if(IS_REAL_CLIENT(it)
+			&& (IS_PLAYER(it) || it.caplayer))
 			++currentlyPlaying;
 	});
 
@@ -2071,9 +2071,9 @@ int nJoinAllowed(entity this, entity ignore)
  */
 void checkSpectatorBlock(entity this)
 {
-	if(IS_SPEC(this) || IS_OBSERVER(this))
-	if(!this.caplayer)
-	if(IS_REAL_CLIENT(this))
+	if((IS_SPEC(this) || IS_OBSERVER(this))
+		&& !this.caplayer
+		&& IS_REAL_CLIENT(this))
 	{
 		if( time > (CS(this).spectatortime + autocvar_g_maxplayers_spectator_blocktime) ) {
 			Send_Notification(NOTIF_ONE_ONLY, this, MSG_INFO, INFO_QUIT_KICK_SPECTATING);
@@ -2434,19 +2434,19 @@ void PlayerUseKey(entity this)
 	}
 	else if(autocvar_g_vehicles_enter)
 	{
-		if(!STAT(FROZEN, this))
-		if(!IS_DEAD(this))
-		if(!game_stopped)
+		if(!STAT(FROZEN, this)
+			&& !IS_DEAD(this)
+			&& !game_stopped)
 		{
 			entity head, closest_target = NULL;
 			head = WarpZone_FindRadius(this.origin, autocvar_g_vehicles_enter_radius, true);
 
 			while(head) // find the closest acceptable target to enter
 			{
-				if(IS_VEHICLE(head))
-				if(!IS_DEAD(head))
-				if(!head.owner || ((head.vehicle_flags & VHF_MULTISLOT) && SAME_TEAM(head.owner, this)))
-				if(head.takedamage != DAMAGE_NO)
+				if(IS_VEHICLE(head)
+					&& !IS_DEAD(head)
+					&& (!head.owner || ((head.vehicle_flags & VHF_MULTISLOT) && SAME_TEAM(head.owner, this)))
+					&& head.takedamage != DAMAGE_NO)
 				{
 					if(closest_target)
 					{
@@ -2567,8 +2567,8 @@ void PlayerPreThink (entity this)
 
 	MUTATOR_CALLHOOK(PlayerPreThink, this);
 
-	if(autocvar_g_vehicles_enter && (time > this.last_vehiclecheck) && !game_stopped && !this.vehicle)
-	if(IS_PLAYER(this) && !STAT(FROZEN, this) && !IS_DEAD(this))
+	if(autocvar_g_vehicles_enter && (time > this.last_vehiclecheck) && !game_stopped && !this.vehicle
+		&& IS_PLAYER(this) && !STAT(FROZEN, this) && !IS_DEAD(this))
 	{
 		FOREACH_ENTITY_RADIUS(this.origin, autocvar_g_vehicles_enter_radius, IS_VEHICLE(it),
 		{
@@ -2705,10 +2705,10 @@ void PlayerPostThink (entity this)
 {
 	Player_Physics(this);
 
-	if (sv_maxidle > 0)
-	if (frametime) // WORKAROUND: only use dropclient in server frames (frametime set). Never use it in cl_movement frames (frametime zero).
-	if (IS_REAL_CLIENT(this))
-	if (IS_PLAYER(this) || sv_maxidle_spectatorsareidle)
+	if (sv_maxidle > 0
+		&& frametime // WORKAROUND: only use dropclient in server frames (frametime set). Never use it in cl_movement frames (frametime zero).
+		&& IS_REAL_CLIENT(this)
+		&& (IS_PLAYER(this) || sv_maxidle_spectatorsareidle))
 	{
 		int totalClients = 0;
 		if(sv_maxidle_slots > 0)

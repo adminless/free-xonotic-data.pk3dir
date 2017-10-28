@@ -44,12 +44,12 @@ MUTATOR_HOOKFUNCTION(ok, Damage_Calculate, CBC_ORDER_LAST)
 	entity frag_target = M_ARGV(2, entity);
 	float frag_deathtype = M_ARGV(3, float);
 
-	if(IS_PLAYER(frag_attacker) && (IS_PLAYER(frag_target) || IS_VEHICLE(frag_target) || IS_TURRET(frag_target)))
-	if(DEATH_ISWEAPON(frag_deathtype, WEP_BLASTER))
+	if((IS_PLAYER(frag_attacker) && (IS_PLAYER(frag_target) || IS_VEHICLE(frag_target) || IS_TURRET(frag_target)))
+		&& DEATH_ISWEAPON(frag_deathtype, WEP_BLASTER))
 	{
-		if(frag_attacker != frag_target)
-		if(!STAT(FROZEN, frag_target))
-		if(!IS_DEAD(frag_target))
+		if(frag_attacker != frag_target
+			&& !STAT(FROZEN, frag_target)
+			&& !IS_DEAD(frag_target))
 		{
 			Send_Notification(NOTIF_ONE, frag_attacker, MSG_CENTER, CENTER_SECONDARY_NODAMAGE);
 			M_ARGV(6, vector) = '0 0 0'; // force
@@ -188,8 +188,8 @@ MUTATOR_HOOKFUNCTION(ok, OnEntityPreSpawn)
 {
 	entity ent = M_ARGV(0, entity);
 
-	if(autocvar_g_powerups)
-	if(autocvar_g_overkill_powerups_replace)
+	if(autocvar_g_powerups
+		&& autocvar_g_overkill_powerups_replace)
 	{
 		if(ent.classname == "item_strength")
 		{

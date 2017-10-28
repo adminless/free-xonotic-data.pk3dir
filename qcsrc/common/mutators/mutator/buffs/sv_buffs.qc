@@ -253,16 +253,16 @@ void buff_Think(entity this)
 		this.oldbuffs = this.buffs;
 	}
 
-	if(!game_stopped)
-	if((round_handler_IsActive() && !round_handler_IsRoundStarted()) || time >= game_starttime)
-	if(!this.buff_activetime_updated)
+	if(!game_stopped
+		&& ((round_handler_IsActive() && !round_handler_IsRoundStarted()) || time >= game_starttime)
+		&& !this.buff_activetime_updated)
 	{
 		buff_SetCooldown(this, this.buff_activetime);
 		this.buff_activetime_updated = true;
 	}
 
-	if(!this.buff_active && !this.buff_activetime)
-	if(!this.owner || STAT(FROZEN, this.owner) || IS_DEAD(this.owner) || !this.owner.iscreature || this.owner.vehicle || !(this.owner.buffs & this.buffs) || this.pickup_anyway > 0 || (this.pickup_anyway >= 0 && autocvar_g_buffs_pickup_anyway))
+	if(!this.buff_active && !this.buff_activetime
+		&& (!this.owner || STAT(FROZEN, this.owner) || IS_DEAD(this.owner) || !this.owner.iscreature || this.owner.vehicle || !(this.owner.buffs & this.buffs) || this.pickup_anyway > 0 || (this.pickup_anyway >= 0 && autocvar_g_buffs_pickup_anyway)))
 	{
 		buff_SetCooldown(this, autocvar_g_buffs_cooldown_respawn + frametime);
 		this.owner = NULL;
@@ -273,9 +273,9 @@ void buff_Think(entity this)
 			buff_Respawn(this);
 	}
 
-	if(this.buff_activetime)
-	if(!game_stopped)
-	if((round_handler_IsActive() && !round_handler_IsRoundStarted()) || time >= game_starttime)
+	if(this.buff_activetime
+		&& !game_stopped
+		&& ((round_handler_IsActive() && !round_handler_IsRoundStarted()) || time >= game_starttime))
 	{
 		this.buff_activetime = max(0, this.buff_activetime - frametime);
 
@@ -292,8 +292,8 @@ void buff_Think(entity this)
 		if(this.team && !this.buff_waypoint)
 			buff_Waypoint_Spawn(this);
 
-		if(this.lifetime)
-		if(time >= this.lifetime)
+		if(this.lifetime
+			&& time >= this.lifetime)
 			buff_Respawn(this);
 	}
 
@@ -460,25 +460,25 @@ MUTATOR_HOOKFUNCTION(buffs, Damage_Calculate)
 		frag_damage = bound(0, frag_damage - reduced, frag_damage);
 	}
 
-	if(frag_target.buffs & BUFF_SPEED.m_itemid)
-	if(frag_target != frag_attacker)
+	if(frag_target.buffs & BUFF_SPEED.m_itemid
+		&& frag_target != frag_attacker)
 		frag_damage *= autocvar_g_buffs_speed_damage_take;
 
-	if(frag_target.buffs & BUFF_MEDIC.m_itemid)
-	if((GetResourceAmount(frag_target, RESOURCE_HEALTH) - frag_damage) <= 0)
-	if(!ITEM_DAMAGE_NEEDKILL(frag_deathtype))
-	if(frag_attacker)
-	if(random() <= autocvar_g_buffs_medic_survive_chance)
+	if(frag_target.buffs & BUFF_MEDIC.m_itemid
+		&& (GetResourceAmount(frag_target, RESOURCE_HEALTH) - frag_damage) <= 0
+		&& !ITEM_DAMAGE_NEEDKILL(frag_deathtype)
+		&& frag_attacker
+		&& random() <= autocvar_g_buffs_medic_survive_chance)
 		frag_damage = max(5, GetResourceAmount(frag_target, RESOURCE_HEALTH) - autocvar_g_buffs_medic_survive_health);
 
-	if(frag_target.buffs & BUFF_JUMP.m_itemid)
-	if(frag_deathtype == DEATH_FALL.m_id)
+	if(frag_target.buffs & BUFF_JUMP.m_itemid
+		&& frag_deathtype == DEATH_FALL.m_id)
 		frag_damage = 0;
 
-	if(frag_target.buffs & BUFF_VENGEANCE.m_itemid)
-	if(frag_attacker)
-	if(frag_attacker != frag_target)
-	if(!ITEM_DAMAGE_NEEDKILL(frag_deathtype))
+	if(frag_target.buffs & BUFF_VENGEANCE.m_itemid
+		&& frag_attacker
+		&& frag_attacker != frag_target
+		&& !ITEM_DAMAGE_NEEDKILL(frag_deathtype))
 	{
 		entity dmgent = spawn();
 
@@ -489,8 +489,8 @@ MUTATOR_HOOKFUNCTION(buffs, Damage_Calculate)
 		dmgent.nextthink = time + 0.1;
 	}
 
-	if(frag_target.buffs & BUFF_BASH.m_itemid)
-	if(frag_attacker != frag_target)
+	if(frag_target.buffs & BUFF_BASH.m_itemid
+		&& frag_attacker != frag_target)
 		frag_force = '0 0 0';
 
 	if(frag_attacker.buffs & BUFF_BASH.m_itemid)
@@ -500,8 +500,8 @@ MUTATOR_HOOKFUNCTION(buffs, Damage_Calculate)
 	else
 		frag_force *= autocvar_g_buffs_bash_force;
 
-	if(frag_attacker.buffs & BUFF_DISABILITY.m_itemid)
-	if(frag_target != frag_attacker)
+	if(frag_attacker.buffs & BUFF_DISABILITY.m_itemid
+		&& frag_target != frag_attacker)
 		frag_target.buff_disability_time = time + autocvar_g_buffs_disability_slowtime;
 
 	if(frag_target.buffs & BUFF_INFERNO.m_itemid)
@@ -512,10 +512,10 @@ MUTATOR_HOOKFUNCTION(buffs, Damage_Calculate)
 			frag_damage *= 0.5; // TODO: cvarize?
 	}
 
-	if(frag_attacker.buffs & BUFF_LUCK.m_itemid)
-	if(frag_attacker != frag_target)
-	if(autocvar_g_buffs_luck_damagemultiplier > 0)
-	if(random() <= autocvar_g_buffs_luck_chance)
+	if(frag_attacker.buffs & BUFF_LUCK.m_itemid
+		&& frag_attacker != frag_target
+		&& autocvar_g_buffs_luck_damagemultiplier > 0
+		&& random() <= autocvar_g_buffs_luck_chance)
 		frag_damage *= autocvar_g_buffs_luck_damagemultiplier;
 
 	if(frag_attacker.buffs & BUFF_INFERNO.m_itemid)
@@ -532,15 +532,15 @@ MUTATOR_HOOKFUNCTION(buffs, Damage_Calculate)
 	}
 
 	// this... is ridiculous (TODO: fix!)
-	if(frag_attacker.buffs & BUFF_VAMPIRE.m_itemid)
-	if(!frag_target.vehicle)
-	if(!ITEM_DAMAGE_NEEDKILL(frag_deathtype))
-	if(!IS_DEAD(frag_target))
-	if(IS_PLAYER(frag_target) || IS_MONSTER(frag_target))
-	if(frag_attacker != frag_target)
-	if(!STAT(FROZEN, frag_target))
-	if(frag_target.takedamage)
-	if(DIFF_TEAM(frag_attacker, frag_target))
+	if(frag_attacker.buffs & BUFF_VAMPIRE.m_itemid
+		&& !frag_target.vehicle
+		&& !ITEM_DAMAGE_NEEDKILL(frag_deathtype)
+		&& !IS_DEAD(frag_target)
+		&& (IS_PLAYER(frag_target) || IS_MONSTER(frag_target))
+		&& frag_attacker != frag_target
+		&& !STAT(FROZEN, frag_target)
+		&& frag_target.takedamage
+		&& DIFF_TEAM(frag_attacker, frag_target))
 	{
 		float amount = bound(0, frag_damage * autocvar_g_buffs_vampire_damage_steal,
 			GetResourceAmount(frag_target, RESOURCE_HEALTH));
@@ -649,8 +649,8 @@ MUTATOR_HOOKFUNCTION(buffs, ForbidThrowCurrentWeapon)
 		float best_distance = autocvar_g_buffs_swapper_range;
 		entity closest = NULL;
 		FOREACH_CLIENT(IS_PLAYER(it), {
-			if(!IS_DEAD(it) && !STAT(FROZEN, it) && !it.vehicle)
-			if(DIFF_TEAM(it, player))
+			if(!IS_DEAD(it) && !STAT(FROZEN, it) && !it.vehicle
+				&& DIFF_TEAM(it, player))
 			{
 				float test = vlen2(player.origin - it.origin);
 				if(test <= best_distance * best_distance)
@@ -734,8 +734,8 @@ MUTATOR_HOOKFUNCTION(buffs, CustomizeWaypoint)
 
 	// if you have the invisibility powerup, sprites ALWAYS are restricted to your team
 	// but only apply this to real players, not to spectators
-	if((wp.owner.flags & FL_CLIENT) && (wp.owner.buffs & BUFF_INVISIBLE.m_itemid) && (e == player))
-	if(DIFF_TEAM(wp.owner, e))
+	if((wp.owner.flags & FL_CLIENT) && (wp.owner.buffs & BUFF_INVISIBLE.m_itemid) && (e == player)
+		&& DIFF_TEAM(wp.owner, e))
 		return true;
 }
 
@@ -800,8 +800,8 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerPreThink)
 		}
 	}
 
-	if(time < player.buff_disability_time)
-	if(time >= player.buff_disability_effect_time)
+	if(time < player.buff_disability_time
+		&& time >= player.buff_disability_effect_time)
 	{
 		Send_Effect(EFFECT_SMOKING, player.origin + ((player.mins + player.maxs) * 0.5), '0 0 0', 1);
 		player.buff_disability_effect_time = time + 0.5;
@@ -812,8 +812,8 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerPreThink)
 	// 2: notify carrier as well
 	int buff_lost = 0;
 
-	if(player.buff_time && player.buffs)
-	if(time >= player.buff_time)
+	if(player.buff_time && player.buffs
+		&& time >= player.buff_time)
 	{
 		player.buff_time = 0;
 		buff_lost = 2;
@@ -869,8 +869,8 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerPreThink)
 	if((player.buffs & BUFF_INVISIBLE.m_itemid) && (player.oldbuffs & BUFF_INVISIBLE.m_itemid))
 		player.alpha = ((autocvar_g_buffs_invisible_alpha) ? autocvar_g_buffs_invisible_alpha : -1); // powerups reset alpha, so we must enforce this (TODO)
 
-	if(player.buffs & BUFF_MEDIC.m_itemid)
-	if(time >= player.buff_medic_healtime)
+	if(player.buffs & BUFF_MEDIC.m_itemid
+		&& time >= player.buff_medic_healtime)
 	{
 		buff_Medic_Heal(player);
 		player.buff_medic_healtime = time + autocvar_g_buffs_medic_heal_delay;
@@ -1023,8 +1023,8 @@ MUTATOR_HOOKFUNCTION(buffs, BuildMutatorsPrettyString)
 
 void buffs_DelayedInit(entity this)
 {
-	if(autocvar_g_buffs_spawn_count > 0)
-	if(find(NULL, classname, "item_buff") == NULL)
+	if(autocvar_g_buffs_spawn_count > 0
+		&& find(NULL, classname, "item_buff") == NULL)
 	{
 		float i;
 		for(i = 0; i < autocvar_g_buffs_spawn_count; ++i)

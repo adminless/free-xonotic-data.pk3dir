@@ -104,8 +104,8 @@ void raptor_bomblet_touch(entity this, entity toucher)
 
 void raptor_bomb_burst(entity this)
 {
-    if(this.cnt > time)
-    if(autocvar_g_vehicle_raptor_bomblet_alt)
+    if(this.cnt > time
+    	&& autocvar_g_vehicle_raptor_bomblet_alt)
     {
         this.nextthink = time;
         traceline(this.origin, this.origin + (normalize(this.velocity) * autocvar_g_vehicle_raptor_bomblet_alt), MOVE_NORMAL, this);
@@ -201,8 +201,8 @@ void raptor_flare_think(entity this)
     this.nextthink = time + 0.1;
     IL_EACH(g_projectiles, it.enemy == this.owner,
     {
-        if(vdist(this.origin - it.origin, <, autocvar_g_vehicle_raptor_flare_range))
-        if(random() > autocvar_g_vehicle_raptor_flare_chase)
+        if(vdist(this.origin - it.origin, <, autocvar_g_vehicle_raptor_flare_range)
+        	&& random() > autocvar_g_vehicle_raptor_flare_chase)
             it.enemy = this;
     });
 

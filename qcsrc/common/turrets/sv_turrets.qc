@@ -31,9 +31,9 @@ vector turret_aim_generic(entity this)
 
 			prep = pre_pos + (this.enemy.velocity * (impact_time + mintime));
 
-			if(this.aim_flags & TFL_AIM_ZPREDICT)
-			if(!IS_ONGROUND(this.enemy))
-			if(this.enemy.move_movetype == MOVETYPE_WALK || this.enemy.move_movetype == MOVETYPE_TOSS || this.enemy.move_movetype == MOVETYPE_BOUNCE)
+			if(this.aim_flags & TFL_AIM_ZPREDICT
+				&& !IS_ONGROUND(this.enemy)
+				&& (this.enemy.move_movetype == MOVETYPE_WALK || this.enemy.move_movetype == MOVETYPE_TOSS || this.enemy.move_movetype == MOVETYPE_BOUNCE))
 			{
 				float vz;
 				prep_z = pre_pos_z;
@@ -742,18 +742,18 @@ float turret_validate_target(entity e_turret, entity e_target, float validate_fl
 	}
 
 	// enemy turrets
-	if(validate_flags & TFL_TARGETSELECT_NOTURRETS)
-	if(e_target.owner.tur_head == e_target)
-	if(e_target.team != e_turret.team) // Dont break support units.
+	if(validate_flags & TFL_TARGETSELECT_NOTURRETS
+		&& e_target.owner.tur_head == e_target
+		&& e_target.team != e_turret.team) // Dont break support units.
 		return -9;
 
 	// Missile
-	if (e_target.flags & FL_PROJECTILE)
-	if(!(validate_flags & TFL_TARGETSELECT_MISSILES))
+	if (e_target.flags & FL_PROJECTILE
+		&& !(validate_flags & TFL_TARGETSELECT_MISSILES))
 		return -10;
 
-	if (validate_flags & TFL_TARGETSELECT_MISSILESONLY)
-	if(!(e_target.flags & FL_PROJECTILE))
+	if (validate_flags & TFL_TARGETSELECT_MISSILESONLY
+		&& !(e_target.flags & FL_PROJECTILE))
 		return -10.5;
 
 	// Team check
@@ -1033,8 +1033,8 @@ void turret_think(entity this)
 #endif
 
 	// Handle ammo
-	if (!(this.spawnflags & TSF_NO_AMMO_REGEN))
-	if (this.ammo < this.ammo_max)
+	if (!(this.spawnflags & TSF_NO_AMMO_REGEN)
+		&& this.ammo < this.ammo_max)
 		this.ammo = min(this.ammo + this.ammo_recharge, this.ammo_max);
 
 	// Inactive turrets needs to run the think loop,
@@ -1122,8 +1122,8 @@ void turret_think(entity this)
 			do_target_scan = 1;
 
 		// Old target (if any) invalid?
-		if(this.target_validate_time < time)
-		if (turret_validate_target(this, this.enemy, this.target_validate_flags) <= 0)
+		if(this.target_validate_time < time
+			&& turret_validate_target(this, this.enemy, this.target_validate_flags) <= 0)
 		{
 			this.enemy = NULL;
 			this.target_validate_time = time + 0.5;

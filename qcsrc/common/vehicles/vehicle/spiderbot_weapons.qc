@@ -143,8 +143,8 @@ void spiderbot_rocket_do(entity this)
     {
         if (PHYS_INPUT_BUTTON_ATCK2(this.owner) && this.vehicle_weapon2mode == SBRM_GUIDE)
         {
-            if (this.wait == 1)
-            if (this.tur_head.frame == 9 || this.tur_head.frame == 1)
+            if (this.wait == 1
+            	&& (this.tur_head.frame == 9 || this.tur_head.frame == 1))
             {
                 if(this.gun2.cnt < time && this.tur_head.frame == 9)
                     this.tur_head.frame = 1;
@@ -171,8 +171,8 @@ void spiderbot_rocket_do(entity this)
         this.wait = 0;
     }
 
-    if(this.wait != -10)
-    if(!PHYS_INPUT_BUTTON_ATCK2(this.owner))
+    if(this.wait != -10
+    	&& !PHYS_INPUT_BUTTON_ATCK2(this.owner))
         return;
 
     if(forbidWeaponUse(this.owner))

@@ -317,8 +317,8 @@ MUTATOR_HOOKFUNCTION(lms, FilterItem)
 {
 	entity item = M_ARGV(0, entity);
 
-	if(autocvar_g_lms_extra_lives)
-	if(item.itemdef == ITEM_ExtraLife)
+	if(autocvar_g_lms_extra_lives
+		&& item.itemdef == ITEM_ExtraLife)
 		return false;
 
 	return true;
@@ -414,8 +414,8 @@ MUTATOR_HOOKFUNCTION(lms, GetPlayerStatus)
 
 MUTATOR_HOOKFUNCTION(lms, AddPlayerScore)
 {
-	if(game_stopped)
-	if(M_ARGV(0, entity) == SP_LMS_RANK) // score field
+	if(game_stopped
+		&& M_ARGV(0, entity) == SP_LMS_RANK) // score field
 		return true; // allow writing to this field in intermission as it is needed for newly joining players
 }
 

@@ -53,8 +53,8 @@ void trigger_keylock_touch(entity this, entity toucher)
 #endif
 
 		// trigger target2
-		if(this.delay <= time || started_delay == true)
-		if(this.target2)
+		if((this.delay <= time || started_delay == true)
+			&& this.target2)
 		{
 			trigger_keylock_trigger(this, toucher, this.target2);
 			started_delay = true;

@@ -142,8 +142,8 @@ string c4_get_lowest_tile(entity minigame, string s)
 	int end = 0;
 	for(i = C4_NUM_CNT; i >= 0; --i)
 	{
-		if(!c4_find_piece(minigame,minigame_tile_buildname(minigame_tile_letter(s), i)))
-		if(c4_find_piece(minigame,minigame_tile_buildname(minigame_tile_letter(s), i - 1)))
+		if(!c4_find_piece(minigame,minigame_tile_buildname(minigame_tile_letter(s), i))
+			&& c4_find_piece(minigame,minigame_tile_buildname(minigame_tile_letter(s), i - 1)))
 		{
 			end = i;
 			break;
@@ -157,11 +157,11 @@ void c4_move(entity minigame, entity player, string pos )
 {
 	pos = c4_get_lowest_tile(minigame, pos);
 
-	if ( minigame.minigame_flags & C4_TURN_PLACE )
-	if ( pos && player.team == (minigame.minigame_flags & C4_TURN_TEAM) )
+	if ( minigame.minigame_flags & C4_TURN_PLACE 
+		&&  pos && player.team == (minigame.minigame_flags & C4_TURN_TEAM) )
 	{
-		if ( c4_valid_tile(pos) )
-		if ( !c4_find_piece(minigame,pos) )
+		if ( c4_valid_tile(pos) 
+			&&  !c4_find_piece(minigame,pos) )
 		{
 			entity piece = msle_spawn(minigame,"minigame_board_piece");
 			piece.team = player.team;
@@ -258,8 +258,8 @@ void c4_hud_board(vector pos, vector mySize)
 	vector tile_size = minigame_hud_denormalize_size('1 1 0' / C4_TILE_SIZE,pos,mySize);
 	vector tile_pos;
 
-	if ( (active_minigame.minigame_flags & C4_TURN_TEAM) == minigame_self.team )
-	if ( c4_valid_tile(c4_curr_pos) )
+	if ( (active_minigame.minigame_flags & C4_TURN_TEAM) == minigame_self.team 
+		&&  c4_valid_tile(c4_curr_pos) )
 	{
 		tile_pos = minigame_tile_pos(c4_curr_pos,C4_NUM_CNT,C4_LET_CNT);
 		tile_pos = minigame_hud_denormalize(tile_pos,pos,mySize);
@@ -276,8 +276,8 @@ void c4_hud_board(vector pos, vector mySize)
 			tile_pos = minigame_tile_pos(e.netname,C4_NUM_CNT,C4_LET_CNT);
 			tile_pos = minigame_hud_denormalize(tile_pos,pos,mySize);
 
-			if ( active_minigame.minigame_flags & C4_TURN_WIN )
-			if ( !e.c4_checkwin )
+			if ( active_minigame.minigame_flags & C4_TURN_WIN 
+				&&  !e.c4_checkwin )
 				e.c4_checkwin = c4_winning_piece(e) ? 1 : -1;
 
 			float icon_color = 1;

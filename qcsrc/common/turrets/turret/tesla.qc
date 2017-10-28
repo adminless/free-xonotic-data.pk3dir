@@ -58,8 +58,8 @@ bool turret_tesla_firecheck(entity this)
         do_target_scan = 1;
 
     // Old target (if any) invalid?
-    if(this.target_validate_time < time)
-    if (turret_validate_target(this, this.enemy, this.target_validate_flags) <= 0)
+    if(this.target_validate_time < time
+    	&& turret_validate_target(this, this.enemy, this.target_validate_flags) <= 0)
     {
         this.enemy = NULL;
         this.target_validate_time = time + 0.5;

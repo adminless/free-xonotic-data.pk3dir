@@ -105,8 +105,8 @@ bool Monster_ValidTarget(entity this, entity targ)
 	if(trace_fraction < 1 && trace_ent != targ)
 		return false; // solid
 
-	if(autocvar_g_monsters_target_infront || (this.spawnflags & MONSTERFLAG_INFRONT))
-	if(this.enemy != targ)
+	if((autocvar_g_monsters_target_infront || (this.spawnflags & MONSTERFLAG_INFRONT))
+		&& this.enemy != targ)
 	{
 		makevectors (this.angles);
 		float dot = normalize (targ.origin - this.origin) * v_forward;
@@ -334,8 +334,8 @@ void Monster_Sound(entity this, .string samplefield, float sound_delay, bool del
 {
 	if(!autocvar_g_monsters_sounds) { return; }
 
-	if(delaytoo)
-	if(time < this.msound_delay)
+	if(delaytoo
+		&& time < this.msound_delay)
 		return; // too early
 	GlobalSound_string(this, this.(samplefield), chan, VOL_BASE, VOICETYPE_PLAYERSOUND);
 
@@ -468,10 +468,10 @@ void Monster_Touch(entity this, entity toucher)
 {
 	if(toucher == NULL) { return; }
 
-	if(toucher.monster_attack)
-	if(this.enemy != toucher)
-	if(!IS_MONSTER(toucher))
-	if(Monster_ValidTarget(this, toucher))
+	if(toucher.monster_attack
+		&& this.enemy != toucher
+		&& !IS_MONSTER(toucher)
+		&& Monster_ValidTarget(this, toucher))
 		this.enemy = toucher;
 }
 
@@ -494,8 +494,8 @@ void Monster_Miniboss_Check(entity this)
 
 bool Monster_Respawn_Check(entity this)
 {
-	if(this.deadflag == DEAD_DEAD) // don't call when monster isn't dead
-	if(MUTATOR_CALLHOOK(MonsterRespawn, this))
+	if(this.deadflag == DEAD_DEAD // don't call when monster isn't dead
+		&& MUTATOR_CALLHOOK(MonsterRespawn, this))
 		return true; // enabled by a mutator
 
 	if(this.spawnflags & MONSTERFLAG_NORESPAWN)
@@ -765,8 +765,8 @@ void Monster_Move(entity this, float runspeed, float walkspeed, float stpspeed)
 	runspeed = bound(0, M_ARGV(1, float) * MONSTER_SKILLMOD(this), runspeed * 2.5); // limit maxspeed to prevent craziness
 	walkspeed = bound(0, M_ARGV(2, float) * MONSTER_SKILLMOD(this), walkspeed * 2.5); // limit maxspeed to prevent craziness
 
-	if(teamplay && autocvar_g_monsters_teams)
-	if(DIFF_TEAM(this.monster_follow, this))
+	if(teamplay && autocvar_g_monsters_teams
+		&& DIFF_TEAM(this.monster_follow, this))
 		this.monster_follow = NULL;
 
 	if(this.state == MONSTER_ATTACK_RANGED && IS_ONGROUND(this))
@@ -778,8 +778,8 @@ void Monster_Move(entity this, float runspeed, float walkspeed, float stpspeed)
 	if(this.state && time >= this.attack_finished_single[0])
 		this.state = 0; // attack is over
 
-	if(this.state != MONSTER_ATTACK_MELEE) // don't move if set
-	if(time >= this.last_trace || this.enemy) // update enemy or rider instantly
+	if(this.state != MONSTER_ATTACK_MELEE // don't move if set
+		&& (time >= this.last_trace || this.enemy)) // update enemy or rider instantly
 		this.moveto = Monster_Move_Target(this, targ);
 
 	if(!this.enemy)
@@ -816,9 +816,9 @@ void Monster_Move(entity this, float runspeed, float walkspeed, float stpspeed)
 			this.target2 = e.target;
 
 		movelib_brake_simple(this, stpspeed);
-		if(time > this.anim_finished && time > this.pain_finished)
-		if(!this.state)
-		if(vdist(this.velocity, <=, 30))
+		if(time > this.anim_finished && time > this.pain_finished
+			&& !this.state
+			&& vdist(this.velocity, <=, 30))
 			setanim(this, this.anim_idle, true, false, false);
 	}
 
@@ -860,8 +860,8 @@ void Monster_Dead_Think(entity this)
 {
 	this.nextthink = time + this.ticrate;
 
-	if(this.monster_lifetime != 0)
-	if(time >= this.monster_lifetime)
+	if(this.monster_lifetime != 0
+		&& time >= this.monster_lifetime)
 	{
 		Monster_Dead_Fade(this);
 		return;
@@ -941,8 +941,8 @@ void Monster_Dead(entity this, entity attacker, float gibbed)
 	if(!(this.spawnflags & MONSTERFLAG_SPAWNED) && !(this.spawnflags & MONSTERFLAG_RESPAWNED))
 		monsters_killed += 1;
 
-	if(IS_PLAYER(attacker))
-	if(autocvar_g_monsters_score_spawned || !((this.spawnflags & MONSTERFLAG_SPAWNED) || (this.spawnflags & MONSTERFLAG_RESPAWNED)))
+	if(IS_PLAYER(attacker)
+		&& (autocvar_g_monsters_score_spawned || !((this.spawnflags & MONSTERFLAG_SPAWNED) || (this.spawnflags & MONSTERFLAG_RESPAWNED))))
 		GameRules_scoring_add(attacker, SCORE, +autocvar_g_monsters_score_kill);
 
 	if(gibbed)
@@ -1330,8 +1330,8 @@ bool Monster_Spawn(entity this, bool check_appear, int mon_id)
 	if(this.team && !teamplay)
 		this.team = 0;
 
-	if(!(this.spawnflags & MONSTERFLAG_SPAWNED)) // naturally spawned monster
-	if(!(this.spawnflags & MONSTERFLAG_RESPAWNED)) // don't count re-spawning monsters either
+	if(!(this.spawnflags & MONSTERFLAG_SPAWNED) // naturally spawned monster
+		&& !(this.spawnflags & MONSTERFLAG_RESPAWNED)) // don't count re-spawning monsters either
 		monsters_total += 1;
 
 	if(this.mdl && this.mdl != "")
@@ -1398,8 +1398,8 @@ bool Monster_Spawn(entity this, bool check_appear, int mon_id)
 		if(mon.spawnflags & MONSTER_SIZE_BROKEN)
 			this.scale *= 1.3;
 
-		if(mon.spawnflags & MONSTER_SIZE_QUAKE)
-		if(autocvar_g_monsters_quake_resize)
+		if(mon.spawnflags & MONSTER_SIZE_QUAKE
+			&& autocvar_g_monsters_quake_resize)
 			this.scale *= 1.3;
 	}
 

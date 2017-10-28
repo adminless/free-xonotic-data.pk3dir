@@ -79,8 +79,8 @@ void HUD_Weapons()
 			return;
 		if(STAT(HEALTH) <= 0 && autocvar_hud_panel_weapons_hide_ondeath)
 			return;
-		if(timeout && time >= weapontime + timeout + timeout_effect_length)
-		if(autocvar_hud_panel_weapons_timeout_effect == 3 || (autocvar_hud_panel_weapons_timeout_effect == 1 && !(autocvar_hud_panel_weapons_timeout_fadebgmin + autocvar_hud_panel_weapons_timeout_fadefgmin)))
+		if(timeout && time >= weapontime + timeout + timeout_effect_length
+			&& (autocvar_hud_panel_weapons_timeout_effect == 3 || (autocvar_hud_panel_weapons_timeout_effect == 1 && !(autocvar_hud_panel_weapons_timeout_fadebgmin + autocvar_hud_panel_weapons_timeout_fadefgmin))))
 		{
 			weaponprevtime = time;
 			return;

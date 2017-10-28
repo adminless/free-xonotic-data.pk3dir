@@ -196,9 +196,9 @@ void W_MineLayer_Think(entity this)
 	head = findradius(this.origin, WEP_CVAR(minelayer, proximityradius));
 	while(head)
 	{
-		if(IS_PLAYER(head) && !IS_DEAD(head) && !STAT(FROZEN, head))
-		if(head != this.realowner && DIFF_TEAM(head, this.realowner)) // don't trigger for team mates
-		if(!this.mine_time)
+		if(IS_PLAYER(head) && !IS_DEAD(head) && !STAT(FROZEN, head)
+			&& head != this.realowner && DIFF_TEAM(head, this.realowner) // don't trigger for team mates
+			&& !this.mine_time)
 		{
 			spamsound(this, CH_SHOTS, SND_MINE_TRIGGER, VOL_BASE, ATTN_NORM);
 			this.mine_time = time + WEP_CVAR(minelayer, time);
@@ -215,9 +215,9 @@ void W_MineLayer_Think(entity this)
 
 	// remote detonation
 	.entity weaponentity = this.weaponentity_fld;
-	if(this.realowner.(weaponentity).m_weapon == WEP_MINE_LAYER)
-	if(!IS_DEAD(this.realowner))
-	if(this.minelayer_detonate)
+	if(this.realowner.(weaponentity).m_weapon == WEP_MINE_LAYER
+		&& !IS_DEAD(this.realowner)
+		&& this.minelayer_detonate)
 		W_MineLayer_RemoteExplode(this);
 }
 

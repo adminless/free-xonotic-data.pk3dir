@@ -6,8 +6,8 @@ REGISTER_NET_TEMP(TE_CSQC_SHOCKWAVEPARTICLE)
 spawnfunc(weapon_shockwave)
 {
 	//if(autocvar_sv_q3acompat_machineshockwaveswap) // WEAPONTODO
-	if(autocvar_sv_q3acompat_machineshotgunswap)
-	if(this.classname != "droppedweapon")
+	if(autocvar_sv_q3acompat_machineshotgunswap
+		&& this.classname != "droppedweapon")
 	{
 		weapon_defaultspawnfunc(this, WEP_MACHINEGUN);
 		return;

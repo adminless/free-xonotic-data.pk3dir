@@ -62,10 +62,10 @@ float XonoticColorpickerString_mouseDrag(entity me, vector coords)
 		return 0;
 	vector margin;
 	margin = me.imagemargin;
-	if(coords.x >= margin.x)
-	if(coords.y >= margin.y)
-	if(coords.x <= 1 - margin.x)
-	if(coords.y <= 1 - margin.y)
+	if(coords.x >= margin.x
+		&& coords.y >= margin.y
+		&& coords.x <= 1 - margin.x
+		&& coords.y <= 1 - margin.y)
 	{
 		me.prevcoords = coords;
 		me.saveCvars(me);

@@ -267,19 +267,19 @@ METHOD(PortoLaunch, wr_think, void(entity thiswep, entity actor, .entity weapone
 {
     if(WEP_CVAR(porto, secondary))
     {
-        if(fire & 1)
-        if(!actor.porto_current)
-        if(!actor.porto_forbidden)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR_PRI(porto, refire)))
+        if(fire & 1
+        	&& !actor.porto_current
+        	&& !actor.porto_forbidden
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR_PRI(porto, refire)))
         {
             W_Porto_Attack(actor, weaponentity, 0);
             weapon_thinkf(actor, weaponentity, WFRAME_FIRE1, WEP_CVAR_PRI(porto, animtime), w_ready);
         }
 
-        if(fire & 2)
-        if(!actor.porto_current)
-        if(!actor.porto_forbidden)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, true, WEP_CVAR_SEC(porto, refire)))
+        if(fire & 2
+        	&& !actor.porto_current
+        	&& !actor.porto_forbidden
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, true, WEP_CVAR_SEC(porto, refire)))
         {
             W_Porto_Attack(actor, weaponentity, 1);
             weapon_thinkf(actor, weaponentity, WFRAME_FIRE2, WEP_CVAR_SEC(porto, animtime), w_ready);
@@ -303,10 +303,10 @@ METHOD(PortoLaunch, wr_think, void(entity thiswep, entity actor, .entity weapone
         if(actor.(weaponentity).porto_v_angle_held)
             makevectors(actor.(weaponentity).porto_v_angle); // override the previously set angles
 
-        if(fire & 1)
-        if(!actor.porto_current)
-        if(!actor.porto_forbidden)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR_PRI(porto, refire)))
+        if(fire & 1
+        	&& !actor.porto_current
+        	&& !actor.porto_forbidden
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR_PRI(porto, refire)))
         {
             W_Porto_Attack(actor, weaponentity, -1);
             weapon_thinkf(actor, weaponentity, WFRAME_FIRE1, WEP_CVAR_PRI(porto, animtime), w_ready);

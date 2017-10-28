@@ -263,10 +263,10 @@ bool raptor_frame(entity this, float dt)
 		if(vehic.gun1.lock_time < time || IS_DEAD(vehic.gun1.enemy) || STAT(FROZEN, vehic.gun1.enemy))
 			vehic.gun1.enemy = NULL;
 
-		if(trace_ent)
-		if(trace_ent.move_movetype)
-		if(trace_ent.takedamage)
-		if(!IS_DEAD(trace_ent) && !STAT(FROZEN, trace_ent))
+		if(trace_ent
+			&& trace_ent.move_movetype
+			&& trace_ent.takedamage
+			&& !IS_DEAD(trace_ent) && !STAT(FROZEN, trace_ent))
 		{
 			if(teamplay)
 			{
@@ -312,9 +312,9 @@ bool raptor_frame(entity this, float dt)
 							 (1 / autocvar_g_vehicle_raptor_cannon_locking_releasetime) * dt,
 							 autocvar_g_vehicle_raptor_cannon_locked_time);
 
-		if(vehic.lock_target != NULL)
-		if(autocvar_g_vehicle_raptor_cannon_predicttarget)
-		if(vehic.lock_strength == 1)
+		if(vehic.lock_target != NULL
+			&& autocvar_g_vehicle_raptor_cannon_predicttarget
+			&& vehic.lock_strength == 1)
 		{
 			float i, distance, impact_time;
 
@@ -358,9 +358,9 @@ bool raptor_frame(entity this, float dt)
 
 	Weapon wep1 = WEP_RAPTOR;
 	.entity weaponentity = weaponentities[0];
-	if(!forbidWeaponUse(this))
-	if(PHYS_INPUT_BUTTON_ATCK(this))
-	if (wep1.wr_checkammo1(wep1, vehic, weaponentity))
+	if(!forbidWeaponUse(this)
+		&& PHYS_INPUT_BUTTON_ATCK(this)
+		&& wep1.wr_checkammo1(wep1, vehic, weaponentity))
 	{
 		wep1.wr_think(wep1, vehic, weaponentity, 1);
 	}
@@ -378,8 +378,8 @@ bool raptor_frame(entity this, float dt)
 	if(!forbidWeaponUse(this))
 	if(vehic.vehicle_weapon2mode == RSM_BOMB)
 	{
-		if(time > vehic.lip + autocvar_g_vehicle_raptor_bombs_refire)
-		if(PHYS_INPUT_BUTTON_ATCK2(this))
+		if(time > vehic.lip + autocvar_g_vehicle_raptor_bombs_refire
+			&& PHYS_INPUT_BUTTON_ATCK2(this))
 		{
 		    .entity weaponentity = weaponentities[1];
 			wep2a.wr_think(wep2a, vehic, weaponentity, 2);
@@ -390,8 +390,8 @@ bool raptor_frame(entity this, float dt)
 	else
 	{
 		Weapon wep2b = WEP_RAPTOR_FLARE;
-		if(time > vehic.lip + autocvar_g_vehicle_raptor_flare_refire)
-		if(PHYS_INPUT_BUTTON_ATCK2(this))
+		if(time > vehic.lip + autocvar_g_vehicle_raptor_flare_refire
+			&& PHYS_INPUT_BUTTON_ATCK2(this))
 		{
 		    .entity weaponentity = weaponentities[1];
 			wep2b.wr_think(wep2b, vehic, weaponentity, 2);
@@ -409,8 +409,8 @@ bool raptor_frame(entity this, float dt)
 		bool incoming = false;
 		IL_EACH(g_projectiles, it.enemy == vehic,
 		{
-			if(MISSILE_IS_TRACKING(it))
-			if(vdist(vehic.origin - it.origin, <, 2 * autocvar_g_vehicle_raptor_flare_range))
+			if(MISSILE_IS_TRACKING(it)
+				&& vdist(vehic.origin - it.origin, <, 2 * autocvar_g_vehicle_raptor_flare_range))
 			{
 				incoming = true;
 				break;

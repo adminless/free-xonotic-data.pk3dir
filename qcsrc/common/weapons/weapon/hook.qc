@@ -116,10 +116,10 @@ void W_Hook_Attack2(Weapon thiswep, entity actor, .entity weaponentity)
 METHOD(Hook, wr_think, void(entity thiswep, entity actor, .entity weaponentity, int fire))
 {
     if (fire & 1) {
-        if(!actor.(weaponentity).hook)
-        if(!(actor.(weaponentity).hook_state & HOOK_WAITING_FOR_RELEASE))
-        if(time > actor.(weaponentity).hook_refire)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, false, -1))
+        if(!actor.(weaponentity).hook
+        	&& !(actor.(weaponentity).hook_state & HOOK_WAITING_FOR_RELEASE)
+        	&& time > actor.(weaponentity).hook_refire
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, false, -1))
         {
             W_DecreaseAmmo(thiswep, actor, thiswep.ammo_factor * WEP_CVAR_PRI(hook, ammo), weaponentity);
             actor.(weaponentity).hook_state |= HOOK_FIRING;
@@ -292,8 +292,8 @@ void Draw_GrapplingHook(entity this)
 	vector vs;
 	float intensity, offset;
 
-	if(this.teleport_time)
-	if(time > this.teleport_time)
+	if(this.teleport_time
+		&& time > this.teleport_time)
 	{
 		sound (this, CH_SHOTS_SINGLE, SND_Null, VOL_BASE, ATTEN_NORM); // safeguard
 		this.teleport_time = 0;

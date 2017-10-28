@@ -9,9 +9,9 @@ MUTATOR_HOOKFUNCTION(vampire, PlayerDamage_SplitHealthArmor)
 	entity frag_target = M_ARGV(2, entity);
 	float damage_take = M_ARGV(4, float);
 
-	if(time >= frag_target.spawnshieldtime)
-	if(frag_target != frag_attacker)
-	if(!IS_DEAD(frag_target))
+	if(time >= frag_target.spawnshieldtime
+		&& frag_target != frag_attacker
+		&& !IS_DEAD(frag_target))
 	{
 		GiveResource(frag_attacker, RESOURCE_HEALTH,
 			bound(0, damage_take, frag_target.health));

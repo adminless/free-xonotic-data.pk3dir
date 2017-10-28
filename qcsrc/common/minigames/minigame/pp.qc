@@ -54,14 +54,14 @@ bool pp_winning_piece(entity piece)
 	int letter = minigame_tile_letter(piece.netname);
 
 	// here goes
-	if(!pp_valid_tile(minigame_tile_buildname(letter-1,number)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter-1,number)).team == 5)
-	if(!pp_valid_tile(minigame_tile_buildname(letter+1,number)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter+1,number)).team == 5)
-	if(!pp_valid_tile(minigame_tile_buildname(letter,number-1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter,number-1)).team == 5)
-	if(!pp_valid_tile(minigame_tile_buildname(letter,number+1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter,number+1)).team == 5)
-	if(!pp_valid_tile(minigame_tile_buildname(letter+1,number+1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter+1,number+1)).team == 5)
-	if(!pp_valid_tile(minigame_tile_buildname(letter-1,number-1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter-1,number-1)).team == 5)
-	if(!pp_valid_tile(minigame_tile_buildname(letter+1,number-1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter+1,number-1)).team == 5)
-	if(!pp_valid_tile(minigame_tile_buildname(letter-1,number+1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter-1,number+1)).team == 5)
+	if((!pp_valid_tile(minigame_tile_buildname(letter-1,number)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter-1,number)).team == 5)
+		&& (!pp_valid_tile(minigame_tile_buildname(letter+1,number)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter+1,number)).team == 5)
+		&& (!pp_valid_tile(minigame_tile_buildname(letter,number-1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter,number-1)).team == 5)
+		&& (!pp_valid_tile(minigame_tile_buildname(letter,number+1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter,number+1)).team == 5)
+		&& (!pp_valid_tile(minigame_tile_buildname(letter+1,number+1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter+1,number+1)).team == 5)
+		&& (!pp_valid_tile(minigame_tile_buildname(letter-1,number-1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter-1,number-1)).team == 5)
+		&& (!pp_valid_tile(minigame_tile_buildname(letter+1,number-1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter+1,number-1)).team == 5)
+		&& (!pp_valid_tile(minigame_tile_buildname(letter-1,number+1)) || pp_find_piece(piece.owner,minigame_tile_buildname(letter-1,number+1)).team == 5))
 		return true;
 
 	return false;
@@ -97,8 +97,8 @@ bool pp_valid_move(entity minigame, string pos)
 // make a move
 void pp_move(entity minigame, entity player, string pos )
 {
-	if ( minigame.minigame_flags & PP_TURN_PLACE )
-	if ( pos && player.team == (minigame.minigame_flags & PP_TURN_TEAM) )
+	if ( minigame.minigame_flags & PP_TURN_PLACE 
+		&&  pos && player.team == (minigame.minigame_flags & PP_TURN_TEAM) )
 	{
 		if ( pp_valid_move(minigame,pos))
 		{
@@ -288,8 +288,8 @@ void pp_hud_board(vector pos, vector mySize)
 	active_minigame.pp_curr_piece = NULL;
 	entity e;
 	FOREACH_MINIGAME_ENTITY(e)
-	if(e.classname == "minigame_board_piece")
-	if(e.cnt)
+	if(e.classname == "minigame_board_piece"
+		&& e.cnt)
 	{
 		active_minigame.pp_curr_piece = e;
 		break;

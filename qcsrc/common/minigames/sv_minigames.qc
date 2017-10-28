@@ -205,8 +205,8 @@ entity join_minigame(entity player, string game_id )
 	entity minig;
 	for ( minig = minigame_sessions; minig != NULL; minig = minig.list_next )
 	{
-		if ( minig.netname == game_id )
-		if ( minigame_addplayer(minig,player) )
+		if ( minig.netname == game_id 
+			&&  minigame_addplayer(minig,player) )
 			return minig;
 	}
 

@@ -527,8 +527,8 @@ METHOD(Crylink, wr_think, void(entity thiswep, entity actor, .entity weaponentit
 
     if(fire & 1)
     {
-        if(actor.(weaponentity).crylink_waitrelease != 1)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR_PRI(crylink, refire)))
+        if(actor.(weaponentity).crylink_waitrelease != 1
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, false, WEP_CVAR_PRI(crylink, refire)))
         {
             W_Crylink_Attack(thiswep, actor, weaponentity);
             weapon_thinkf(actor, weaponentity, WFRAME_FIRE1, WEP_CVAR_PRI(crylink, animtime), w_ready);
@@ -537,8 +537,8 @@ METHOD(Crylink, wr_think, void(entity thiswep, entity actor, .entity weaponentit
 
     if((fire & 2) && autocvar_g_balance_crylink_secondary)
     {
-        if(actor.(weaponentity).crylink_waitrelease != 2)
-        if(weapon_prepareattack(thiswep, actor, weaponentity, true, WEP_CVAR_SEC(crylink, refire)))
+        if(actor.(weaponentity).crylink_waitrelease != 2
+        	&& weapon_prepareattack(thiswep, actor, weaponentity, true, WEP_CVAR_SEC(crylink, refire)))
         {
             W_Crylink_Attack2(thiswep, actor, weaponentity);
             weapon_thinkf(actor, weaponentity, WFRAME_FIRE2, WEP_CVAR_SEC(crylink, animtime), w_ready);
@@ -566,8 +566,8 @@ METHOD(Crylink, wr_think, void(entity thiswep, entity actor, .entity weaponentit
                 setorigin(linkjoineffect, pos);
             }
             actor.(weaponentity).crylink_waitrelease = 0;
-            if(!thiswep.wr_checkammo1(thiswep, actor, weaponentity) && !thiswep.wr_checkammo2(thiswep, actor, weaponentity))
-            if(!(actor.items & IT_UNLIMITED_WEAPON_AMMO))
+            if(!thiswep.wr_checkammo1(thiswep, actor, weaponentity) && !thiswep.wr_checkammo2(thiswep, actor, weaponentity)
+            	&& !(actor.items & IT_UNLIMITED_WEAPON_AMMO))
             {
                 // ran out of ammo!
                 actor.cnt = WEP_CRYLINK.m_id;

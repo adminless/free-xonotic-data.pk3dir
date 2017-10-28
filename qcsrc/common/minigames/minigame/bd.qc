@@ -339,8 +339,8 @@ bool bd_move_dozer(entity minigame, entity dozer)
 // make a move
 void bd_move(entity minigame, entity player, string dir)
 {
-	if ( minigame.minigame_flags & BD_TURN_MOVE )
-	if ( dir )
+	if ( minigame.minigame_flags & BD_TURN_MOVE 
+		&&  dir )
 	{
 		//if ( bd_valid_tile(pos) )
 		//if ( bd_find_piece(minigame, pos, false) )
@@ -382,8 +382,8 @@ void bd_move(entity minigame, entity player, string dir)
 // editor
 void bd_editor_place(entity minigame, entity player, string pos, int thetile, string thedir)
 {
-	if ( minigame.minigame_flags & BD_TURN_EDIT )
-	if ( pos && thetile )
+	if ( minigame.minigame_flags & BD_TURN_EDIT 
+		&&  pos && thetile )
 	{
 		if ( bd_valid_tile(pos) )
 		{
@@ -1067,8 +1067,8 @@ void bd_hud_board(vector pos, vector mySize)
 		}
 	}
 
-	if(active_minigame.minigame_flags & BD_TURN_EDIT)
-	if(bd_valid_tile(bd_curr_pos))
+	if(active_minigame.minigame_flags & BD_TURN_EDIT
+		&& bd_valid_tile(bd_curr_pos))
 	{
 		entity piece = bd_find_piece(active_minigame, bd_curr_pos, false);
 		entity targ = bd_find_piece(active_minigame, bd_curr_pos, true);

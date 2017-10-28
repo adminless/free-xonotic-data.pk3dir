@@ -357,8 +357,8 @@ void HUD_MinigameMenu_Close(entity this, entity actor, entity trigger)
 		HUD_MinigameMenu_entries = NULL;
 		HUD_MinigameMenu_last_entry = NULL;
 		HUD_MinigameMenu_activeitem = NULL;
-		if(autocvar_hud_cursormode)
-		if ( !autocvar__hud_configure )
+		if(autocvar_hud_cursormode
+			&&  !autocvar__hud_configure )
 			setcursormode(0);
 	}
 }

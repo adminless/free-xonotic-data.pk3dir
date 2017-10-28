@@ -209,8 +209,8 @@ void QuickMenu_Close()
 	prevMouseClicked = 0;
 	QuickMenu_Buffer_Close();
 
-	if(autocvar_hud_cursormode)
-	if(!mv_active)
+	if(autocvar_hud_cursormode
+		&& !mv_active)
 		setcursormode(0);
 }
 
@@ -492,8 +492,8 @@ void QuickMenu_Mouse()
 {
 	if(mv_active) return;
 
-	if(!mouseClicked)
-	if(prevMouseClicked & S_MOUSE2)
+	if(!mouseClicked
+		&& prevMouseClicked & S_MOUSE2)
 	{
 		QuickMenu_Close();
 		return;
@@ -591,8 +591,8 @@ void HUD_QuickMenu()
 		//if(!autocvar_hud_panel_quickmenu) return;
 		if(!hud_panel_quickmenu) return;
 
-		if(QuickMenu_TimeOut)
-		if(time > QuickMenu_TimeOut)
+		if(QuickMenu_TimeOut
+			&& time > QuickMenu_TimeOut)
 		{
 			QuickMenu_Close();
 			return;

@@ -143,8 +143,8 @@ void W_Shotgun_Attack2(Weapon thiswep, entity actor, .entity weaponentity, int f
 // alternate secondary weapon frames
 void W_Shotgun_Attack3_Frame2(Weapon thiswep, entity actor, .entity weaponentity, int fire)
 {
-	if (!thiswep.wr_checkammo2(thiswep, actor, weaponentity))
-	if (!(actor.items & IT_UNLIMITED_WEAPON_AMMO))
+	if (!thiswep.wr_checkammo2(thiswep, actor, weaponentity)
+		&& !(actor.items & IT_UNLIMITED_WEAPON_AMMO))
 	{
 		W_SwitchWeapon_Force(actor, w_getbestweapon(actor, weaponentity), weaponentity);
 		w_ready(thiswep, actor, weaponentity, fire);
@@ -157,8 +157,8 @@ void W_Shotgun_Attack3_Frame2(Weapon thiswep, entity actor, .entity weaponentity
 }
 void W_Shotgun_Attack3_Frame1(Weapon thiswep, entity actor, .entity weaponentity, int fire)
 {
-	if (!thiswep.wr_checkammo2(thiswep, actor, weaponentity))
-	if (!(actor.items & IT_UNLIMITED_WEAPON_AMMO))
+	if (!thiswep.wr_checkammo2(thiswep, actor, weaponentity)
+		&& !(actor.items & IT_UNLIMITED_WEAPON_AMMO))
 	{
 		W_SwitchWeapon_Force(actor, w_getbestweapon(actor, weaponentity), weaponentity);
 		w_ready(thiswep, actor, weaponentity, fire);
@@ -214,10 +214,10 @@ METHOD(Shotgun, wr_think, void(entity thiswep, entity actor, .entity weaponentit
             }
         }
     }
-    if(actor.(weaponentity).clip_load >= 0) // we are not currently reloading
-    if(WEP_CVAR(shotgun, secondary) == 1)
-    if(((fire & 1) && GetResourceAmount(actor, thiswep.ammo_type) <= 0 && !(actor.items & IT_UNLIMITED_WEAPON_AMMO)) || (fire & 2))
-    if(weapon_prepareattack(thiswep, actor, weaponentity, true, WEP_CVAR_SEC(shotgun, refire)))
+    if(actor.(weaponentity).clip_load >= 0 // we are not currently reloading
+    	&& WEP_CVAR(shotgun, secondary) == 1
+    	&& (((fire & 1) && GetResourceAmount(actor, thiswep.ammo_type) <= 0 && !(actor.items & IT_UNLIMITED_WEAPON_AMMO)) || (fire & 2))
+    	&& weapon_prepareattack(thiswep, actor, weaponentity, true, WEP_CVAR_SEC(shotgun, refire)))
     {
         // attempt forcing playback of the anim by switching to another anim (that we never play) here...
         weapon_thinkf(actor, weaponentity, WFRAME_FIRE1, 0, W_Shotgun_Attack2);
@@ -231,8 +231,8 @@ METHOD(Shotgun, wr_checkammo1, bool(entity thiswep, entity actor, .entity weapon
 }
 METHOD(Shotgun, wr_checkammo2, bool(entity thiswep, entity actor, .entity weaponentity))
 {
-    if(IS_BOT_CLIENT(actor))
-    if(vdist(actor.origin - actor.enemy.origin, >, WEP_CVAR_SEC(shotgun, melee_range)))
+    if(IS_BOT_CLIENT(actor)
+    	&& vdist(actor.origin - actor.enemy.origin, >, WEP_CVAR_SEC(shotgun, melee_range)))
         return false; // bots cannot use secondary out of range (fixes constant melee when out of ammo)
     switch(WEP_CVAR(shotgun, secondary))
     {
