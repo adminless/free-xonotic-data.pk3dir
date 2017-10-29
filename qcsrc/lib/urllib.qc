@@ -27,12 +27,12 @@ int autocvar__urllib_nextslot;
 ERASEABLE
 float url_URI_Get_Callback(int id, float status, string data)
 {
-	if (id < MIN_URL_ID) return 0;
+	if (id < MIN_URL_ID) { return 0; }
 	id -= MIN_URL_ID;
-	if (id >= NUM_URL_ID) return 0;
+	if (id >= NUM_URL_ID) { return 0; }
 	entity e;
 	e = url_fromid[id];
-	if (!e) return 0;
+	if (!e) { return 0; }
 	if (e.url_rbuf >= 0 || e.url_wbuf >= 0)
 	{
 		LOG_INFOF("WARNING: handle %d (%s) has already received data?!?", id + NUM_URL_ID, e.url_url);
@@ -43,7 +43,7 @@ float url_URI_Get_Callback(int id, float status, string data)
 	url_fromid[id] = NULL;
 
 	// if we get here, we MUST have both buffers cleared
-	if (e.url_rbuf != -1 || e.url_wbuf != -1 || e.url_fh != URL_FH_CURL) error("url_URI_Get_Callback: not a request waiting for data");
+	if (e.url_rbuf != -1 || e.url_wbuf != -1 || e.url_fh != URL_FH_CURL) { error("url_URI_Get_Callback: not a request waiting for data"); }
 
 	if (status == 0)
 	{
@@ -69,7 +69,9 @@ float url_URI_Get_Callback(int id, float status, string data)
 			return 1;
 		}
 		for (i = 0; i < n; ++i)
+		{
 			bufstr_set(e.url_rbuf, i, argv(i));
+		}
 		e.url_ready(e, e.url_ready_pass, URL_READY_CANREAD);
 		return 1;
 	}
@@ -92,93 +94,95 @@ void url_single_fopen(string url, int mode, url_ready_func rdy, entity pass)
 	{
 		switch (mode)
 		{
-			case FILE_WRITE:
-			case FILE_APPEND:
-				// collect data to a stringbuffer for a POST request
-				// attempts to close will result in a reading handle
+		case FILE_WRITE:
+		case FILE_APPEND:
+			// collect data to a stringbuffer for a POST request
+			// attempts to close will result in a reading handle
 
-				// create a writing end that does nothing yet
-				e = new_pure(url_single_fopen_file);
-				e.url_url = strzone(url);
-				e.url_content_type = "text/plain";
-				e.url_verb = "";
-				e.url_fh = URL_FH_CURL;
-				e.url_wbuf = buf_create();
-				if (e.url_wbuf < 0)
+			// create a writing end that does nothing yet
+			e = new_pure(url_single_fopen_file);
+			e.url_url = strzone(url);
+			e.url_content_type = "text/plain";
+			e.url_verb = "";
+			e.url_fh = URL_FH_CURL;
+			e.url_wbuf = buf_create();
+			if (e.url_wbuf < 0)
+			{
+				LOG_INFO("url_single_fopen: out of memory in buf_create");
+				rdy(e, pass, URL_READY_ERROR);
+				strunzone(e.url_url);
+				delete(e);
+				return;
+			}
+			e.url_wbufpos = 0;
+			e.url_rbuf = -1;
+			e.url_ready = rdy;
+			e.url_ready_pass = pass;
+			rdy(e, pass, URL_READY_CANWRITE);
+			break;
+
+		case FILE_READ:
+			// read data only
+
+			// get slot for HTTP request
+			for (i = autocvar__urllib_nextslot; i < NUM_URL_ID; ++i)
+			{
+				if (url_fromid[i] == NULL) { break; } }
+			if (i >= NUM_URL_ID)
+			{
+				for (i = 0; i < autocvar__urllib_nextslot; ++i)
 				{
-					LOG_INFO("url_single_fopen: out of memory in buf_create");
-					rdy(e, pass, URL_READY_ERROR);
-					strunzone(e.url_url);
-					delete(e);
-					return;
-				}
-				e.url_wbufpos = 0;
-				e.url_rbuf = -1;
-				e.url_ready = rdy;
-				e.url_ready_pass = pass;
-				rdy(e, pass, URL_READY_CANWRITE);
-				break;
-
-			case FILE_READ:
-				// read data only
-
-				// get slot for HTTP request
-				for (i = autocvar__urllib_nextslot; i < NUM_URL_ID; ++i)
-					if (url_fromid[i] == NULL) break;
-				if (i >= NUM_URL_ID)
+					if (url_fromid[i] == NULL) { break; } }
+				if (i >= autocvar__urllib_nextslot)
 				{
-					for (i = 0; i < autocvar__urllib_nextslot; ++i)
-						if (url_fromid[i] == NULL) break;
-					if (i >= autocvar__urllib_nextslot)
-					{
-						LOG_INFO("url_single_fopen: too many concurrent requests");
-						rdy(NULL, pass, URL_READY_ERROR);
-						return;
-					}
-				}
-
-				// GET the data
-				if (!crypto_uri_postbuf(url, i + MIN_URL_ID, string_null, string_null, -1, 0))
-				{
-					LOG_INFO("url_single_fopen: failure in crypto_uri_postbuf");
+					LOG_INFO("url_single_fopen: too many concurrent requests");
 					rdy(NULL, pass, URL_READY_ERROR);
 					return;
 				}
+			}
 
-				// Make a dummy handle object (no buffers at
-				// all). Wait for data to come from the
-				// server, then call the callback
-				e = new_pure(url_single_fopen_file);
-				e.url_url = strzone(url);
-				e.url_fh = URL_FH_CURL;
-				e.url_rbuf = -1;
-				e.url_wbuf = -1;
-				e.url_ready = rdy;
-				e.url_ready_pass = pass;
-				e.url_id = i;
-				url_fromid[i] = e;
+			// GET the data
+			if (!crypto_uri_postbuf(url, i + MIN_URL_ID, string_null, string_null, -1, 0))
+			{
+				LOG_INFO("url_single_fopen: failure in crypto_uri_postbuf");
+				rdy(NULL, pass, URL_READY_ERROR);
+				return;
+			}
 
-				// make sure this slot won't be reused quickly even on map change
-				cvar_set("_urllib_nextslot", ftos((i + 1) % NUM_URL_ID));
-				break;
+			// Make a dummy handle object (no buffers at
+			// all). Wait for data to come from the
+			// server, then call the callback
+			e = new_pure(url_single_fopen_file);
+			e.url_url = strzone(url);
+			e.url_fh = URL_FH_CURL;
+			e.url_rbuf = -1;
+			e.url_wbuf = -1;
+			e.url_ready = rdy;
+			e.url_ready_pass = pass;
+			e.url_id = i;
+			url_fromid[i] = e;
+
+			// make sure this slot won't be reused quickly even on map change
+			cvar_set("_urllib_nextslot", ftos((i + 1) % NUM_URL_ID));
+			break;
 		}
 	}
 	else if (url == "-")
 	{
 		switch (mode)
 		{
-			case FILE_WRITE:
-			case FILE_APPEND:
-				e = new_pure(url_single_fopen_stdout);
-				e.url_fh = URL_FH_STDOUT;
-				e.url_ready = rdy;
-				e.url_ready_pass = pass;
-				rdy(e, pass, URL_READY_CANWRITE);
-				break;
-			case FILE_READ:
-				LOG_INFO("url_single_fopen: cannot open '-' for reading");
-				rdy(NULL, pass, URL_READY_ERROR);
-				break;
+		case FILE_WRITE:
+		case FILE_APPEND:
+			e = new_pure(url_single_fopen_stdout);
+			e.url_fh = URL_FH_STDOUT;
+			e.url_ready = rdy;
+			e.url_ready_pass = pass;
+			rdy(e, pass, URL_READY_CANWRITE);
+			break;
+		case FILE_READ:
+			LOG_INFO("url_single_fopen: cannot open '-' for reading");
+			rdy(NULL, pass, URL_READY_ERROR);
+			break;
 		}
 	}
 	else
@@ -196,8 +200,8 @@ void url_single_fopen(string url, int mode, url_ready_func rdy, entity pass)
 			e.url_fh = fh;
 			e.url_ready = rdy;
 			e.url_ready_pass = pass;
-			if (mode == FILE_READ) rdy(e, pass, URL_READY_CANREAD);
-			else rdy(e, pass, URL_READY_CANWRITE);
+			if (mode == FILE_READ) { rdy(e, pass, URL_READY_CANREAD); }
+			else { rdy(e, pass, URL_READY_CANWRITE); }
 		}
 	}
 }
@@ -210,9 +214,13 @@ void url_fclose(entity e)
 
 	if (e.url_fh == URL_FH_CURL)
 	{
-		if (e.url_rbuf == -1 || e.url_wbuf != -1)     // not(post GET/POST request)
+		if (e.url_rbuf == -1 || e.url_wbuf != -1) // not(post GET/POST request)
+		{
 			if (e.url_rbuf != -1 || e.url_wbuf == -1) // not(pre POST request)
+			{
 				error("url_fclose: not closable in current state");
+			}
+		}
 
 		// closing an URL!
 		if (e.url_wbuf >= 0)
@@ -221,11 +229,13 @@ void url_fclose(entity e)
 
 			// get slot for HTTP request
 			for (i = autocvar__urllib_nextslot; i < NUM_URL_ID; ++i)
-				if (url_fromid[i] == NULL) break;
+			{
+				if (url_fromid[i] == NULL) { break; } }
 			if (i >= NUM_URL_ID)
 			{
 				for (i = 0; i < autocvar__urllib_nextslot; ++i)
-					if (url_fromid[i] == NULL) break;
+				{
+					if (url_fromid[i] == NULL) { break; } }
 				if (i >= autocvar__urllib_nextslot)
 				{
 					LOG_INFO("url_fclose: too many concurrent requests");
@@ -270,14 +280,14 @@ void url_fclose(entity e)
 	}
 	else if (e.url_fh == URL_FH_STDOUT)
 	{
-		e.url_ready(e, e.url_ready_pass, URL_READY_CLOSED);  // closing creates no reading handle
+		e.url_ready(e, e.url_ready_pass, URL_READY_CLOSED); // closing creates no reading handle
 		delete(e);
 	}
 	else
 	{
 		// file
 		fclose(e.url_fh);
-		e.url_ready(e, e.url_ready_pass, URL_READY_CLOSED);  // closing creates no reading handle
+		e.url_ready(e, e.url_ready_pass, URL_READY_CLOSED); // closing creates no reading handle
 		delete(e);
 	}
 }
@@ -288,7 +298,7 @@ string url_fgets(entity e)
 {
 	if (e.url_fh == URL_FH_CURL)
 	{
-		if (e.url_rbuf == -1) error("url_fgets: not readable in current state");
+		if (e.url_rbuf == -1) { error("url_fgets: not readable in current state"); }
 		// curl
 		string s;
 		s = bufstr_get(e.url_rbuf, e.url_rbufpos);
@@ -313,7 +323,7 @@ void url_fputs(entity e, string s)
 {
 	if (e.url_fh == URL_FH_CURL)
 	{
-		if (e.url_wbuf == -1) error("url_fputs: not writable in current state");
+		if (e.url_wbuf == -1) { error("url_fputs: not writable in current state"); }
 		// curl
 		bufstr_set(e.url_wbuf, e.url_wbufpos, s);
 		e.url_wbufpos += 1;
@@ -337,7 +347,7 @@ void url_multi_ready(entity fh, entity me, float status)
 	float n;
 	if (status == URL_READY_ERROR || status < 0)
 	{
-		if (status == -422)  // Unprocessable Entity
+		if (status == -422) // Unprocessable Entity
 		{
 			LOG_INFO("uri_multi_ready: got HTTP error 422, data is in unusable format - not continuing");
 			me.url_ready(fh, me.url_ready_pass, status);

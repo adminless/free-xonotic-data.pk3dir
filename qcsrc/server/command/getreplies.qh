@@ -7,7 +7,7 @@
 
 // ladder bullshit todo
 const int LADDER_FIRSTPOINT = 100;
-#define LADDER_CNT 10       // position X still gives LADDER_FIRSTPOINT/X points
+#define LADDER_CNT 10 // position X still gives LADDER_FIRSTPOINT/X points
 const int LADDER_SIZE = 30; // ladder shows the top X players
 
 string top_uids[LADDER_SIZE];

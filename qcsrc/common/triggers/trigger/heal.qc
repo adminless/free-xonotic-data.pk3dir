@@ -4,7 +4,9 @@
 void trigger_heal_touch(entity this, entity toucher)
 {
 	if (this.active != ACTIVE_ACTIVE)
+	{
 		return;
+	}
 
 	// only do the EXACTTRIGGER_TOUCH checks when really needed (saves some cpu)
 	if (toucher.iscreature)
@@ -20,7 +22,7 @@ void trigger_heal_touch(entity this, entity toucher)
 			{
 				toucher.health = min(toucher.health + this.health, this.max_health);
 				toucher.pauserothealth_finished = max(toucher.pauserothealth_finished, time + autocvar_g_balance_pause_health_rot);
-				_sound (toucher, CH_TRIGGER, this.noise, VOL_BASE, ATTEN_NORM);
+				_sound(toucher, CH_TRIGGER, this.noise, VOL_BASE, ATTEN_NORM);
 			}
 		}
 	}
@@ -33,11 +35,17 @@ spawnfunc(trigger_heal)
 	EXACTTRIGGER_INIT;
 	settouch(this, trigger_heal_touch);
 	if (!this.health)
+	{
 		this.health = 10;
+	}
 	if (!this.max_health)
-		this.max_health = 200; //Max health topoff for field
-	if(this.noise == "")
+	{
+		this.max_health = 200; // Max health topoff for field
+	}
+	if (this.noise == "")
+	{
 		this.noise = "misc/mediumhealth.wav";
+	}
 	precache_sound(this.noise);
 }
 #endif

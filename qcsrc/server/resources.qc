@@ -13,51 +13,51 @@ float GetResourceLimit(entity e, int resource_type)
 	float limit;
 	switch (resource_type)
 	{
-		case RESOURCE_HEALTH:
-		{
-			limit = autocvar_g_balance_health_limit;
-			break;
-		}
-		case RESOURCE_ARMOR:
-		{
-			limit = autocvar_g_balance_armor_limit;
-			break;
-		}
-		case RESOURCE_SHELLS:
-		{
-			limit = g_pickup_shells_max;
-			break;
-		}
-		case RESOURCE_BULLETS:
-		{
-			limit = g_pickup_nails_max;
-			break;
-		}
-		case RESOURCE_ROCKETS:
-		{
-			limit = g_pickup_rockets_max;
-			break;
-		}
-		case RESOURCE_CELLS:
-		{
-			limit = g_pickup_cells_max;
-			break;
-		}
-		case RESOURCE_PLASMA:
-		{
-			limit = g_pickup_plasma_max;
-			break;
-		}
-		case RESOURCE_FUEL:
-		{
-			limit = autocvar_g_balance_fuel_limit;
-			break;
-		}
-		default:
-		{
-			error("GetResourceLimit: Invalid resource type.");
-			return 0;
-		}
+	case RESOURCE_HEALTH:
+	{
+		limit = autocvar_g_balance_health_limit;
+		break;
+	}
+	case RESOURCE_ARMOR:
+	{
+		limit = autocvar_g_balance_armor_limit;
+		break;
+	}
+	case RESOURCE_SHELLS:
+	{
+		limit = g_pickup_shells_max;
+		break;
+	}
+	case RESOURCE_BULLETS:
+	{
+		limit = g_pickup_nails_max;
+		break;
+	}
+	case RESOURCE_ROCKETS:
+	{
+		limit = g_pickup_rockets_max;
+		break;
+	}
+	case RESOURCE_CELLS:
+	{
+		limit = g_pickup_cells_max;
+		break;
+	}
+	case RESOURCE_PLASMA:
+	{
+		limit = g_pickup_plasma_max;
+		break;
+	}
+	case RESOURCE_FUEL:
+	{
+		limit = autocvar_g_balance_fuel_limit;
+		break;
+	}
+	default:
+	{
+		error("GetResourceLimit: Invalid resource type.");
+		return 0;
+	}
 	}
 	MUTATOR_CALLHOOK(GetResourceLimit, e, resource_type, limit);
 	limit = M_ARGV(2, float);
@@ -118,31 +118,30 @@ void GiveResource(entity receiver, int resource_type, float amount)
 		GetResourceAmount(receiver, resource_type) + amount);
 	switch (resource_type)
 	{
-		case RESOURCE_HEALTH:
-		{
-			receiver.pauserothealth_finished =
-				max(receiver.pauserothealth_finished, time +
-				autocvar_g_balance_pause_health_rot);
-			return;
-		}
-		case RESOURCE_ARMOR:
-		{
-			receiver.pauserotarmor_finished =
-				max(receiver.pauserotarmor_finished, time +
-				autocvar_g_balance_pause_armor_rot);
-			return;
-		}
-		case RESOURCE_FUEL:
-		{
-			receiver.pauserotfuel_finished = max(receiver.pauserotfuel_finished,
-				time + autocvar_g_balance_pause_fuel_rot);
-			return;
-		}
+	case RESOURCE_HEALTH:
+	{
+		receiver.pauserothealth_finished =
+			max(receiver.pauserothealth_finished, time
+			+autocvar_g_balance_pause_health_rot);
+		return;
+	}
+	case RESOURCE_ARMOR:
+	{
+		receiver.pauserotarmor_finished =
+			max(receiver.pauserotarmor_finished, time
+			+autocvar_g_balance_pause_armor_rot);
+		return;
+	}
+	case RESOURCE_FUEL:
+	{
+		receiver.pauserotfuel_finished = max(receiver.pauserotfuel_finished,
+			time + autocvar_g_balance_pause_fuel_rot);
+		return;
+	}
 	}
 }
 
-void GiveResourceWithLimit(entity receiver, int resource_type, float amount,
-	float limit)
+void GiveResourceWithLimit(entity receiver, int resource_type, float amount, float limit)
 {
 	if (amount == 0)
 	{
@@ -160,14 +159,30 @@ int GetResourceType(.float resource_field)
 {
 	switch (resource_field)
 	{
-		case health: { return RESOURCE_HEALTH; }
-		case armorvalue: { return RESOURCE_ARMOR; }
-		case ammo_shells: { return RESOURCE_SHELLS; }
-		case ammo_nails: { return RESOURCE_BULLETS; }
-		case ammo_rockets: { return RESOURCE_ROCKETS; }
-		case ammo_cells: { return RESOURCE_CELLS; }
-		case ammo_plasma: { return RESOURCE_PLASMA; }
-		case ammo_fuel: { return RESOURCE_FUEL; }
+	case health:
+	{ return RESOURCE_HEALTH;
+	}
+	case armorvalue:
+	{ return RESOURCE_ARMOR;
+	}
+	case ammo_shells:
+	{ return RESOURCE_SHELLS;
+	}
+	case ammo_nails:
+	{ return RESOURCE_BULLETS;
+	}
+	case ammo_rockets:
+	{ return RESOURCE_ROCKETS;
+	}
+	case ammo_cells:
+	{ return RESOURCE_CELLS;
+	}
+	case ammo_plasma:
+	{ return RESOURCE_PLASMA;
+	}
+	case ammo_fuel:
+	{ return RESOURCE_FUEL;
+	}
 	}
 	error("GetResourceType: Invalid field.");
 	return 0;
@@ -177,14 +192,30 @@ int GetResourceType(.float resource_field)
 {
 	switch (resource_type)
 	{
-		case RESOURCE_HEALTH: { return health; }
-		case RESOURCE_ARMOR: { return armorvalue; }
-		case RESOURCE_SHELLS: { return ammo_shells; }
-		case RESOURCE_BULLETS: { return ammo_nails; }
-		case RESOURCE_ROCKETS: { return ammo_rockets; }
-		case RESOURCE_CELLS: { return ammo_cells; }
-		case RESOURCE_PLASMA: { return ammo_plasma; }
-		case RESOURCE_FUEL: { return ammo_fuel; }
+	case RESOURCE_HEALTH:
+	{ return health;
+	}
+	case RESOURCE_ARMOR:
+	{ return armorvalue;
+	}
+	case RESOURCE_SHELLS:
+	{ return ammo_shells;
+	}
+	case RESOURCE_BULLETS:
+	{ return ammo_nails;
+	}
+	case RESOURCE_ROCKETS:
+	{ return ammo_rockets;
+	}
+	case RESOURCE_CELLS:
+	{ return ammo_cells;
+	}
+	case RESOURCE_PLASMA:
+	{ return ammo_plasma;
+	}
+	case RESOURCE_FUEL:
+	{ return ammo_fuel;
+	}
 	}
 	error("GetResourceField: Invalid resource type.");
 	return health;

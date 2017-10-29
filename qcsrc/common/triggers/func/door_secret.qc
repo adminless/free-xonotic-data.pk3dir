@@ -8,11 +8,11 @@ void fd_secret_move5(entity this);
 void fd_secret_move6(entity this);
 void fd_secret_done(entity this);
 
-const float SECRET_OPEN_ONCE = 1;		// stays open
-const float SECRET_1ST_LEFT = 2;		// 1st move is left of arrow
-const float SECRET_1ST_DOWN = 4;		// 1st move is down from arrow
-const float SECRET_NO_SHOOT = 8;		// only opened by trigger
-const float SECRET_YES_SHOOT = 16;	// shootable even if targeted
+const float SECRET_OPEN_ONCE = 1; // stays open
+const float SECRET_1ST_LEFT = 2; // 1st move is left of arrow
+const float SECRET_1ST_DOWN = 4; // 1st move is down from arrow
+const float SECRET_NO_SHOOT = 8; // only opened by trigger
+const float SECRET_YES_SHOOT = 16; // shootable even if targeted
 
 void fd_secret_use(entity this, entity actor, entity trigger)
 {
@@ -20,17 +20,21 @@ void fd_secret_use(entity this, entity actor, entity trigger)
 	string message_save;
 
 	this.health = 10000;
-	if(!this.bot_attack)
+	if (!this.bot_attack)
+	{
 		IL_PUSH(g_bot_targets, this);
+	}
 	this.bot_attack = true;
 
 	// exit if still moving around...
 	if (this.origin != this.oldorigin)
+	{
 		return;
+	}
 
 	message_save = this.message;
 	this.message = ""; // no more message
-	SUB_UseTargets(this, actor, trigger);				// fire all targets / killtargets
+	SUB_UseTargets(this, actor, trigger); // fire all targets / killtargets
 	this.message = message_save;
 
 	this.velocity = '0 0 0';
@@ -38,32 +42,46 @@ void fd_secret_use(entity this, entity actor, entity trigger)
 	// Make a sound, wait a little...
 
 	if (this.noise1 != "")
+	{
 		_sound(this, CH_TRIGGER_SINGLE, this.noise1, VOL_BASE, ATTEN_NORM);
+	}
 	this.nextthink = this.ltime + 0.1;
 
-	temp = 1 - (this.spawnflags & SECRET_1ST_LEFT);	// 1 or -1
+	temp = 1 - (this.spawnflags & SECRET_1ST_LEFT); // 1 or -1
 	makevectors(this.mangle);
 
 	if (!this.t_width)
 	{
 		if (this.spawnflags & SECRET_1ST_DOWN)
+		{
 			this.t_width = fabs(v_up * this.size);
+		}
 		else
+		{
 			this.t_width = fabs(v_right * this.size);
+		}
 	}
 
 	if (!this.t_length)
+	{
 		this.t_length = fabs(v_forward * this.size);
+	}
 
 	if (this.spawnflags & SECRET_1ST_DOWN)
+	{
 		this.dest1 = this.origin - v_up * this.t_width;
+	}
 	else
+	{
 		this.dest1 = this.origin + v_right * (this.t_width * temp);
+	}
 
 	this.dest2 = this.dest1 + v_forward * this.t_length;
 	SUB_CalcMove(this, this.dest1, TSPEED_LINEAR, this.speed, fd_secret_move1);
 	if (this.noise2 != "")
+	{
 		_sound(this, CH_TRIGGER_SINGLE, this.noise2, VOL_BASE, ATTEN_NORM);
+	}
 }
 
 void fd_secret_damage(entity this, entity inflictor, entity attacker, float damage, int deathtype, vector hitloc, vector force)
@@ -77,14 +95,18 @@ void fd_secret_move1(entity this)
 	this.nextthink = this.ltime + 1.0;
 	setthink(this, fd_secret_move2);
 	if (this.noise3 != "")
+	{
 		_sound(this, CH_TRIGGER_SINGLE, this.noise3, VOL_BASE, ATTEN_NORM);
+	}
 }
 
 // Start moving sideways w/sound...
 void fd_secret_move2(entity this)
 {
 	if (this.noise2 != "")
+	{
 		_sound(this, CH_TRIGGER_SINGLE, this.noise2, VOL_BASE, ATTEN_NORM);
+	}
 	SUB_CalcMove(this, this.dest2, TSPEED_LINEAR, this.speed, fd_secret_move3);
 }
 
@@ -92,7 +114,9 @@ void fd_secret_move2(entity this)
 void fd_secret_move3(entity this)
 {
 	if (this.noise3 != "")
+	{
 		_sound(this, CH_TRIGGER_SINGLE, this.noise3, VOL_BASE, ATTEN_NORM);
+	}
 	if (!(this.spawnflags & SECRET_OPEN_ONCE))
 	{
 		this.nextthink = this.ltime + this.wait;
@@ -104,7 +128,9 @@ void fd_secret_move3(entity this)
 void fd_secret_move4(entity this)
 {
 	if (this.noise2 != "")
+	{
 		_sound(this, CH_TRIGGER_SINGLE, this.noise2, VOL_BASE, ATTEN_NORM);
+	}
 	SUB_CalcMove(this, this.dest1, TSPEED_LINEAR, this.speed, fd_secret_move5);
 }
 
@@ -114,13 +140,17 @@ void fd_secret_move5(entity this)
 	this.nextthink = this.ltime + 1.0;
 	setthink(this, fd_secret_move6);
 	if (this.noise3 != "")
+	{
 		_sound(this, CH_TRIGGER_SINGLE, this.noise3, VOL_BASE, ATTEN_NORM);
+	}
 }
 
 void fd_secret_move6(entity this)
 {
 	if (this.noise2 != "")
+	{
 		_sound(this, CH_TRIGGER_SINGLE, this.noise2, VOL_BASE, ATTEN_NORM);
+	}
 	SUB_CalcMove(this, this.oldorigin, TSPEED_LINEAR, this.speed, fd_secret_done);
 }
 
@@ -130,10 +160,12 @@ void fd_secret_done(entity this)
 	{
 		this.health = 10000;
 		this.takedamage = DAMAGE_YES;
-		//this.th_pain = fd_secret_use;
+		// this.th_pain = fd_secret_use;
 	}
 	if (this.noise3 != "")
+	{
 		_sound(this, CH_TRIGGER_SINGLE, this.noise3, VOL_BASE, ATTEN_NORM);
+	}
 }
 
 .float door_finished;
@@ -141,9 +173,11 @@ void fd_secret_done(entity this)
 void secret_blocked(entity this, entity blocker)
 {
 	if (time < this.door_finished)
+	{
 		return;
+	}
 	this.door_finished = time + 0.5;
-	//T_Damage (other, this, this, this.dmg, this.dmg, this.deathtype, DT_IMPACT, (this.absmin + this.absmax) * 0.5, '0 0 0', Obituary_Generic);
+	// T_Damage (other, this, this, this.dmg, this.dmg, this.deathtype, DT_IMPACT, (this.absmin + this.absmax) * 0.5, '0 0 0', Obituary_Generic);
 }
 
 /*
@@ -156,16 +190,22 @@ Prints messages
 void secret_touch(entity this, entity toucher)
 {
 	if (!toucher.iscreature)
+	{
 		return;
+	}
 	if (this.door_finished > time)
+	{
 		return;
+	}
 
 	this.door_finished = time + 2;
 
 	if (this.message)
 	{
 		if (IS_CLIENT(toucher))
+		{
 			centerprint(toucher, this.message);
+		}
 		play2(toucher, this.noise);
 	}
 }
@@ -202,29 +242,30 @@ If a secret door has a targetname, it will only be opened by it's botton or trig
 spawnfunc(func_door_secret)
 {
 	/*if (!this.deathtype) // map makers can override this
-		this.deathtype = " got in the way";*/
+	    this.deathtype = " got in the way";*/
 
-	if (!this.dmg) this.dmg = 2;
+	if (!this.dmg) { this.dmg = 2; }
 
 	// Magic formula...
 	this.mangle = this.angles;
 	this.angles = '0 0 0';
 	this.classname = "door";
-	if (!InitMovingBrushTrigger(this)) return;
+	if (!InitMovingBrushTrigger(this)) { return; }
 	this.effects |= EF_LOWPRECISION;
 
-	if (this.noise == "") this.noise = "misc/talk.wav";
+	if (this.noise == "") { this.noise = "misc/talk.wav"; }
 	precache_sound(this.noise);
 
 	settouch(this, secret_touch);
 	setblocked(this, secret_blocked);
 	this.speed = 50;
 	this.use = fd_secret_use;
-	if(THIS_TARGETED)
-	{
-	}
+	if (THIS_TARGETED)
+	{}
 	else
+	{
 		this.spawnflags |= SECRET_YES_SHOOT;
+	}
 
 	if (this.spawnflags & SECRET_YES_SHOOT)
 	{
@@ -233,8 +274,10 @@ spawnfunc(func_door_secret)
 		this.event_damage = fd_secret_damage;
 	}
 	this.oldorigin = this.origin;
-	if (!this.wait) this.wait = 5; // seconds before closing
-
+	if (!this.wait)
+	{
+		this.wait = 5; // seconds before closing
+	}
 	this.reset = secret_reset;
 	this.reset(this);
 }

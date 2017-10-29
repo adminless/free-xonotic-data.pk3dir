@@ -3,19 +3,19 @@
 #include <common/monsters/_mod.qh>
 
 #if defined(SVQC)
-    #include "util.qh"
-    #include "../server/defs.qh"
+#include "util.qh"
+#include "../server/defs.qh"
 #endif
 
 bool monsters_animoverride(entity this)
 {
 	Monster monster_id = NULL;
 	FOREACH(Monsters, it != MON_Null && it.m_model.model_str() == this.model, {
-        monster_id = it;
-        break;
+		monster_id = it;
+		break;
 	});
 
-	if(!monster_id) { return false; }
+	if (!monster_id) { return false; }
 
 	monster_id.mr_anim(monster_id, this);
 
@@ -50,13 +50,15 @@ bool monsters_animoverride(entity this)
 void animdecide_load_if_needed(entity e)
 {
 	int mdlidx = e.modelindex;
-	if (mdlidx == e.animdecide_modelindex) return;
+	if (mdlidx == e.animdecide_modelindex) { return; }
 	e.animdecide_modelindex = mdlidx;
 
-	if(substring(e.model, 0, 16) == "models/monsters/")
+	if (substring(e.model, 0, 16) == "models/monsters/")
 	{
-		if(monsters_animoverride(e))
+		if (monsters_animoverride(e))
+		{
 			return;
+		}
 	}
 
 #define ANIM_VEC(a, frames, rate) anim_vec(ANIM_##a, mdlidx, frames, rate)
@@ -81,7 +83,7 @@ void animdecide_load_if_needed(entity e)
 	e.anim_forwardright = animfixfps(e, ANIM_VEC(forwardright, 1, 1), ANIM_VEC(straferight, 1, 1));
 	e.anim_forwardleft = animfixfps(e, ANIM_VEC(forwardleft, 1, 1), ANIM_VEC(strafeleft, 1, 1));
 	e.anim_backright = animfixfps(e, ANIM_VEC(backright, 1, 1), ANIM_VEC(straferight, 1, 1));
-	e.anim_backleft  = animfixfps(e, ANIM_VEC(backleft , 1, 1), ANIM_VEC(strafeleft, 1, 1));
+	e.anim_backleft  = animfixfps(e, ANIM_VEC(backleft, 1, 1), ANIM_VEC(strafeleft, 1, 1));
 	e.anim_melee = animfixfps(e, ANIM_VEC(melee, 1, 1), ANIM_VEC(shoot, 1, 1));
 	e.anim_duckwalkbackwards = animfixfps(e, ANIM_VEC(duckwalkbackwards, 1, 1), ANIM_VEC(duckwalk, 1, 1));
 	e.anim_duckwalkstrafeleft = animfixfps(e, ANIM_VEC(duckwalkstrafeleft, 1, 1), ANIM_VEC(duckwalk, 1, 1));
@@ -89,7 +91,7 @@ void animdecide_load_if_needed(entity e)
 	e.anim_duckwalkforwardright = animfixfps(e, ANIM_VEC(duckwalkforwardright, 1, 1), ANIM_VEC(duckwalk, 1, 1));
 	e.anim_duckwalkforwardleft = animfixfps(e, ANIM_VEC(duckwalkforwardleft, 1, 1), ANIM_VEC(duckwalk, 1, 1));
 	e.anim_duckwalkbackright = animfixfps(e, ANIM_VEC(duckwalkbackright, 1,  1), ANIM_VEC(duckwalk, 1, 1));
-	e.anim_duckwalkbackleft  = animfixfps(e, ANIM_VEC(duckwalkbackleft , 1,  1), ANIM_VEC(duckwalk, 1, 1));
+	e.anim_duckwalkbackleft  = animfixfps(e, ANIM_VEC(duckwalkbackleft, 1,  1), ANIM_VEC(duckwalk, 1, 1));
 
 #undef ANIM_VEC
 
@@ -106,17 +108,23 @@ const float ANIMPRIO_DEAD = 3;
 vector animdecide_getupperanim(entity e)
 {
 	// death etc.
-	if(e.anim_state & ANIMSTATE_FROZEN)
+	if (e.anim_state & ANIMSTATE_FROZEN)
+	{
 		return vec3(e.anim_idle.x, e.anim_time, ANIMPRIO_DEAD);
-	if(e.anim_state & ANIMSTATE_DEAD1)
+	}
+	if (e.anim_state & ANIMSTATE_DEAD1)
+	{
 		return vec3(e.anim_die1_x, e.anim_time, ANIMPRIO_DEAD);
-	if(e.anim_state & ANIMSTATE_DEAD2)
+	}
+	if (e.anim_state & ANIMSTATE_DEAD2)
+	{
 		return vec3(e.anim_die2_x, e.anim_time, ANIMPRIO_DEAD);
+	}
 
 	// is there an action?
 	vector outframe = '-1 0 0';
 	float t, a;
-	if(e.anim_upper_time >= e.anim_upper_implicit_time)
+	if (e.anim_upper_time >= e.anim_upper_implicit_time)
 	{
 		a = e.anim_upper_action;
 		t = e.anim_upper_time;
@@ -126,18 +134,24 @@ vector animdecide_getupperanim(entity e)
 		a = e.anim_upper_implicit_action;
 		t = e.anim_upper_implicit_time;
 	}
-	switch(a)
+	switch (a)
 	{
-		case ANIMACTION_DRAW: outframe = e.anim_draw; break;
-		case ANIMACTION_PAIN1: outframe = e.anim_pain1; break;
-		case ANIMACTION_PAIN2: outframe = e.anim_pain2; break;
-		case ANIMACTION_SHOOT: outframe = e.anim_shoot; break;
-		case ANIMACTION_TAUNT: outframe = e.anim_taunt; break;
-		case ANIMACTION_MELEE: outframe = e.anim_melee; break;
+	case ANIMACTION_DRAW: outframe = e.anim_draw;
+		break;
+	case ANIMACTION_PAIN1: outframe = e.anim_pain1;
+		break;
+	case ANIMACTION_PAIN2: outframe = e.anim_pain2;
+		break;
+	case ANIMACTION_SHOOT: outframe = e.anim_shoot;
+		break;
+	case ANIMACTION_TAUNT: outframe = e.anim_taunt;
+		break;
+	case ANIMACTION_MELEE: outframe = e.anim_melee;
+		break;
 	}
-	if(outframe.x >= 0)
+	if (outframe.x >= 0)
 	{
-		if(time <= t + outframe.y / outframe.z)
+		if (time <= t + outframe.y / outframe.z)
 		{
 			// animation is running!
 			return vec3(outframe.x, t, ANIMPRIO_ACTIVE);
@@ -152,19 +166,27 @@ vector animdecide_getupperanim(entity e)
 vector animdecide_getloweranim(entity e)
 {
 	// death etc.
-	if(e.anim_state & ANIMSTATE_FOLLOW)
+	if (e.anim_state & ANIMSTATE_FOLLOW)
+	{
 		return vec3(((e.anim_state & ANIMSTATE_DUCK) ? e.anim_duckidle_x : e.anim_idle_x), e.anim_time, ANIMPRIO_DEAD); // dead priority so it's above all
-	if(e.anim_state & ANIMSTATE_FROZEN)
+	}
+	if (e.anim_state & ANIMSTATE_FROZEN)
+	{
 		return vec3(e.anim_idle.x, e.anim_time, ANIMPRIO_DEAD);
-	if(e.anim_state & ANIMSTATE_DEAD1)
+	}
+	if (e.anim_state & ANIMSTATE_DEAD1)
+	{
 		return vec3(e.anim_die1_x, e.anim_time, ANIMPRIO_DEAD);
-	if(e.anim_state & ANIMSTATE_DEAD2)
+	}
+	if (e.anim_state & ANIMSTATE_DEAD2)
+	{
 		return vec3(e.anim_die2_x, e.anim_time, ANIMPRIO_DEAD);
+	}
 
 	// is there an action?
 	vector outframe = '-1 0 0';
 	float t, a;
-	if(e.anim_lower_time >= e.anim_lower_implicit_time)
+	if (e.anim_lower_time >= e.anim_lower_implicit_time)
 	{
 		a = e.anim_lower_action;
 		t = e.anim_lower_time;
@@ -174,13 +196,13 @@ vector animdecide_getloweranim(entity e)
 		a = e.anim_lower_implicit_action;
 		t = e.anim_lower_implicit_time;
 	}
-	switch(a)
+	switch (a)
 	{
-		case ANIMACTION_JUMP: if(e.anim_implicit_state & ANIMIMPLICITSTATE_INAIR) { if(e.anim_state & ANIMSTATE_DUCK) outframe = e.anim_duckjump; else outframe = e.anim_jump; } break;
+	case ANIMACTION_JUMP: if (e.anim_implicit_state & ANIMIMPLICITSTATE_INAIR) { if (e.anim_state & ANIMSTATE_DUCK) { outframe = e.anim_duckjump; } else { outframe = e.anim_jump; } } break;
 	}
-	if(outframe.x >= 0)
+	if (outframe.x >= 0)
 	{
-		if(time <= t + outframe.y / outframe.z)
+		if (time <= t + outframe.y / outframe.z)
 		{
 			// animation is running!
 			return vec3(outframe.x, t, ANIMPRIO_ACTIVE);
@@ -188,12 +210,16 @@ vector animdecide_getloweranim(entity e)
 	}
 	// or, decide the anim by state
 	t = max(e.anim_time, e.anim_implicit_time);
-	if(e.anim_state & ANIMSTATE_DUCK)
+	if (e.anim_state & ANIMSTATE_DUCK)
 	{
-		if(e.anim_implicit_state & ANIMIMPLICITSTATE_INAIR)
-			return vec3(e.anim_duckjump.x, 0, ANIMPRIO_CROUCH); // play the END of the jump anim
-		else switch(e.anim_implicit_state & (ANIMIMPLICITSTATE_FORWARD | ANIMIMPLICITSTATE_BACKWARDS | ANIMIMPLICITSTATE_LEFT | ANIMIMPLICITSTATE_RIGHT))
+		if (e.anim_implicit_state & ANIMIMPLICITSTATE_INAIR)
 		{
+			return vec3(e.anim_duckjump.x, 0, ANIMPRIO_CROUCH); // play the END of the jump anim
+		}
+		else
+		{
+			switch (e.anim_implicit_state & (ANIMIMPLICITSTATE_FORWARD | ANIMIMPLICITSTATE_BACKWARDS | ANIMIMPLICITSTATE_LEFT | ANIMIMPLICITSTATE_RIGHT))
+			{
 			case ANIMIMPLICITSTATE_FORWARD:
 				return vec3(e.anim_duckwalk.x, t, ANIMPRIO_CROUCH);
 			case ANIMIMPLICITSTATE_BACKWARDS:
@@ -212,14 +238,19 @@ vector animdecide_getloweranim(entity e)
 				return vec3(e.anim_duckwalkbackleft.x, t, ANIMPRIO_CROUCH);
 			default:
 				return vec3(e.anim_duckidle.x, t, ANIMPRIO_CROUCH);
+			}
 		}
 	}
 	else
 	{
-		if(e.anim_implicit_state & ANIMIMPLICITSTATE_INAIR)
-			return vec3(e.anim_jump.x, 0, ANIMPRIO_ACTIVE); // play the END of the jump anim
-		else switch(e.anim_implicit_state & (ANIMIMPLICITSTATE_FORWARD | ANIMIMPLICITSTATE_BACKWARDS | ANIMIMPLICITSTATE_LEFT | ANIMIMPLICITSTATE_RIGHT))
+		if (e.anim_implicit_state & ANIMIMPLICITSTATE_INAIR)
 		{
+			return vec3(e.anim_jump.x, 0, ANIMPRIO_ACTIVE); // play the END of the jump anim
+		}
+		else
+		{
+			switch (e.anim_implicit_state & (ANIMIMPLICITSTATE_FORWARD | ANIMIMPLICITSTATE_BACKWARDS | ANIMIMPLICITSTATE_LEFT | ANIMIMPLICITSTATE_RIGHT))
+			{
 			case ANIMIMPLICITSTATE_FORWARD:
 				return vec3(e.anim_run.x, t, ANIMPRIO_ACTIVE);
 			case ANIMIMPLICITSTATE_BACKWARDS:
@@ -238,6 +269,7 @@ vector animdecide_getloweranim(entity e)
 				return vec3(e.anim_backleft.x, t, ANIMPRIO_ACTIVE);
 			default:
 				return vec3(e.anim_idle.x, t, ANIMPRIO_IDLE);
+			}
 		}
 	}
 	// can't get here
@@ -264,29 +296,39 @@ void animdecide_setimplicitstate(entity e, float onground)
 	// it slightly less likely to "hit two keys at once", so let's do this
 	// here too
 
-	if(vdist(v, >, 10))
+	if (vdist(v, >, 10))
 	{
-		if(v.x >  fabs(v.y) * 0.5)
+		if (v.x >  fabs(v.y) * 0.5)
+		{
 			s |= ANIMIMPLICITSTATE_FORWARD;
-		if(v.x < -fabs(v.y) * 0.5)
+		}
+		if (v.x < -fabs(v.y) * 0.5)
+		{
 			s |= ANIMIMPLICITSTATE_BACKWARDS;
-		if(v.y >  fabs(v.x) * 0.5)
+		}
+		if (v.y >  fabs(v.x) * 0.5)
+		{
 			s |= ANIMIMPLICITSTATE_RIGHT;
-		if(v.y < -fabs(v.x) * 0.5)
+		}
+		if (v.y < -fabs(v.x) * 0.5)
+		{
 			s |= ANIMIMPLICITSTATE_LEFT;
+		}
 	}
-	if(!onground)
+	if (!onground)
+	{
 		s |= ANIMIMPLICITSTATE_INAIR;
+	}
 
 	// detect some kinds of otherwise misdetected jumps (ground to air transition)
 	// NOTE: currently, in CSQC this is the only jump detection, as the explicit jump action is never called!
-	if(!(e.anim_implicit_state & ANIMIMPLICITSTATE_INAIR) && (s & ANIMIMPLICITSTATE_INAIR))
+	if (!(e.anim_implicit_state & ANIMIMPLICITSTATE_INAIR) && (s & ANIMIMPLICITSTATE_INAIR))
 	{
 		e.anim_lower_implicit_action = ANIMACTION_JUMP;
 		e.anim_lower_implicit_time = time;
 	}
 
-	if(s != e.anim_implicit_state)
+	if (s != e.anim_implicit_state)
 	{
 		e.anim_implicit_state = s;
 		e.anim_implicit_time = time;
@@ -299,15 +341,21 @@ void animdecide_setframes(entity e, float support_blending, .float fld_frame, .f
 	// _z: priority
 	vector upper = animdecide_getupperanim(e);
 	vector lower = animdecide_getloweranim(e);
-	//print("UPPER: ", vtos(upper), ", LOWER: ", vtos(lower), "\n");
-	if(support_blending)
+	// print("UPPER: ", vtos(upper), ", LOWER: ", vtos(lower), "\n");
+	if (support_blending)
 	{
-		if(upper.z && !lower.z)
+		if (upper.z && !lower.z)
+		{
 			lower = upper;
-		else if(lower.z && !upper.z)
+		}
+		else if (lower.z && !upper.z)
+		{
 			upper = lower;
-		if(e.frame1time != upper.y || e.frame2time != lower.y)
+		}
+		if (e.frame1time != upper.y || e.frame2time != lower.y)
+		{
 			BITXOR_ASSIGN(e.effects, EF_RESTARTANIM_BIT);
+		}
 		e.(fld_frame) = upper.x;
 		e.(fld_frame1time) = upper.y;
 		e.(fld_frame2) = lower.x;
@@ -315,12 +363,18 @@ void animdecide_setframes(entity e, float support_blending, .float fld_frame, .f
 	}
 	else
 	{
-		if(upper.z > lower.z)
+		if (upper.z > lower.z)
+		{
 			lower = upper;
-		else if(lower.z > upper.z)
+		}
+		else if (lower.z > upper.z)
+		{
 			upper = lower;
-		if(e.frame1time != upper.y)
+		}
+		if (e.frame1time != upper.y)
+		{
 			BITXOR_ASSIGN(e.effects, EF_RESTARTANIM_BIT);
+		}
 		e.(fld_frame) = upper.x;
 		e.(fld_frame1time) = upper.y;
 	}
@@ -328,27 +382,39 @@ void animdecide_setframes(entity e, float support_blending, .float fld_frame, .f
 
 void animdecide_setstate(entity e, int newstate, float restart)
 {
-	if(!restart)
-		if(newstate == e.anim_state)
+	if (!restart)
+	{
+		if (newstate == e.anim_state)
+		{
 			return;
+		}
+	}
 	e.anim_state = newstate;
 	e.anim_time = time;
 }
 void animdecide_setaction(entity e, float action, float restart)
 {
-	if(action < 0)
+	if (action < 0)
 	{
-		if(!restart)
-			if(action == e.anim_lower_action)
+		if (!restart)
+		{
+			if (action == e.anim_lower_action)
+			{
 				return;
+			}
+		}
 		e.anim_lower_action = action;
 		e.anim_lower_time = time;
 	}
 	else
 	{
-		if(!restart)
-			if(action == e.anim_upper_action)
+		if (!restart)
+		{
+			if (action == e.anim_upper_action)
+			{
 				return;
+			}
+		}
 		e.anim_upper_action = action;
 		e.anim_upper_time = time;
 	}

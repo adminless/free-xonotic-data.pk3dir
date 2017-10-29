@@ -3,7 +3,7 @@
 #ifdef GAMEQC
 
 #ifdef SVQC
-	#include <server/antilag.qh>
+#include <server/antilag.qh>
 #endif
 #include <common/physics/player.qh>
 
@@ -24,21 +24,21 @@ REGISTER_MUTATOR(bugrigs, true);
 #endif
 
 
-#define PHYS_BUGRIGS(s)                        STAT(BUGRIGS, s)
-#define PHYS_BUGRIGS_ACCEL(s)                  STAT(BUGRIGS_ACCEL, s)
-#define PHYS_BUGRIGS_AIR_STEERING(s)           STAT(BUGRIGS_AIR_STEERING, s)
-#define PHYS_BUGRIGS_ANGLE_SMOOTHING(s)        STAT(BUGRIGS_ANGLE_SMOOTHING, s)
-#define PHYS_BUGRIGS_CAR_JUMPING(s)            STAT(BUGRIGS_CAR_JUMPING, s)
-#define PHYS_BUGRIGS_FRICTION_AIR(s)           STAT(BUGRIGS_FRICTION_AIR, s)
-#define PHYS_BUGRIGS_FRICTION_BRAKE(s)         STAT(BUGRIGS_FRICTION_BRAKE, s)
-#define PHYS_BUGRIGS_FRICTION_FLOOR(s)         STAT(BUGRIGS_FRICTION_FLOOR, s)
-#define PHYS_BUGRIGS_PLANAR_MOVEMENT(s)        STAT(BUGRIGS_PLANAR_MOVEMENT, s)
-#define PHYS_BUGRIGS_REVERSE_SPEEDING(s)       STAT(BUGRIGS_REVERSE_SPEEDING, s)
-#define PHYS_BUGRIGS_REVERSE_SPINNING(s)       STAT(BUGRIGS_REVERSE_SPINNING, s)
-#define PHYS_BUGRIGS_REVERSE_STOPPING(s)       STAT(BUGRIGS_REVERSE_STOPPING, s)
-#define PHYS_BUGRIGS_SPEED_POW(s)              STAT(BUGRIGS_SPEED_POW, s)
-#define PHYS_BUGRIGS_SPEED_REF(s)              STAT(BUGRIGS_SPEED_REF, s)
-#define PHYS_BUGRIGS_STEER(s)                  STAT(BUGRIGS_STEER, s)
+#define PHYS_BUGRIGS(s) STAT(BUGRIGS, s)
+#define PHYS_BUGRIGS_ACCEL(s) STAT(BUGRIGS_ACCEL, s)
+#define PHYS_BUGRIGS_AIR_STEERING(s) STAT(BUGRIGS_AIR_STEERING, s)
+#define PHYS_BUGRIGS_ANGLE_SMOOTHING(s) STAT(BUGRIGS_ANGLE_SMOOTHING, s)
+#define PHYS_BUGRIGS_CAR_JUMPING(s) STAT(BUGRIGS_CAR_JUMPING, s)
+#define PHYS_BUGRIGS_FRICTION_AIR(s) STAT(BUGRIGS_FRICTION_AIR, s)
+#define PHYS_BUGRIGS_FRICTION_BRAKE(s) STAT(BUGRIGS_FRICTION_BRAKE, s)
+#define PHYS_BUGRIGS_FRICTION_FLOOR(s) STAT(BUGRIGS_FRICTION_FLOOR, s)
+#define PHYS_BUGRIGS_PLANAR_MOVEMENT(s) STAT(BUGRIGS_PLANAR_MOVEMENT, s)
+#define PHYS_BUGRIGS_REVERSE_SPEEDING(s) STAT(BUGRIGS_REVERSE_SPEEDING, s)
+#define PHYS_BUGRIGS_REVERSE_SPINNING(s) STAT(BUGRIGS_REVERSE_SPINNING, s)
+#define PHYS_BUGRIGS_REVERSE_STOPPING(s) STAT(BUGRIGS_REVERSE_STOPPING, s)
+#define PHYS_BUGRIGS_SPEED_POW(s) STAT(BUGRIGS_SPEED_POW, s)
+#define PHYS_BUGRIGS_SPEED_REF(s) STAT(BUGRIGS_SPEED_REF, s)
+#define PHYS_BUGRIGS_STEER(s) STAT(BUGRIGS_STEER, s)
 
 #if defined(SVQC)
 
@@ -76,9 +76,13 @@ float racecar_angle(float forward, float down)
 	float angle_mult = forward / (800 + forward);
 
 	if (ret > 180)
+	{
 		return ret * angle_mult + 360 * (1 - angle_mult);
+	}
 	else
+	{
 		return ret * angle_mult;
+	}
 }
 
 void RaceCarPhysics(entity this, float dt)
@@ -99,9 +103,13 @@ void RaceCarPhysics(entity this, float dt)
 			// back accel is DIGITAL
 			// to prevent speedhack
 			if (accel < -0.5)
+			{
 				accel = -1;
+			}
 			else
+			{
 				accel = 0;
+			}
 		}
 	}
 
@@ -116,20 +124,28 @@ void RaceCarPhysics(entity this, float dt)
 
 		// responsiveness factor for steering and acceleration
 		float f = 1 / (1 + ((max(-myspeed, myspeed) / PHYS_BUGRIGS_SPEED_REF(this)) ** PHYS_BUGRIGS_SPEED_POW(this)));
-		//MAXIMA: f(v) := 1 / (1 + (v / PHYS_BUGRIGS_SPEED_REF(this)) ^ PHYS_BUGRIGS_SPEED_POW(this));
+		// MAXIMA: f(v) := 1 / (1 + (v / PHYS_BUGRIGS_SPEED_REF(this)) ^ PHYS_BUGRIGS_SPEED_POW(this));
 
 		float steerfactor;
 		if (myspeed < 0 && PHYS_BUGRIGS_REVERSE_SPINNING(this))
+		{
 			steerfactor = -myspeed * PHYS_BUGRIGS_STEER(this);
+		}
 		else
+		{
 			steerfactor = -myspeed * f * PHYS_BUGRIGS_STEER(this);
+		}
 
 		float accelfactor;
 		if (myspeed < 0 && PHYS_BUGRIGS_REVERSE_SPEEDING(this))
+		{
 			accelfactor = PHYS_BUGRIGS_ACCEL(this);
+		}
 		else
+		{
 			accelfactor = f * PHYS_BUGRIGS_ACCEL(this);
-		//MAXIMA: accel(v) := f(v) * PHYS_BUGRIGS_ACCEL(this);
+		}
+		// MAXIMA: accel(v) := f(v) * PHYS_BUGRIGS_ACCEL(this);
 
 		if (accel < 0)
 		{
@@ -140,7 +156,9 @@ void RaceCarPhysics(entity this, float dt)
 			else
 			{
 				if (!PHYS_BUGRIGS_REVERSE_SPEEDING(this))
+				{
 					myspeed = min(0, myspeed + dt * PHYS_BUGRIGS_FRICTION_FLOOR(this));
+				}
 			}
 		}
 		else
@@ -152,13 +170,17 @@ void RaceCarPhysics(entity this, float dt)
 			else
 			{
 				if (PHYS_BUGRIGS_REVERSE_STOPPING(this))
+				{
 					myspeed = 0;
+				}
 				else
+				{
 					myspeed = min(0, myspeed + dt * (PHYS_BUGRIGS_FRICTION_FLOOR(this) + PHYS_BUGRIGS_FRICTION_BRAKE(this) * accel));
+				}
 			}
 		}
 		// terminal velocity = velocity at which 50 == accelfactor, that is, 1549 units/sec
-		//MAXIMA: friction(v) := PHYS_BUGRIGS_FRICTION_FLOOR(this);
+		// MAXIMA: friction(v) := PHYS_BUGRIGS_FRICTION_FLOOR(this);
 
 		this.angles_y += steer * dt * steerfactor; // apply steering
 		makevectors(this.angles); // new forward direction!
@@ -181,9 +203,9 @@ void RaceCarPhysics(entity this, float dt)
 	}
 
 	rigvel *= max(0, 1 - vlen(rigvel) * PHYS_BUGRIGS_FRICTION_AIR(this) * dt);
-	//MAXIMA: airfriction(v) := v * v * PHYS_BUGRIGS_FRICTION_AIR(this);
-	//MAXIMA: total_acceleration(v) := accel(v) - friction(v) - airfriction(v);
-	//MAXIMA: solve(total_acceleration(v) = 0, v);
+	// MAXIMA: airfriction(v) := v * v * PHYS_BUGRIGS_FRICTION_AIR(this);
+	// MAXIMA: total_acceleration(v) := accel(v) - friction(v) - airfriction(v);
+	// MAXIMA: solve(total_acceleration(v) = 0, v);
 
 	if (PHYS_BUGRIGS_PLANAR_MOVEMENT(this))
 	{
@@ -194,9 +216,13 @@ void RaceCarPhysics(entity this, float dt)
 		rigvel_xy = vec2(rigvel);
 
 		if (PHYS_BUGRIGS_CAR_JUMPING(this))
+		{
 			mt = MOVE_NORMAL;
+		}
 		else
+		{
 			mt = MOVE_NOMONSTERS;
+		}
 
 		tracebox(this.origin, this.mins, this.maxs, this.origin + '0 0 1024', mt, this);
 		up = trace_endpos - this.origin;
@@ -214,18 +240,20 @@ void RaceCarPhysics(entity this, float dt)
 			neworigin = this.origin;
 		}
 		else
+		{
 			neworigin = trace_endpos;
+		}
 
 		if (trace_fraction < 1)
 		{
 			// now set angles_x so that the car points parallel to the surface
 			this.angles = vectoangles(
-					'1 0 0' * v_forward.x * trace_plane_normal.z
-					+
-					'0 1 0' * v_forward.y * trace_plane_normal.z
-					+
-					'0 0 1' * -(v_forward.x * trace_plane_normal.x + v_forward.y * trace_plane_normal.y)
-					);
+				'1 0 0' * v_forward.x * trace_plane_normal.z
+				+
+				'0 1 0' * v_forward.y * trace_plane_normal.z
+				+
+				'0 0 1' * -(v_forward.x * trace_plane_normal.x + v_forward.y * trace_plane_normal.y)
+				);
 			SET_ONGROUND(this);
 		}
 		else
@@ -249,13 +277,13 @@ void RaceCarPhysics(entity this, float dt)
 	if (trace_fraction != 1)
 	{
 		this.angles = vectoangles2(
-				'1 0 0' * v_forward.x * trace_plane_normal.z
-				+
-				'0 1 0' * v_forward.y * trace_plane_normal.z
-				+
-				'0 0 1' * -(v_forward.x * trace_plane_normal.x + v_forward.y * trace_plane_normal.y),
-				trace_plane_normal
-				);
+			'1 0 0' * v_forward.x * trace_plane_normal.z
+			+
+			'0 1 0' * v_forward.y * trace_plane_normal.z
+			+
+			'0 0 1' * -(v_forward.x * trace_plane_normal.x + v_forward.y * trace_plane_normal.y),
+			trace_plane_normal
+			);
 	}
 	else
 	{
@@ -274,7 +302,9 @@ void RaceCarPhysics(entity this, float dt)
 	makevectors(this.angles);
 	float f = bound(0, dt * PHYS_BUGRIGS_ANGLE_SMOOTHING(this), 1);
 	if (f == 0)
+	{
 		f = 1;
+	}
 	vf1 = v_forward * f;
 	vu1 = v_up * f;
 	makevectors(angles_save);
@@ -290,10 +320,10 @@ void RaceCarPhysics(entity this, float dt)
 #endif
 MUTATOR_HOOKFUNCTION(bugrigs, PM_Physics)
 {
-    entity player = M_ARGV(0, entity);
-    float dt = M_ARGV(2, float);
+	entity player = M_ARGV(0, entity);
+	float dt = M_ARGV(2, float);
 
-	if(!PHYS_BUGRIGS(player) || !IS_PLAYER(player)) { return; }
+	if (!PHYS_BUGRIGS(player) || !IS_PLAYER(player)) { return; }
 
 #ifdef SVQC
 	player.angles = player.bugrigs_prevangles;
@@ -305,7 +335,7 @@ MUTATOR_HOOKFUNCTION(bugrigs, PM_Physics)
 
 MUTATOR_HOOKFUNCTION(bugrigs, PlayerPhysics)
 {
-	if(!PHYS_BUGRIGS(M_ARGV(0, entity))) { return; }
+	if (!PHYS_BUGRIGS(M_ARGV(0, entity))) { return; }
 #ifdef SVQC
 	entity player = M_ARGV(0, entity);
 	player.bugrigs_prevangles = player.angles;
@@ -316,7 +346,7 @@ MUTATOR_HOOKFUNCTION(bugrigs, PlayerPhysics)
 
 MUTATOR_HOOKFUNCTION(bugrigs, ClientConnect)
 {
-    entity player = M_ARGV(0, entity);
+	entity player = M_ARGV(0, entity);
 
 	stuffcmd(player, "cl_cmd settemp chase_active 1\n");
 }

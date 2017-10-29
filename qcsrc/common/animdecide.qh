@@ -13,7 +13,7 @@ CLASS(Animation, Object)
 	{
 		FOREACH_WORD(this.m_framenames, true, {
 			int f = frameforname(mdlidx, it);
-			if (f != -1) return f;
+			if (f != -1) { return f; }
 		});
 #ifdef CSQC
 		LOG_DEBUGF("Missing animation for %s: %s", modelnameforindex(mdlidx), this.registered_id);
@@ -29,7 +29,8 @@ REGISTER_REGISTRY(Animations)
 #define ReadAnimation() ReadRegistered(Animations)
 #define REGISTER_ANIMATION(id, framenames) \
 	.vector anim_##id; \
-	REGISTER(Animations, ANIM_##id, m_id, NEW(Animation)) { \
+	REGISTER(Animations, ANIM_##id, m_id, NEW(Animation)) \
+	{ \
 		this.m_framenames = framenames; \
 	}
 

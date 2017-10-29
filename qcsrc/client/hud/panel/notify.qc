@@ -8,23 +8,33 @@
 void HUD_Notify_Push(string icon, string attacker, string victim)
 {
 	if (icon == "")
+	{
 		return;
+	}
 
 	++notify_count;
 	--notify_index;
 
 	if (notify_index == -1)
+	{
 		notify_index = NOTIFY_MAX_ENTRIES-1;
+	}
 
 	// Free old strings
 	if (notify_attackers[notify_index])
+	{
 		strunzone(notify_attackers[notify_index]);
+	}
 
 	if (notify_victims[notify_index])
+	{
 		strunzone(notify_victims[notify_index]);
+	}
 
 	if (notify_icons[notify_index])
+	{
 		strunzone(notify_icons[notify_index]);
+	}
 
 	// Allocate new strings
 	if (victim != "")
@@ -48,20 +58,32 @@ void HUD_Notify_Push(string icon, string attacker, string victim)
 void HUD_Notify()
 {
 	if (!autocvar__hud_configure)
+	{
 		if (!autocvar_hud_panel_notify)
+		{
 			return;
+		}
+	}
 
 	HUD_Panel_LoadCvars();
 
 	if (autocvar_hud_panel_notify_dynamichud)
+	{
 		HUD_Scale_Enable();
+	}
 	else
+	{
 		HUD_Scale_Disable();
+	}
 	HUD_Panel_DrawBg();
 
 	if (!autocvar__hud_configure)
+	{
 		if (notify_count == 0)
+		{
 			return;
+		}
+	}
 
 	vector pos, size;
 	pos  = panel_pos;
@@ -112,7 +134,7 @@ void HUD_Notify()
 
 	for (j = notify_index, count = 0; i != limit; i += step, ++j, ++count)
 	{
-		if(autocvar__hud_configure)
+		if (autocvar__hud_configure)
 		{
 			attacker = sprintf(_("Player %d"), count + 1);
 			victim = sprintf(_("Player %d"), count + 2);
@@ -122,18 +144,26 @@ void HUD_Notify()
 		else
 		{
 			if (j == NOTIFY_MAX_ENTRIES)
+			{
 				j = 0;
+			}
 
 			if (notify_times[j] + fade_start > time)
+			{
 				alpha = 1;
+			}
 			else if (fade_time != 0)
 			{
 				alpha = bound(0, (notify_times[j] + fade_start + fade_time - time) / fade_time, 1);
 				if (alpha == 0)
+				{
 					break;
+				}
 			}
 			else
+			{
 				break;
+			}
 
 			attacker = notify_attackers[j];
 			victim = notify_victims[j];

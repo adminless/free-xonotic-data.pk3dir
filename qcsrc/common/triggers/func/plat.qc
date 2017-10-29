@@ -15,7 +15,7 @@ float plat_send(entity this, entity to, float sf)
 	WriteHeader(MSG_ENTITY, ENT_CLIENT_PLAT);
 	WriteByte(MSG_ENTITY, sf);
 
-	if(sf & SF_TRIGGER_INIT)
+	if (sf & SF_TRIGGER_INIT)
 	{
 		WriteByte(MSG_ENTITY, this.platmovetype_start);
 		WriteByte(MSG_ENTITY, this.platmovetype_turn);
@@ -49,7 +49,7 @@ float plat_send(entity this, entity to, float sf)
 		WriteShort(MSG_ENTITY, this.dmg);
 	}
 
-	if(sf & SF_TRIGGER_RESET)
+	if (sf & SF_TRIGGER_RESET)
 	{
 		// used on client
 	}
@@ -59,17 +59,17 @@ float plat_send(entity this, entity to, float sf)
 
 void plat_link(entity this)
 {
-	//Net_LinkEntity(this, 0, false, plat_send);
+	// Net_LinkEntity(this, 0, false, plat_send);
 }
 
 spawnfunc(func_plat)
 {
-	if (this.sounds == 0) this.sounds = 2;
+	if (this.sounds == 0) { this.sounds = 2; }
 
-    if (this.spawnflags & 4) this.dmg = 10000;
+	if (this.spawnflags & 4) { this.dmg = 10000; }
 
-    if (this.dmg && (this.message == "")) this.message = "was squished";
-    if (this.dmg && (this.message2 == "")) this.message2 = "was squished by";
+	if (this.dmg && (this.message == "")) { this.message = "was squished"; }
+	if (this.dmg && (this.message2 == "")) { this.message2 = "was squished by"; }
 
 	if (this.sounds == 1)
 	{
@@ -84,27 +84,33 @@ spawnfunc(func_plat)
 	}
 
 	if (this.sound1)
+	{
 		this.noise = this.sound1;
+	}
 	if (this.sound2)
+	{
 		this.noise1 = this.sound2;
+	}
 
-	if(this.noise && this.noise != "") { precache_sound(this.noise); }
-	if(this.noise1 && this.noise1 != "") { precache_sound(this.noise1); }
+	if (this.noise && this.noise != "") { precache_sound(this.noise); }
+	if (this.noise1 && this.noise1 != "") { precache_sound(this.noise1); }
 
 	this.mangle = this.angles;
 	this.angles = '0 0 0';
 
 	this.classname = "plat";
 	if (!InitMovingBrushTrigger(this))
+	{
 		return;
+	}
 	this.effects |= EF_LOWPRECISION;
-	setsize (this, this.mins , this.maxs);
+	setsize(this, this.mins, this.maxs);
 
 	setblocked(this, plat_crush);
 
-	if (!this.speed) this.speed = 150;
-	if (!this.lip) this.lip = 16;
-	if (!this.height) this.height = this.size.z - this.lip;
+	if (!this.speed) { this.speed = 150; }
+	if (!this.lip) { this.lip = 16; }
+	if (!this.height) { this.height = this.size.z - this.lip; }
 
 	this.pos1 = this.origin;
 	this.pos2 = this.origin;
@@ -119,14 +125,14 @@ spawnfunc(func_plat)
 void plat_draw(entity this)
 {
 	Movetype_Physics_NoMatchServer(this);
-	//Movetype_Physics_MatchServer(autocvar_cl_projectiles_sloppy);
+	// Movetype_Physics_MatchServer(autocvar_cl_projectiles_sloppy);
 }
 
 NET_HANDLE(ENT_CLIENT_PLAT, bool isnew)
 {
 	float sf = ReadByte();
 
-	if(sf & SF_TRIGGER_INIT)
+	if (sf & SF_TRIGGER_INIT)
 	{
 		this.platmovetype_start = ReadByte();
 		this.platmovetype_turn = ReadByte();
@@ -165,7 +171,7 @@ NET_HANDLE(ENT_CLIENT_PLAT, bool isnew)
 		set_movetype(this, MOVETYPE_PUSH);
 		this.drawmask = MASK_NORMAL;
 		this.draw = plat_draw;
-		if (isnew) IL_PUSH(g_drawables, this);
+		if (isnew) { IL_PUSH(g_drawables, this); }
 		this.use = plat_use;
 		this.entremove = trigger_remove_generic;
 
@@ -177,7 +183,7 @@ NET_HANDLE(ENT_CLIENT_PLAT, bool isnew)
 		plat_spawn_inside_trigger(this);
 	}
 
-	if(sf & SF_TRIGGER_RESET)
+	if (sf & SF_TRIGGER_RESET)
 	{
 		plat_reset(this);
 

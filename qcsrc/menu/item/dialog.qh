@@ -18,7 +18,7 @@
 #include "inputcontainer.qh"
 CLASS(Dialog, InputContainer)
 	METHOD(Dialog, configureDialog, void(entity)); // no runtime configuration, all parameters are given in the code!
-	METHOD(Dialog, fill, void(entity));            // to be overridden by user to fill the dialog with controls
+	METHOD(Dialog, fill, void(entity)); // to be overridden by user to fill the dialog with controls
 	METHOD(Dialog, keyDown, float(entity, float, float, float));
 	METHOD(Dialog, close, void(entity));
 	METHOD(Dialog, addItemSimple, void(entity, float, float, float, float, entity, vector));
@@ -48,19 +48,19 @@ CLASS(Dialog, InputContainer)
 	ATTRIB(Dialog, rows, float, 3);
 	ATTRIB(Dialog, columns, float, 2);
 
-	ATTRIB(Dialog, marginTop, float, 0);     // pixels
-	ATTRIB(Dialog, marginBottom, float, 0);  // pixels
-	ATTRIB(Dialog, marginLeft, float, 0);    // pixels
-	ATTRIB(Dialog, marginRight, float, 0);   // pixels
+	ATTRIB(Dialog, marginTop, float, 0); // pixels
+	ATTRIB(Dialog, marginBottom, float, 0); // pixels
+	ATTRIB(Dialog, marginLeft, float, 0); // pixels
+	ATTRIB(Dialog, marginRight, float, 0); // pixels
 	ATTRIB(Dialog, columnSpacing, float, 0); // pixels
-	ATTRIB(Dialog, rowSpacing, float, 0);    // pixels
-	ATTRIB(Dialog, rowHeight, float, 0);     // pixels
-	ATTRIB(Dialog, titleHeight, float, 0);   // pixels
+	ATTRIB(Dialog, rowSpacing, float, 0); // pixels
+	ATTRIB(Dialog, rowHeight, float, 0); // pixels
+	ATTRIB(Dialog, titleHeight, float, 0); // pixels
 	ATTRIB(Dialog, titleFontSize, float, 0); // pixels; if 0, title causes no margin
 	ATTRIB(Dialog, zoomedOutTitleBarPosition, float, 0);
 	ATTRIB(Dialog, zoomedOutTitleBar, float, 0);
 
-	ATTRIB(Dialog, requiresConnection, float, 0);  // set to true if the dialog requires a connection to be opened
+	ATTRIB(Dialog, requiresConnection, float, 0); // set to true if the dialog requires a connection to be opened
 
 	ATTRIB(Dialog, backgroundImage, string);
 	ATTRIB(Dialog, borderLines, float, 1);

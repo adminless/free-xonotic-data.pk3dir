@@ -3,7 +3,7 @@
 #include "progname.qh"
 
 #define assert(expr, ...) _assert(LOG_SEVERE, expr, __VA_ARGS__)
-#define devassert(...) MACRO_BEGIN if (autocvar_developer) assert(__VA_ARGS__); MACRO_END
+#define devassert(...) MACRO_BEGIN if (autocvar_developer) { assert(__VA_ARGS__); } MACRO_END
 
 #define assert_once(expr, ...) \
 	MACRO_BEGIN \
@@ -14,10 +14,10 @@
 			__once = true; \
 		} \
 	MACRO_END
-#define devassert_once(...) MACRO_BEGIN if (autocvar_developer) assert_once(__VA_ARGS__); MACRO_END
+#define devassert_once(...) MACRO_BEGIN if (autocvar_developer) { assert_once(__VA_ARGS__); } MACRO_END
 
 #define demand(expr, ...) _assert(LOG_FATAL, expr, __VA_ARGS__)
-#define devdemand(...) MACRO_BEGIN if (autocvar_developer) demand(__VA_ARGS__); MACRO_END
+#define devdemand(...) MACRO_BEGIN if (autocvar_developer) { demand(__VA_ARGS__); } MACRO_END
 
 #define _assert(f, expr, then) \
 	MACRO_BEGIN \
@@ -32,20 +32,20 @@
 
 
 #if defined(MENUQC)
-string(string, string...) strcat1n = #53;
+string(string, string ...) strcat1n = #53;
 #else
-string(string, string...) strcat1n = #115;
+string(string, string ...) strcat1n = #115;
 #endif
 
 // would be nice if __FUNC__ could be concatenated at compile time
 #if 0
-	// less work, bigger binary
-	#define __SOURCELOC__ (sprintf("^7%s^9" "(" "^9"__FILE__"^7"  ":"  "^9"STR(__LINE__)"^7" ")", __FUNC__))
+// less work, bigger binary
+#define __SOURCELOC__ (sprintf("^7%s^9" "(" "^9"__FILE__ "^7"  ":"  "^9"STR (__LINE__)"^7" ")", __FUNC__))
 #else
-	#define __SOURCELOC__ (sprintf("^7%s^9" "(" "^9%s^7"  ":"  "^9%s^7" ")", __FUNC__, __FILE__, STR(__LINE__)))
+#define __SOURCELOC__ (sprintf("^7%s^9" "(" "^9%s^7"  ":"  "^9%s^7" ")", __FUNC__, __FILE__, STR(__LINE__)))
 #endif
 
-#define _LOG_HEADER(level) "^9[::" "^7"PROGNAME"^9" "::" level"^9" "] ", __SOURCELOC__
+#define _LOG_HEADER(level) "^9[::" "^7"PROGNAME "^9" "::" level "^9" "] ", __SOURCELOC__
 #define _LOG(f, level, s) \
 	MACRO_BEGIN \
 		f(strcat1n(_LOG_HEADER(level), "\n^7", s, "\n")); \
@@ -84,7 +84,7 @@ string(string, string...) strcat1n = #115;
 
 #define dprint2(msg) \
 	MACRO_BEGIN \
-		if (autocvar_developer > 1) dprint(msg); \
+		if (autocvar_developer > 1) { dprint(msg); } \
 	MACRO_END
 
 // TODO: this sucks, lets find a better way to do backtraces?

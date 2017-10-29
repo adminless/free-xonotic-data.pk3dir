@@ -5,7 +5,7 @@
 /// \author Lyberta
 /// \copyright GNU GPLv2 or any later version.
 
-//======================= Global variables ====================================
+// ======================= Global variables ====================================
 
 int autocvar_g_dynamic_handicap; ///< Whether to enable dynamic handicap.
 /// \brief The scale of the handicap. Larget values mean more penalties for
@@ -18,14 +18,14 @@ float autocvar_g_dynamic_handicap_exponent;
 float autocvar_g_dynamic_handicap_min; ///< The minimum value of the handicap.
 float autocvar_g_dynamic_handicap_max; ///< The maximum value of the handicap.
 
-//====================== Forward declarations =================================
+// ====================== Forward declarations =================================
 
 /// \brief Clamps the value of the handicap.
 /// \param[in] handicap Value to clamp.
 /// \return Clamped value.
 float DynamicHandicap_ClampHandicap(float handicap);
 
-//========================= Free functions ====================================
+// ========================= Free functions ====================================
 
 /// \brief Updates the handicap of all players.
 /// \return No return.
@@ -42,8 +42,8 @@ void DynamicHandicap_UpdateHandicap()
 	FOREACH_CLIENT(true,
 	{
 		float score = PlayerScore_Get(it, SP_SCORE);
-		float handicap = fabs((score - mean_score) *
-			autocvar_g_dynamic_handicap_scale);
+		float handicap = fabs((score - mean_score)
+			*autocvar_g_dynamic_handicap_scale);
 		handicap = handicap ** autocvar_g_dynamic_handicap_exponent;
 		if (score < mean_score)
 		{
@@ -64,20 +64,20 @@ void DynamicHandicap_UpdateHandicap()
 
 float DynamicHandicap_ClampHandicap(float handicap)
 {
-	if ((autocvar_g_dynamic_handicap_min >= 0) && (handicap <
-		autocvar_g_dynamic_handicap_min))
+	if ((autocvar_g_dynamic_handicap_min >= 0) && (handicap
+		< autocvar_g_dynamic_handicap_min))
 	{
 		handicap = autocvar_g_dynamic_handicap_min;
 	}
-	if ((autocvar_g_dynamic_handicap_max > 0) && (handicap >
-		autocvar_g_dynamic_handicap_max))
+	if ((autocvar_g_dynamic_handicap_max > 0) && (handicap
+		> autocvar_g_dynamic_handicap_max))
 	{
 		handicap = autocvar_g_dynamic_handicap_max;
 	}
 	return handicap;
 }
 
-//============================= Hooks ========================================
+// ============================= Hooks ========================================
 
 REGISTER_MUTATOR(dynamic_handicap, autocvar_g_dynamic_handicap);
 

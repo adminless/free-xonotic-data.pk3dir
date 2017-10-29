@@ -44,8 +44,7 @@ void GiveResource(entity receiver, int resource_type, float amount);
 /// \param[in] amount Amount of resource to give.
 /// \param[in] limit Limit of resources to give.
 /// \return No return.
-void GiveResourceWithLimit(entity receiver, int resource_type, float amount,
-	float limit);
+void GiveResourceWithLimit(entity receiver, int resource_type, float amount, float limit);
 
 // ===================== Legacy and/or internal API ===========================
 

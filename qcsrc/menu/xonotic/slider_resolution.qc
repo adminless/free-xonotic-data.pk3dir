@@ -11,8 +11,9 @@ float updateConwidths(float width, float height, float pixelheight)
 
 	sz = cvar("menu_vid_scale");
 	if (sz < -1)
-		return 0;  // No recalculation.
-
+	{
+		return 0; // No recalculation.
+	}
 	// Save off current settings.
 	cvar_set("_menu_vid_width", ftos(width));
 	cvar_set("_menu_vid_height", ftos(height));
@@ -27,27 +28,34 @@ float updateConwidths(float width, float height, float pixelheight)
 	c_z = 0;
 	c_x = 800;
 	c_y = c.x * r.y * r.z / r.x;
-	if(c.y < 600)
+	if (c.y < 600)
 	{
 		c_y = 600;
 		c_x = c.y * r.x / (r.y * r.z);
 	}
 
 	f = min(r.x / c.x, r.y / c.y);
-	if(f < 1)
+	if (f < 1)
+	{
 		c = c * f; // ensures that c_x <= r_x and c_y <= r_y
-
-	minfactor = min(1, 640 / c.x);            // can be > 1 only if c_x is <640
+	}
+	minfactor = min(1, 640 / c.x); // can be > 1 only if c_x is <640
 	maxfactor = max(1, r.x / c.x, r.y / c.y); // can be < 1 only if r_x < c_x and r_y < c_y
 	LOG_TRACE("min factor: ", ftos(minfactor));
 	LOG_TRACE("max factor: ", ftos(maxfactor));
 
-	if(sz < 0)
+	if (sz < 0)
+	{
 		f = 1 - (maxfactor - 1) * sz;
-	else if(sz > 0)
+	}
+	else if (sz > 0)
+	{
 		f = 1 + (minfactor - 1) * sz;
+	}
 	else
+	{
 		f = 1;
+	}
 	c = c * f; // fteqcc fail
 
 	c_x = rint(c.x);
@@ -74,20 +82,24 @@ entity makeXonoticResolutionSlider()
 void XonoticResolutionSlider_addResolution(entity me, float w, float h, float pixelheight)
 {
 	if (me.maxAllowedWidth && w > me.maxAllowedWidth)
+	{
 		return;
+	}
 	if (me.maxAllowedHeight && h > me.maxAllowedHeight)
+	{
 		return;
+	}
 	float i;
 	for (i = 0; i < me.nValues; ++i)
 	{
 		tokenize_console(me.valueToIdentifier(me, i));
-		if (w > stof(argv(0))) continue;
-		if (w < stof(argv(0))) break;
-		if (h > stof(argv(1))) continue;
-		if (h < stof(argv(1))) break;
-		if (pixelheight > stof(argv(2)) + 0.01) continue;
-		if (pixelheight < stof(argv(2)) - 0.01) break;
-		return;  // already there
+		if (w > stof(argv(0))) { continue; }
+		if (w < stof(argv(0))) { break; }
+		if (h > stof(argv(1))) { continue; }
+		if (h < stof(argv(1))) { break; }
+		if (pixelheight > stof(argv(2)) + 0.01) { continue; }
+		if (pixelheight < stof(argv(2)) - 0.01) { break; }
+		return; // already there
 	}
 	if (pixelheight != 1)
 	{
@@ -95,7 +107,8 @@ void XonoticResolutionSlider_addResolution(entity me, float w, float h, float pi
 		float bestdenom = rint(aspect);
 		float bestnum = 1;
 		float denom;
-		for (denom = 2; denom < 10; ++denom) {
+		for (denom = 2; denom < 10; ++denom)
+		{
 			float num = rint(aspect * denom);
 			if (fabs(num / denom - aspect) < fabs(bestnum / bestdenom - aspect))
 			{
@@ -106,7 +119,9 @@ void XonoticResolutionSlider_addResolution(entity me, float w, float h, float pi
 		me.insertValue(me, i, strzone(sprintf("%dx%d (%d:%d)", w, h, bestnum, bestdenom)), strzone(strcat(ftos(w), " ", ftos(h), " ", ftos(pixelheight))));
 	}
 	else
+	{
 		me.insertValue(me, i, strzone(sprintf("%dx%d", w, h)), strzone(strcat(ftos(w), " ", ftos(h), " ", ftos(pixelheight))));
+	}
 }
 float autocvar_menu_vid_allowdualscreenresolution;
 void XonoticResolutionSlider_configureXonoticResolutionSlider(entity me)
@@ -122,7 +137,7 @@ void XonoticResolutionSlider_loadResolutions(entity me, float fullscreen)
 
 	// HACK: text slider assumes the strings are constants, so clearValues
 	// will not unzone them
-	for(i = 0; i < me.nValues; ++i)
+	for (i = 0; i < me.nValues; ++i)
 	{
 		strunzone(me.valueToIdentifier(me, i));
 		strunzone(me.valueToText(me, i));
@@ -134,34 +149,46 @@ void XonoticResolutionSlider_loadResolutions(entity me, float fullscreen)
 
 	if (fullscreen)
 	{
-		for(i = 0;; ++i)
+		for (i = 0; ; ++i)
 		{
 			r = getresolution(i);
-			if(r_x == 0 && r_y == 0)
+			if (r_x == 0 && r_y == 0)
+			{
 				break;
-			if(r.x < 640 || r.y < 480)
+			}
+			if (r.x < 640 || r.y < 480)
+			{
 				continue;
-			if(r.x > 2 * r.y) // likely dualscreen resolution, skip this one
-				if(autocvar_menu_vid_allowdualscreenresolution <= 0)
+			}
+			if (r.x > 2 * r.y) // likely dualscreen resolution, skip this one
+			{
+				if (autocvar_menu_vid_allowdualscreenresolution <= 0)
+				{
 					continue;
+				}
+			}
 			me.addResolution(me, r.x, r.y, r.z);
 		}
 		r = getresolution(-1);
-		if(r.x != 0 || r.y != 0)
+		if (r.x != 0 || r.y != 0)
+		{
 			me.addResolution(me, r.x, r.y, r.z);
+		}
 		LOG_TRACE("Added system resolutions.");
 	}
 
-	if(me.nValues == 0)
+	if (me.nValues == 0)
 	{
 		// Get workarea.
 		r = getresolution(-2);
 		// If workarea is not supported, get desktop size.
-		if(r.x == 0 && r.y == 0)
+		if (r.x == 0 && r.y == 0)
+		{
 			r = getresolution(-1);
+		}
 
 		// Add it, and limit all other resolutions to the workarea/desktop size.
-		if(r.x != 0 || r.y != 0)
+		if (r.x != 0 || r.y != 0)
 		{
 			me.maxAllowedWidth = r.x;
 			me.maxAllowedHeight = r.y;
@@ -198,7 +225,7 @@ void XonoticResolutionSlider_loadCvars(entity me)
 }
 void XonoticResolutionSlider_saveCvars(entity me)
 {
-	if(me.value >= 0 || me.value < me.nValues)
+	if (me.value >= 0 || me.value < me.nValues)
 	{
 		tokenize_console(me.getIdentifier(me));
 		cvar_set("_menu_vid_width", argv(0));
@@ -206,9 +233,13 @@ void XonoticResolutionSlider_saveCvars(entity me)
 		cvar_set("_menu_vid_pixelheight", argv(2));
 		vector r = getresolution(-1);
 		if (stof(argv(0)) == r.x && stof(argv(1)) == r.y && fabs(stof(argv(2)) - r.z) < 0.01)
+		{
 			cvar_set("_menu_vid_desktopfullscreen", "1");
+		}
 		else
+		{
 			cvar_set("_menu_vid_desktopfullscreen", "0");
+		}
 	}
 }
 void XonoticResolutionSlider_draw(entity me)

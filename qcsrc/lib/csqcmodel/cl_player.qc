@@ -43,13 +43,13 @@ float csqcplayer_predictionerrorfactor;
 
 vector CSQCPlayer_GetPredictionErrorO()
 {
-	if (time >= csqcplayer_predictionerrortime) return '0 0 0';
+	if (time >= csqcplayer_predictionerrortime) { return '0 0 0'; }
 	return csqcplayer_predictionerroro * (csqcplayer_predictionerrortime - time) * csqcplayer_predictionerrorfactor;
 }
 
 vector CSQCPlayer_GetPredictionErrorV()
 {
-	if (time >= csqcplayer_predictionerrortime) return '0 0 0';
+	if (time >= csqcplayer_predictionerrortime) { return '0 0 0'; }
 	return csqcplayer_predictionerrorv * (csqcplayer_predictionerrortime - time) * csqcplayer_predictionerrorfactor;
 }
 
@@ -64,17 +64,17 @@ void CSQCPlayer_SetPredictionError(vector o, vector v, float onground_diff)
 	// commented out as this one did not help
 	if(onground_diff)
 	{
-		printf("ONGROUND MISMATCH: %d x=%v v=%v\n", onground_diff, o, v);
-		return;
+	    printf("ONGROUND MISMATCH: %d x=%v v=%v\n", onground_diff, o, v);
+	    return;
 	}
 	*/
-	if(vdist(o, >, 32) || vdist(v, >, 192))
+	if (vdist(o, >, 32) || vdist(v, >, 192))
 	{
-		//printf("TOO BIG: x=%v v=%v\n", o, v);
+		// printf("TOO BIG: x=%v v=%v\n", o, v);
 		return;
 	}
 
-	if(!autocvar_cl_movement_errorcompensation)
+	if (!autocvar_cl_movement_errorcompensation)
 	{
 		csqcplayer_predictionerrorfactor = 0;
 		return;
@@ -88,8 +88,8 @@ void CSQCPlayer_SetPredictionError(vector o, vector v, float onground_diff)
 
 void CSQCPlayer_Unpredict(entity this)
 {
-	if (csqcplayer_status == CSQCPLAYERSTATUS_UNPREDICTED) return;
-	if (csqcplayer_status != CSQCPLAYERSTATUS_PREDICTED) LOG_FATALF("Cannot unpredict in current status (%d)", csqcplayer_status);
+	if (csqcplayer_status == CSQCPLAYERSTATUS_UNPREDICTED) { return; }
+	if (csqcplayer_status != CSQCPLAYERSTATUS_PREDICTED) { LOG_FATALF("Cannot unpredict in current status (%d)", csqcplayer_status); }
 	this.origin = csqcplayer_origin;
 	this.velocity = csqcplayer_velocity;
 	csqcplayer_moveframe = csqcplayer_sequence + 1; // + 1 because the recieved frame has the move already done (server side)
@@ -125,7 +125,7 @@ void CSQC_ClientMovement_PlayerMove_Frame(entity this);
 
 void CSQCPlayer_Physics(entity this)
 {
-	if(!autocvar_cl_movement) { return; }
+	if (!autocvar_cl_movement) { return; }
 
 	_Movetype_CheckWater(this); // we apparently need to check water *before* physics so it can use this for water jump
 
@@ -144,9 +144,9 @@ void CSQCPlayer_Physics(entity this)
 	this.angles = oldangles;
 
 	this.pmove_flags =
-			((IS_DUCKED(this)) ? PMF_DUCKED : 0) |
-			((IS_JUMP_HELD(this)) ? PMF_JUMP_HELD : 0) |
-			((IS_ONGROUND(this)) ? PMF_ONGROUND : 0);
+		((IS_DUCKED(this)) ? PMF_DUCKED : 0)
+		|((IS_JUMP_HELD(this)) ? PMF_JUMP_HELD : 0)
+		|((IS_ONGROUND(this)) ? PMF_ONGROUND : 0);
 }
 
 void CSQCPlayer_PredictTo(entity this, float endframe, bool apply_error)
@@ -181,15 +181,15 @@ void CSQCPlayer_PredictTo(entity this, float endframe, bool apply_error)
 	{
 		do
 		{
-			if (!getinputstate(csqcplayer_moveframe)) break;
+			if (!getinputstate(csqcplayer_moveframe)) { break; }
 			/*if (input_timelength > 0.0005)
 			{
-				if (input_timelength > 0.05)
-				{
-					input_timelength /= 2;
-					CSQCPlayer_Physics(this);
-				}
-				CSQCPlayer_Physics(this);
+			    if (input_timelength > 0.05)
+			    {
+			        input_timelength /= 2;
+			        CSQCPlayer_Physics(this);
+			    }
+			    CSQCPlayer_Physics(this);
 			}*/
 			CSQCPlayer_Physics(this);
 			CSQCPlayer_SetMinsMaxs(this);
@@ -204,7 +204,7 @@ void CSQCPlayer_PredictTo(entity this, float endframe, bool apply_error)
 
 bool CSQCPlayer_IsLocalPlayer(entity this)
 {
-	return (this == csqcplayer);
+	return this == csqcplayer;
 }
 
 /** Called once per CSQC_UpdateView() */
@@ -223,8 +223,11 @@ void CSQCPlayer_SetCamera()
 			e.view_ofs = '0 0 1' * vh;
 
 			// get crouch state from the server
-			if (vh == pl_viewofs.z) e.flags &= ~FL_DUCKED;
-			else if (vh == pl_viewofs_crouch.z) e.flags |= FL_DUCKED;
+			if (vh == pl_viewofs.z) { e.flags &= ~FL_DUCKED; }
+			else if (vh == pl_viewofs_crouch.z)
+			{
+				e.flags |= FL_DUCKED;
+			}
 
 			// get onground state from the server
 			e.flags = BITSET(e.flags, FL_ONGROUND, pmove_onground);
@@ -239,7 +242,8 @@ void CSQCPlayer_SetCamera()
 		}
 		else
 		{
-			const int flg = e.iflags; e.iflags &= ~(IFLAG_ORIGIN | IFLAG_ANGLES);
+			const int flg = e.iflags;
+			e.iflags &= ~(IFLAG_ORIGIN | IFLAG_ANGLES);
 			InterpolateOrigin_Do(e);
 			e.iflags = flg;
 
@@ -253,8 +257,11 @@ void CSQCPlayer_SetCamera()
 				e.velocity = v0;
 
 				// get crouch state from the server
-				if (vh == pl_viewofs.z) e.flags &= ~FL_DUCKED;
-				else if(vh == pl_viewofs_crouch.z) e.flags |= FL_DUCKED;
+				if (vh == pl_viewofs.z) { e.flags &= ~FL_DUCKED; }
+				else if (vh == pl_viewofs_crouch.z)
+				{
+					e.flags |= FL_DUCKED;
+				}
 
 				// get onground state from the server
 				e.flags = BITSET(e.flags, FL_ONGROUND, pmove_onground);
@@ -265,8 +272,11 @@ void CSQCPlayer_SetCamera()
 
 #ifdef CSQCMODEL_SERVERSIDE_CROUCH
 			// get crouch state from the server (LAG)
-			if (vh == pl_viewofs.z) e.flags &= ~FL_DUCKED;
-			else if (vh == pl_viewofs_crouch.z) e.flags |= FL_DUCKED;
+			if (vh == pl_viewofs.z) { e.flags &= ~FL_DUCKED; }
+			else if (vh == pl_viewofs_crouch.z)
+			{
+				e.flags |= FL_DUCKED;
+			}
 #endif
 			CSQCPlayer_SetMinsMaxs(e);
 
@@ -286,11 +296,11 @@ void CSQCPlayer_SetCamera()
 			view.view_ofs = '0 0 1' * vh;
 		}
 		int refdefflags = 0;
-		if (view.csqcmodel_teleported) refdefflags |= REFDEFFLAG_TELEPORTED;
-		if (input_buttons & BIT(1)) refdefflags |= REFDEFFLAG_JUMPING;
+		if (view.csqcmodel_teleported) { refdefflags |= REFDEFFLAG_TELEPORTED; }
+		if (input_buttons & BIT(1)) { refdefflags |= REFDEFFLAG_JUMPING; }
 		// note: these two only work in WIP2, but are harmless in WIP1
-		if (PHYS_HEALTH(NULL) <= 0 && PHYS_HEALTH(NULL) != -666 && PHYS_HEALTH(NULL) != -2342) refdefflags |= REFDEFFLAG_DEAD;
-		if (intermission) refdefflags |= REFDEFFLAG_INTERMISSION;
+		if (PHYS_HEALTH(NULL) <= 0 && PHYS_HEALTH(NULL) != -666 && PHYS_HEALTH(NULL) != -2342) { refdefflags |= REFDEFFLAG_DEAD; }
+		if (intermission) { refdefflags |= REFDEFFLAG_INTERMISSION; }
 		V_CalcRefdef(view, refdefflags);
 	}
 	else
@@ -313,14 +323,14 @@ void CSQCPlayer_Remove(entity this)
 
 bool CSQCPlayer_PreUpdate(entity this)
 {
-	if (this != csqcplayer) return false;
-	if (csqcplayer_status != CSQCPLAYERSTATUS_FROMSERVER) CSQCPlayer_Unpredict(this);
+	if (this != csqcplayer) { return false; }
+	if (csqcplayer_status != CSQCPLAYERSTATUS_FROMSERVER) { CSQCPlayer_Unpredict(this); }
 	return true;
 }
 
 bool CSQCPlayer_PostUpdate(entity this)
 {
-	if (this.entnum != player_localnum + 1) return false;
+	if (this.entnum != player_localnum + 1) { return false; }
 	csqcplayer = this;
 	csqcplayer_status = CSQCPLAYERSTATUS_FROMSERVER;
 	cvar_settemp("cl_movement_replay", "0");

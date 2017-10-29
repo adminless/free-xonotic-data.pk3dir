@@ -24,7 +24,7 @@ MUTATOR_HOOKFUNCTION(campcheck, Damage_Calculate)
 	entity frag_attacker = M_ARGV(1, entity);
 	entity frag_target = M_ARGV(2, entity);
 
-	if(IS_PLAYER(frag_target)
+	if (IS_PLAYER(frag_target)
 		&& IS_PLAYER(frag_attacker)
 		&& frag_attacker != frag_target)
 	{
@@ -38,7 +38,7 @@ MUTATOR_HOOKFUNCTION(campcheck, PlayerPreThink)
 	entity player = M_ARGV(0, entity);
 	bool checked = false;
 
-	if(autocvar_g_campcheck_interval
+	if (autocvar_g_campcheck_interval
 		&& !game_stopped && !warmup_stage && time >= game_starttime
 		&& IS_PLAYER(player)
 		&& !IS_DEAD(player)
@@ -51,21 +51,25 @@ MUTATOR_HOOKFUNCTION(campcheck, PlayerPreThink)
 		vector dist = vec2(player.campcheck_prevorigin - player.origin);
 		player.campcheck_traveled_distance += fabs(vlen(dist));
 
-		if((autocvar_g_campaign && !campaign_bots_may_start) || (time < game_starttime) || (round_handler_IsActive() && !round_handler_IsRoundStarted()))
+		if ((autocvar_g_campaign && !campaign_bots_may_start) || (time < game_starttime) || (round_handler_IsActive() && !round_handler_IsRoundStarted()))
 		{
 			player.campcheck_nextcheck = time + autocvar_g_campcheck_interval * 2;
 			player.campcheck_traveled_distance = 0;
 		}
 
-		if(time > player.campcheck_nextcheck)
+		if (time > player.campcheck_nextcheck)
 		{
-			if(player.campcheck_traveled_distance < autocvar_g_campcheck_distance)
+			if (player.campcheck_traveled_distance < autocvar_g_campcheck_distance)
 			{
 				Send_Notification(NOTIF_ONE, player, MSG_CENTER, CENTER_CAMPCHECK);
-				if(player.vehicle)
+				if (player.vehicle)
+				{
 					Damage(player.vehicle, NULL, NULL, autocvar_g_campcheck_damage * 2, DEATH_CAMP.m_id, player.vehicle.origin, '0 0 0');
+				}
 				else
+				{
 					Damage(player, NULL, NULL, bound(0, autocvar_g_campcheck_damage, GetResourceAmount(player, RESOURCE_HEALTH) + GetResourceAmount(player, RESOURCE_ARMOR) * autocvar_g_balance_armor_blockpercent + 5), DEATH_CAMP.m_id, player.origin, '0 0 0');
+				}
 			}
 			player.campcheck_nextcheck = time + autocvar_g_campcheck_interval;
 			player.campcheck_traveled_distance = 0;
@@ -74,9 +78,10 @@ MUTATOR_HOOKFUNCTION(campcheck, PlayerPreThink)
 		checked = true;
 	}
 
-	if(!checked)
+	if (!checked)
+	{
 		player.campcheck_nextcheck = time + autocvar_g_campcheck_interval; // one of the above checks failed, so keep the timer up to date
-
+	}
 	player.campcheck_prevorigin = player.origin;
 }
 

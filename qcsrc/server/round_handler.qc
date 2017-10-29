@@ -26,23 +26,23 @@ void round_handler_Think(entity this)
 	if (this.wait)
 	{
 		this.wait = false;
-		this.cnt = this.count + 1;  // init countdown
+		this.cnt = this.count + 1; // init countdown
 		round_starttime = time + this.count;
 		reset_map(true);
 	}
 
-	if (this.cnt > 0)  // countdown running
+	if (this.cnt > 0) // countdown running
 	{
 		if (this.canRoundStart() && !(autocvar_g_campaign && !campaign_bots_may_start))
 		{
-			if (this.cnt == this.count + 1) round_starttime = time + this.count;
+			if (this.cnt == this.count + 1) { round_starttime = time + this.count; }
 			int f = this.cnt - 1;
 			if (f == 0)
 			{
 				this.cnt = 0;
 				this.round_endtime = (this.round_timelimit) ? time + this.round_timelimit : 0;
 				this.nextthink = time;
-				if (this.roundStart) this.roundStart();
+				if (this.roundStart) { this.roundStart(); }
 				return;
 			}
 			this.cnt = this.cnt - 1;
@@ -51,7 +51,7 @@ void round_handler_Think(entity this)
 		{
 			round_handler_Reset(0);
 		}
-		this.nextthink = time + 1;  // canRoundStart every second
+		this.nextthink = time + 1; // canRoundStart every second
 	}
 	else
 	{
@@ -63,7 +63,7 @@ void round_handler_Think(entity this)
 		}
 		else
 		{
-			this.nextthink = time;  // canRoundEnd every frame
+			this.nextthink = time; // canRoundEnd every frame
 		}
 	}
 }
@@ -109,7 +109,8 @@ void round_handler_Reset(float next_think)
 	entity this = round_handler;
 	this.wait = false;
 	if (this.count)
-		if (this.cnt < this.count + 1) this.cnt = this.count + 1;
+	{
+		if (this.cnt < this.count + 1) { this.cnt = this.count + 1; } }
 	this.nextthink = next_think;
 	round_starttime = (next_think) ? (next_think + this.count) : -1;
 }

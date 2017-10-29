@@ -37,9 +37,10 @@ const float SHOWNAMES_FADESPEED = 4;
 const float SHOWNAMES_FADEDELAY = 0.4;
 void Draw_ShowNames(entity this)
 {
-	if (this.sv_entnum == (current_player + 1))  // self or spectatee
-		if (!(autocvar_hud_shownames_self && autocvar_chase_active)) return;
-	if (!this.sameteam && !autocvar_hud_shownames_enemies) return;
+	if (this.sv_entnum == (current_player + 1)) // self or spectatee
+	{
+		if (!(autocvar_hud_shownames_self && autocvar_chase_active)) { return; } }
+	if (!this.sameteam && !autocvar_hud_shownames_enemies) { return; }
 	bool hit;
 	if (!autocvar_hud_shownames_crosshairdistance && this.sameteam)
 	{
@@ -58,11 +59,15 @@ void Draw_ShowNames(entity this)
 		float d = autocvar_hud_shownames_crosshairdistance;
 		float w = o.x - vid_conwidth / 2;
 		float h = o.y - vid_conheight / 2;
-		if (d * d > w * w + h * h) this.pointtime = time;
+		if (d * d > w * w + h * h) { this.pointtime = time; }
 		if (this.pointtime + autocvar_hud_shownames_crosshairdistance_time <= time)
+		{
 			overlap = 1;
-		else if(!autocvar_hud_shownames_crosshairdistance_antioverlap)
+		}
+		else if (!autocvar_hud_shownames_crosshairdistance_antioverlap)
+		{
 			overlap = 0;
+		}
 	}
 
 	if (overlap == -1 && autocvar_hud_shownames_antioverlap)
@@ -72,12 +77,14 @@ void Draw_ShowNames(entity this)
 		LL_EACH(shownames_ent, it != this, {
 			entcs = entcs_receiver(i);
 			if (!(entcs && entcs.has_sv_origin))
+			{
 				continue;
+			}
 			vector eo = project_3d_to_2d(it.origin);
-			if (eo.z < 0 || eo.x < 0 || eo.y < 0 || eo.x > vid_conwidth || eo.y > vid_conheight) continue;
+			if (eo.z < 0 || eo.x < 0 || eo.y < 0 || eo.x > vid_conwidth || eo.y > vid_conheight) { continue; }
 			eo.z = 0;
 			if (vdist((vec2(o) - eo), <, autocvar_hud_shownames_antioverlap_distance)
-			    && vlen2(it.origin - view_origin) < vlen2(this.origin - view_origin))
+			&& vlen2(it.origin - view_origin) < vlen2(this.origin - view_origin))
 			{
 				overlap = 1;
 				break;
@@ -85,25 +92,25 @@ void Draw_ShowNames(entity this)
 		});
 	}
 	bool onscreen = (o.z >= 0 && o.x >= 0 && o.y >= 0 && o.x <= vid_conwidth && o.y <= vid_conheight);
-	if (!this.fadedelay) this.fadedelay = time + SHOWNAMES_FADEDELAY;
-	if (this.csqcmodel_isdead)                                                                   // dead player, fade out slowly
+	if (!this.fadedelay) { this.fadedelay = time + SHOWNAMES_FADEDELAY; }
+	if (this.csqcmodel_isdead) // dead player, fade out slowly
 	{
 		this.alpha = max(0, this.alpha - SHOWNAMES_FADESPEED * 0.25 * frametime);
 	}
 	else if (!onscreen || (!this.sameteam && !hit)) // out of view, fade out
 	{
 		this.alpha = max(0, this.alpha - SHOWNAMES_FADESPEED * frametime);
-		this.fadedelay = 0;                         // reset fade in delay, enemy has left the view
+		this.fadedelay = 0; // reset fade in delay, enemy has left the view
 	}
 	else if (overlap > 0) // tag overlap detected, fade out
 	{
 		this.alpha = max(0, this.alpha - SHOWNAMES_FADESPEED * frametime);
 	}
-	else if (this.sameteam)  // fade in for team mates
+	else if (this.sameteam) // fade in for team mates
 	{
 		this.alpha = min(1, this.alpha + SHOWNAMES_FADESPEED * frametime);
 	}
-	else if (time > this.fadedelay)  // fade in for enemies
+	else if (time > this.fadedelay) // fade in for enemies
 	{
 		this.alpha = min(1, this.alpha + SHOWNAMES_FADESPEED * frametime);
 	}
@@ -112,23 +119,23 @@ void Draw_ShowNames(entity this)
 	if (!this.sameteam || (this.sv_entnum == player_localentnum))
 	{
 		float f = entcs_GetAlpha(this.sv_entnum - 1);
-		if (f == 0) f = 1;
-		if (f < 0) f = 0;
+		if (f == 0) { f = 1; }
+		if (f < 0) { f = 0; }
 		// FIXME: alpha is negative when dead, breaking death fade
-		if (!this.csqcmodel_isdead) a *= f;
+		if (!this.csqcmodel_isdead) { a *= f; }
 	}
-	if (a < ALPHA_MIN_VISIBLE && gametype != MAPINFO_TYPE_CTS) return;
-	if (vdist(this.origin - view_origin, >=, max_shot_distance)) return;
+	if (a < ALPHA_MIN_VISIBLE && gametype != MAPINFO_TYPE_CTS) { return; }
+	if (vdist(this.origin - view_origin, >=, max_shot_distance)) { return; }
 	float dist = vlen(this.origin - view_origin);
 	if (autocvar_hud_shownames_maxdistance)
 	{
-		if (dist >= autocvar_hud_shownames_maxdistance) return;
+		if (dist >= autocvar_hud_shownames_maxdistance) { return; }
 		float f = autocvar_hud_shownames_maxdistance - autocvar_hud_shownames_mindistance;
 		a *= (f - max(0, dist - autocvar_hud_shownames_mindistance)) / f;
 	}
-	if (!a) return;
+	if (!a) { return; }
 	float resize = 1;
-	if (autocvar_hud_shownames_resize)  // limit resize so its never smaller than 0.5... gets unreadable
+	if (autocvar_hud_shownames_resize) // limit resize so its never smaller than 0.5... gets unreadable
 	{
 		float f = autocvar_hud_shownames_maxdistance - autocvar_hud_shownames_mindistance;
 		resize = 0.5 + 0.5 * (f - max(0, dist - autocvar_hud_shownames_mindistance)) / f;
@@ -166,11 +173,11 @@ void Draw_ShowNames(entity this)
 		}
 		string s = entcs_GetName(this.sv_entnum - 1);
 		if ((autocvar_hud_shownames_decolorize == 1 && teamplay)
-		    || autocvar_hud_shownames_decolorize == 2) s = playername(s, entcs_GetTeam(this.sv_entnum - 1));
+			|| autocvar_hud_shownames_decolorize == 2) { s = playername(s, entcs_GetTeam(this.sv_entnum - 1)); }
 		drawfontscale = '1 1 0' * resize;
 		s = textShortenToWidth(s, namewidth, '1 1 0' * autocvar_hud_shownames_fontsize, stringwidth_colors);
 		float width = stringwidth(s, true, '1 1 0' * autocvar_hud_shownames_fontsize);
-		if (width != namewidth) namepos.x += (namewidth - width) / 2;
+		if (width != namewidth) { namepos.x += (namewidth - width) / 2; }
 		drawcolorcodedstring(namepos, s, '1 1 0' * autocvar_hud_shownames_fontsize, a, DRAWFLAG_NORMAL);
 		drawfontscale = '1 1 0';
 	}
@@ -178,7 +185,7 @@ void Draw_ShowNames(entity this)
 
 void Draw_ShowNames_All()
 {
-	if (!autocvar_hud_shownames) return;
+	if (!autocvar_hud_shownames) { return; }
 	LL_EACH(shownames_ent, true, {
 		entity entcs = entcs_receiver(i);
 		if (!entcs)
@@ -189,7 +196,7 @@ void Draw_ShowNames_All()
 		make_impure(it);
 		assert(getthink(entcs), eprint(entcs));
 		getthink(entcs)(entcs);
-		if (!entcs.has_origin) continue;
+		if (!entcs.has_origin) { continue; }
 		if (entcs.m_entcs_private)
 		{
 			it.healthvalue = entcs.healthvalue;
@@ -203,7 +210,7 @@ void Draw_ShowNames_All()
 			it.sameteam = false;
 		}
 		bool dead = entcs_IsDead(i) || entcs_IsSpectating(i);
-		if (!it.csqcmodel_isdead) setorigin(it, entcs.origin);
+		if (!it.csqcmodel_isdead) { setorigin(it, entcs.origin); }
 		it.csqcmodel_isdead = dead;
 		Draw_ShowNames(it);
 	});
