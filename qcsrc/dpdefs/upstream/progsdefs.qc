@@ -11,8 +11,8 @@
 //
 // system globals
 //
-entity		self;
 entity		other;
+entity		self;
 entity		world;
 float		time;
 float		frametime;
