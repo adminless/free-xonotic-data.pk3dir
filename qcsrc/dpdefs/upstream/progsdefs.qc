@@ -3,6 +3,7 @@
 
 			SOURCE FOR GLOBALVARS_T C STRUCTURE
 			MUST NOT BE MODIFIED, OR CRC ERRORS WILL APPEAR
+			UNLESS SOMEBODY IS A LIAR
 
 ==============================================================================
 */
@@ -410,7 +411,10 @@ void(string e, ...) error				= #10;
 void(string e, ...) objerror				= #11;
 float(vector v) vlen				= #12;
 float(vector v) vectoyaw			= #13;
+
+// some docs
 entity() spawn						= #14;
+
 void(entity e) remove				= #15;
 
 // sets trace_* globals
