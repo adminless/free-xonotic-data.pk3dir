@@ -102,7 +102,7 @@ string race_readName(string map, float pos)
 }
 
 
-const float MAX_CHECKPOINTS = 255;
+const int MAX_CHECKPOINTS = 255;
 
 .float race_penalty;
 .float race_penalty_accumulator;
@@ -112,11 +112,20 @@ const float MAX_CHECKPOINTS = 255;
 
 .entity sprite;
 
-float race_checkpoint_records[MAX_CHECKPOINTS];
-string race_checkpoint_recordholders[MAX_CHECKPOINTS];
-float race_checkpoint_lasttimes[MAX_CHECKPOINTS];
-float race_checkpoint_lastlaps[MAX_CHECKPOINTS];
-entity race_checkpoint_lastplayers[MAX_CHECKPOINTS];
+ArrayList race_checkpoint_records;
+ArrayList race_checkpoint_recordholders;
+ArrayList race_checkpoint_lasttimes;
+ArrayList race_checkpoint_lastlaps;
+ArrayList race_checkpoint_lastplayers;
+
+STATIC_INIT(race_arraylists)
+{
+	AL_NEW(race_checkpoint_records, MAX_CHECKPOINTS, 0, f);
+	AL_NEW(race_checkpoint_recordholders, MAX_CHECKPOINTS, string_null, s);
+	AL_NEW(race_checkpoint_lasttimes, MAX_CHECKPOINTS, 0, f);
+	AL_NEW(race_checkpoint_lastlaps, MAX_CHECKPOINTS, 0, f);
+	AL_NEW(race_checkpoint_lastplayers, MAX_CHECKPOINTS, NULL, e);
+}
 
 .float race_checkpoint_record[MAX_CHECKPOINTS];
 
@@ -166,9 +175,9 @@ void race_SendNextCheckpoint(entity e, float spec) // qualifying only
 		return;
 
 	int cp = e.race_checkpoint;
-	float recordtime = race_checkpoint_records[cp];
+	float recordtime = AL_getf(race_checkpoint_records, cp);
 	float myrecordtime = e.race_checkpoint_record[cp];
-	string recordholder = race_checkpoint_recordholders[cp];
+	string recordholder = AL_gets(race_checkpoint_recordholders, cp);
 	if(recordholder == e.netname)
 		recordholder = "";
 
@@ -425,9 +434,9 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 
 		if(tvalid)
 		{
-			recordtime = race_checkpoint_records[cp];
+			recordtime = AL_getf(race_checkpoint_records, cp);
 			float myrecordtime = e.race_checkpoint_record[cp];
-			recordholder = strcat1(race_checkpoint_recordholders[cp]); // make a tempstring copy, as we'll possibly strunzone it!
+			recordholder = AL_gets(race_checkpoint_recordholders, cp); // make a tempstring copy, as we'll possibly strunzone it!
 			if(recordholder == e.netname)
 				recordholder = "";
 
@@ -443,8 +452,8 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 
 				if(t < recordtime || recordtime == 0)
 				{
-					race_checkpoint_records[cp] = t;
-					strcpy(race_checkpoint_recordholders[cp], e.netname);
+					AL_setf(race_checkpoint_records, cp, t);
+					AL_sets(race_checkpoint_recordholders, cp, e.netname);
 					if(g_race_qualifying)
 						FOREACH_CLIENT(IS_PLAYER(it) && IS_REAL_CLIENT(it) && it.race_checkpoint == cp, { race_SendNextCheckpoint(it, 0); });
 				}
@@ -483,12 +492,12 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 	else // RACE! Not Qualifying
 	{
 		float mylaps, lother, othtime;
-		entity oth = race_checkpoint_lastplayers[cp];
+		entity oth = AL_gete(race_checkpoint_lastplayers, cp);
 		if(oth)
 		{
 			mylaps = GameRules_scoring_add(e, RACE_LAPS, 0);
-			lother = race_checkpoint_lastlaps[cp];
-			othtime = race_checkpoint_lasttimes[cp];
+			lother = AL_getf(race_checkpoint_lastlaps, cp);
+			othtime = AL_getf(race_checkpoint_lasttimes, cp);
 		}
 		else
 			mylaps = lother = othtime = 0;
@@ -508,16 +517,16 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				}
 				else
 				{
-					WriteInt24_t(MSG_ONE, TIME_ENCODE(time - race_checkpoint_lasttimes[cp]));
+					WriteInt24_t(MSG_ONE, TIME_ENCODE(time - AL_getf(race_checkpoint_lasttimes, cp)));
 					WriteByte(MSG_ONE, mylaps - lother);
 					WriteByte(MSG_ONE, etof(oth)); // record holder
 				}
 			});
 		}
 
-		race_checkpoint_lastplayers[cp] = e;
-		race_checkpoint_lasttimes[cp] = time;
-		race_checkpoint_lastlaps[cp] = mylaps;
+		AL_sete(race_checkpoint_lastplayers, cp, e);
+		AL_setf(race_checkpoint_lasttimes, cp, time);
+		AL_setf(race_checkpoint_lastlaps, cp, mylaps);
 
 		if(IS_REAL_CLIENT(oth))
 		{
@@ -1088,8 +1097,8 @@ void race_ClearRecords()
 {
 	for(int j = 0; j < MAX_CHECKPOINTS; ++j)
 	{
-		race_checkpoint_records[j] = 0;
-		strfree(race_checkpoint_recordholders[j]);
+		AL_setf(race_checkpoint_records, j, 0);
+		AL_sets(race_checkpoint_recordholders, j, string_null);
 	}
 
 	FOREACH_CLIENT(true, {
