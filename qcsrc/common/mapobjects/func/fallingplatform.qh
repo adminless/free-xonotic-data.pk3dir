@@ -1,0 +1,41 @@
+#pragma once
+
+// Platform that lowers or rises when a certain amount of creatures are standing on it. Upon reaching its height limit, the platform falls and fades away, activating secondary targets
+// Can be linked to another platform, it will rise when the other platform lowers. It will not fall when rising
+
+const int FALLINGPLATFORM_RISE = BIT(0); // rise up instead of falling when creatures are standing on it
+const int FALLINGPLATFORM_NOPLAYERS = BIT(1); // don't count players when counting the number of creatures standing on this platform
+//INVERT_TEAMS
+const int FALLINGPLATFORM_CRUSH = BIT(3); // crush entities that block its path
+const int FALLINGPLATFORM_RISE_NOFALL = BIT(4); // if the platform is set to rise, don't fall when it reaches its maximum height
+const int FALLINGPLATFORM_STOP_WHENFULL = BIT(5); // when the player limit is reached, stop lowering or rising
+//ONLY_PLAYERS
+
+// TODO: deactivation! needs to somehow work across a chain of platforms
+const int STATE_ACTIVE = 0;
+const int STATE_FALLEN = 1;
+
+#ifdef SVQC
+// new field to store the upward position
+.vector pos3;
+
+// maintain a list of all the falling platforms, for cheaper searching during runtime
+IntrusiveList g_fallingplatforms;
+STATIC_INIT(g_fallingplatforms) { g_fallingplatforms = IL_NEW(); }
+
+// entity keys
+#if 0
+#define FIELDS_FALLINGPLATFORM(fld) \
+	FIELD_SCALAR(fld, count) /* number of entities standing on this before it will stop lowering (default 2) */ \
+	FIELD_SCALAR(fld, dmg) /* damage dealt when crushing the entity */ \
+	FIELD_SCALAR(fld, dmgtime) /* delay in seconds between damage dealt to a crushed entity (default 0.25) */ \
+	FIELD_SCALAR(fld, fade_time) /* time until the platform fades out after dropping (default 1) */ \
+	FIELD_SCALAR(fld, height) /* custom size of the platform, for tweaking the lip and height limits */ \
+	FIELD_SCALAR(fld, lip) /* height limit at which the platform will fall and fade away (default 16) */ \
+	FIELD_SCALAR(fld, speed) /* speed at which the platform will lower while stood on (default 100) */ \
+	FIELD_SCALAR(fld, message) /* death message when a player is crushed */ \
+	FIELD_SCALAR(fld, message2) /* kill message when another player was pushed under the platform */ \
+	/**/
+#endif
+
+#endif

@@ -16,6 +16,8 @@ const int ONLY_PLAYERS = BIT(14);
 const int SPAWNFLAG_NOMESSAGE = BIT(0);
 const int SPAWNFLAG_NOTOUCH = BIT(0);
 
+const float DMG_INSTAKILL = 10000; // TODO: acquire this by another means (e.g. the absolute health limit)
+
 //----------
 // SENDFLAGS
 //----------
