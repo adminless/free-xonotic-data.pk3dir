@@ -218,7 +218,10 @@ void Shutdown()
 		if (!(calledhooks & HOOK_START))
 			localcmd("\n_cl_hook_gamestart nop\n");
 		if (!(calledhooks & HOOK_END))
+		{
+			cvar_set("cl_matchcount", ftos(cvar("cl_matchcount") + 1));
 			localcmd("\ncl_hook_gameend\n");
+		}
 	}
 
 	localcmd("\ncl_hook_shutdown\n");

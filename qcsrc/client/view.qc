@@ -1988,6 +1988,7 @@ void CSQC_UpdateView(entity this, float w, float h)
 		if(calledhooks & HOOK_START)
 		{
 			localcmd("\ncl_hook_gameend\n");
+			cvar_set("cl_matchcount", ftos(cvar("cl_matchcount") + 1));
 			calledhooks |= HOOK_END;
 		}
 	}
