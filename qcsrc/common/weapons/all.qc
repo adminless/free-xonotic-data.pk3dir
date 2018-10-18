@@ -308,7 +308,7 @@ vector shotorg_adjust_values(vector vecs, bool y_is_right, bool visual, int algn
 		vecs.y = 0;
 		vecs.z -= 2;
 	}
-	else if ((s = G_SHOOTFROMFIXEDORIGIN) != "")
+	else if ((s = STAT(SHOOTFROMFIXEDORIGIN)) != "")
 	{
 		vector v = stov(s);
 		if (y_is_right) v.y = -v.y;

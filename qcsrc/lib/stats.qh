@@ -41,6 +41,7 @@ int g_magic_stats_hole = 0;
 	#define getstat_float(id) getstatf(id)
 	#define getstat_vector(id) vec3(getstat_float(id + 0), getstat_float(id + 1), getstat_float(id + 2))
 	#define getstat_vectori(id) vec3(getstat_int(id + 0), getstat_int(id + 1), getstat_int(id + 2))
+	#define getstat_string(id) getstats(id)
 
 	#define _STAT(id) g_stat_##id
 	#define REGISTER_STAT_2(id, T) \
@@ -73,6 +74,7 @@ int g_magic_stats_hole = 0;
 	#define addstat_int(id, fld) addstat(id, AS_INT, fld)
 	#define addstat_bool(id, fld) addstat(id, AS_INT, fld)
 	#define addstat_float(id, fld) addstat(id, AS_FLOAT, fld)
+	#define addstat_string(id, fld) addstat(id, AS_STRING, fld)
 	#define addstat_vector(id, fld) MACRO_BEGIN { \
 		addstat_float(id + 0, fld##_x); \
 		addstat_float(id + 1, fld##_y); \

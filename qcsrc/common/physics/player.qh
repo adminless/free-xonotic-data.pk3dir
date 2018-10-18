@@ -75,6 +75,8 @@ bool IsFlying(entity a);
 #define PHYS_JETPACK_MAXSPEED_UP(s)         STAT(JETPACK_MAXSPEED_UP, s)
 #define PHYS_JETPACK_REVERSE_THRUST(s)		STAT(JETPACK_REVERSE_THRUST, s)
 
+#define PHYS_JUMPSPEEDCAP_MIN(s)            STAT(MOVEVARS_JUMPSPEEDCAP_MIN, s)
+#define PHYS_JUMPSPEEDCAP_MAX(s)            STAT(MOVEVARS_JUMPSPEEDCAP_MAX, s)
 #define PHYS_JUMPSPEEDCAP_DISABLE_ONRAMPS(s) STAT(MOVEVARS_JUMPSPEEDCAP_DISABLE_ONRAMPS)
 #define PHYS_JUMPVELOCITY(s)                STAT(MOVEVARS_JUMPVELOCITY, s)
 #define PHYS_JUMPVELOCITY_CROUCH(s)         STAT(MOVEVARS_JUMPVELOCITY_CROUCH, s)
@@ -167,9 +169,6 @@ STATIC_INIT(PHYS_INPUT_BUTTON)
 
 	#define PHYS_FIXANGLE(s) ('0 0 0')
 
-	string autocvar_cl_jumpspeedcap_min;
-	string autocvar_cl_jumpspeedcap_max;
-
 	const int FL_WATERJUMP = 2048;  // player jumping out of water
 	const int FL_JUMPRELEASED = 4096;  // for jump debouncing
 
@@ -234,9 +233,6 @@ STATIC_INIT(PHYS_INPUT_BUTTON)
 
 	#define PHYS_INVEHICLE(s) 					(boolean(hud != HUD_NORMAL))
 
-	#define PHYS_JUMPSPEEDCAP_MIN               autocvar_cl_jumpspeedcap_min
-	#define PHYS_JUMPSPEEDCAP_MAX               autocvar_cl_jumpspeedcap_max
-
 	#define PHYS_CL_TRACK_CANJUMP(s)            STAT(MOVEVARS_CL_TRACK_CANJUMP, s)
 
 #elif defined(SVQC)
@@ -248,10 +244,6 @@ STATIC_INIT(PHYS_INPUT_BUTTON)
 	void Physics_UpdateStats(entity this);
 
 	void PM_UpdateButtons(entity this, entity store);
-
-	/** Not real stats */
-	.string jumpspeedcap_min;
-	.string jumpspeedcap_max;
 
 	#define PHYS_INPUT_ANGLES(s)                ((s).v_angle)
 	#define PHYS_WORLD_ANGLES(s)                ((s).angles)
@@ -287,9 +279,6 @@ STATIC_INIT(PHYS_INPUT_BUTTON)
 	#define UNSET_DUCKED(s)                     ((s).crouch = false)
 
 	#define PHYS_INVEHICLE(s) 					(boolean((s).vehicle != NULL))
-
-	#define PHYS_JUMPSPEEDCAP_MIN               autocvar_sv_jumpspeedcap_min
-	#define PHYS_JUMPSPEEDCAP_MAX               autocvar_sv_jumpspeedcap_max
 
 	#define PHYS_CL_TRACK_CANJUMP(s)            (CS(s).cvar_cl_movement_track_canjump)
 

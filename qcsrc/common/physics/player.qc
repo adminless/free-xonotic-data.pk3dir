@@ -49,6 +49,9 @@ void Physics_UpdateStats(entity this)
 	STAT(MOVEVARS_AIRSPEEDLIMIT_NONQW, this) = Physics_ClientOption(this, "airspeedlimit_nonqw", autocvar_sv_airspeedlimit_nonqw) * maxspd_mod;
 	STAT(MOVEVARS_MAXSPEED, this) = Physics_ClientOption(this, "maxspeed", autocvar_sv_maxspeed) * maxspd_mod; // also slow walking
 
+	STAT(MOVEVARS_JUMPSPEEDCAP_MAX, this) = autocvar_sv_jumpspeedcap_max;
+	STAT(MOVEVARS_JUMPSPEEDCAP_MIN, this) = autocvar_sv_jumpspeedcap_min;
+
 	bool vq3compat = autocvar_sv_vq3compat && autocvar_sv_vq3compat_changehitbox; // NOTE: these hitboxes are off by 1 due to engine differences
 	STAT(PL_MIN, this) = (vq3compat) ? '-15 -15 -24' : autocvar_sv_player_mins;
 	STAT(PL_MAX, this) = (vq3compat) ? '15 15 32' : autocvar_sv_player_maxs;
@@ -361,22 +364,22 @@ bool PlayerJump(entity this)
 	// velocity bounds.  Final velocity is bound between (jumpheight *
 	// min + jumpheight) and (jumpheight * max + jumpheight);
 
-	if(PHYS_JUMPSPEEDCAP_MIN != "")
+	if(PHYS_JUMPSPEEDCAP_MIN(this) != "")
 	{
-		float minjumpspeed = mjumpheight * stof(PHYS_JUMPSPEEDCAP_MIN);
+		float minjumpspeed = mjumpheight * stof(PHYS_JUMPSPEEDCAP_MIN(this));
 
 		if (this.velocity_z < minjumpspeed)
 			mjumpheight += minjumpspeed - this.velocity_z;
 	}
 
-	if(PHYS_JUMPSPEEDCAP_MAX != "")
+	if(PHYS_JUMPSPEEDCAP_MAX(this) != "")
 	{
 		// don't do jump speedcaps on ramps to preserve old xonotic ramjump style
 		tracebox(this.origin + '0 0 0.01', this.mins, this.maxs, this.origin - '0 0 0.01', MOVE_NORMAL, this);
 
 		if (!(trace_fraction < 1 && trace_plane_normal_z < 0.98 && PHYS_JUMPSPEEDCAP_DISABLE_ONRAMPS(this)))
 		{
-			float maxjumpspeed = mjumpheight * stof(PHYS_JUMPSPEEDCAP_MAX);
+			float maxjumpspeed = mjumpheight * stof(PHYS_JUMPSPEEDCAP_MAX(this));
 
 			if (this.velocity_z > maxjumpspeed)
 				mjumpheight -= this.velocity_z - maxjumpspeed;

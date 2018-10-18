@@ -918,11 +918,6 @@ void FixClientCvars(entity e)
 	if(autocvar_sv_gentle)
 		stuffcmd(e, "cl_cmd settemp cl_gentle 1\n");
 
-	stuffcmd(e, sprintf("\ncl_jumpspeedcap_min \"%s\"\n", autocvar_sv_jumpspeedcap_min));
-	stuffcmd(e, sprintf("\ncl_jumpspeedcap_max \"%s\"\n", autocvar_sv_jumpspeedcap_max));
-
-	stuffcmd(e, sprintf("\ncl_shootfromfixedorigin \"%s\"\n", autocvar_g_shootfromfixedorigin));
-
 	MUTATOR_CALLHOOK(FixClientCvars, e);
 }
 
@@ -2051,7 +2046,6 @@ bool joinAllowed(entity this)
 }
 
 .int items_added;
-.string shootfromfixedorigin;
 bool PlayerThink(entity this)
 {
 	if (game_stopped || intermission_running) {
@@ -2148,11 +2142,6 @@ bool PlayerThink(entity this)
 	}
 
 	FixPlayermodel(this);
-
-	if (this.shootfromfixedorigin != autocvar_g_shootfromfixedorigin) {
-		this.shootfromfixedorigin = autocvar_g_shootfromfixedorigin;
-		stuffcmd(this, sprintf("\ncl_shootfromfixedorigin \"%s\"\n", autocvar_g_shootfromfixedorigin));
-	}
 
 	// LordHavoc: allow firing on move frames (sub-ticrate), this gives better timing on slow servers
 	//if(frametime)

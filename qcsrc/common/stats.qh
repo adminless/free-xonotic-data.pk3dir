@@ -205,7 +205,9 @@ REGISTER_STAT(MOVEVARS_FRICTION, float)
 REGISTER_STAT(MOVEVARS_FRICTION_SLICK, float, autocvar_sv_friction_slick)
 REGISTER_STAT(MOVEVARS_FRICTION_ONLAND, float, autocvar_sv_friction_on_land)
 
+REGISTER_STAT(MOVEVARS_JUMPSPEEDCAP_MAX, string, autocvar_sv_jumpspeedcap_max)
 REGISTER_STAT(MOVEVARS_JUMPSPEEDCAP_DISABLE_ONRAMPS, int, autocvar_sv_jumpspeedcap_max_disable_on_ramps)
+REGISTER_STAT(MOVEVARS_JUMPSPEEDCAP_MIN, string, autocvar_sv_jumpspeedcap_min)
 REGISTER_STAT(MOVEVARS_TRACK_CANJUMP, int)
 /** cvar loopback */
 REGISTER_STAT(MOVEVARS_CL_TRACK_CANJUMP, int)
@@ -314,9 +316,12 @@ float warmup_limit;
 #ifdef SVQC
 bool autocvar_g_shootfromcenter;
 bool autocvar_g_shootfromeye;
+string autocvar_g_shootfromfixedorigin;
 #endif
 REGISTER_STAT(SHOOTFROMEYE, bool, autocvar_g_shootfromeye)
 REGISTER_STAT(SHOOTFROMCENTER, bool, autocvar_g_shootfromcenter)
+REGISTER_STAT(SHOOTFROMFIXEDORIGIN, string, autocvar_g_shootfromfixedorigin)
+
 
 REGISTER_STAT(MOVEVARS_AIRACCEL_QW_STRETCHFACTOR, float)
 REGISTER_STAT(MOVEVARS_AIRCONTROL_PENALTY, float)
