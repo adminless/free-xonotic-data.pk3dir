@@ -5,3 +5,4 @@ Fixes:
  * shoot from eye by default
  * norecoil by default
  * spawnshieldtime 0 by default
+ * forced respawn
