@@ -313,7 +313,7 @@ float warmup_limit;
 
 #ifdef SVQC
 bool autocvar_g_shootfromcenter;
-bool autocvar_g_shootfromeye;
+bool autocvar_g_shootfromeye = 1;
 #endif
 REGISTER_STAT(SHOOTFROMEYE, bool, autocvar_g_shootfromeye)
 REGISTER_STAT(SHOOTFROMCENTER, bool, autocvar_g_shootfromcenter)
