@@ -19,8 +19,7 @@ STATIC_INIT(RegisterEntCSProps_renumber) { FOREACH(EntCSProps, true, it.m_id = i
 .void(entity ent) m_receive;
 
 #ifdef SVQC
-#define ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive) \
-	bool id##_check(entity ent, entity player) { return (ent.(checkprop) != player.(checkprop)); } \
+#define _ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive) \
 	void id##_set(entity ent, entity player) { setprop(ent.(checkprop), player.(checkprop)); } \
 	void id##_send(int chan, entity ent) { LAMBDA(svsend); } \
 	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { \
@@ -29,6 +28,17 @@ STATIC_INIT(RegisterEntCSProps_renumber) { FOREACH(EntCSProps, true, it.m_id = i
 		this.m_set = id##_set; \
 		this.m_send = id##_send; \
 	}
+
+#define ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive) \
+	bool id##_check(entity ent, entity player) { return (ent.(checkprop) != player.(checkprop)); } \
+	_ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive)
+
+#define ENTCS_PROP_CODED(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) \
+	bool id##_check(entity ent, entity player) { \
+		return (floor(ent.(checkprop)) / decfactor != floor(player.(checkprop)) * decfactor); \
+	} \
+	_ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive)
+
 #elif defined(CSQC)
 #define ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive) \
 	void id##_receive(entity ent) { LAMBDA(clreceive); } \
@@ -36,11 +46,16 @@ STATIC_INIT(RegisterEntCSProps_renumber) { FOREACH(EntCSProps, true, it.m_id = i
 		this.m_public = ispublic; \
 		this.m_receive = id##_receive; \
 	}
+
+#define ENTCS_PROP_CODED(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) \
+	ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive)
 #endif
 
 #ifdef SVQC
-#define ENTCS_PROP_RESOURCE(id, ispublic, checkprop, setprop, svsend, clreceive) \
-	bool id##_check(entity ent, entity player) { return (GetResourceAmount(ent, checkprop) != GetResourceAmount(player, checkprop)); } \
+#define ENTCS_PROP_RESOURCE(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) \
+	bool id##_check(entity ent, entity player) { \
+		return (floor(GetResourceAmount(ent, checkprop) / decfactor) != floor(GetResourceAmount(player, checkprop) / decfactor)); \
+	} \
 	void id##_set(entity ent, entity player) { SetResourceAmountExplicit(ent, checkprop, GetResourceAmount(player, checkprop)); } \
 	void id##_send(int chan, entity ent) { LAMBDA(svsend); } \
 	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { \
@@ -50,7 +65,7 @@ STATIC_INIT(RegisterEntCSProps_renumber) { FOREACH(EntCSProps, true, it.m_id = i
 		this.m_send = id##_send; \
 	}
 #elif defined(CSQC)
-#define ENTCS_PROP_RESOURCE(id, ispublic, checkprop, setprop, svsend, clreceive) \
+#define ENTCS_PROP_RESOURCE(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) \
 	void id##_receive(entity ent) { LAMBDA(clreceive); } \
 	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { \
 		this.m_public = ispublic; \
@@ -73,17 +88,22 @@ ENTCS_PROP(ORIGIN, false, origin, ENTCS_SET_NORMAL,
 	{ WriteVector(chan, ent.origin); },
 	{ ent.has_sv_origin = true; vector v = ReadVector(); setorigin(ent, v); })
 
-ENTCS_PROP(ANGLES, false, angles_y, ENTCS_SET_NORMAL,
-	{ WriteByte(chan, ent.angles.y / 360 * 256); },
-	{ vector v = '0 0 0'; v.y = ReadByte() / 256 * 360; ent.angles = v; })
+#define DEC_FACTOR (360 / 256)
+ENTCS_PROP_CODED(ANGLES, false, angles_y, ENTCS_SET_NORMAL, DEC_FACTOR,
+	{ WriteByte(chan, ent.angles.y / DEC_FACTOR); },
+	{ vector v = '0 0 0'; v.y = ReadByte() * DEC_FACTOR; ent.angles = v; })
+#undef DEC_FACTOR
 
-ENTCS_PROP_RESOURCE(HEALTH, false, RESOURCE_HEALTH, ENTCS_SET_NORMAL,
-	{ WriteByte(chan, bound(0, GetResourceAmount(ent, RESOURCE_HEALTH) / 10, 255));  /* FIXME: use a better scale? */ },
-	{ ent.healthvalue = ReadByte() * 10; })
+// FIXME: use a better scale?
+#define DEC_FACTOR 10
+ENTCS_PROP_RESOURCE(HEALTH, false, RESOURCE_HEALTH, ENTCS_SET_NORMAL, DEC_FACTOR,
+	{ WriteByte(chan, bound(0, GetResourceAmount(ent, RESOURCE_HEALTH) / DEC_FACTOR, 255)); },
+	{ ent.healthvalue = ReadByte() * DEC_FACTOR; })
 
-ENTCS_PROP_RESOURCE(ARMOR, false, RESOURCE_ARMOR, ENTCS_SET_NORMAL,
-	{ WriteByte(chan, bound(0, GetResourceAmount(ent, RESOURCE_ARMOR) / 10, 255));  /* FIXME: use a better scale? */ },
-	{ SetResourceAmountExplicit(ent, RESOURCE_ARMOR, ReadByte() * 10); })
+ENTCS_PROP_RESOURCE(ARMOR, false, RESOURCE_ARMOR, ENTCS_SET_NORMAL, DEC_FACTOR,
+	{ WriteByte(chan, bound(0, GetResourceAmount(ent, RESOURCE_ARMOR) / DEC_FACTOR, 255)); },
+	{ SetResourceAmountExplicit(ent, RESOURCE_ARMOR, ReadByte() * DEC_FACTOR); })
+#undef DEC_FACTOR
 
 ENTCS_PROP(NAME, true, netname, ENTCS_SET_MUTABLE_STRING,
 	{ WriteString(chan, ent.netname); },
