@@ -10,7 +10,28 @@ REGISTRY(EntCSProps, BITS(16) - 1)
 REGISTER_REGISTRY(EntCSProps)
 REGISTRY_SORT(EntCSProps)
 REGISTRY_CHECK(EntCSProps)
-STATIC_INIT(RegisterEntCSProps_renumber) { FOREACH(EntCSProps, true, it.m_id = i); }
+STATIC_INIT(EntCSProps_renumber) { FOREACH(EntCSProps, true, it.m_id = i); }
+
+// these entcs_props ids need to be referenced directly
+int ENTCS_PROP_ENTNUM_id = 0;
+int ENTCS_PROP_ORIGIN_id = 0;
+STATIC_INIT(EntCSProps_setglobalids)
+{
+	FOREACH(EntCSProps, true, {
+		if (it.registered_id == "ENTCS_PROP_ENTNUM")
+			ENTCS_PROP_ENTNUM_id = it.m_id;
+		if (it.registered_id == "ENTCS_PROP_ORIGIN")
+			ENTCS_PROP_ORIGIN_id = it.m_id;
+	});
+}
+
+#ifdef SVQC
+// Force an origin update, for player sounds
+void entcs_force_origin(entity player)
+{
+	CS(player).entcs.m_forceupdate = BIT(ENTCS_PROP_ORIGIN_id);
+}
+#endif
 
 .bool m_public;
 .bool(entity ent, entity player) m_check;
@@ -35,7 +56,7 @@ STATIC_INIT(RegisterEntCSProps_renumber) { FOREACH(EntCSProps, true, it.m_id = i
 
 #define ENTCS_PROP_CODED(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) \
 	bool id##_check(entity ent, entity player) { \
-		return (floor(ent.(checkprop)) / decfactor != floor(player.(checkprop)) * decfactor); \
+		return (floor(ent.(checkprop)) / decfactor != floor(player.(checkprop)) / decfactor); \
 	} \
 	_ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive)
 
@@ -54,9 +75,9 @@ STATIC_INIT(RegisterEntCSProps_renumber) { FOREACH(EntCSProps, true, it.m_id = i
 #ifdef SVQC
 #define ENTCS_PROP_RESOURCE(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) \
 	bool id##_check(entity ent, entity player) { \
-		return (floor(GetResourceAmount(ent, checkprop) / decfactor) != floor(GetResourceAmount(player, checkprop) / decfactor)); \
+		return (floor(GetResource(ent, checkprop) / decfactor) != floor(GetResource(player, checkprop) / decfactor)); \
 	} \
-	void id##_set(entity ent, entity player) { SetResourceAmountExplicit(ent, checkprop, GetResourceAmount(player, checkprop)); } \
+	void id##_set(entity ent, entity player) { SetResource(ent, checkprop, GetResource(player, checkprop)); } \
 	void id##_send(int chan, entity ent) { LAMBDA(svsend); } \
 	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { \
 		this.m_public = ispublic; \
@@ -96,13 +117,13 @@ ENTCS_PROP_CODED(ANGLES, false, angles_y, ENTCS_SET_NORMAL, DEC_FACTOR,
 
 // FIXME: use a better scale?
 #define DEC_FACTOR 10
-ENTCS_PROP_RESOURCE(HEALTH, false, RESOURCE_HEALTH, ENTCS_SET_NORMAL, DEC_FACTOR,
-	{ WriteByte(chan, bound(0, GetResourceAmount(ent, RESOURCE_HEALTH) / DEC_FACTOR, 255)); },
+ENTCS_PROP_RESOURCE(HEALTH, false, RES_HEALTH, ENTCS_SET_NORMAL, DEC_FACTOR,
+	{ WriteByte(chan, bound(0, GetResource(ent, RES_HEALTH) / DEC_FACTOR, 255)); },
 	{ ent.healthvalue = ReadByte() * DEC_FACTOR; })
 
-ENTCS_PROP_RESOURCE(ARMOR, false, RESOURCE_ARMOR, ENTCS_SET_NORMAL, DEC_FACTOR,
-	{ WriteByte(chan, bound(0, GetResourceAmount(ent, RESOURCE_ARMOR) / DEC_FACTOR, 255)); },
-	{ SetResourceAmountExplicit(ent, RESOURCE_ARMOR, ReadByte() * DEC_FACTOR); })
+ENTCS_PROP_RESOURCE(ARMOR, false, RES_ARMOR, ENTCS_SET_NORMAL, DEC_FACTOR,
+	{ WriteByte(chan, bound(0, GetResource(ent, RES_ARMOR) / DEC_FACTOR, 255)); },
+	{ SetResource(ent, RES_ARMOR, ReadByte() * DEC_FACTOR); })
 #undef DEC_FACTOR
 
 ENTCS_PROP(NAME, true, netname, ENTCS_SET_MUTABLE_STRING,
@@ -139,7 +160,7 @@ ENTCS_PROP(FRAGS, true, frags, ENTCS_SET_NORMAL,
 	bool _entcs_send(entity this, entity to, int sf, int chan)
 	{
 		entity player = this.owner;
-		sf |= BIT(0); // assume private
+		sf |= BIT(ENTCS_PROP_ENTNUM_id); // assume private
 		do {
 			if (IS_PLAYER(player))
 			{
@@ -257,7 +278,7 @@ ENTCS_PROP(FRAGS, true, frags, ENTCS_SET_NORMAL,
 		e.sv_entnum = n;
 		int sf = ReadShort();
 		e.has_sv_origin = false;
-		e.m_entcs_private = boolean(sf & BIT(0));
+		e.m_entcs_private = boolean(sf & BIT(ENTCS_PROP_ENTNUM_id));
 		FOREACH(EntCSProps, sf & BIT(it.m_id),
 		{
 			it.m_receive(e);

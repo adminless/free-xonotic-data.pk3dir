@@ -924,7 +924,7 @@ spawnfunc(worldspawn)
 			s = cons(s, pkg);
 		}
 		// add automatically managed files to the list
-		#define X(match) MACRO_BEGIN { \
+		#define X(match) MACRO_BEGIN \
 			int fd = search_begin(match, true, false); \
 			if (fd >= 0) \
 			{ \
@@ -934,7 +934,7 @@ spawnfunc(worldspawn)
 				} \
 				search_end(fd); \
 			} \
-		} MACRO_END
+		MACRO_END
 		X("*-serverpackage.txt");
 		X("*.serverpackage");
 		#undef X
@@ -1523,7 +1523,7 @@ void FixIntermissionClient(entity e)
 	if(!e.autoscreenshot) // initial call
 	{
 		e.autoscreenshot = time + 0.8;	// used for autoscreenshot
-		SetResourceAmountExplicit(e, RESOURCE_HEALTH, -2342);
+		SetResource(e, RES_HEALTH, -2342);
 		// first intermission phase; voting phase has positive health (used to decide whether to send SVC_FINALE or not)
 		for (int slot = 0; slot < MAX_WEAPONSLOTS; ++slot)
 		{
