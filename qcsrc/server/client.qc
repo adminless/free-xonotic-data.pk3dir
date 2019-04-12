@@ -735,10 +735,12 @@ void PutPlayerInServer(entity this)
 	});
 
 	{
-		//string s = spot.target;
-		//spot.target = string_null;
+		string s = spot.target;
+		if(g_assault || g_race) // TODO: make targeting work in assault & race without this hack
+			spot.target = string_null;
 		SUB_UseTargets(spot, this, NULL);
-		//spot.target = s;
+		if(g_assault || g_race)
+			spot.target = s;
 	}
 
 	Unfreeze(this, false);
@@ -1319,12 +1321,14 @@ void respawn(entity this)
 	PutClientInServer(this);
 }
 
+ERASEABLE
 void PrintToChat(entity client, string text)
 {
 	text = strcat("\{1}^7", text, "\n");
 	sprint(client, text);
 }
 
+ERASEABLE
 void DebugPrintToChat(entity client, string text)
 {
 	if (autocvar_developer)
@@ -1333,12 +1337,14 @@ void DebugPrintToChat(entity client, string text)
 	}
 }
 
+ERASEABLE
 void PrintToChatAll(string text)
 {
 	text = strcat("\{1}^7", text, "\n");
 	bprint(text);
 }
 
+ERASEABLE
 void DebugPrintToChatAll(string text)
 {
 	if (autocvar_developer)
@@ -1347,6 +1353,7 @@ void DebugPrintToChatAll(string text)
 	}
 }
 
+ERASEABLE
 void PrintToChatTeam(int team_num, string text)
 {
 	text = strcat("\{1}^7", text, "\n");
@@ -1359,6 +1366,7 @@ void PrintToChatTeam(int team_num, string text)
 	});
 }
 
+ERASEABLE
 void DebugPrintToChatTeam(int team_num, string text)
 {
 	if (autocvar_developer)
@@ -2388,9 +2396,18 @@ void PlayerPreThink (entity this)
 	if (this.netname == "" || this.netname != CS(this).netname_previous)
 	{
 		bool assume_unchanged = (CS(this).netname_previous == "");
+		if (strlennocol(this.netname) > autocvar_name_maxlength)
+		{
+			int new_length = textLengthUpToLength(this.netname, autocvar_name_maxlength, strlennocol);
+			this.netname = strzone(strcat(substring(this.netname, 0, new_length), "^7"));
+			sprint(this, sprintf("Warning: your name is longer than %d characters, it has been truncated.\n", autocvar_name_maxlength));
+			assume_unchanged = false;
+			// stuffcmd(this, strcat("name ", this.netname, "\n")); // maybe?
+		}
 		if (isInvisibleString(this.netname))
 		{
 			this.netname = strzone(sprintf("Player#%d", this.playerid));
+			sprint(this, "Warning: invisible names are not allowed.\n");
 			assume_unchanged = false;
 			// stuffcmd(this, strcat("name ", this.netname, "\n")); // maybe?
 		}

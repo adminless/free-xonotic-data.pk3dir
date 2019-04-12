@@ -241,6 +241,9 @@ void bot_setnameandstuff(entity this)
 	READSKILL(bot_thinkskill, 1, 0.5); // think skill
 	READSKILL(bot_aiskill, 2, 0); // "ai" skill
 
+	if (file >= 0 && argv(prio) != "")
+		LOG_INFOF("^1Warning^7: too many parameters for bot %s, please check format of %s", bot_name, autocvar_bot_config_file);
+
 	this.bot_config_loaded = true;
 
 	// this is really only a default, TeamBalance_JoinBestTeam is called later
@@ -427,7 +430,7 @@ void bot_clientconnect(entity this)
 		bot_setclientfields(this);
 	}
 
-	if (Team_IsValidIndex(this.bot_forced_team))
+	if (teamplay && Team_IsValidIndex(this.bot_forced_team))
 	{
 		SetPlayerTeam(this, this.bot_forced_team, TEAM_CHANGE_MANUAL);
 	}
