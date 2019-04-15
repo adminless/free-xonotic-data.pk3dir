@@ -126,12 +126,13 @@ ENDCLASS(Weapon)
 #ifdef SVQC
 
 void weapon_defaultspawnfunc(entity this, Weapon e);
-#define SPAWNFUNC_WEAPON(name, weapon) \
-    spawnfunc(name) { weapon_defaultspawnfunc(this, weapon); }
+/*qc2rust::define::SPAWNFUNC_WEAPON*/
+#define SPAWNFUNC_WEAPON(name,weapon) /*qc2rust::macro_begin::SPAWNFUNC_WEAPON*/spawnfunc( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/) { weapon_defaultspawnfunc(this,  /*qc2rust::param_begin::weapon*/weapon /*qc2rust::param_end::weapon*/); } /*qc2rust::macro_end::SPAWNFUNC_WEAPON*/
 
 #else
 
-#define SPAWNFUNC_WEAPON(name, weapon)
+/*qc2rust::define::SPAWNFUNC_WEAPON*/
+#define SPAWNFUNC_WEAPON(name,weapon) /*qc2rust::macro_begin::SPAWNFUNC_WEAPON*/ /*qc2rust::macro_end::SPAWNFUNC_WEAPON*/
 
 #endif
 

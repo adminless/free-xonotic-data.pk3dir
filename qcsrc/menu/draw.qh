@@ -2,15 +2,18 @@
 
 // from the engine
 vector drawfontscale;
-#define draw_fontscale drawfontscale
+/*qc2rust::define::draw_fontscale*/
+#define draw_fontscale /*qc2rust::macro_begin::draw_fontscale*/drawfontscale /*qc2rust::macro_end::draw_fontscale*/
 
 vector draw_shift;
 vector draw_scale;
 float draw_alpha;
 
 void draw_reset(float cw, float ch, float ox, float oy);
-#define draw_beginBoldFont() drawfont = FONT_USER + 3
-#define draw_endBoldFont() drawfont = FONT_USER
+/*qc2rust::define::draw_beginBoldFont*/
+#define draw_beginBoldFont() /*qc2rust::macro_begin::draw_beginBoldFont*/drawfont = FONT_USER + 3 /*qc2rust::macro_end::draw_beginBoldFont*/
+/*qc2rust::define::draw_endBoldFont*/
+#define draw_endBoldFont() /*qc2rust::macro_begin::draw_endBoldFont*/drawfont = FONT_USER /*qc2rust::macro_end::draw_endBoldFont*/
 void draw_setMousePointer(string pic, vector theSize, vector theOffset);
 void draw_drawMousePointer(vector where);
 

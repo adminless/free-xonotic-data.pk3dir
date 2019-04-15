@@ -2,9 +2,12 @@
 
 #pragma noref 1
 
-#define particleeffectnum __particleeffectnum
-#define trailparticles __trailparticles
-#define pointparticles __pointparticles
+/*qc2rust::define::particleeffectnum*/
+#define particleeffectnum /*qc2rust::macro_begin::particleeffectnum*/__particleeffectnum /*qc2rust::macro_end::particleeffectnum*/
+/*qc2rust::define::trailparticles*/
+#define trailparticles /*qc2rust::macro_begin::trailparticles*/__trailparticles /*qc2rust::macro_end::trailparticles*/
+/*qc2rust::define::pointparticles*/
+#define pointparticles /*qc2rust::macro_begin::pointparticles*/__pointparticles /*qc2rust::macro_end::pointparticles*/
 
 #include "upstream/dpextensions.qc"
 
@@ -13,53 +16,69 @@
 #undef pointparticles
 
 int(entity ent, string tagname) _gettagindex = #451;
-#define gettagindex _gettagindex
+/*qc2rust::define::gettagindex*/
+#define gettagindex /*qc2rust::macro_begin::gettagindex*/_gettagindex /*qc2rust::macro_end::gettagindex*/
 
 int(string effectname) _particleeffectnum = #335;
 
 int(string s, string separator1, ...) _tokenizebyseparator = #479;
-#define tokenizebyseparator _tokenizebyseparator
+/*qc2rust::define::tokenizebyseparator*/
+#define tokenizebyseparator /*qc2rust::macro_begin::tokenizebyseparator*/_tokenizebyseparator /*qc2rust::macro_end::tokenizebyseparator*/
 
 int(string s) _tokenize_console = #514;
-#define tokenize_console _tokenize_console
+/*qc2rust::define::tokenize_console*/
+#define tokenize_console /*qc2rust::macro_begin::tokenize_console*/_tokenize_console /*qc2rust::macro_end::tokenize_console*/
 
 int(int i) _argv_start_index = #515;
-#define argv_start_index _argv_start_index
+/*qc2rust::define::argv_start_index*/
+#define argv_start_index /*qc2rust::macro_begin::argv_start_index*/_argv_start_index /*qc2rust::macro_end::argv_start_index*/
 
 int(int i) _argv_end_index = #516;
-#define argv_end_index _argv_end_index
+/*qc2rust::define::argv_end_index*/
+#define argv_end_index /*qc2rust::macro_begin::argv_end_index*/_argv_end_index /*qc2rust::macro_end::argv_end_index*/
 
 int(string s) _strlen = #114;
-#define strlen _strlen
+/*qc2rust::define::strlen*/
+#define strlen /*qc2rust::macro_begin::strlen*/_strlen /*qc2rust::macro_end::strlen*/
 
 float(float skel, float bonenum) _skel_get_boneparent = #267;
-#define skel_get_boneparent _skel_get_boneparent
+/*qc2rust::define::skel_get_boneparent*/
+#define skel_get_boneparent /*qc2rust::macro_begin::skel_get_boneparent*/_skel_get_boneparent /*qc2rust::macro_end::skel_get_boneparent*/
 
 float(float skel, string tagname) _skel_find_bone = #268;
-#define skel_find_bone _skel_find_bone
+/*qc2rust::define::skel_find_bone*/
+#define skel_find_bone /*qc2rust::macro_begin::skel_find_bone*/_skel_find_bone /*qc2rust::macro_end::skel_find_bone*/
 
 float(string str, string sub, float startpos) _strstrofs = #221;
-#define strstrofs _strstrofs
+/*qc2rust::define::strstrofs*/
+#define strstrofs /*qc2rust::macro_begin::strstrofs*/_strstrofs /*qc2rust::macro_end::strstrofs*/
 
 float(string str, float ofs) _str2chr = #222;
-#define str2chr _str2chr
+/*qc2rust::define::str2chr*/
+#define str2chr /*qc2rust::macro_begin::str2chr*/_str2chr /*qc2rust::macro_end::str2chr*/
 
 string(int c, ...) _chr2str = #223;
-#define chr2str _chr2str
+/*qc2rust::define::chr2str*/
+#define chr2str /*qc2rust::macro_begin::chr2str*/_chr2str /*qc2rust::macro_end::chr2str*/
 
 int(string s1, string s2) _strcmp = #228;
-#define strcmp _strcmp
+/*qc2rust::define::strcmp*/
+#define strcmp /*qc2rust::macro_begin::strcmp*/_strcmp /*qc2rust::macro_end::strcmp*/
 
 int(string s1, string s2, int len) _strncmp = #228;
-#define strncmp _strncmp
+/*qc2rust::define::strncmp*/
+#define strncmp /*qc2rust::macro_begin::strncmp*/_strncmp /*qc2rust::macro_end::strncmp*/
 
 int(string s1, string s2) _strcasecmp = #229;
-#define strcasecmp _strcasecmp
+/*qc2rust::define::strcasecmp*/
+#define strcasecmp /*qc2rust::macro_begin::strcasecmp*/_strcasecmp /*qc2rust::macro_end::strcasecmp*/
 
 int(string s1, string s2, int len) _strncasecmp = #230;
-#define strncasecmp _strncasecmp
+/*qc2rust::define::strncasecmp*/
+#define strncasecmp /*qc2rust::macro_begin::strncasecmp*/_strncasecmp /*qc2rust::macro_end::strncasecmp*/
 
 int() _buf_create = #460;
-#define buf_create _buf_create
+/*qc2rust::define::buf_create*/
+#define buf_create /*qc2rust::macro_begin::buf_create*/_buf_create /*qc2rust::macro_end::buf_create*/
 
 #pragma noref 0

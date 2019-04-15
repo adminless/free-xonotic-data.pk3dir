@@ -57,11 +57,16 @@ REGISTER_NET_TEMP(CLIENT_ENTCS)
 	{
 		AL_DELETE(_entcs);
 	}
-	#define entcs_receiver(...) EVAL_entcs_receiver(OVERLOAD(entcs_receiver, __VA_ARGS__))
-	#define EVAL_entcs_receiver(...) __VA_ARGS__
-	#define entcs_receiver_1(i) AL_gete(_entcs, i)
-	#define entcs_receiver_2(i, v) AL_sete(_entcs, i, v)
-	#define entcs_is_self(e) ((e).sv_entnum == player_localentnum - 1)
+/*qc2rust::define::entcs_receiver*/
+#define entcs_receiver(...) /*qc2rust::macro_begin::entcs_receiver*/EVAL_entcs_receiver(OVERLOAD(entcs_receiver,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::entcs_receiver*/
+/*qc2rust::define::EVAL_entcs_receiver*/
+#define EVAL_entcs_receiver(...) /*qc2rust::macro_begin::EVAL_entcs_receiver*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_entcs_receiver*/
+/*qc2rust::define::entcs_receiver_1*/
+#define entcs_receiver_1(i) /*qc2rust::macro_begin::entcs_receiver_1*/AL_gete(_entcs,  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/) /*qc2rust::macro_end::entcs_receiver_1*/
+/*qc2rust::define::entcs_receiver_2*/
+#define entcs_receiver_2(i,v) /*qc2rust::macro_begin::entcs_receiver_2*/AL_sete(_entcs,  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/,  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/) /*qc2rust::macro_end::entcs_receiver_2*/
+/*qc2rust::define::entcs_is_self*/
+#define entcs_is_self(e) /*qc2rust::macro_begin::entcs_is_self*/(( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/).sv_entnum == player_localentnum - 1) /*qc2rust::macro_end::entcs_is_self*/
 
 	/**
      * @param i zero indexed player

@@ -1,42 +1,70 @@
 #pragma once
 
-#define MAP(f, ...) EVAL(OVERLOAD(MAP, f, __VA_ARGS__))
-#define MAP_2(f, it) f(it)
-#define MAP_3(f, it, ...) f(it) MAP_2(f, __VA_ARGS__)
-#define MAP_4(f, it, ...) f(it) MAP_3(f, __VA_ARGS__)
-#define MAP_5(f, it, ...) f(it) MAP_4(f, __VA_ARGS__)
-#define MAP_6(f, it, ...) f(it) MAP_5(f, __VA_ARGS__)
-#define MAP_7(f, it, ...) f(it) MAP_6(f, __VA_ARGS__)
-#define MAP_8(f, it, ...) f(it) MAP_7(f, __VA_ARGS__)
-#define MAP_9(f, it, ...) f(it) MAP_8(f, __VA_ARGS__)
-#define MAP_10(f, it, ...) f(it) MAP_9(f, __VA_ARGS__)
-#define MAP_11(f, it, ...) f(it) MAP_10(f, __VA_ARGS__)
-#define MAP_12(f, it, ...) f(it) MAP_11(f, __VA_ARGS__)
-#define MAP_13(f, it, ...) f(it) MAP_12(f, __VA_ARGS__)
-#define MAP_14(f, it, ...) f(it) MAP_13(f, __VA_ARGS__)
-#define MAP_15(f, it, ...) f(it) MAP_14(f, __VA_ARGS__)
-#define MAP_16(f, it, ...) f(it) MAP_15(f, __VA_ARGS__)
-#define MAP_17(f, it, ...) f(it) MAP_16(f, __VA_ARGS__)
-#define MAP_18(f, it, ...) f(it) MAP_17(f, __VA_ARGS__)
-#define MAP_19(f, it, ...) f(it) MAP_18(f, __VA_ARGS__)
-#define MAP_20(f, it, ...) f(it) MAP_19(f, __VA_ARGS__)
+/*qc2rust::define::MAP*/
+#define MAP(f,...) /*qc2rust::macro_begin::MAP*/EVAL(OVERLOAD(MAP,  /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::MAP*/
+/*qc2rust::define::MAP_2*/
+#define MAP_2(f,it) /*qc2rust::macro_begin::MAP_2*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) /*qc2rust::macro_end::MAP_2*/
+/*qc2rust::define::MAP_3*/
+#define MAP_3(f,it,...) /*qc2rust::macro_begin::MAP_3*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_2( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_3*/
+/*qc2rust::define::MAP_4*/
+#define MAP_4(f,it,...) /*qc2rust::macro_begin::MAP_4*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_3( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_4*/
+/*qc2rust::define::MAP_5*/
+#define MAP_5(f,it,...) /*qc2rust::macro_begin::MAP_5*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_4( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_5*/
+/*qc2rust::define::MAP_6*/
+#define MAP_6(f,it,...) /*qc2rust::macro_begin::MAP_6*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_5( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_6*/
+/*qc2rust::define::MAP_7*/
+#define MAP_7(f,it,...) /*qc2rust::macro_begin::MAP_7*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_6( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_7*/
+/*qc2rust::define::MAP_8*/
+#define MAP_8(f,it,...) /*qc2rust::macro_begin::MAP_8*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_7( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_8*/
+/*qc2rust::define::MAP_9*/
+#define MAP_9(f,it,...) /*qc2rust::macro_begin::MAP_9*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_8( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_9*/
+/*qc2rust::define::MAP_10*/
+#define MAP_10(f,it,...) /*qc2rust::macro_begin::MAP_10*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_9( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_10*/
+/*qc2rust::define::MAP_11*/
+#define MAP_11(f,it,...) /*qc2rust::macro_begin::MAP_11*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_10( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_11*/
+/*qc2rust::define::MAP_12*/
+#define MAP_12(f,it,...) /*qc2rust::macro_begin::MAP_12*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_11( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_12*/
+/*qc2rust::define::MAP_13*/
+#define MAP_13(f,it,...) /*qc2rust::macro_begin::MAP_13*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_12( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_13*/
+/*qc2rust::define::MAP_14*/
+#define MAP_14(f,it,...) /*qc2rust::macro_begin::MAP_14*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_13( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_14*/
+/*qc2rust::define::MAP_15*/
+#define MAP_15(f,it,...) /*qc2rust::macro_begin::MAP_15*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_14( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_15*/
+/*qc2rust::define::MAP_16*/
+#define MAP_16(f,it,...) /*qc2rust::macro_begin::MAP_16*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_15( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_16*/
+/*qc2rust::define::MAP_17*/
+#define MAP_17(f,it,...) /*qc2rust::macro_begin::MAP_17*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_16( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_17*/
+/*qc2rust::define::MAP_18*/
+#define MAP_18(f,it,...) /*qc2rust::macro_begin::MAP_18*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_17( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_18*/
+/*qc2rust::define::MAP_19*/
+#define MAP_19(f,it,...) /*qc2rust::macro_begin::MAP_19*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_18( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_19*/
+/*qc2rust::define::MAP_20*/
+#define MAP_20(f,it,...) /*qc2rust::macro_begin::MAP_20*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) MAP_19( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MAP_20*/
 
-#define IDENTITY(it) it
+/*qc2rust::define::IDENTITY*/
+#define IDENTITY(it) /*qc2rust::macro_begin::IDENTITY*/ /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/ /*qc2rust::macro_end::IDENTITY*/
 
-#define UNWORDS(...) MAP(IDENTITY, __VA_ARGS__)
+/*qc2rust::define::UNWORDS*/
+#define UNWORDS(...) /*qc2rust::macro_begin::UNWORDS*/MAP(IDENTITY,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::UNWORDS*/
 
-#define APPLY(f, ...) f(__VA_ARGS__)
+/*qc2rust::define::APPLY*/
+#define APPLY(f,...) /*qc2rust::macro_begin::APPLY*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::APPLY*/
 
 #ifdef SVQC
-	#define SV(f, ...) f(__VA_ARGS__)
+/*qc2rust::define::SV*/
+#define SV(f,...) /*qc2rust::macro_begin::SV*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::SV*/
 #else
-	#define SV(f, ...)
+/*qc2rust::define::SV*/
+#define SV(f,...) /*qc2rust::macro_begin::SV*/ /*qc2rust::macro_end::SV*/
 #endif
 
 #ifdef CSQC
-	#define CL(f, ...) f(__VA_ARGS__)
+/*qc2rust::define::CL*/
+#define CL(f,...) /*qc2rust::macro_begin::CL*/ /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::CL*/
 #else
-	#define CL(f, ...)
+/*qc2rust::define::CL*/
+#define CL(f,...) /*qc2rust::macro_begin::CL*/ /*qc2rust::macro_end::CL*/
 #endif
 
-#define IF(cond, f, ...) cond(f, __VA_ARGS__)
+/*qc2rust::define::IF*/
+#define IF(cond,f,...) /*qc2rust::macro_begin::IF*/ /*qc2rust::param_begin::cond*/cond /*qc2rust::param_end::cond*/( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::IF*/

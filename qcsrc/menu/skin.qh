@@ -1,11 +1,13 @@
 #pragma once
 
-#define SKINBEGIN
+/*qc2rust::define::SKINBEGIN*/
+#define SKINBEGIN /*qc2rust::macro_begin::SKINBEGIN*/ /*qc2rust::macro_end::SKINBEGIN*/
 #define SKINVECTOR(name,def) vector SKIN##name = def
 #define SKINFLOAT(name,def) float SKIN##name = def
 //#define SKINSTRING(name,def) const string SKIN##name = def
 #define SKINSTRING(name,def) string SKIN##name = def
-#define SKINEND
+/*qc2rust::define::SKINEND*/
+#define SKINEND /*qc2rust::macro_begin::SKINEND*/ /*qc2rust::macro_end::SKINEND*/
 #include "skin-customizables.inc"
 #undef SKINEND
 #undef SKINBEGIN
@@ -13,13 +15,15 @@
 #undef SKINFLOAT
 #undef SKINVECTOR
 
-#define SKINBEGIN void Skin_ApplySetting(string key, string _value) { switch(key) {
+/*qc2rust::define::SKINBEGIN*/
+#define SKINBEGIN /*qc2rust::macro_begin::SKINBEGIN*/void Skin_ApplySetting(string key, string _value) { switch(key) { /*qc2rust::macro_end::SKINBEGIN*/
 #define SKINVECTOR(name,def) case #name: SKIN##name = stov(_value); break
 #define SKINFLOAT(name,def) case #name: SKIN##name = stof(_value); break
 //#define SKINSTRING(name,def) case #name: break
 #define SKINSTRING(name,def) case #name: SKIN##name = strzone(_value); break
 	// I know this leaks memory when skin is read multiple times. Screw it.
-#define SKINEND case "": break; case "//": break; default: LOG_TRACE("Invalid key in skin file: ", key); } }
+/*qc2rust::define::SKINEND*/
+#define SKINEND /*qc2rust::macro_begin::SKINEND*/case "": break; case "//": break; default: LOG_TRACE("Invalid key in skin file: ", key); } } /*qc2rust::macro_end::SKINEND*/
 #include "skin-customizables.inc"
 #undef SKINEND
 #undef SKINSTRING

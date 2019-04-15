@@ -2,13 +2,19 @@
 
 #pragma noref 1
 
-#define true _true
-#define false _false
-#define TRUE _TRUE
-#define FALSE _FALSE
+/*qc2rust::define::true*/
+#define true /*qc2rust::macro_begin::true*/_true /*qc2rust::macro_end::true*/
+/*qc2rust::define::false*/
+#define false /*qc2rust::macro_begin::false*/_false /*qc2rust::macro_end::false*/
+/*qc2rust::define::TRUE*/
+#define TRUE /*qc2rust::macro_begin::TRUE*/_TRUE /*qc2rust::macro_end::TRUE*/
+/*qc2rust::define::FALSE*/
+#define FALSE /*qc2rust::macro_begin::FALSE*/_FALSE /*qc2rust::macro_end::FALSE*/
 
-#define spawn _spawn
-#define setmodel _setmodel
+/*qc2rust::define::spawn*/
+#define spawn /*qc2rust::macro_begin::spawn*/_spawn /*qc2rust::macro_end::spawn*/
+/*qc2rust::define::setmodel*/
+#define setmodel /*qc2rust::macro_begin::setmodel*/_setmodel /*qc2rust::macro_end::setmodel*/
 
 #include "upstream/progsdefs.qc"
 
@@ -20,12 +26,11 @@
 #undef spawn
 #undef setmodel
 
-#define stuffcmd(cl, ...) MACRO_BEGIN \
-    entity _cl = (cl); \
-    if (IS_REAL_CLIENT(_cl)) stuffcmd(_cl, __VA_ARGS__); \
-MACRO_END
+/*qc2rust::define::stuffcmd*/
+#define stuffcmd(cl,...) /*qc2rust::macro_begin::stuffcmd*/MACRO_BEGIN     entity _cl = ( /*qc2rust::param_begin::cl*/cl /*qc2rust::param_end::cl*/);     if (IS_REAL_CLIENT(_cl)) stuffcmd(_cl,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/); MACRO_END /*qc2rust::macro_end::stuffcmd*/
 
 #pragma noref 0
 
-#define use use1
+/*qc2rust::define::use*/
+#define use /*qc2rust::macro_begin::use*/use1 /*qc2rust::macro_end::use*/
 .void(entity this, entity actor, entity trigger) use;

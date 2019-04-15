@@ -3,13 +3,17 @@
 string M_Model(string m_mdl);
 
 REGISTRY(Monsters, BITS(5))
-#define Monsters_from(i) _Monsters_from(i, MON_Null)
-#define get_monsterinfo(i) Monsters_from(i)
+/*qc2rust::define::Monsters_from*/
+#define Monsters_from(i) /*qc2rust::macro_begin::Monsters_from*/_Monsters_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, MON_Null) /*qc2rust::macro_end::Monsters_from*/
+/*qc2rust::define::get_monsterinfo*/
+#define get_monsterinfo(i) /*qc2rust::macro_begin::get_monsterinfo*/Monsters_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/) /*qc2rust::macro_end::get_monsterinfo*/
 REGISTER_REGISTRY(Monsters)
 REGISTRY_CHECK(Monsters)
 const int MON_FIRST = 1;
-#define MON_LAST (Monsters_COUNT - 1)
-#define REGISTER_MONSTER(id, inst) REGISTER(Monsters, MON, id, monsterid, inst)
+/*qc2rust::define::MON_LAST*/
+#define MON_LAST /*qc2rust::macro_begin::MON_LAST*/(Monsters_COUNT - 1) /*qc2rust::macro_end::MON_LAST*/
+/*qc2rust::define::REGISTER_MONSTER*/
+#define REGISTER_MONSTER(id,inst) /*qc2rust::macro_begin::REGISTER_MONSTER*/REGISTER(Monsters, MON,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, monsterid,  /*qc2rust::param_begin::inst*/inst /*qc2rust::param_end::inst*/) /*qc2rust::macro_end::REGISTER_MONSTER*/
 
 #include "monster.qh"
 

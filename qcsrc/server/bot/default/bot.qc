@@ -215,13 +215,8 @@ void bot_setnameandstuff(entity this)
 
 	prio = 6;
 
-	#define READSKILL(f, w, r) MACRO_BEGIN \
-		if(argv(prio) != "") \
-			this.f = stof(argv(prio)) * w; \
-		else \
-			this.f = (!autocvar_g_campaign) * (2 * random() - 1) * r * w; \
-		prio++; \
-	MACRO_END
+/*qc2rust::define::READSKILL*/
+#define READSKILL(f,w,r) /*qc2rust::macro_begin::READSKILL*/MACRO_BEGIN 		if(argv(prio) != "") 			this. /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/ = stof(argv(prio)) *  /*qc2rust::param_begin::w*/w /*qc2rust::param_end::w*/; 		else 			this. /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/ = (!autocvar_g_campaign) * (2 * random() - 1) *  /*qc2rust::param_begin::r*/r /*qc2rust::param_end::r*/ *  /*qc2rust::param_begin::w*/w /*qc2rust::param_end::w*/; 		prio++; 	MACRO_END /*qc2rust::macro_end::READSKILL*/
 	//print(bot_name, ": ping=", argv(9), "\n");
 
 	READSKILL(havocbot_keyboardskill, 0.5, 0.5); // keyboard skill

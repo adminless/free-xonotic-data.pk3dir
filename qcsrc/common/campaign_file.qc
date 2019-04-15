@@ -46,12 +46,8 @@ float CampaignFile_Load(int offset, float n)
 			{
 				entlen = tokenize(l); // using insane tokenizer for CSV
 
-#define CAMPAIGN_GETARG \
-	a = argv(++i); \
-	if(a == ",") \
-		a = ""; \
-	else \
-		++i
+/*qc2rust::define::CAMPAIGN_GETARG*/
+#define CAMPAIGN_GETARG /*qc2rust::macro_begin::CAMPAIGN_GETARG*/a = argv(++i); 	if(a == ",") 		a = ""; 	else 		++i /*qc2rust::macro_end::CAMPAIGN_GETARG*/
 
 				i = -1; // starts at -1 so I don't need postincrement; that is, i points to BEFORE the current arg!
 				CAMPAIGN_GETARG; campaign_gametype[campaign_entries] = strzone(a);

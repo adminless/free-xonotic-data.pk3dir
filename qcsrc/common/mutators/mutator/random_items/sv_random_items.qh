@@ -34,10 +34,8 @@ string RandomItems_GetRandomItemClassName(string prefix);
 string RandomItems_GetRandomVanillaItemClassName(string prefix, int types);
 
 /// \brief Called when random item classname is requested.
-#define EV_RandomItems_GetRandomItemClassName(i, o) \
-	/** prefix */    i(string, MUTATOR_ARGV_0_string) \
-	/** classname */ o(string, MUTATOR_ARGV_1_string) \
-    /**/
+/*qc2rust::define::EV_RandomItems_GetRandomItemClassName*/
+#define EV_RandomItems_GetRandomItemClassName(i,o) /*qc2rust::macro_begin::EV_RandomItems_GetRandomItemClassName*//** prefix */     /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, MUTATOR_ARGV_0_string) 	/** classname */  /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(string, MUTATOR_ARGV_1_string)     /**/ /*qc2rust::macro_end::EV_RandomItems_GetRandomItemClassName*/
 MUTATOR_HOOKABLE(RandomItems_GetRandomItemClassName,
 	EV_RandomItems_GetRandomItemClassName);
 

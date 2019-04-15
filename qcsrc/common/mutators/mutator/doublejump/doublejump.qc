@@ -12,7 +12,8 @@ REGISTER_MUTATOR(doublejump, autocvar_sv_doublejump);
 REGISTER_MUTATOR(doublejump, true);
 #endif
 
-#define PHYS_DOUBLEJUMP(s)                     STAT(DOUBLEJUMP, s)
+/*qc2rust::define::PHYS_DOUBLEJUMP*/
+#define PHYS_DOUBLEJUMP(s) /*qc2rust::macro_begin::PHYS_DOUBLEJUMP*/STAT(DOUBLEJUMP,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_DOUBLEJUMP*/
 
 
 MUTATOR_HOOKFUNCTION(doublejump, PlayerJump)

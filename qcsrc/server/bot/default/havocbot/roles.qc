@@ -181,7 +181,8 @@ void havocbot_goalrating_items(entity this, float ratingscale, vector org, float
 	});
 }
 
-#define BOT_RATING_ENEMY 2500
+/*qc2rust::define::BOT_RATING_ENEMY*/
+#define BOT_RATING_ENEMY /*qc2rust::macro_begin::BOT_RATING_ENEMY*/2500 /*qc2rust::macro_end::BOT_RATING_ENEMY*/
 void havocbot_goalrating_enemyplayers(entity this, float ratingscale, vector org, float sradius)
 {
 	if (autocvar_bot_nofire)

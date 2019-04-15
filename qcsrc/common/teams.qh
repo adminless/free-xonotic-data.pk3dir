@@ -28,26 +28,44 @@ const string COL_TEAM_2 = "^4";
 const string COL_TEAM_3 = "^3";
 const string COL_TEAM_4 = "^6";
 // must be #defined, const globals drop the translation attribute
-#define NAME_TEAM_1 CTX(_("TEAM^Red"))
-#define NAME_TEAM_2 CTX(_("TEAM^Blue"))
-#define NAME_TEAM_3 CTX(_("TEAM^Yellow"))
-#define NAME_TEAM_4 CTX(_("TEAM^Pink"))
-#define NAME_TEAM _("Team")
-#define NAME_NEUTRAL _("Neutral")
+/*qc2rust::define::NAME_TEAM_1*/
+#define NAME_TEAM_1 /*qc2rust::macro_begin::NAME_TEAM_1*/CTX(_("TEAM^Red")) /*qc2rust::macro_end::NAME_TEAM_1*/
+/*qc2rust::define::NAME_TEAM_2*/
+#define NAME_TEAM_2 /*qc2rust::macro_begin::NAME_TEAM_2*/CTX(_("TEAM^Blue")) /*qc2rust::macro_end::NAME_TEAM_2*/
+/*qc2rust::define::NAME_TEAM_3*/
+#define NAME_TEAM_3 /*qc2rust::macro_begin::NAME_TEAM_3*/CTX(_("TEAM^Yellow")) /*qc2rust::macro_end::NAME_TEAM_3*/
+/*qc2rust::define::NAME_TEAM_4*/
+#define NAME_TEAM_4 /*qc2rust::macro_begin::NAME_TEAM_4*/CTX(_("TEAM^Pink")) /*qc2rust::macro_end::NAME_TEAM_4*/
+/*qc2rust::define::NAME_TEAM*/
+#define NAME_TEAM /*qc2rust::macro_begin::NAME_TEAM*/_("Team") /*qc2rust::macro_end::NAME_TEAM*/
+/*qc2rust::define::NAME_NEUTRAL*/
+#define NAME_NEUTRAL /*qc2rust::macro_begin::NAME_NEUTRAL*/_("Neutral") /*qc2rust::macro_end::NAME_NEUTRAL*/
 
 // items colors, so they are handled properly in languages which decline things with grammatical gender
-#define KEY_TEAM_1 CTX(_("KEY^Red"))
-#define KEY_TEAM_2 CTX(_("KEY^Blue"))
-#define KEY_TEAM_3 CTX(_("KEY^Yellow"))
-#define KEY_TEAM_4 CTX(_("KEY^Pink"))
-#define FLAG_TEAM_1 CTX(_("FLAG^Red"))
-#define FLAG_TEAM_2 CTX(_("FLAG^Blue"))
-#define FLAG_TEAM_3 CTX(_("FLAG^Yellow"))
-#define FLAG_TEAM_4 CTX(_("FLAG^Pink"))
-#define GENERATOR_TEAM_1 CTX(_("GENERATOR^Red"))
-#define GENERATOR_TEAM_2 CTX(_("GENERATOR^Blue"))
-#define GENERATOR_TEAM_3 CTX(_("GENERATOR^Yellow"))
-#define GENERATOR_TEAM_4 CTX(_("GENERATOR^Pink"))
+/*qc2rust::define::KEY_TEAM_1*/
+#define KEY_TEAM_1 /*qc2rust::macro_begin::KEY_TEAM_1*/CTX(_("KEY^Red")) /*qc2rust::macro_end::KEY_TEAM_1*/
+/*qc2rust::define::KEY_TEAM_2*/
+#define KEY_TEAM_2 /*qc2rust::macro_begin::KEY_TEAM_2*/CTX(_("KEY^Blue")) /*qc2rust::macro_end::KEY_TEAM_2*/
+/*qc2rust::define::KEY_TEAM_3*/
+#define KEY_TEAM_3 /*qc2rust::macro_begin::KEY_TEAM_3*/CTX(_("KEY^Yellow")) /*qc2rust::macro_end::KEY_TEAM_3*/
+/*qc2rust::define::KEY_TEAM_4*/
+#define KEY_TEAM_4 /*qc2rust::macro_begin::KEY_TEAM_4*/CTX(_("KEY^Pink")) /*qc2rust::macro_end::KEY_TEAM_4*/
+/*qc2rust::define::FLAG_TEAM_1*/
+#define FLAG_TEAM_1 /*qc2rust::macro_begin::FLAG_TEAM_1*/CTX(_("FLAG^Red")) /*qc2rust::macro_end::FLAG_TEAM_1*/
+/*qc2rust::define::FLAG_TEAM_2*/
+#define FLAG_TEAM_2 /*qc2rust::macro_begin::FLAG_TEAM_2*/CTX(_("FLAG^Blue")) /*qc2rust::macro_end::FLAG_TEAM_2*/
+/*qc2rust::define::FLAG_TEAM_3*/
+#define FLAG_TEAM_3 /*qc2rust::macro_begin::FLAG_TEAM_3*/CTX(_("FLAG^Yellow")) /*qc2rust::macro_end::FLAG_TEAM_3*/
+/*qc2rust::define::FLAG_TEAM_4*/
+#define FLAG_TEAM_4 /*qc2rust::macro_begin::FLAG_TEAM_4*/CTX(_("FLAG^Pink")) /*qc2rust::macro_end::FLAG_TEAM_4*/
+/*qc2rust::define::GENERATOR_TEAM_1*/
+#define GENERATOR_TEAM_1 /*qc2rust::macro_begin::GENERATOR_TEAM_1*/CTX(_("GENERATOR^Red")) /*qc2rust::macro_end::GENERATOR_TEAM_1*/
+/*qc2rust::define::GENERATOR_TEAM_2*/
+#define GENERATOR_TEAM_2 /*qc2rust::macro_begin::GENERATOR_TEAM_2*/CTX(_("GENERATOR^Blue")) /*qc2rust::macro_end::GENERATOR_TEAM_2*/
+/*qc2rust::define::GENERATOR_TEAM_3*/
+#define GENERATOR_TEAM_3 /*qc2rust::macro_begin::GENERATOR_TEAM_3*/CTX(_("GENERATOR^Yellow")) /*qc2rust::macro_end::GENERATOR_TEAM_3*/
+/*qc2rust::define::GENERATOR_TEAM_4*/
+#define GENERATOR_TEAM_4 /*qc2rust::macro_begin::GENERATOR_TEAM_4*/CTX(_("GENERATOR^Pink")) /*qc2rust::macro_end::GENERATOR_TEAM_4*/
 
 // used for replacement in filenames or such where the name CANNOT be allowed to be translated
 const string STATIC_NAME_TEAM_1 = "Red";
@@ -215,26 +233,38 @@ int Team_IndexToBit(int index)
 
 
 // legacy aliases for shitty code
-#define TeamByColor(teamid) (Team_TeamToIndex(teamid) - 1)
-#define ColorByTeam(number) Team_IndexToTeam(number + 1)
+/*qc2rust::define::TeamByColor*/
+#define TeamByColor(teamid) /*qc2rust::macro_begin::TeamByColor*/(Team_TeamToIndex( /*qc2rust::param_begin::teamid*/teamid /*qc2rust::param_end::teamid*/) - 1) /*qc2rust::macro_end::TeamByColor*/
+/*qc2rust::define::ColorByTeam*/
+#define ColorByTeam(number) /*qc2rust::macro_begin::ColorByTeam*/Team_IndexToTeam( /*qc2rust::param_begin::number*/number /*qc2rust::param_end::number*/ + 1) /*qc2rust::macro_end::ColorByTeam*/
 
 // useful aliases
-#define Team_ColorName_Lower(teamid) strtolower(Team_ColorName(teamid))
-#define Team_ColorName_Upper(teamid) strtoupper(Team_ColorName(teamid))
+/*qc2rust::define::Team_ColorName_Lower*/
+#define Team_ColorName_Lower(teamid) /*qc2rust::macro_begin::Team_ColorName_Lower*/strtolower(Team_ColorName( /*qc2rust::param_begin::teamid*/teamid /*qc2rust::param_end::teamid*/)) /*qc2rust::macro_end::Team_ColorName_Lower*/
+/*qc2rust::define::Team_ColorName_Upper*/
+#define Team_ColorName_Upper(teamid) /*qc2rust::macro_begin::Team_ColorName_Upper*/strtoupper(Team_ColorName( /*qc2rust::param_begin::teamid*/teamid /*qc2rust::param_end::teamid*/)) /*qc2rust::macro_end::Team_ColorName_Upper*/
 
 // used for replacement in filenames or such where the name CANNOT be allowed to be translated
-#define Static_Team_ColorName_Lower(teamid) strtolower(Static_Team_ColorName(teamid))
-#define Static_Team_ColorName_Upper(teamid) strtoupper(Static_Team_ColorName(teamid))
+/*qc2rust::define::Static_Team_ColorName_Lower*/
+#define Static_Team_ColorName_Lower(teamid) /*qc2rust::macro_begin::Static_Team_ColorName_Lower*/strtolower(Static_Team_ColorName( /*qc2rust::param_begin::teamid*/teamid /*qc2rust::param_end::teamid*/)) /*qc2rust::macro_end::Static_Team_ColorName_Lower*/
+/*qc2rust::define::Static_Team_ColorName_Upper*/
+#define Static_Team_ColorName_Upper(teamid) /*qc2rust::macro_begin::Static_Team_ColorName_Upper*/strtoupper(Static_Team_ColorName( /*qc2rust::param_begin::teamid*/teamid /*qc2rust::param_end::teamid*/)) /*qc2rust::macro_end::Static_Team_ColorName_Upper*/
 
-#define Team_FullName(teamid) strcat(Team_ColorName(teamid), " ", NAME_TEAM, "^7")
-#define Team_ColoredFullName(teamid) strcat(Team_ColorCode(teamid), Team_ColorName(teamid), " ", NAME_TEAM, "^7")
+/*qc2rust::define::Team_FullName*/
+#define Team_FullName(teamid) /*qc2rust::macro_begin::Team_FullName*/strcat(Team_ColorName( /*qc2rust::param_begin::teamid*/teamid /*qc2rust::param_end::teamid*/), " ", NAME_TEAM, "^7") /*qc2rust::macro_end::Team_FullName*/
+/*qc2rust::define::Team_ColoredFullName*/
+#define Team_ColoredFullName(teamid) /*qc2rust::macro_begin::Team_ColoredFullName*/strcat(Team_ColorCode( /*qc2rust::param_begin::teamid*/teamid /*qc2rust::param_end::teamid*/), Team_ColorName( /*qc2rust::param_begin::teamid*/teamid /*qc2rust::param_end::teamid*/), " ", NAME_TEAM, "^7") /*qc2rust::macro_end::Team_ColoredFullName*/
 
-#define Team_IndexToFullName(index) Team_FullName(Team_IndexToTeam(index))
-#define Team_IndexToColoredFullName(index) Team_ColoredFullName(Team_IndexToTeam(index))
+/*qc2rust::define::Team_IndexToFullName*/
+#define Team_IndexToFullName(index) /*qc2rust::macro_begin::Team_IndexToFullName*/Team_FullName(Team_IndexToTeam( /*qc2rust::param_begin::index*/index /*qc2rust::param_end::index*/)) /*qc2rust::macro_end::Team_IndexToFullName*/
+/*qc2rust::define::Team_IndexToColoredFullName*/
+#define Team_IndexToColoredFullName(index) /*qc2rust::macro_begin::Team_IndexToColoredFullName*/Team_ColoredFullName(Team_IndexToTeam( /*qc2rust::param_begin::index*/index /*qc2rust::param_end::index*/)) /*qc2rust::macro_end::Team_IndexToColoredFullName*/
 
 // replace these flags in a string with the strings provided
 #define TCR(input,type,team) strreplace("^TC", COL_TEAM_##team, strreplace("^TT", strtoupper(type##_TEAM_##team), input))
 
 // safe team comparisons
-#define SAME_TEAM(a,b) (teamplay ? (a.team == b.team) : (a == b))
-#define DIFF_TEAM(a,b) (teamplay ? (a.team != b.team) : (a != b))
+/*qc2rust::define::SAME_TEAM*/
+#define SAME_TEAM(a,b) /*qc2rust::macro_begin::SAME_TEAM*/(teamplay ? ( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/.team ==  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/.team) : ( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/ ==  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)) /*qc2rust::macro_end::SAME_TEAM*/
+/*qc2rust::define::DIFF_TEAM*/
+#define DIFF_TEAM(a,b) /*qc2rust::macro_begin::DIFF_TEAM*/(teamplay ? ( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/.team !=  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/.team) : ( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/ !=  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)) /*qc2rust::macro_end::DIFF_TEAM*/

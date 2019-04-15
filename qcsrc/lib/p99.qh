@@ -14,71 +14,89 @@
 /*                                                                            */
 #pragma once
 
-#define P99_MAX_NUMBER 16
-#define P00_ARG(                            \
-    _01, _02, _03, _04, _05, _06, _07, _08, \
-    _09, _10, _11, _12, _13, _14, _15, _16, \
-    _00, ...) _00
-#define P00_NARG(...) P00_ARG(__VA_ARGS__,  \
-    16, 15, 14, 13, 12, 11, 10,  9,         \
-     8,  7,  6,  5,  4,  3,  2,  1,         \
-     0, )
-#define P99_HAS_COMMA(...) P00_ARG(__VA_ARGS__, \
-    1, 1, 1, 1, 1, 1, 1, 1,                     \
-    1, 1, 1, 1, 1, 1, 1, 0,                     \
-    0)
+/*qc2rust::define::P99_MAX_NUMBER*/
+#define P99_MAX_NUMBER /*qc2rust::macro_begin::P99_MAX_NUMBER*/16 /*qc2rust::macro_end::P99_MAX_NUMBER*/
+/*qc2rust::define::P00_ARG*/
+#define P00_ARG(_01,_02,_03,_04,_05,_06,_07,_08,_09,_10,_11,_12,_13,_14,_15,_16,_00,...) /*qc2rust::macro_begin::P00_ARG*/ /*qc2rust::param_begin::_00*/_00 /*qc2rust::param_end::_00*/ /*qc2rust::macro_end::P00_ARG*/
+/*qc2rust::define::P00_NARG*/
+#define P00_NARG(...) /*qc2rust::macro_begin::P00_NARG*/P00_ARG( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/,      16, 15, 14, 13, 12, 11, 10,  9,              8,  7,  6,  5,  4,  3,  2,  1,              0, ) /*qc2rust::macro_end::P00_NARG*/
+/*qc2rust::define::P99_HAS_COMMA*/
+#define P99_HAS_COMMA(...) /*qc2rust::macro_begin::P99_HAS_COMMA*/P00_ARG( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/,     1, 1, 1, 1, 1, 1, 1, 1,                         1, 1, 1, 1, 1, 1, 1, 0,                         0) /*qc2rust::macro_end::P99_HAS_COMMA*/
 
-#define P99_IF_EMPTY(...) P99_IF_EQ(1, P99_IS_EMPTY(__VA_ARGS__))
+/*qc2rust::define::P99_IF_EMPTY*/
+#define P99_IF_EMPTY(...) /*qc2rust::macro_begin::P99_IF_EMPTY*/P99_IF_EQ(1, P99_IS_EMPTY( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::P99_IF_EMPTY*/
     // P99_HAS_COMMA(__VA_ARGS__),                         : test if there is just one argument, that might be empty
     // P99_HAS_COMMA(P00_IS__EQ__ __VA_ARGS__),            : test if P99_IS__EQ__ together with the argument adds a comma
     // P99_HAS_COMMA(__VA_ARGS__ (/*empty*/)),             : test if the argument together with a parenthesis adds a comma
     // P99_HAS_COMMA(P00_IS__EQ__ __VA_ARGS__ (/*empty*/)) : test if placing it between P99_IS__EQ__ and the parenthesis adds a comma
-    #define P99_IS_EMPTY(...)                                                               \
-        P00_ISEMPTY(                                                                        \
-            P99_HAS_COMMA(__VA_ARGS__),                                                     \
-            P99_HAS_COMMA(P00_IS__EQ__ __VA_ARGS__),                                        \
-            P99_HAS_COMMA(__VA_ARGS__ (/*empty*/)),                                         \
-            P99_HAS_COMMA(P00_IS__EQ__ __VA_ARGS__ (/*empty*/))                             \
-        )
-        #define P00_IS__EQ__(...) ,
-        #define P00_ISEMPTY(_1, _2, _3, _4) P99_HAS_COMMA(P99_PASTE5(P00_IS_EMPTY_CASE_, _1, _2, _3, _4))
-            #define P00_IS_EMPTY_CASE_0000 P00_IS_EMPTY_CASE_0000
-            #define P00_IS_EMPTY_CASE_0001 ,
-            #define P00_IS_EMPTY_CASE_0010 P00_IS_EMPTY_CASE_0010
-            #define P00_IS_EMPTY_CASE_0011 P00_IS_EMPTY_CASE_0011
-            #define P00_IS_EMPTY_CASE_0100 P00_IS_EMPTY_CASE_0100
-            #define P00_IS_EMPTY_CASE_0101 P00_IS_EMPTY_CASE_0101
-            #define P00_IS_EMPTY_CASE_0110 P00_IS_EMPTY_CASE_0110
-            #define P00_IS_EMPTY_CASE_0111 P00_IS_EMPTY_CASE_0111
-            #define P00_IS_EMPTY_CASE_1000 P00_IS_EMPTY_CASE_1000
-            #define P00_IS_EMPTY_CASE_1001 P00_IS_EMPTY_CASE_1001
-            #define P00_IS_EMPTY_CASE_1010 P00_IS_EMPTY_CASE_1010
-            #define P00_IS_EMPTY_CASE_1011 P00_IS_EMPTY_CASE_1011
-            #define P00_IS_EMPTY_CASE_1100 P00_IS_EMPTY_CASE_1100
-            #define P00_IS_EMPTY_CASE_1101 P00_IS_EMPTY_CASE_1101
-            #define P00_IS_EMPTY_CASE_1110 P00_IS_EMPTY_CASE_1110
-            #define P00_IS_EMPTY_CASE_1111 P00_IS_EMPTY_CASE_1111
+/*qc2rust::define::P99_IS_EMPTY*/
+#define P99_IS_EMPTY(...) /*qc2rust::macro_begin::P99_IS_EMPTY*/P00_ISEMPTY(                                                                                    P99_HAS_COMMA( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/),                                                                 P99_HAS_COMMA(P00_IS__EQ__  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/),                                                    P99_HAS_COMMA( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ (/*empty*/)),                                                     P99_HAS_COMMA(P00_IS__EQ__  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ (/*empty*/))                                     ) /*qc2rust::macro_end::P99_IS_EMPTY*/
+/*qc2rust::define::P00_IS__EQ__*/
+#define P00_IS__EQ__(...) /*qc2rust::macro_begin::P00_IS__EQ__*/, /*qc2rust::macro_end::P00_IS__EQ__*/
+/*qc2rust::define::P00_ISEMPTY*/
+#define P00_ISEMPTY(_1,_2,_3,_4) /*qc2rust::macro_begin::P00_ISEMPTY*/P99_HAS_COMMA(P99_PASTE5(P00_IS_EMPTY_CASE_,  /*qc2rust::param_begin::_1*/_1 /*qc2rust::param_end::_1*/,  /*qc2rust::param_begin::_2*/_2 /*qc2rust::param_end::_2*/,  /*qc2rust::param_begin::_3*/_3 /*qc2rust::param_end::_3*/,  /*qc2rust::param_begin::_4*/_4 /*qc2rust::param_end::_4*/)) /*qc2rust::macro_end::P00_ISEMPTY*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_0000*/
+#define P00_IS_EMPTY_CASE_0000 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_0000*/P00_IS_EMPTY_CASE_0000 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_0000*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_0001*/
+#define P00_IS_EMPTY_CASE_0001 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_0001*/, /*qc2rust::macro_end::P00_IS_EMPTY_CASE_0001*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_0010*/
+#define P00_IS_EMPTY_CASE_0010 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_0010*/P00_IS_EMPTY_CASE_0010 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_0010*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_0011*/
+#define P00_IS_EMPTY_CASE_0011 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_0011*/P00_IS_EMPTY_CASE_0011 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_0011*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_0100*/
+#define P00_IS_EMPTY_CASE_0100 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_0100*/P00_IS_EMPTY_CASE_0100 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_0100*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_0101*/
+#define P00_IS_EMPTY_CASE_0101 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_0101*/P00_IS_EMPTY_CASE_0101 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_0101*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_0110*/
+#define P00_IS_EMPTY_CASE_0110 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_0110*/P00_IS_EMPTY_CASE_0110 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_0110*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_0111*/
+#define P00_IS_EMPTY_CASE_0111 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_0111*/P00_IS_EMPTY_CASE_0111 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_0111*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_1000*/
+#define P00_IS_EMPTY_CASE_1000 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_1000*/P00_IS_EMPTY_CASE_1000 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_1000*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_1001*/
+#define P00_IS_EMPTY_CASE_1001 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_1001*/P00_IS_EMPTY_CASE_1001 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_1001*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_1010*/
+#define P00_IS_EMPTY_CASE_1010 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_1010*/P00_IS_EMPTY_CASE_1010 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_1010*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_1011*/
+#define P00_IS_EMPTY_CASE_1011 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_1011*/P00_IS_EMPTY_CASE_1011 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_1011*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_1100*/
+#define P00_IS_EMPTY_CASE_1100 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_1100*/P00_IS_EMPTY_CASE_1100 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_1100*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_1101*/
+#define P00_IS_EMPTY_CASE_1101 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_1101*/P00_IS_EMPTY_CASE_1101 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_1101*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_1110*/
+#define P00_IS_EMPTY_CASE_1110 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_1110*/P00_IS_EMPTY_CASE_1110 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_1110*/
+/*qc2rust::define::P00_IS_EMPTY_CASE_1111*/
+#define P00_IS_EMPTY_CASE_1111 /*qc2rust::macro_begin::P00_IS_EMPTY_CASE_1111*/P00_IS_EMPTY_CASE_1111 /*qc2rust::macro_end::P00_IS_EMPTY_CASE_1111*/
 
 
-#define P00_IF_CLAUSE(EXP) P00__IF_CLAUSE(EXP, P00_CLAUSE1, P00_CLAUSE2, ~)
-    #define P00__IF_CLAUSE(A, B, C, ...) C
-    #define P00_CLAUSE1(...) __VA_ARGS__ P00_IGNORE
-        #define P00_IGNORE(...)
-    #define P00_CLAUSE2(...) P00_IDENT
-        #define P00_IDENT(...) __VA_ARGS__
+/*qc2rust::define::P00_IF_CLAUSE*/
+#define P00_IF_CLAUSE(EXP) /*qc2rust::macro_begin::P00_IF_CLAUSE*/P00__IF_CLAUSE( /*qc2rust::param_begin::EXP*/EXP /*qc2rust::param_end::EXP*/, P00_CLAUSE1, P00_CLAUSE2, ~) /*qc2rust::macro_end::P00_IF_CLAUSE*/
+/*qc2rust::define::P00__IF_CLAUSE*/
+#define P00__IF_CLAUSE(A,B,C,...) /*qc2rust::macro_begin::P00__IF_CLAUSE*/ /*qc2rust::param_begin::C*/C /*qc2rust::param_end::C*/ /*qc2rust::macro_end::P00__IF_CLAUSE*/
+/*qc2rust::define::P00_CLAUSE1*/
+#define P00_CLAUSE1(...) /*qc2rust::macro_begin::P00_CLAUSE1*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ P00_IGNORE /*qc2rust::macro_end::P00_CLAUSE1*/
+/*qc2rust::define::P00_IGNORE*/
+#define P00_IGNORE(...) /*qc2rust::macro_begin::P00_IGNORE*/ /*qc2rust::macro_end::P00_IGNORE*/
+/*qc2rust::define::P00_CLAUSE2*/
+#define P00_CLAUSE2(...) /*qc2rust::macro_begin::P00_CLAUSE2*/P00_IDENT /*qc2rust::macro_end::P00_CLAUSE2*/
+/*qc2rust::define::P00_IDENT*/
+#define P00_IDENT(...) /*qc2rust::macro_begin::P00_IDENT*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::P00_IDENT*/
 
 
-#define P99_IF_EQ(A, B) P00_IF_CLAUSE(P99_PASTE4(P00_IS_, A, _EQ_, B)())
-    #define P00_IS_0_EQ_0(...) ,
-    #define P00_IS_1_EQ_1(...) ,
+/*qc2rust::define::P99_IF_EQ*/
+#define P99_IF_EQ(A,B) /*qc2rust::macro_begin::P99_IF_EQ*/P00_IF_CLAUSE(P99_PASTE4(P00_IS_,  /*qc2rust::param_begin::A*/A /*qc2rust::param_end::A*/, _EQ_,  /*qc2rust::param_begin::B*/B /*qc2rust::param_end::B*/)()) /*qc2rust::macro_end::P99_IF_EQ*/
+/*qc2rust::define::P00_IS_0_EQ_0*/
+#define P00_IS_0_EQ_0(...) /*qc2rust::macro_begin::P00_IS_0_EQ_0*/, /*qc2rust::macro_end::P00_IS_0_EQ_0*/
+/*qc2rust::define::P00_IS_1_EQ_1*/
+#define P00_IS_1_EQ_1(...) /*qc2rust::macro_begin::P00_IS_1_EQ_1*/, /*qc2rust::macro_end::P00_IS_1_EQ_1*/
 
 
 #define P99_CAT2(_1, _2) _1 ## _2
-#define P99_PASTE2(_1, _2) \
-    P99_CAT2(_1, _2)
-#define P99_PASTE3(_1, _2, _3) \
-    P99_PASTE2(P99_PASTE2(_1, _2), _3)
-#define P99_PASTE4(_1, _2, _3, _4) \
-    P99_PASTE2(P99_PASTE3(_1, _2, _3), _4)
-#define P99_PASTE5(_1, _2, _3, _4, _5) \
-    P99_PASTE2(P99_PASTE4(_1, _2, _3, _4), _5)
+/*qc2rust::define::P99_PASTE2*/
+#define P99_PASTE2(_1,_2) /*qc2rust::macro_begin::P99_PASTE2*/P99_CAT2( /*qc2rust::param_begin::_1*/_1 /*qc2rust::param_end::_1*/,  /*qc2rust::param_begin::_2*/_2 /*qc2rust::param_end::_2*/) /*qc2rust::macro_end::P99_PASTE2*/
+/*qc2rust::define::P99_PASTE3*/
+#define P99_PASTE3(_1,_2,_3) /*qc2rust::macro_begin::P99_PASTE3*/P99_PASTE2(P99_PASTE2( /*qc2rust::param_begin::_1*/_1 /*qc2rust::param_end::_1*/,  /*qc2rust::param_begin::_2*/_2 /*qc2rust::param_end::_2*/),  /*qc2rust::param_begin::_3*/_3 /*qc2rust::param_end::_3*/) /*qc2rust::macro_end::P99_PASTE3*/
+/*qc2rust::define::P99_PASTE4*/
+#define P99_PASTE4(_1,_2,_3,_4) /*qc2rust::macro_begin::P99_PASTE4*/P99_PASTE2(P99_PASTE3( /*qc2rust::param_begin::_1*/_1 /*qc2rust::param_end::_1*/,  /*qc2rust::param_begin::_2*/_2 /*qc2rust::param_end::_2*/,  /*qc2rust::param_begin::_3*/_3 /*qc2rust::param_end::_3*/),  /*qc2rust::param_begin::_4*/_4 /*qc2rust::param_end::_4*/) /*qc2rust::macro_end::P99_PASTE4*/
+/*qc2rust::define::P99_PASTE5*/
+#define P99_PASTE5(_1,_2,_3,_4,_5) /*qc2rust::macro_begin::P99_PASTE5*/P99_PASTE2(P99_PASTE4( /*qc2rust::param_begin::_1*/_1 /*qc2rust::param_end::_1*/,  /*qc2rust::param_begin::_2*/_2 /*qc2rust::param_end::_2*/,  /*qc2rust::param_begin::_3*/_3 /*qc2rust::param_end::_3*/,  /*qc2rust::param_begin::_4*/_4 /*qc2rust::param_end::_4*/),  /*qc2rust::param_begin::_5*/_5 /*qc2rust::param_end::_5*/) /*qc2rust::macro_end::P99_PASTE5*/

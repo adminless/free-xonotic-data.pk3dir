@@ -47,12 +47,13 @@ entity navigation_bestgoal;
 .float wp24mincost, wp25mincost, wp26mincost, wp27mincost, wp28mincost, wp29mincost, wp30mincost, wp31mincost;
 */
 
-#define navigation_item_islinked(from_wp, to_item) waypoint_islinked(to_item, from_wp)
-#define navigation_item_addlink(from_wp, to_item) \
-	waypoint_addlink_customcost(to_item, from_wp, waypoint_getlinkcost(from_wp, to_item))
+/*qc2rust::define::navigation_item_islinked*/
+#define navigation_item_islinked(from_wp,to_item) /*qc2rust::macro_begin::navigation_item_islinked*/waypoint_islinked( /*qc2rust::param_begin::to_item*/to_item /*qc2rust::param_end::to_item*/,  /*qc2rust::param_begin::from_wp*/from_wp /*qc2rust::param_end::from_wp*/) /*qc2rust::macro_end::navigation_item_islinked*/
+/*qc2rust::define::navigation_item_addlink*/
+#define navigation_item_addlink(from_wp,to_item) /*qc2rust::macro_begin::navigation_item_addlink*/waypoint_addlink_customcost( /*qc2rust::param_begin::to_item*/to_item /*qc2rust::param_end::to_item*/,  /*qc2rust::param_begin::from_wp*/from_wp /*qc2rust::param_end::from_wp*/, waypoint_getlinkcost( /*qc2rust::param_begin::from_wp*/from_wp /*qc2rust::param_end::from_wp*/,  /*qc2rust::param_begin::to_item*/to_item /*qc2rust::param_end::to_item*/)) /*qc2rust::macro_end::navigation_item_addlink*/
 
-#define TELEPORT_USED(pl, tele_wp) \
-	boxesoverlap(tele_wp.absmin, tele_wp.absmax, pl.lastteleport_origin + STAT(PL_MIN, pl), pl.lastteleport_origin + STAT(PL_MAX, pl))
+/*qc2rust::define::TELEPORT_USED*/
+#define TELEPORT_USED(pl,tele_wp) /*qc2rust::macro_begin::TELEPORT_USED*/boxesoverlap( /*qc2rust::param_begin::tele_wp*/tele_wp /*qc2rust::param_end::tele_wp*/.absmin,  /*qc2rust::param_begin::tele_wp*/tele_wp /*qc2rust::param_end::tele_wp*/.absmax,  /*qc2rust::param_begin::pl*/pl /*qc2rust::param_end::pl*/.lastteleport_origin + STAT(PL_MIN,  /*qc2rust::param_begin::pl*/pl /*qc2rust::param_end::pl*/),  /*qc2rust::param_begin::pl*/pl /*qc2rust::param_end::pl*/.lastteleport_origin + STAT(PL_MAX,  /*qc2rust::param_begin::pl*/pl /*qc2rust::param_end::pl*/)) /*qc2rust::macro_end::TELEPORT_USED*/
 
 vector tracewalk_dest;
 float tracewalk_dest_height;
@@ -86,9 +87,12 @@ void navigation_dynamicgoal_set(entity this, entity dropper);
 void navigation_dynamicgoal_unset(entity this);
 
 .int nav_submerged_state;
-#define SUBMERGED_UNDEFINED 0
-#define SUBMERGED_NO 1
-#define SUBMERGED_YES 2
+/*qc2rust::define::SUBMERGED_UNDEFINED*/
+#define SUBMERGED_UNDEFINED /*qc2rust::macro_begin::SUBMERGED_UNDEFINED*/0 /*qc2rust::macro_end::SUBMERGED_UNDEFINED*/
+/*qc2rust::define::SUBMERGED_NO*/
+#define SUBMERGED_NO /*qc2rust::macro_begin::SUBMERGED_NO*/1 /*qc2rust::macro_end::SUBMERGED_NO*/
+/*qc2rust::define::SUBMERGED_YES*/
+#define SUBMERGED_YES /*qc2rust::macro_begin::SUBMERGED_YES*/2 /*qc2rust::macro_end::SUBMERGED_YES*/
 bool navigation_check_submerged_state(entity ent, vector pos);
 
 

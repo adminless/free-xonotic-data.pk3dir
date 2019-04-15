@@ -21,14 +21,14 @@ noref bool require_spawnfunc_prefix;
 		return false;
 	}
 
-	#define _spawnfunc_checktypes(fld) \
-		if (s == #fld) \
-			if (!entityfieldassignablefromeditor(i)) LOG_FATALF("Entity field '%s' cannot be whitelisted", s);
+/*qc2rust::define::_spawnfunc_checktypes*/
+#define _spawnfunc_checktypes(fld) /*qc2rust::macro_begin::_spawnfunc_checktypes*/if (s ==  /*qc2rust::stringify_begin::fld*/#fld /*qc2rust::stringify_end::fld*/) 			if (!entityfieldassignablefromeditor(i)) LOG_FATALF("Entity field '%s' cannot be whitelisted", s); /*qc2rust::macro_end::_spawnfunc_checktypes*/
 #else
-	#define _spawnfunc_checktypes(fld)
+/*qc2rust::define::_spawnfunc_checktypes*/
+#define _spawnfunc_checktypes(fld) /*qc2rust::macro_begin::_spawnfunc_checktypes*/ /*qc2rust::macro_end::_spawnfunc_checktypes*/
 #endif
-	#define _spawnfunc_check(fld) \
-		if (s == #fld) continue;
+/*qc2rust::define::_spawnfunc_check*/
+#define _spawnfunc_check(fld) /*qc2rust::macro_begin::_spawnfunc_check*/if (s ==  /*qc2rust::stringify_begin::fld*/#fld /*qc2rust::stringify_end::fld*/) continue; /*qc2rust::macro_end::_spawnfunc_check*/
 
 	noref int __spawnfunc_expecting;
 	noref entity __spawnfunc_expect;
@@ -37,14 +37,8 @@ noref bool require_spawnfunc_prefix;
     .void(entity) __spawnfunc_constructor;
     noref IntrusiveList g_spawn_queue;
 
-    #define SPAWNFUNC_INTERNAL_FIELDS(X) \
-        X(string, classname, "spawnfunc") \
-        X(string, target, string_null) \
-        X(string, target2, string_null) \
-        X(string, target3, string_null) \
-        X(string, target4, string_null) \
-        X(string, targetname, string_null) \
-        /**/
+/*qc2rust::define::SPAWNFUNC_INTERNAL_FIELDS*/
+#define SPAWNFUNC_INTERNAL_FIELDS(X) /*qc2rust::macro_begin::SPAWNFUNC_INTERNAL_FIELDS*/ /*qc2rust::param_begin::X*/X /*qc2rust::param_end::X*/(string, classname, "spawnfunc")          /*qc2rust::param_begin::X*/X /*qc2rust::param_end::X*/(string, target, string_null)          /*qc2rust::param_begin::X*/X /*qc2rust::param_end::X*/(string, target2, string_null)          /*qc2rust::param_begin::X*/X /*qc2rust::param_end::X*/(string, target3, string_null)          /*qc2rust::param_begin::X*/X /*qc2rust::param_end::X*/(string, target4, string_null)          /*qc2rust::param_begin::X*/X /*qc2rust::param_end::X*/(string, targetname, string_null)         /**/ /*qc2rust::macro_end::SPAWNFUNC_INTERNAL_FIELDS*/
 
     #define X(T, fld, def) .T fld, __spawnfunc_##fld;
     SPAWNFUNC_INTERNAL_FIELDS(X)
@@ -60,10 +54,8 @@ noref bool require_spawnfunc_prefix;
     }
 
     noref IntrusiveList g_map_entities;
-    #define __spawnfunc_spawn_all() MACRO_BEGIN \
-        g_map_entities = IL_NEW(); \
-        IL_EACH(g_spawn_queue, true, __spawnfunc_spawn(it)); \
-    MACRO_END
+/*qc2rust::define::__spawnfunc_spawn_all*/
+#define __spawnfunc_spawn_all() /*qc2rust::macro_begin::__spawnfunc_spawn_all*/MACRO_BEGIN         g_map_entities = IL_NEW();         IL_EACH(g_spawn_queue, true, __spawnfunc_spawn(it));     MACRO_END /*qc2rust::macro_end::__spawnfunc_spawn_all*/
 #ifdef SVQC
     void _SV_OnEntityPreSpawnFunction(entity this);
 #endif
@@ -84,146 +76,20 @@ noref bool require_spawnfunc_prefix;
         e.__spawnfunc_constructor(e);
     }
 
-	#define FIELD_SCALAR(fld, n) \
-		fld(n)
-	#define FIELD_VEC(fld, n) \
-		fld(n) \
-		fld(n##_x) \
-		fld(n##_y) \
-		fld(n##_z)
+/*qc2rust::define::FIELD_SCALAR*/
+#define FIELD_SCALAR(fld,n) /*qc2rust::macro_begin::FIELD_SCALAR*/ /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/( /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/) /*qc2rust::macro_end::FIELD_SCALAR*/
+	#define FIELD_VEC(fld, n) 		fld(n) 		fld(n##_x) 		fld(n##_y) 		fld(n##_z)
 
-	#define FIELDS_NONE(fld)
-	#define FIELDS_ALL(fld) if (false)
+/*qc2rust::define::FIELDS_NONE*/
+#define FIELDS_NONE(fld) /*qc2rust::macro_begin::FIELDS_NONE*/ /*qc2rust::macro_end::FIELDS_NONE*/
+/*qc2rust::define::FIELDS_ALL*/
+#define FIELDS_ALL(fld) /*qc2rust::macro_begin::FIELDS_ALL*/if (false) /*qc2rust::macro_end::FIELDS_ALL*/
 
-	#define FIELDS_COMMON(fld) \
-		FIELD_SCALAR(fld, classname) \
-		FIELD_SCALAR(fld, sourceLoc) \
-		FIELD_SCALAR(fld, spawnfunc_checked) \
-		FIELD_VEC(fld, origin) \
-		/**/
+/*qc2rust::define::FIELDS_COMMON*/
+#define FIELDS_COMMON(fld) /*qc2rust::macro_begin::FIELDS_COMMON*/FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, classname) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, sourceLoc) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, spawnfunc_checked) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, origin) 		/**/ /*qc2rust::macro_end::FIELDS_COMMON*/
 
-	#define FIELDS_UNION(fld) \
-		FIELD_SCALAR(fld, Version) \
-		FIELD_SCALAR(fld, ammo_cells) \
-		FIELD_SCALAR(fld, ammo_nails) \
-		FIELD_SCALAR(fld, ammo_rockets) \
-		FIELD_SCALAR(fld, antiwall_flag) \
-		FIELD_SCALAR(fld, armorvalue) \
-		FIELD_SCALAR(fld, atten) \
-		FIELD_SCALAR(fld, bgmscriptdecay) \
-		FIELD_SCALAR(fld, bgmscriptsustain) \
-		FIELD_SCALAR(fld, bgmscript) \
-		FIELD_SCALAR(fld, button0) \
-		FIELD_SCALAR(fld, chmap) \
-		FIELD_SCALAR(fld, cnt) \
-		FIELD_SCALAR(fld, colormap) \
-		FIELD_SCALAR(fld, count) \
-		FIELD_SCALAR(fld, curvetarget) \
-		FIELD_SCALAR(fld, cvarfilter) \
-		FIELD_SCALAR(fld, debrisdamageforcescale) \
-		FIELD_SCALAR(fld, debrisfadetime) \
-		FIELD_SCALAR(fld, debrismovetype) \
-		FIELD_SCALAR(fld, debrisskin) \
-		FIELD_SCALAR(fld, debristimejitter) \
-		FIELD_SCALAR(fld, debristime) \
-		FIELD_SCALAR(fld, debris) \
-		FIELD_SCALAR(fld, delay) \
-		FIELD_SCALAR(fld, dmgtime) \
-		FIELD_SCALAR(fld, dmg) \
-		FIELD_SCALAR(fld, dmg_edge) \
-		FIELD_SCALAR(fld, dmg_force) \
-		FIELD_SCALAR(fld, dmg_radius) \
-		FIELD_SCALAR(fld, effects) \
-		FIELD_SCALAR(fld, falloff) \
-		FIELD_SCALAR(fld, flags) \
-		FIELD_SCALAR(fld, fog) \
-		FIELD_SCALAR(fld, frags) \
-		FIELD_SCALAR(fld, frame) \
-		FIELD_SCALAR(fld, gametype) \
-		FIELD_SCALAR(fld, gametypefilter) \
-		FIELD_SCALAR(fld, geomtype) \
-		FIELD_SCALAR(fld, gravity) \
-		FIELD_SCALAR(fld, health) \
-		FIELD_SCALAR(fld, height) \
-		FIELD_SCALAR(fld, impulse) \
-		FIELD_SCALAR(fld, killtarget) \
-		FIELD_SCALAR(fld, lerpfrac) \
-		FIELD_SCALAR(fld, light_lev) \
-		FIELD_SCALAR(fld, lip) \
-		FIELD_SCALAR(fld, loddistance1) \
-		FIELD_SCALAR(fld, lodmodel1) \
-		FIELD_SCALAR(fld, ltime) \
-		FIELD_SCALAR(fld, map) \
-		FIELD_SCALAR(fld, max_health) \
-		FIELD_SCALAR(fld, mdl) \
-		FIELD_SCALAR(fld, message2) \
-		FIELD_SCALAR(fld, message) \
-		FIELD_SCALAR(fld, modelindex) \
-		FIELD_SCALAR(fld, modelscale) \
-		FIELD_SCALAR(fld, model) \
-		FIELD_SCALAR(fld, monsterid) \
-		FIELD_SCALAR(fld, monster_moveflags) \
-		FIELD_SCALAR(fld, monster_name) \
-		FIELD_SCALAR(fld, movetype) \
-		FIELD_SCALAR(fld, move_movetype) \
-		FIELD_SCALAR(fld, netname) \
-		FIELD_SCALAR(fld, nextthink) \
-		FIELD_SCALAR(fld, noalign) \
-		FIELD_SCALAR(fld, noise1) \
-		FIELD_SCALAR(fld, noise2) \
-		FIELD_SCALAR(fld, noise3) \
-		FIELD_SCALAR(fld, noise) \
-		FIELD_SCALAR(fld, phase) \
-		FIELD_SCALAR(fld, platmovetype) \
-		FIELD_SCALAR(fld, race_place) \
-		FIELD_SCALAR(fld, radius) \
-		FIELD_SCALAR(fld, respawntimestart) \
-		FIELD_SCALAR(fld, respawntimejitter) \
-		FIELD_SCALAR(fld, respawntime) \
-		FIELD_SCALAR(fld, restriction) \
-		FIELD_SCALAR(fld, scale) \
-		FIELD_SCALAR(fld, skin) \
-		FIELD_SCALAR(fld, solid) \
-		FIELD_SCALAR(fld, sound1) \
-		FIELD_SCALAR(fld, sounds) \
-		FIELD_SCALAR(fld, spawnflags) \
-		FIELD_SCALAR(fld, spawnmob) \
-		FIELD_SCALAR(fld, speed) \
-		FIELD_SCALAR(fld, strength) \
-		FIELD_SCALAR(fld, style) \
-		FIELD_SCALAR(fld, target2) \
-		FIELD_SCALAR(fld, target3) \
-		FIELD_SCALAR(fld, target4) \
-		FIELD_SCALAR(fld, targetname) \
-		FIELD_SCALAR(fld, target) \
-		FIELD_SCALAR(fld, target_random) \
-		FIELD_SCALAR(fld, target_range) \
-		FIELD_SCALAR(fld, team) \
-		FIELD_SCALAR(fld, trigger_reverse) \
-		FIELD_SCALAR(fld, turret_scale_health) \
-		FIELD_SCALAR(fld, turret_scale_range) \
-		FIELD_SCALAR(fld, turret_scale_respawn) \
-		FIELD_SCALAR(fld, volume) \
-		FIELD_SCALAR(fld, wait) \
-		FIELD_SCALAR(fld, warpzone_fadeend) \
-		FIELD_SCALAR(fld, warpzone_fadestart) \
-		FIELD_SCALAR(fld, weapon) \
-		FIELD_SCALAR(fld, worldtype) \
-		FIELD_VEC(fld, absmax) \
-		FIELD_VEC(fld, absmin) \
-		FIELD_VEC(fld, angles) \
-		FIELD_VEC(fld, avelocity) \
-		FIELD_VEC(fld, beam_color)\
-		FIELD_VEC(fld, debrisavelocityjitter) \
-		FIELD_VEC(fld, debrisvelocity) \
-		FIELD_VEC(fld, debrisvelocityjitter) \
-		FIELD_VEC(fld, color) \
-		FIELD_VEC(fld, mangle) \
-		FIELD_VEC(fld, maxs) \
-		FIELD_VEC(fld, mins) \
-		FIELD_VEC(fld, modelscale_vec) \
-		FIELD_VEC(fld, velocity) \
-		/**/
+/*qc2rust::define::FIELDS_UNION*/
+#define FIELDS_UNION(fld) /*qc2rust::macro_begin::FIELDS_UNION*/FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, Version) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, ammo_cells) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, ammo_nails) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, ammo_rockets) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, antiwall_flag) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, armorvalue) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, atten) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, bgmscriptdecay) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, bgmscriptsustain) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, bgmscript) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, button0) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, chmap) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, cnt) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, colormap) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, count) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, curvetarget) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, cvarfilter) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, debrisdamageforcescale) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, debrisfadetime) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, debrismovetype) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, debrisskin) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, debristimejitter) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, debristime) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, debris) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, delay) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, dmgtime) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, dmg) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, dmg_edge) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, dmg_force) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, dmg_radius) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, effects) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, falloff) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, flags) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, fog) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, frags) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, frame) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, gametype) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, gametypefilter) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, geomtype) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, gravity) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, health) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, height) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, impulse) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, killtarget) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, lerpfrac) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, light_lev) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, lip) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, loddistance1) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, lodmodel1) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, ltime) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, map) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, max_health) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, mdl) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, message2) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, message) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, modelindex) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, modelscale) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, model) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, monsterid) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, monster_moveflags) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, monster_name) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, movetype) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, move_movetype) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, netname) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, nextthink) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, noalign) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, noise1) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, noise2) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, noise3) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, noise) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, phase) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, platmovetype) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, race_place) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, radius) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, respawntimestart) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, respawntimejitter) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, respawntime) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, restriction) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, scale) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, skin) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, solid) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, sound1) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, sounds) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, spawnflags) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, spawnmob) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, speed) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, strength) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, style) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, target2) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, target3) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, target4) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, targetname) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, target) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, target_random) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, target_range) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, team) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, trigger_reverse) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, turret_scale_health) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, turret_scale_range) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, turret_scale_respawn) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, volume) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, wait) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, warpzone_fadeend) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, warpzone_fadestart) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, weapon) 		FIELD_SCALAR( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, worldtype) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, absmax) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, absmin) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, angles) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, avelocity) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, beam_color)		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, debrisavelocityjitter) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, debrisvelocity) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, debrisvelocityjitter) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, color) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, mangle) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, maxs) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, mins) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, modelscale_vec) 		FIELD_VEC( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, velocity) 		/**/ /*qc2rust::macro_end::FIELDS_UNION*/
 
 ERASEABLE
 void _checkWhitelisted(entity this, string id)
@@ -243,44 +109,6 @@ void _checkWhitelisted(entity this, string id)
 
 noref bool __spawnfunc_first;
 
-#define spawnfunc(id) \
-	void __spawnfunc_##id(entity this); \
-	ACCUMULATE void spawnfunc_##id(entity this) \
-	{ \
-		if (!__spawnfunc_first) { \
-			__spawnfunc_first = true; \
-			static_init_early(); \
-		} \
-		bool dospawn = true; \
-		if (__spawnfunc_expecting > 1) { __spawnfunc_expecting = 0; } \
-		else if (__spawnfunc_expecting) { \
-			/* engine call */ \
-			if (!g_spawn_queue) { g_spawn_queue = IL_NEW(); } \
-			__spawnfunc_expecting = 0; \
-			this = __spawnfunc_expect; \
-			__spawnfunc_expect = NULL; \
-			dospawn = false; \
-		} else { \
-			/* userland call */ \
-			assert(this); \
-		} \
-		if (!this.sourceLoc) { \
-			this.sourceLoc = __FILE__":"STR(__LINE__); \
-		} \
-		if (!this.spawnfunc_checked) { \
-			_checkWhitelisted(this, #id); \
-			this.spawnfunc_checked = true; \
-			if (this) { \
-				/* not worldspawn, delay spawn */ \
-				__spawnfunc_defer(this, __spawnfunc_##id); \
-			} else { \
-				/* world might not be "worldspawn" */ \
-				this.__spawnfunc_constructor = __spawnfunc_##id; \
-			} \
-		} \
-		if (dospawn) { __spawnfunc_##id(this); } \
-		if (__spawnfunc_unreachable_workaround) return; \
-	} \
-	void __spawnfunc_##id(entity this)
+#define spawnfunc(id) 	void __spawnfunc_##id(entity this); 	ACCUMULATE void spawnfunc_##id(entity this) 	{ 		if (!__spawnfunc_first) { 			__spawnfunc_first = true; 			static_init_early(); 		} 		bool dospawn = true; 		if (__spawnfunc_expecting > 1) { __spawnfunc_expecting = 0; } 		else if (__spawnfunc_expecting) { 			/* engine call */ 			if (!g_spawn_queue) { g_spawn_queue = IL_NEW(); } 			__spawnfunc_expecting = 0; 			this = __spawnfunc_expect; 			__spawnfunc_expect = NULL; 			dospawn = false; 		} else { 			/* userland call */ 			assert(this); 		} 		if (!this.sourceLoc) { 			this.sourceLoc = __FILE__":"STR(__LINE__); 		} 		if (!this.spawnfunc_checked) { 			_checkWhitelisted(this, #id); 			this.spawnfunc_checked = true; 			if (this) { 				/* not worldspawn, delay spawn */ 				__spawnfunc_defer(this, __spawnfunc_##id); 			} else { 				/* world might not be "worldspawn" */ 				this.__spawnfunc_constructor = __spawnfunc_##id; 			} 		} 		if (dospawn) { __spawnfunc_##id(this); } 		if (__spawnfunc_unreachable_workaround) return; 	} 	void __spawnfunc_##id(entity this)
 
 #endif

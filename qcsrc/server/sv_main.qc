@@ -277,18 +277,11 @@ bool expr_evaluate(string s)
         int o;
         string k, v;
         s = argv(i);
-        #define X(expr) \
-            if (expr) \
-                continue; \
-            expr_fail = true; \
-            break;
+/*qc2rust::define::X*/
+#define X(expr) /*qc2rust::macro_begin::X*/if ( /*qc2rust::param_begin::expr*/expr /*qc2rust::param_end::expr*/)                 continue;             expr_fail = true;             break; /*qc2rust::macro_end::X*/
 
-        #define BINOP(op, len, expr) \
-            if ((o = strstrofs(s, op, 0)) >= 0) { \
-                k = substring(s, 0, o); \
-                v = substring(s, o + len, -1); \
-                X(expr); \
-            }
+/*qc2rust::define::BINOP*/
+#define BINOP(op,len,expr) /*qc2rust::macro_begin::BINOP*/if ((o = strstrofs(s,  /*qc2rust::param_begin::op*/op /*qc2rust::param_end::op*/, 0)) >= 0) {                 k = substring(s, 0, o);                 v = substring(s, o +  /*qc2rust::param_begin::len*/len /*qc2rust::param_end::len*/, -1);                 X( /*qc2rust::param_begin::expr*/expr /*qc2rust::param_end::expr*/);             } /*qc2rust::macro_end::BINOP*/
         BINOP(">=", 2, cvar(k) >= stof(v));
         BINOP("<=", 2, cvar(k) <= stof(v));
         BINOP(">",  1, cvar(k) >  stof(v));
@@ -344,12 +337,11 @@ void SV_OnEntityPreSpawnFunction(entity this)
 	if (this.angles == '0 -1 0') {
 		this.angles = '-90 0 0';
 	} else if (this.angles == '0 -2 0') {
-		this.angles = '+90 0 0';
+		this.angles = '90 0 0';
     }
 
-    #define X(out, in) MACRO_BEGIN \
-        if (in != 0) { out = out + (random() * 2 - 1) * in; } \
-    MACRO_END
+/*qc2rust::define::X*/
+#define X(out,in) /*qc2rust::macro_begin::X*/MACRO_BEGIN         if ( /*qc2rust::param_begin::in*/in /*qc2rust::param_end::in*/ != 0) {  /*qc2rust::param_begin::out*/out /*qc2rust::param_end::out*/ =  /*qc2rust::param_begin::out*/out /*qc2rust::param_end::out*/ + (random() * 2 - 1) *  /*qc2rust::param_begin::in*/in /*qc2rust::param_end::in*/; }     MACRO_END /*qc2rust::macro_end::X*/
     X(this.origin.x, this.originjitter.x); X(this.origin.y, this.originjitter.y); X(this.origin.z, this.originjitter.z);
     X(this.angles.x, this.anglesjitter.x); X(this.angles.y, this.anglesjitter.y); X(this.angles.z, this.anglesjitter.z);
     X(this.angles.y, this.anglejitter);

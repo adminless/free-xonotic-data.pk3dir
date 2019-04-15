@@ -32,13 +32,18 @@ ENDCLASS(IntrusiveList)
 // bitflags
 .vector il_listmask;
 
-#define IL_NEW() NEW(IntrusiveList)
+/*qc2rust::define::IL_NEW*/
+#define IL_NEW() /*qc2rust::macro_begin::IL_NEW*/NEW(IntrusiveList) /*qc2rust::macro_end::IL_NEW*/
 
-#define IL_EMPTY(this) (this.il_head == NULL)
+/*qc2rust::define::IL_EMPTY*/
+#define IL_EMPTY(this) /*qc2rust::macro_begin::IL_EMPTY*/( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/.il_head == NULL) /*qc2rust::macro_end::IL_EMPTY*/
 
-#define IL_FIRST(this) (this.il_head)
-#define IL_LAST(this) (this.il_tail)
-#define IL_PEEK(this) (this.il_tail)
+/*qc2rust::define::IL_FIRST*/
+#define IL_FIRST(this) /*qc2rust::macro_begin::IL_FIRST*/( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/.il_head) /*qc2rust::macro_end::IL_FIRST*/
+/*qc2rust::define::IL_LAST*/
+#define IL_LAST(this) /*qc2rust::macro_begin::IL_LAST*/( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/.il_tail) /*qc2rust::macro_end::IL_LAST*/
+/*qc2rust::define::IL_PEEK*/
+#define IL_PEEK(this) /*qc2rust::macro_begin::IL_PEEK*/( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/.il_tail) /*qc2rust::macro_end::IL_PEEK*/
 
 ERASEABLE
 bool IL_CONTAINS(IntrusiveList this, entity it)
@@ -144,47 +149,30 @@ void IL_REMOVE(IntrusiveList this, entity it)
 /**
  * Remove all elements
  */
-#define IL_CLEAR(this) \
-	MACRO_BEGIN \
-		IntrusiveList __il = this; \
-		assert(__il); \
-		.entity il_prev = __il.il_prevfld; \
-		IL_EACH(__il, true, it.(il_next) = it.(il_prev) = NULL); \
-		__il.il_head = __il.il_tail = NULL; \
-	MACRO_END
+/*qc2rust::define::IL_CLEAR*/
+#define IL_CLEAR(this) /*qc2rust::macro_begin::IL_CLEAR*/MACRO_BEGIN 		IntrusiveList __il =  /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/; 		assert(__il); 		.entity il_prev = __il.il_prevfld; 		IL_EACH(__il, true, it.(il_next) = it.(il_prev) = NULL); 		__il.il_head = __il.il_tail = NULL; 	MACRO_END /*qc2rust::macro_end::IL_CLEAR*/
 
 /**
  * Delete the list
  */
-#define IL_DELETE(this) \
-	MACRO_BEGIN \
-		delete(this); \
-		this = NULL; \
-	MACRO_END
+/*qc2rust::define::IL_DELETE*/
+#define IL_DELETE(this) /*qc2rust::macro_begin::IL_DELETE*/MACRO_BEGIN 		delete( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/); 		 /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/ = NULL; 	MACRO_END /*qc2rust::macro_end::IL_DELETE*/
 
-#define IL_EACH(this, cond, body) \
-	MACRO_BEGIN \
-		IntrusiveList _il = this; \
-		assert(_il); \
-		.entity il_next = _il.il_nextfld; \
-		noref int i = 0; \
-		for (entity _next, _it = _il.il_head; _it; (_it = _next, ++i)) \
-		{ \
-			const noref entity it = _it; \
-			_next = it.(il_next); \
-			if (cond) { LAMBDA(body) } \
-		} \
-	MACRO_END
+/*qc2rust::define::IL_EACH*/
+#define IL_EACH(this,cond,body) /*qc2rust::macro_begin::IL_EACH*/MACRO_BEGIN 		IntrusiveList _il =  /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/; 		assert(_il); 		.entity il_next = _il.il_nextfld; 		noref int i = 0; 		for (entity _next, _it = _il.il_head; _it; (_it = _next, ++i)) 		{ 			const noref entity it = _it; 			_next = it.(il_next); 			if ( /*qc2rust::param_begin::cond*/cond /*qc2rust::param_end::cond*/) { LAMBDA( /*qc2rust::param_begin::body*/body /*qc2rust::param_end::body*/) } 		} 	MACRO_END /*qc2rust::macro_end::IL_EACH*/
 
 .int il_id;
 IntrusiveList il_links[IL_MAX];
 .entity il_links_flds[IL_MAX * 2];
 int il_links_ptr;
 
-#define IL_FLOOR(n) ((n) | 0)
-#define IL_CEIL(n)  IL_FLOOR((n) + 0.5)
+/*qc2rust::define::IL_FLOOR*/
+#define IL_FLOOR(n) /*qc2rust::macro_begin::IL_FLOOR*/(( /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/) | 0) /*qc2rust::macro_end::IL_FLOOR*/
+/*qc2rust::define::IL_CEIL*/
+#define IL_CEIL(n) /*qc2rust::macro_begin::IL_CEIL*/IL_FLOOR(( /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/) + 0.5) /*qc2rust::macro_end::IL_CEIL*/
 
-#define IL_LISTS_PER_BIT IL_CEIL(IL_MAX / (3 * 24))
+/*qc2rust::define::IL_LISTS_PER_BIT*/
+#define IL_LISTS_PER_BIT /*qc2rust::macro_begin::IL_LISTS_PER_BIT*/IL_CEIL(IL_MAX / (3 * 24)) /*qc2rust::macro_end::IL_LISTS_PER_BIT*/
 
 ERASEABLE
 void IL_INIT(IntrusiveList this)

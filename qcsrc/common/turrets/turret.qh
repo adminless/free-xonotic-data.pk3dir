@@ -18,7 +18,7 @@ CLASS(Turret, Object)
 
     ATTRIB(Turret, spawnflags, int, 0);
     /** turret hitbox size */
-    ATTRIB(Turret, m_mins, vector, '-0 -0 -0');
+    ATTRIB(Turret, m_mins, vector, '0 0 0');
     /** turret hitbox size */
     ATTRIB(Turret, m_maxs, vector, '0 0 0');
 
@@ -137,7 +137,8 @@ const int TUR_FLAG_ROAM = 32768; // roams around if not attacking
 const int TUR_FLAG_ISTURRET = 65536; // identifies this unit as a turret
 
 // ammo types
-#define ammo_flags currentammo
+/*qc2rust::define::ammo_flags*/
+#define ammo_flags /*qc2rust::macro_begin::ammo_flags*/currentammo /*qc2rust::macro_end::ammo_flags*/
 const int TFL_AMMO_NONE = 64; // doesn't use ammo
 const int TFL_AMMO_ENERGY = 2; // uses power
 const int TFL_AMMO_BULLETS = 4; // uses bullets

@@ -23,8 +23,5 @@ CLASS(Model, Object)
     }
 ENDCLASS(Model)
 
-#define setmodel(this, m) MACRO_BEGIN \
-    Model _setmodel_model = (m); \
-    string _setmodel_cached = _setmodel_model.model_str_; \
-    _setmodel((this), _setmodel_cached ? _setmodel_cached : _setmodel_model.model_str()); \
-MACRO_END
+/*qc2rust::define::setmodel*/
+#define setmodel(this,m) /*qc2rust::macro_begin::setmodel*/MACRO_BEGIN     Model _setmodel_model = ( /*qc2rust::param_begin::m*/m /*qc2rust::param_end::m*/);     string _setmodel_cached = _setmodel_model.model_str_;     _setmodel(( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/), _setmodel_cached ? _setmodel_cached : _setmodel_model.model_str()); MACRO_END /*qc2rust::macro_end::setmodel*/

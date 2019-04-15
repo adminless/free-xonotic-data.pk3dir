@@ -106,9 +106,8 @@ float PlayerStats_GameReport_Event(string prefix, string event_id, float value)
 
 void PlayerStats_GameReport_Accuracy(entity p)
 {
-	#define ACCMAC(suffix, field) \
-		PlayerStats_GameReport_Event_Player(p, \
-			sprintf("acc-%s-%s", it.netname, suffix), CS(p).accuracy.(field[i-1]));
+/*qc2rust::define::ACCMAC*/
+#define ACCMAC(suffix,field) /*qc2rust::macro_begin::ACCMAC*/PlayerStats_GameReport_Event_Player(p, 			sprintf("acc-%s-%s", it.netname,  /*qc2rust::param_begin::suffix*/suffix /*qc2rust::param_end::suffix*/), CS(p).accuracy.( /*qc2rust::param_begin::field*/field /*qc2rust::param_end::field*/[i-1])); /*qc2rust::macro_end::ACCMAC*/
 	FOREACH(Weapons, it != WEP_Null, {
 		ACCMAC("hit", accuracy_hit)
 		ACCMAC("fired", accuracy_fired)

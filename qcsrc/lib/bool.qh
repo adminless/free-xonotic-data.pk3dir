@@ -6,7 +6,8 @@
 	const int false = 0;
 #endif
 
-#define boolean(value) ((value) != 0)
+/*qc2rust::define::boolean*/
+#define boolean(value) /*qc2rust::macro_begin::boolean*/(( /*qc2rust::param_begin::value*/value /*qc2rust::param_end::value*/) != 0) /*qc2rust::macro_end::boolean*/
 
 // get true/false value of a string with multiple different inputs
 ERASEABLE

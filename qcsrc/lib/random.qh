@@ -11,14 +11,19 @@ ERASEABLE
 void RandomSelection_Init();
 ERASEABLE
 void RandomSelection_Add(entity e, float f, string s, vector v, float weight, float priority);
-#define RandomSelection_AddEnt(e, weight, priority) RandomSelection_Add(e, 0, string_null, '0 0 0', weight, priority)
-#define RandomSelection_AddFloat(f, weight, priority) RandomSelection_Add(NULL, f, string_null, '0 0 0', weight, priority)
-#define RandomSelection_AddString(s, weight, priority) RandomSelection_Add(NULL, 0, s, '0 0 0', weight, priority)
-#define RandomSelection_AddVec(v, weight, priority) RandomSelection_Add(NULL, 0, string_null, v, weight, priority)
+/*qc2rust::define::RandomSelection_AddEnt*/
+#define RandomSelection_AddEnt(e,weight,priority) /*qc2rust::macro_begin::RandomSelection_AddEnt*/RandomSelection_Add( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/, 0, string_null, '0 0 0',  /*qc2rust::param_begin::weight*/weight /*qc2rust::param_end::weight*/,  /*qc2rust::param_begin::priority*/priority /*qc2rust::param_end::priority*/) /*qc2rust::macro_end::RandomSelection_AddEnt*/
+/*qc2rust::define::RandomSelection_AddFloat*/
+#define RandomSelection_AddFloat(f,weight,priority) /*qc2rust::macro_begin::RandomSelection_AddFloat*/RandomSelection_Add(NULL,  /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/, string_null, '0 0 0',  /*qc2rust::param_begin::weight*/weight /*qc2rust::param_end::weight*/,  /*qc2rust::param_begin::priority*/priority /*qc2rust::param_end::priority*/) /*qc2rust::macro_end::RandomSelection_AddFloat*/
+/*qc2rust::define::RandomSelection_AddString*/
+#define RandomSelection_AddString(s,weight,priority) /*qc2rust::macro_begin::RandomSelection_AddString*/RandomSelection_Add(NULL, 0,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/, '0 0 0',  /*qc2rust::param_begin::weight*/weight /*qc2rust::param_end::weight*/,  /*qc2rust::param_begin::priority*/priority /*qc2rust::param_end::priority*/) /*qc2rust::macro_end::RandomSelection_AddString*/
+/*qc2rust::define::RandomSelection_AddVec*/
+#define RandomSelection_AddVec(v,weight,priority) /*qc2rust::macro_begin::RandomSelection_AddVec*/RandomSelection_Add(NULL, 0, string_null,  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/,  /*qc2rust::param_begin::weight*/weight /*qc2rust::param_end::weight*/,  /*qc2rust::param_begin::priority*/priority /*qc2rust::param_end::priority*/) /*qc2rust::macro_end::RandomSelection_AddVec*/
 
 // prandom - PREDICTABLE random number generator
 
-#define USE_PRANDOM
+/*qc2rust::define::USE_PRANDOM*/
+#define USE_PRANDOM /*qc2rust::macro_begin::USE_PRANDOM*/ /*qc2rust::macro_end::USE_PRANDOM*/
 
 #ifdef USE_PRANDOM
 	float prandom();
@@ -28,11 +33,16 @@ void RandomSelection_Add(entity e, float f, string s, vector v, float weight, fl
 	#ifdef USE_PRANDOM_DEBUG
 		void prandom_debug();
 	#else
-		#define prandom_debug()
+/*qc2rust::define::prandom_debug*/
+#define prandom_debug() /*qc2rust::macro_begin::prandom_debug*/ /*qc2rust::macro_end::prandom_debug*/
 	#endif
 #else
-	#define prandom random
-	#define prandomvec randomvec
-	#define psrandom(x)
-	#define prandom_debug()
+/*qc2rust::define::prandom*/
+#define prandom /*qc2rust::macro_begin::prandom*/random /*qc2rust::macro_end::prandom*/
+/*qc2rust::define::prandomvec*/
+#define prandomvec /*qc2rust::macro_begin::prandomvec*/randomvec /*qc2rust::macro_end::prandomvec*/
+/*qc2rust::define::psrandom*/
+#define psrandom(x) /*qc2rust::macro_begin::psrandom*/ /*qc2rust::macro_end::psrandom*/
+/*qc2rust::define::prandom_debug*/
+#define prandom_debug() /*qc2rust::macro_begin::prandom_debug*/ /*qc2rust::macro_end::prandom_debug*/
 #endif

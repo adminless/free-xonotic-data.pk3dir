@@ -24,14 +24,13 @@ ENDCLASS(Animation)
 
 REGISTRY(Animations, BITS(8))
 REGISTER_REGISTRY(Animations)
-#define Animations_from(id) _Animations_from(id, NULL)
-#define WriteAnimation(to, it) WriteRegistered(Animations, to, it)
-#define ReadAnimation() ReadRegistered(Animations)
-#define REGISTER_ANIMATION(id, framenames) \
-	.vector anim_##id; \
-	REGISTER(Animations, ANIM_##id, m_id, NEW(Animation)) { \
-		this.m_framenames = framenames; \
-	}
+/*qc2rust::define::Animations_from*/
+#define Animations_from(id) /*qc2rust::macro_begin::Animations_from*/_Animations_from( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, NULL) /*qc2rust::macro_end::Animations_from*/
+/*qc2rust::define::WriteAnimation*/
+#define WriteAnimation(to,it) /*qc2rust::macro_begin::WriteAnimation*/WriteRegistered(Animations,  /*qc2rust::param_begin::to*/to /*qc2rust::param_end::to*/,  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) /*qc2rust::macro_end::WriteAnimation*/
+/*qc2rust::define::ReadAnimation*/
+#define ReadAnimation() /*qc2rust::macro_begin::ReadAnimation*/ReadRegistered(Animations) /*qc2rust::macro_end::ReadAnimation*/
+#define REGISTER_ANIMATION(id, framenames) 	.vector anim_##id; 	REGISTER(Animations, ANIM_##id, m_id, NEW(Animation)) { 		this.m_framenames = framenames; 	}
 
 vector anim_vec(Animation anim, int mdlidx, int numframes, float framerate)
 {

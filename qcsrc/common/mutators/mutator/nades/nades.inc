@@ -1,10 +1,9 @@
 #ifdef GAMEQC
-#define NADE_PROJECTILE(i, projectile, trail) MACRO_BEGIN \
-    this.m_projectile[i] = projectile; \
-    this.m_trail[i] = trail; \
-MACRO_END
+/*qc2rust::define::NADE_PROJECTILE*/
+#define NADE_PROJECTILE(i,projectile,trail) /*qc2rust::macro_begin::NADE_PROJECTILE*/MACRO_BEGIN     this.m_projectile[ /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/] =  /*qc2rust::param_begin::projectile*/projectile /*qc2rust::param_end::projectile*/;     this.m_trail[ /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/] =  /*qc2rust::param_begin::trail*/trail /*qc2rust::param_end::trail*/; MACRO_END /*qc2rust::macro_end::NADE_PROJECTILE*/
 #else
-#define NADE_PROJECTILE(i, projectile, trail)
+/*qc2rust::define::NADE_PROJECTILE*/
+#define NADE_PROJECTILE(i,projectile,trail) /*qc2rust::macro_begin::NADE_PROJECTILE*/ /*qc2rust::macro_end::NADE_PROJECTILE*/
 #endif
 
 REGISTER_NADE(NORMAL) {

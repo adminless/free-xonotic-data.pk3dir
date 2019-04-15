@@ -24,7 +24,8 @@ float mean_evaluate(entity e, .float a, .float c, float mean)
 #define MEAN_DECLARE(prefix, m) float prefix##_mean = m; .float prefix##_count, prefix##_accumulator
 
 /** Returns a random number between -1.0 and 1.0 */
-#define crandom() (2 * (random() - 0.5))
+/*qc2rust::define::crandom*/
+#define crandom() /*qc2rust::macro_begin::crandom*/(2 * (random() - 0.5)) /*qc2rust::macro_end::crandom*/
 
 
 /*
@@ -215,7 +216,8 @@ float ExponentialFalloff(float mindist, float maxdist, float halflifedist, float
 	else return 1;
 }
 
-#define power2of(e) (2 ** e)
+/*qc2rust::define::power2of*/
+#define power2of(e) /*qc2rust::macro_begin::power2of*/(2 **  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::power2of*/
 
 ERASEABLE
 float log2of(float e)

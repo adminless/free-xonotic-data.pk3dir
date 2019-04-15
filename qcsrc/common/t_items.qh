@@ -125,10 +125,12 @@ void GiveRot(entity e, float v0, float v1, .float rotfield, float rottime, .floa
 
 spawnfunc(target_items);
 
-#define PREGIVE_WEAPONS(e) WepSet save_weapons; save_weapons = STAT(WEAPONS, e)
+/*qc2rust::define::PREGIVE_WEAPONS*/
+#define PREGIVE_WEAPONS(e) /*qc2rust::macro_begin::PREGIVE_WEAPONS*/WepSet save_weapons; save_weapons = STAT(WEAPONS,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::PREGIVE_WEAPONS*/
 #define PREGIVE(e,f) float save_##f; save_##f = (e).f
 #define PREGIVE_RESOURCE(e,f) float save_##f = GetResource((e), (f))
-#define POSTGIVE_WEAPON(e,b,snd_incr,snd_decr) GiveSound((e), !!(save_weapons & WepSet_FromWeapon(b)), !!(STAT(WEAPONS, e) & WepSet_FromWeapon(b)), 0, snd_incr, snd_decr)
+/*qc2rust::define::POSTGIVE_WEAPON*/
+#define POSTGIVE_WEAPON(e,b,snd_incr,snd_decr) /*qc2rust::macro_begin::POSTGIVE_WEAPON*/GiveSound(( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/), !!(save_weapons & WepSet_FromWeapon( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)), !!(STAT(WEAPONS,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) & WepSet_FromWeapon( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)), 0,  /*qc2rust::param_begin::snd_incr*/snd_incr /*qc2rust::param_end::snd_incr*/,  /*qc2rust::param_begin::snd_decr*/snd_decr /*qc2rust::param_end::snd_decr*/) /*qc2rust::macro_end::POSTGIVE_WEAPON*/
 #define POSTGIVE_BIT(e,f,b,snd_incr,snd_decr) GiveSound((e), save_##f & (b), (e).f & (b), 0, snd_incr, snd_decr)
 #define POSTGIVE_RESOURCE(e,f,t,snd_incr,snd_decr) GiveSound((e), save_##f, GetResource((e), (f)), t, snd_incr, snd_decr)
 #define POSTGIVE_RES_ROT(e,f,t,rotfield,rottime,regenfield,regentime,snd_incr,snd_decr) GiveRot((e),save_##f,GetResource((e),(f)),rotfield,rottime,regenfield,regentime);GiveSound((e),save_##f,GetResource((e),(f)),t,snd_incr,snd_decr)

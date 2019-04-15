@@ -7,13 +7,17 @@ string autocvar__campaign_name;
 bool autocvar__sv_init;
 float autocvar_bot_ai_strategyinterval;
 float autocvar_bot_ai_strategyinterval_movingtarget;
-#define autocvar_bot_number cvar("bot_number")
+/*qc2rust::define::autocvar_bot_number*/
+#define autocvar_bot_number /*qc2rust::macro_begin::autocvar_bot_number*/cvar("bot_number") /*qc2rust::macro_end::autocvar_bot_number*/
 int autocvar_bot_vs_human;
 int autocvar_captureleadlimit_override;
-#define autocvar_capturelimit_override cvar("capturelimit_override")
+/*qc2rust::define::autocvar_capturelimit_override*/
+#define autocvar_capturelimit_override /*qc2rust::macro_begin::autocvar_capturelimit_override*/cvar("capturelimit_override") /*qc2rust::macro_end::autocvar_capturelimit_override*/
 float autocvar_ekg;
-#define autocvar_fraglimit cvar("fraglimit")
-#define autocvar_fraglimit_override cvar("fraglimit_override")
+/*qc2rust::define::autocvar_fraglimit*/
+#define autocvar_fraglimit /*qc2rust::macro_begin::autocvar_fraglimit*/cvar("fraglimit") /*qc2rust::macro_end::autocvar_fraglimit*/
+/*qc2rust::define::autocvar_fraglimit_override*/
+#define autocvar_fraglimit_override /*qc2rust::macro_begin::autocvar_fraglimit_override*/cvar("fraglimit_override") /*qc2rust::macro_end::autocvar_fraglimit_override*/
 //bool autocvar_g_allow_oldvortexbeam;
 int autocvar_g_antilag;
 float autocvar_g_antilag_nudge;
@@ -104,7 +108,8 @@ string autocvar_g_banned_list;
 bool autocvar_g_banned_list_idmode;
 bool autocvar_g_botclip_collisions;
 bool autocvar_g_campaign;
-#define autocvar_g_campaign_forceteam cvar("g_campaign_forceteam")
+/*qc2rust::define::autocvar_g_campaign_forceteam*/
+#define autocvar_g_campaign_forceteam /*qc2rust::macro_begin::autocvar_g_campaign_forceteam*/cvar("g_campaign_forceteam") /*qc2rust::macro_end::autocvar_g_campaign_forceteam*/
 int autocvar_g_campaign_skill;
 int autocvar_g_casings;
 float autocvar_g_chat_flood_burst;
@@ -122,9 +127,12 @@ bool autocvar_g_chat_teamcolors;
 bool autocvar_g_chat_tellprivacy;
 bool autocvar_g_forced_respawn;
 string autocvar_g_forced_team_otherwise; // TODO: Move to teamplay.qc
-#define autocvar_g_friendlyfire cvar("g_friendlyfire")
-#define autocvar_g_friendlyfire_virtual cvar("g_friendlyfire_virtual")
-#define autocvar_g_friendlyfire_virtual_force cvar("g_friendlyfire_virtual_force")
+/*qc2rust::define::autocvar_g_friendlyfire*/
+#define autocvar_g_friendlyfire /*qc2rust::macro_begin::autocvar_g_friendlyfire*/cvar("g_friendlyfire") /*qc2rust::macro_end::autocvar_g_friendlyfire*/
+/*qc2rust::define::autocvar_g_friendlyfire_virtual*/
+#define autocvar_g_friendlyfire_virtual /*qc2rust::macro_begin::autocvar_g_friendlyfire_virtual*/cvar("g_friendlyfire_virtual") /*qc2rust::macro_end::autocvar_g_friendlyfire_virtual*/
+/*qc2rust::define::autocvar_g_friendlyfire_virtual_force*/
+#define autocvar_g_friendlyfire_virtual_force /*qc2rust::macro_begin::autocvar_g_friendlyfire_virtual_force*/cvar("g_friendlyfire_virtual_force") /*qc2rust::macro_end::autocvar_g_friendlyfire_virtual_force*/
 bool autocvar_g_full_getstatus_responses;
 bool autocvar_g_fullbrightitems;
 bool autocvar_g_fullbrightplayers;
@@ -141,14 +149,16 @@ int autocvar_g_jetpack_fuel;
 float autocvar_g_jetpack_maxspeed_side;
 float autocvar_g_jetpack_maxspeed_up;
 float autocvar_g_jetpack_reverse_thrust;
-#define autocvar_g_maplist cvar_string("g_maplist")
+/*qc2rust::define::autocvar_g_maplist*/
+#define autocvar_g_maplist /*qc2rust::macro_begin::autocvar_g_maplist*/cvar_string("g_maplist") /*qc2rust::macro_end::autocvar_g_maplist*/
 bool autocvar_g_maplist_check_waypoints;
 int autocvar_g_maplist_index;
 string autocvar_g_maplist_mostrecent;
 int autocvar_g_maplist_mostrecent_count;
 bool autocvar_g_maplist_selectrandom;
 float autocvar_g_maplist_shuffle;
-#define autocvar_g_maplist_votable cvar("g_maplist_votable")
+/*qc2rust::define::autocvar_g_maplist_votable*/
+#define autocvar_g_maplist_votable /*qc2rust::macro_begin::autocvar_g_maplist_votable*/cvar("g_maplist_votable") /*qc2rust::macro_end::autocvar_g_maplist_votable*/
 bool autocvar_g_maplist_votable_abstain;
 float autocvar_g_maplist_votable_keeptwotime;
 bool autocvar_g_maplist_votable_nodetail;
@@ -160,9 +170,12 @@ int autocvar_g_maxplayers;
 float autocvar_g_maxplayers_spectator_blocktime;
 float autocvar_g_maxpushtime;
 float autocvar_g_maxspeed;
-#define autocvar_g_instagib cvar("g_instagib")
-#define autocvar_g_mirrordamage cvar("g_mirrordamage")
-#define autocvar_g_mirrordamage_virtual cvar("g_mirrordamage_virtual")
+/*qc2rust::define::autocvar_g_instagib*/
+#define autocvar_g_instagib /*qc2rust::macro_begin::autocvar_g_instagib*/cvar("g_instagib") /*qc2rust::macro_end::autocvar_g_instagib*/
+/*qc2rust::define::autocvar_g_mirrordamage*/
+#define autocvar_g_mirrordamage /*qc2rust::macro_begin::autocvar_g_mirrordamage*/cvar("g_mirrordamage") /*qc2rust::macro_end::autocvar_g_mirrordamage*/
+/*qc2rust::define::autocvar_g_mirrordamage_virtual*/
+#define autocvar_g_mirrordamage_virtual /*qc2rust::macro_begin::autocvar_g_mirrordamage_virtual*/cvar("g_mirrordamage_virtual") /*qc2rust::macro_end::autocvar_g_mirrordamage_virtual*/
 bool autocvar_g_mirrordamage_onlyweapons;
 
 float autocvar_g_movement_highspeed = 1;
@@ -238,9 +251,11 @@ vector autocvar_g_waypointeditor_symmetrical_origin;
 int autocvar_g_waypointeditor_symmetrical_order;
 vector autocvar_g_waypointeditor_symmetrical_axis;
 bool autocvar_g_waypoints_for_items;
-#define autocvar_g_weapon_stay cvar("g_weapon_stay")
+/*qc2rust::define::autocvar_g_weapon_stay*/
+#define autocvar_g_weapon_stay /*qc2rust::macro_begin::autocvar_g_weapon_stay*/cvar("g_weapon_stay") /*qc2rust::macro_end::autocvar_g_weapon_stay*/
 bool autocvar_g_weapon_throwable;
-#define autocvar_g_weaponarena cvar_string("g_weaponarena")
+/*qc2rust::define::autocvar_g_weaponarena*/
+#define autocvar_g_weaponarena /*qc2rust::macro_begin::autocvar_g_weaponarena*/cvar_string("g_weaponarena") /*qc2rust::macro_end::autocvar_g_weaponarena*/
 string autocvar_g_xonoticversion;
 float autocvar_gameversion;
 float autocvar_gameversion_min;
@@ -260,8 +275,10 @@ float autocvar_r_showbboxes;
 int autocvar_rescan_pending;
 bool autocvar_samelevel;
 string autocvar_sessionid;
-#define autocvar_skill cvar("skill")
-#define autocvar_slowmo cvar("slowmo")
+/*qc2rust::define::autocvar_skill*/
+#define autocvar_skill /*qc2rust::macro_begin::autocvar_skill*/cvar("skill") /*qc2rust::macro_end::autocvar_skill*/
+/*qc2rust::define::autocvar_slowmo*/
+#define autocvar_slowmo /*qc2rust::macro_begin::autocvar_slowmo*/cvar("slowmo") /*qc2rust::macro_end::autocvar_slowmo*/
 float autocvar_snd_soundradius;
 int autocvar_spawn_debug;
 bool autocvar_speedmeter;
@@ -298,7 +315,8 @@ float autocvar_sv_friction_on_land;
 var float autocvar_sv_friction_slick = 0.5;
 float autocvar_sv_gameplayfix_q2airaccelerate;
 int autocvar_sv_gentle;
-#define autocvar_sv_gravity cvar("sv_gravity")
+/*qc2rust::define::autocvar_sv_gravity*/
+#define autocvar_sv_gravity /*qc2rust::macro_begin::autocvar_sv_gravity*/cvar("sv_gravity") /*qc2rust::macro_end::autocvar_sv_gravity*/
 string autocvar_sv_intermission_cdtrack;
 int autocvar_sv_itemstime;
 string autocvar_sv_jumpspeedcap_max;
@@ -359,8 +377,10 @@ bool autocvar_sv_vote_gamestart;
 string autocvar_sv_weaponstats_file;
 float autocvar_sv_gibhealth;
 float autocvar_sys_ticrate;
-#define autocvar_timelimit cvar("timelimit")
-#define autocvar_timelimit_override cvar("timelimit_override")
+/*qc2rust::define::autocvar_timelimit*/
+#define autocvar_timelimit /*qc2rust::macro_begin::autocvar_timelimit*/cvar("timelimit") /*qc2rust::macro_end::autocvar_timelimit*/
+/*qc2rust::define::autocvar_timelimit_override*/
+#define autocvar_timelimit_override /*qc2rust::macro_begin::autocvar_timelimit_override*/cvar("timelimit_override") /*qc2rust::macro_end::autocvar_timelimit_override*/
 float autocvar_timelimit_increment;
 float autocvar_timelimit_decrement;
 float autocvar_timelimit_min;
@@ -368,7 +388,8 @@ float autocvar_timelimit_max;
 float autocvar_timelimit_overtime;
 int autocvar_timelimit_overtimes;
 float autocvar_timelimit_suddendeath;
-#define autocvar_utf8_enable cvar("utf8_enable")
+/*qc2rust::define::autocvar_utf8_enable*/
+#define autocvar_utf8_enable /*qc2rust::macro_begin::autocvar_utf8_enable*/cvar("utf8_enable") /*qc2rust::macro_end::autocvar_utf8_enable*/
 float autocvar_sv_gameplayfix_gravityunaffectedbyticrate;
 bool autocvar_sv_gameplayfix_upwardvelocityclearsongroundflag;
 float autocvar_g_trueaim_minrange;

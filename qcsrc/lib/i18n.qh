@@ -26,7 +26,8 @@ string language_filename(string s)
 }
 
 #ifndef CTX_CACHE
-	#define CTX_CACHE 1
+/*qc2rust::define::CTX_CACHE*/
+#define CTX_CACHE /*qc2rust::macro_begin::CTX_CACHE*/1 /*qc2rust::macro_end::CTX_CACHE*/
 #endif
 
 #if CTX_CACHE
@@ -57,4 +58,5 @@ string CTX(string s)
 	return ret;
 }
 
-#define ZCTX(s) strzone(CTX(s))
+/*qc2rust::define::ZCTX*/
+#define ZCTX(s) /*qc2rust::macro_begin::ZCTX*/strzone(CTX( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/)) /*qc2rust::macro_end::ZCTX*/

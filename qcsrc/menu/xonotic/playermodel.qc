@@ -15,7 +15,8 @@ const float BUFMODELS_SKIN = 3;
 const float BUFMODELS_DESC = 4;
 const float BUFMODELS_COUNT = 5;
 
-#define XONVOTE186 1 // (nyov) removal of model text description
+/*qc2rust::define::XONVOTE186*/
+#define XONVOTE186 /*qc2rust::macro_begin::XONVOTE186*/1 // (nyov) removal of model text description /*qc2rust::macro_end::XONVOTE186*/
 
 void XonoticPlayerModelSelector_configureXonoticPlayerModelSelector(entity me)
 {

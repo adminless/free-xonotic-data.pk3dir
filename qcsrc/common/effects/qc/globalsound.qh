@@ -11,14 +11,9 @@
 ..string m_playersoundfld;
 
 REGISTRY(PlayerSounds, BITS(8) - 1)
-#define PlayerSounds_from(i) _PlayerSounds_from(i, NULL)
-#define REGISTER_PLAYERSOUND(id) \
-	.string _playersound_##id; \
-	REGISTER(PlayerSounds, playersound, id, m_id, new_pure(PlayerSound)) \
-	{ \
-		this.m_playersoundstr = #id; \
-		this.m_playersoundfld = _playersound_##id; \
-	}
+/*qc2rust::define::PlayerSounds_from*/
+#define PlayerSounds_from(i) /*qc2rust::macro_begin::PlayerSounds_from*/_PlayerSounds_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NULL) /*qc2rust::macro_end::PlayerSounds_from*/
+#define REGISTER_PLAYERSOUND(id) 	.string _playersound_##id; 	REGISTER(PlayerSounds, playersound, id, m_id, new_pure(PlayerSound)) 	{ 		this.m_playersoundstr = #id; 		this.m_playersoundfld = _playersound_##id; 	}
 REGISTER_REGISTRY(PlayerSounds)
 REGISTRY_SORT(PlayerSounds)
 STATIC_INIT(PlayerSounds_renumber)
@@ -40,15 +35,7 @@ REGISTER_PLAYERSOUND(pain75)
 
 .bool instanceOfVoiceMessage;
 .int m_playersoundvt;
-#define REGISTER_VOICEMSG(id, vt) \
-	.string _playersound_##id; \
-	REGISTER(PlayerSounds, playersound, id, m_id, new_pure(VoiceMessage)) \
-	{ \
-		this.instanceOfVoiceMessage = true; \
-		this.m_playersoundstr = #id; \
-		this.m_playersoundfld = _playersound_##id; \
-		this.m_playersoundvt = vt; \
-	}
+#define REGISTER_VOICEMSG(id, vt) 	.string _playersound_##id; 	REGISTER(PlayerSounds, playersound, id, m_id, new_pure(VoiceMessage)) 	{ 		this.instanceOfVoiceMessage = true; 		this.m_playersoundstr = #id; 		this.m_playersoundfld = _playersound_##id; 		this.m_playersoundvt = vt; 	}
 
 const int VOICETYPE_PLAYERSOUND = 10;
 const int VOICETYPE_TEAMRADIO = 11;
@@ -84,12 +71,10 @@ REGISTER_VOICEMSG(teamshoot, VOICETYPE_LASTATTACKER)
 
 .string m_globalsoundstr;
 REGISTRY(GlobalSounds, BITS(8) - 1)
-#define GlobalSounds_from(i) _GlobalSounds_from(i, NULL)
-#define REGISTER_GLOBALSOUND(id, str) \
-	REGISTER(GlobalSounds, GS, id, m_id, new_pure(GlobalSound)) \
-	{ \
-		this.m_globalsoundstr = str; \
-	}
+/*qc2rust::define::GlobalSounds_from*/
+#define GlobalSounds_from(i) /*qc2rust::macro_begin::GlobalSounds_from*/_GlobalSounds_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NULL) /*qc2rust::macro_end::GlobalSounds_from*/
+/*qc2rust::define::REGISTER_GLOBALSOUND*/
+#define REGISTER_GLOBALSOUND(id,str) /*qc2rust::macro_begin::REGISTER_GLOBALSOUND*/REGISTER(GlobalSounds, GS,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, m_id, new_pure(GlobalSound)) 	{ 		this.m_globalsoundstr =  /*qc2rust::param_begin::str*/str /*qc2rust::param_end::str*/; 	} /*qc2rust::macro_end::REGISTER_GLOBALSOUND*/
 REGISTER_REGISTRY(GlobalSounds)
 REGISTRY_SORT(GlobalSounds)
 STATIC_INIT(GlobalSounds_renumber)
@@ -124,21 +109,14 @@ string GlobalSound_sample(string pair, float r);
 #ifdef SVQC
 
 	void _GlobalSound(entity this, entity gs, entity ps, string sample, float chan, float vol, float voicetype, bool fake);
-	#define GlobalSound(this, def, chan, vol, voicetype) _GlobalSound(this, def, NULL, string_null, chan, vol, voicetype, false)
-	#define GlobalSound_string(this, def, chan, vol, voicetype) _GlobalSound(this, NULL, NULL, def, chan, vol, voicetype, false)
-	#define PlayerSound(this, def, chan, vol, voicetype) _GlobalSound(this, NULL, def, string_null, chan, vol, voicetype, false)
-	#define VoiceMessage(this, def, msg) \
-		MACRO_BEGIN \
-			entity VM = def; \
-			int voicetype = VM.m_playersoundvt; \
-			bool ownteam = (voicetype == VOICETYPE_TEAMRADIO); \
-			int flood = Say(this, ownteam, NULL, msg, true); \
-			bool fake; \
-			if (IS_SPEC(this) || IS_OBSERVER(this) || flood < 0) fake = true; \
-			else if (flood > 0) fake = false; \
-			else break; \
-			_GlobalSound(this, NULL, VM, string_null, CH_VOICE, VOL_BASEVOICE, voicetype, fake); \
-		MACRO_END
+/*qc2rust::define::GlobalSound*/
+#define GlobalSound(this,def,chan,vol,voicetype) /*qc2rust::macro_begin::GlobalSound*/_GlobalSound( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/,  /*qc2rust::param_begin::def*/def /*qc2rust::param_end::def*/, NULL, string_null,  /*qc2rust::param_begin::chan*/chan /*qc2rust::param_end::chan*/,  /*qc2rust::param_begin::vol*/vol /*qc2rust::param_end::vol*/,  /*qc2rust::param_begin::voicetype*/voicetype /*qc2rust::param_end::voicetype*/, false) /*qc2rust::macro_end::GlobalSound*/
+/*qc2rust::define::GlobalSound_string*/
+#define GlobalSound_string(this,def,chan,vol,voicetype) /*qc2rust::macro_begin::GlobalSound_string*/_GlobalSound( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/, NULL, NULL,  /*qc2rust::param_begin::def*/def /*qc2rust::param_end::def*/,  /*qc2rust::param_begin::chan*/chan /*qc2rust::param_end::chan*/,  /*qc2rust::param_begin::vol*/vol /*qc2rust::param_end::vol*/,  /*qc2rust::param_begin::voicetype*/voicetype /*qc2rust::param_end::voicetype*/, false) /*qc2rust::macro_end::GlobalSound_string*/
+/*qc2rust::define::PlayerSound*/
+#define PlayerSound(this,def,chan,vol,voicetype) /*qc2rust::macro_begin::PlayerSound*/_GlobalSound( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/, NULL,  /*qc2rust::param_begin::def*/def /*qc2rust::param_end::def*/, string_null,  /*qc2rust::param_begin::chan*/chan /*qc2rust::param_end::chan*/,  /*qc2rust::param_begin::vol*/vol /*qc2rust::param_end::vol*/,  /*qc2rust::param_begin::voicetype*/voicetype /*qc2rust::param_end::voicetype*/, false) /*qc2rust::macro_end::PlayerSound*/
+/*qc2rust::define::VoiceMessage*/
+#define VoiceMessage(this,def,msg) /*qc2rust::macro_begin::VoiceMessage*/MACRO_BEGIN 			entity VM =  /*qc2rust::param_begin::def*/def /*qc2rust::param_end::def*/; 			int voicetype = VM.m_playersoundvt; 			bool ownteam = (voicetype == VOICETYPE_TEAMRADIO); 			int flood = Say( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/, ownteam, NULL,  /*qc2rust::param_begin::msg*/msg /*qc2rust::param_end::msg*/, true); 			bool fake; 			if (IS_SPEC( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/) || IS_OBSERVER( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/) || flood < 0) fake = true; 			else if (flood > 0) fake = false; 			else break; 			_GlobalSound( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/, NULL, VM, string_null, CH_VOICE, VOL_BASEVOICE, voicetype, fake); 		MACRO_END /*qc2rust::macro_end::VoiceMessage*/
 
 #endif
 

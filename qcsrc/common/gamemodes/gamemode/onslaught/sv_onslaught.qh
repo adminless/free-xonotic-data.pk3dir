@@ -21,7 +21,8 @@ REGISTER_MUTATOR(ons, false)
 // control point / generator constants
 const float ONS_CP_THINKRATE = 0.2;
 const float GEN_THINKRATE = 1;
-#define CPGEN_SPAWN_OFFSET ('0 0 1' * (PL_MAX_CONST.z - 13))
+/*qc2rust::define::CPGEN_SPAWN_OFFSET*/
+#define CPGEN_SPAWN_OFFSET /*qc2rust::macro_begin::CPGEN_SPAWN_OFFSET*/('0 0 1' * (PL_MAX_CONST.z - 13)) /*qc2rust::macro_end::CPGEN_SPAWN_OFFSET*/
 const vector CPGEN_WAYPOINT_OFFSET = ('0 0 128');
 const vector CPICON_OFFSET = ('0 0 96');
 

@@ -5,7 +5,8 @@
 #include <client/defs.qh>
 #include <client/main.qh>
 
-#define CONSTANT_SPEED_DECAY
+/*qc2rust::define::CONSTANT_SPEED_DECAY*/
+#define CONSTANT_SPEED_DECAY /*qc2rust::macro_begin::CONSTANT_SPEED_DECAY*/ /*qc2rust::macro_end::CONSTANT_SPEED_DECAY*/
 
 float bgmscriptbuf;
 float bgmscriptbufsize;

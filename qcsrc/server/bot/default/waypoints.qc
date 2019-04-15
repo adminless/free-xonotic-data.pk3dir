@@ -806,7 +806,8 @@ void waypoint_schedulerelinkall()
 	waypoint_load_links_hardwired();
 }
 
-#define GET_GAMETYPE_EXTENSION() ((g_race) ? ".race" : "")
+/*qc2rust::define::GET_GAMETYPE_EXTENSION*/
+#define GET_GAMETYPE_EXTENSION() /*qc2rust::macro_begin::GET_GAMETYPE_EXTENSION*/((g_race) ? ".race" : "") /*qc2rust::macro_end::GET_GAMETYPE_EXTENSION*/
 
 // Load waypoint links from file
 bool waypoint_load_links()
@@ -1333,8 +1334,8 @@ float waypoint_loadall()
 	return cwp + cwb;
 }
 
-#define waypoint_fixorigin(position, tracetest_ent) \
-	waypoint_fixorigin_down_dir(position, tracetest_ent, '0 0 -1')
+/*qc2rust::define::waypoint_fixorigin*/
+#define waypoint_fixorigin(position,tracetest_ent) /*qc2rust::macro_begin::waypoint_fixorigin*/waypoint_fixorigin_down_dir( /*qc2rust::param_begin::position*/position /*qc2rust::param_end::position*/,  /*qc2rust::param_begin::tracetest_ent*/tracetest_ent /*qc2rust::param_end::tracetest_ent*/, '0 0 -1') /*qc2rust::macro_end::waypoint_fixorigin*/
 
 vector waypoint_fixorigin_down_dir(vector position, entity tracetest_ent, vector down_dir)
 {

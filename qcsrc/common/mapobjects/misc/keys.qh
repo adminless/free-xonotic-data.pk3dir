@@ -3,9 +3,11 @@
 /**
  * Returns the bit ID of a key
  */
-#define ITEM_KEY_BIT(n)	( bitshift(1, n) )
+/*qc2rust::define::ITEM_KEY_BIT*/
+#define ITEM_KEY_BIT(n) /*qc2rust::macro_begin::ITEM_KEY_BIT*/( bitshift(1,  /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/) ) /*qc2rust::macro_end::ITEM_KEY_BIT*/
 
-#define ITEM_KEY_MAX	24
+/*qc2rust::define::ITEM_KEY_MAX*/
+#define ITEM_KEY_MAX /*qc2rust::macro_begin::ITEM_KEY_MAX*/24 /*qc2rust::macro_end::ITEM_KEY_MAX*/
 
 /**
  * list of key names.

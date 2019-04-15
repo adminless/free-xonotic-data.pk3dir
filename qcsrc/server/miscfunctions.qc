@@ -1100,7 +1100,8 @@ bool SUB_NoImpactCheck(entity this, entity toucher)
     return false;
 }
 
-#define SUB_OwnerCheck(ent,oth) ((oth) && ((oth) == (ent).owner))
+/*qc2rust::define::SUB_OwnerCheck*/
+#define SUB_OwnerCheck(ent,oth) /*qc2rust::macro_begin::SUB_OwnerCheck*/(( /*qc2rust::param_begin::oth*/oth /*qc2rust::param_end::oth*/) && (( /*qc2rust::param_begin::oth*/oth /*qc2rust::param_end::oth*/) == ( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/).owner)) /*qc2rust::macro_end::SUB_OwnerCheck*/
 
 bool WarpZone_Projectile_Touch_ImpactFilter_Callback(entity this, entity toucher)
 {

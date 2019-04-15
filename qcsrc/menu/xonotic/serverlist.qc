@@ -39,14 +39,8 @@ void SL_ProcessCategoryOverrides(.string override_field_string, .float override_
 void RegisterSLCategories()
 {
 	entity cat;
-	#define SLIST_CATEGORY(name,enoverride,dioverride,str) \
-		SET_FIELD_COUNT(name, CATEGORY_FIRST, category_ent_count) \
-		CHECK_MAX_COUNT(name, MAX_CATEGORIES, category_ent_count, "SLIST_CATEGORY") \
-		cat = categories[name - 1] = new(slist_category); \
-		cat.cat_name = #name; \
-		cat.cat_enoverride_string = strzone(SLIST_CATEGORY_AUTOCVAR(name)); \
-		cat.cat_dioverride_string = strzone(dioverride); \
-		cat.cat_string = strzone(str);
+/*qc2rust::define::SLIST_CATEGORY*/
+#define SLIST_CATEGORY(name,enoverride,dioverride,str) /*qc2rust::macro_begin::SLIST_CATEGORY*/SET_FIELD_COUNT( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/, CATEGORY_FIRST, category_ent_count) 		CHECK_MAX_COUNT( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/, MAX_CATEGORIES, category_ent_count, "SLIST_CATEGORY") 		cat = categories[ /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ - 1] = new(slist_category); 		cat.cat_name =  /*qc2rust::stringify_begin::name*/#name /*qc2rust::stringify_end::name*/; 		cat.cat_enoverride_string = strzone(SLIST_CATEGORY_AUTOCVAR( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/)); 		cat.cat_dioverride_string = strzone( /*qc2rust::param_begin::dioverride*/dioverride /*qc2rust::param_end::dioverride*/); 		cat.cat_string = strzone( /*qc2rust::param_begin::str*/str /*qc2rust::param_end::str*/); /*qc2rust::macro_end::SLIST_CATEGORY*/
 	SLIST_CATEGORIES
 	#undef SLIST_CATEGORY
 
@@ -802,9 +796,8 @@ void XonoticServerList_drawListBoxItem(entity me, int i, vector absSize, bool is
 
 	vector oldscale = draw_scale;
 	vector oldshift = draw_shift;
-#define SET_YRANGE(start,end) \
-	draw_scale = boxToGlobalSize(eX + eY * (end - start), oldscale); \
-	draw_shift = boxToGlobal(eY * start, oldshift, oldscale);
+/*qc2rust::define::SET_YRANGE*/
+#define SET_YRANGE(start,end) /*qc2rust::macro_begin::SET_YRANGE*/draw_scale = boxToGlobalSize(eX + eY * ( /*qc2rust::param_begin::end*/end /*qc2rust::param_end::end*/ -  /*qc2rust::param_begin::start*/start /*qc2rust::param_end::start*/), oldscale); 	draw_shift = boxToGlobal(eY *  /*qc2rust::param_begin::start*/start /*qc2rust::param_end::start*/, oldshift, oldscale); /*qc2rust::macro_end::SET_YRANGE*/
 
 	for (j = 0; j < category_draw_count; ++j) {
 		// Matches exactly the headings with increased height.

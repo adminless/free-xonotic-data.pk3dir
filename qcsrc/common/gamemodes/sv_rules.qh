@@ -31,14 +31,8 @@ void GameRules_limit_fallbacks();
  * @param spprio player score priority (if frags aren't enabled)
  * @param stprio team score priority (if frags aren't enabled)
  */
-#define GameRules_scoring(teams, spprio, stprio, fields) MACRO_BEGIN \
-    _GameRules_scoring_begin((teams), (spprio), (stprio)); \
-    noref void(entity, string, float) field = _GameRules_scoring_field; \
-    /* todo: just have the one `field` function */ \
-    noref void(int, string, float) field_team = _GameRules_scoring_field_team; \
-    LAMBDA(fields); \
-    _GameRules_scoring_end(); \
-MACRO_END
+/*qc2rust::define::GameRules_scoring*/
+#define GameRules_scoring(teams,spprio,stprio,fields) /*qc2rust::macro_begin::GameRules_scoring*/MACRO_BEGIN     _GameRules_scoring_begin(( /*qc2rust::param_begin::teams*/teams /*qc2rust::param_end::teams*/), ( /*qc2rust::param_begin::spprio*/spprio /*qc2rust::param_end::spprio*/), ( /*qc2rust::param_begin::stprio*/stprio /*qc2rust::param_end::stprio*/));     noref void(entity, string, float) field = _GameRules_scoring_field;     /* todo: just have the one `field` function */     noref void(int, string, float) field_team = _GameRules_scoring_field_team;     LAMBDA( /*qc2rust::param_begin::fields*/fields /*qc2rust::param_end::fields*/);     _GameRules_scoring_end(); MACRO_END /*qc2rust::macro_end::GameRules_scoring*/
 
 void _GameRules_scoring_begin(int teams, float spprio, float stprio);
 void _GameRules_scoring_field(entity i, string label, int scoreflags);

@@ -5,12 +5,14 @@
 #include "item.qh"
 
 REGISTRY(Items, BITS(7))
-#define Items_from(i) _Items_from(i, NULL)
+/*qc2rust::define::Items_from*/
+#define Items_from(i) /*qc2rust::macro_begin::Items_from*/_Items_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NULL) /*qc2rust::macro_end::Items_from*/
 #ifdef GAMEQC
 REGISTRY_DEPENDS(Items, Models)
 #endif
 REGISTER_REGISTRY(Items)
-#define REGISTER_ITEM(id, class) REGISTER(Items, ITEM, id, m_id, NEW(class))
+/*qc2rust::define::REGISTER_ITEM*/
+#define REGISTER_ITEM(id,class) /*qc2rust::macro_begin::REGISTER_ITEM*/REGISTER(Items, ITEM,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, m_id, NEW( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/)) /*qc2rust::macro_end::REGISTER_ITEM*/
 
 REGISTRY_SORT(Items)
 REGISTRY_CHECK(Items)

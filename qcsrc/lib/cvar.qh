@@ -74,11 +74,16 @@ const noref float default_float = 0;
 const noref string default_string = "";
 const noref vector default_vector = '0 0 0';
 
-#define repr_cvar_bool(x) ((x) ? "1" : "0")
-#define repr_cvar_int(x) (ftos(x))
-#define repr_cvar_float(x) (ftos(x))
-#define repr_cvar_string(x) (x)
-#define repr_cvar_vector(x) (sprintf("%v", x))
+/*qc2rust::define::repr_cvar_bool*/
+#define repr_cvar_bool(x) /*qc2rust::macro_begin::repr_cvar_bool*/(( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/) ? "1" : "0") /*qc2rust::macro_end::repr_cvar_bool*/
+/*qc2rust::define::repr_cvar_int*/
+#define repr_cvar_int(x) /*qc2rust::macro_begin::repr_cvar_int*/(ftos( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/)) /*qc2rust::macro_end::repr_cvar_int*/
+/*qc2rust::define::repr_cvar_float*/
+#define repr_cvar_float(x) /*qc2rust::macro_begin::repr_cvar_float*/(ftos( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/)) /*qc2rust::macro_end::repr_cvar_float*/
+/*qc2rust::define::repr_cvar_string*/
+#define repr_cvar_string(x) /*qc2rust::macro_begin::repr_cvar_string*/( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/) /*qc2rust::macro_end::repr_cvar_string*/
+/*qc2rust::define::repr_cvar_vector*/
+#define repr_cvar_vector(x) /*qc2rust::macro_begin::repr_cvar_vector*/(sprintf("%v",  /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/)) /*qc2rust::macro_end::repr_cvar_vector*/
 
 //pseudo prototypes:
 // void AUTOCVAR(<cvar_name>, <qc_var_type>, default_cvar_value, string desc)
@@ -86,17 +91,15 @@ const noref vector default_vector = '0 0 0';
 //  where default_cvar_value has type <qc_var_type>
 //  e.g.: AUTOCVAR(mycvar, float, 2.5, "cvar description")
 
-#define __AUTOCVAR(file, archive, var, type, desc, default) \
-	ACCUMULATE void RegisterCvars(void(string, string, string, bool, string) f) \
-	{ \
-		f( #var, repr_cvar_##type(default), desc, archive, file); \
-	} \
-	type autocvar_##var = default
-#define AUTOCVAR_5(file, archive, var, type, desc) \
-	__AUTOCVAR(file, archive, var, type, desc, default_##type)
-#define AUTOCVAR_6(file, archive, var, type, default, desc) \
-	__AUTOCVAR(file, archive, var, type, desc, default)
-#define _AUTOCVAR(...) EVAL__AUTOCVAR(OVERLOAD(AUTOCVAR, __FILE__, __VA_ARGS__))
-#define EVAL__AUTOCVAR(...) __VA_ARGS__
-#define AUTOCVAR_SAVE(...) _AUTOCVAR(true, __VA_ARGS__)
-#define AUTOCVAR(...) _AUTOCVAR(false, __VA_ARGS__)
+#define __AUTOCVAR(file, archive, var, type, desc, default) 	ACCUMULATE void RegisterCvars(void(string, string, string, bool, string) f) 	{ 		f( #var, repr_cvar_##type(default), desc, archive, file); 	} 	type autocvar_##var = default
+#define AUTOCVAR_5(file, archive, var, type, desc) 	__AUTOCVAR(file, archive, var, type, desc, default_##type)
+/*qc2rust::define::AUTOCVAR_6*/
+#define AUTOCVAR_6(file,archive,var,type,default,desc) /*qc2rust::macro_begin::AUTOCVAR_6*/__AUTOCVAR( /*qc2rust::param_begin::file*/file /*qc2rust::param_end::file*/,  /*qc2rust::param_begin::archive*/archive /*qc2rust::param_end::archive*/,  /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/,  /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/,  /*qc2rust::param_begin::desc*/desc /*qc2rust::param_end::desc*/,  /*qc2rust::param_begin::default*/default /*qc2rust::param_end::default*/) /*qc2rust::macro_end::AUTOCVAR_6*/
+/*qc2rust::define::_AUTOCVAR*/
+#define _AUTOCVAR(...) /*qc2rust::macro_begin::_AUTOCVAR*/EVAL__AUTOCVAR(OVERLOAD(AUTOCVAR, __FILE__,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::_AUTOCVAR*/
+/*qc2rust::define::EVAL__AUTOCVAR*/
+#define EVAL__AUTOCVAR(...) /*qc2rust::macro_begin::EVAL__AUTOCVAR*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL__AUTOCVAR*/
+/*qc2rust::define::AUTOCVAR_SAVE*/
+#define AUTOCVAR_SAVE(...) /*qc2rust::macro_begin::AUTOCVAR_SAVE*/_AUTOCVAR(true,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::AUTOCVAR_SAVE*/
+/*qc2rust::define::AUTOCVAR*/
+#define AUTOCVAR(...) /*qc2rust::macro_begin::AUTOCVAR*/_AUTOCVAR(false,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::AUTOCVAR*/

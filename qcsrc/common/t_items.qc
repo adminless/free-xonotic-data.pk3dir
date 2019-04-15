@@ -225,23 +225,10 @@ NET_HANDLE(ENT_CLIENT_ITEM, bool isnew)
             string _fn2 = substring(_fn, 0 , strlen(_fn) -4);
             this.item_simple = true;
 
-			#define extensions(x) \
-				x(md3) \
-				x(dpm) \
-				x(iqm) \
-				x(mdl) \
-				/**/
-			#define tryext(ext) { \
-				string s = strcat(_fn2, autocvar_cl_simpleitems_postfix, "." #ext); \
-				string cached = HM_gets(ENT_CLIENT_ITEM_simple, s); \
-				if (cached == "") { \
-					HM_sets(ENT_CLIENT_ITEM_simple, s, cached = fexists(s) ? "1" : "0"); \
-				} \
-				if (cached != "0") { \
-					strcpy(this.mdl, s); \
-					break; \
-				} \
-			}
+/*qc2rust::define::extensions*/
+#define extensions(x) /*qc2rust::macro_begin::extensions*/ /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/(md3) 				 /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/(dpm) 				 /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/(iqm) 				 /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/(mdl) 				/**/ /*qc2rust::macro_end::extensions*/
+/*qc2rust::define::tryext*/
+#define tryext(ext) /*qc2rust::macro_begin::tryext*/{ 				string s = strcat(_fn2, autocvar_cl_simpleitems_postfix, "."  /*qc2rust::stringify_begin::ext*/#ext /*qc2rust::stringify_end::ext*/); 				string cached = HM_gets(ENT_CLIENT_ITEM_simple, s); 				if (cached == "") { 					HM_sets(ENT_CLIENT_ITEM_simple, s, cached = fexists(s) ? "1" : "0"); 				} 				if (cached != "0") { 					strcpy(this.mdl, s); 					break; 				} 			} /*qc2rust::macro_end::tryext*/
 			do {
 				extensions(tryext);
 				this.item_simple = false;
@@ -1393,7 +1380,8 @@ void StartItem(entity this, GameItem def)
 	);
 }
 
-#define IS_SMALL(def) ((def.instanceOfHealth && def == ITEM_HealthSmall) || (def.instanceOfArmor && def == ITEM_ArmorSmall))
+/*qc2rust::define::IS_SMALL*/
+#define IS_SMALL(def) /*qc2rust::macro_begin::IS_SMALL*/(( /*qc2rust::param_begin::def*/def /*qc2rust::param_end::def*/.instanceOfHealth &&  /*qc2rust::param_begin::def*/def /*qc2rust::param_end::def*/ == ITEM_HealthSmall) || ( /*qc2rust::param_begin::def*/def /*qc2rust::param_end::def*/.instanceOfArmor &&  /*qc2rust::param_begin::def*/def /*qc2rust::param_end::def*/ == ITEM_ArmorSmall)) /*qc2rust::macro_end::IS_SMALL*/
 int group_count = 1;
 
 void setItemGroup(entity this)

@@ -5,10 +5,10 @@
 #include "xonotic/tab.qh"
 
 REGISTRY(Settings, BITS(3))
-#define Settings_from(i) _Settings_from(i, NULL)
+/*qc2rust::define::Settings_from*/
+#define Settings_from(i) /*qc2rust::macro_begin::Settings_from*/_Settings_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NULL) /*qc2rust::macro_end::Settings_from*/
 REGISTER_REGISTRY(Settings)
-#define REGISTER_SETTINGS(id, impl) \
-    LAZY_NEW(id, impl) \
-    REGISTER(Settings, MENU, id, m_id, NEW(Lazy, LAZY(id)))
+/*qc2rust::define::REGISTER_SETTINGS*/
+#define REGISTER_SETTINGS(id,impl) /*qc2rust::macro_begin::REGISTER_SETTINGS*/LAZY_NEW( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/,  /*qc2rust::param_begin::impl*/impl /*qc2rust::param_end::impl*/)     REGISTER(Settings, MENU,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, m_id, NEW(Lazy, LAZY( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/))) /*qc2rust::macro_end::REGISTER_SETTINGS*/
 
 #endif

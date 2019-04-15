@@ -2,36 +2,43 @@
 
 #ifndef QCC_SUPPORT_ACCUMULATE
 	#ifdef GMQCC
-		#define QCC_SUPPORT_ACCUMULATE
+/*qc2rust::define::QCC_SUPPORT_ACCUMULATE*/
+#define QCC_SUPPORT_ACCUMULATE /*qc2rust::macro_begin::QCC_SUPPORT_ACCUMULATE*/ /*qc2rust::macro_end::QCC_SUPPORT_ACCUMULATE*/
 	#endif
 #endif
 
 #ifndef QCC_SUPPORT_NIL
 	#ifdef GMQCC
-		#define QCC_SUPPORT_NIL
+/*qc2rust::define::QCC_SUPPORT_NIL*/
+#define QCC_SUPPORT_NIL /*qc2rust::macro_begin::QCC_SUPPORT_NIL*/ /*qc2rust::macro_end::QCC_SUPPORT_NIL*/
 	#endif
 #endif
 
 #ifndef QCC_SUPPORT_ERASEABLE
 	#ifdef GMQCC
-		#define QCC_SUPPORT_ERASEABLE
+/*qc2rust::define::QCC_SUPPORT_ERASEABLE*/
+#define QCC_SUPPORT_ERASEABLE /*qc2rust::macro_begin::QCC_SUPPORT_ERASEABLE*/ /*qc2rust::macro_end::QCC_SUPPORT_ERASEABLE*/
 	#endif
 #endif
 
 #ifndef QCC_SUPPORT_ALIAS
 	#ifdef GMQCC
-		#define QCC_SUPPORT_ALIAS
+/*qc2rust::define::QCC_SUPPORT_ALIAS*/
+#define QCC_SUPPORT_ALIAS /*qc2rust::macro_begin::QCC_SUPPORT_ALIAS*/ /*qc2rust::macro_end::QCC_SUPPORT_ALIAS*/
 	#endif
 #endif
 
 #ifndef QCC_SUPPORT_POW
     #ifdef GMQCC
-        #define QCC_SUPPORT_POW
+/*qc2rust::define::QCC_SUPPORT_POW*/
+#define QCC_SUPPORT_POW /*qc2rust::macro_begin::QCC_SUPPORT_POW*/ /*qc2rust::macro_end::QCC_SUPPORT_POW*/
     #endif
 #endif
 
 #ifdef GMQCC
-    #define LABEL(id) :id
+/*qc2rust::define::LABEL*/
+#define LABEL(id) /*qc2rust::macro_begin::LABEL*/: /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/ /*qc2rust::macro_end::LABEL*/
 #else
-    #define LABEL(id) id:
+/*qc2rust::define::LABEL*/
+#define LABEL(id) /*qc2rust::macro_begin::LABEL*/ /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/: /*qc2rust::macro_end::LABEL*/
 #endif

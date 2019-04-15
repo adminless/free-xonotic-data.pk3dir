@@ -94,19 +94,16 @@ float CheatsAllowed(entity this, float i, int argc, float fr) // the cheat gets 
 	return 0;
 }
 
-#define BEGIN_CHEAT_FUNCTION() \
-	float cheating = 0, attempting = 0
-#define DID_CHEAT() \
-	++cheating
-#define ADD_CHEATS(e,n) \
-	cheatcount_total += n; \
-	e.cheatcount += n
-#define END_CHEAT_FUNCTION() \
-	ADD_CHEATS(this, cheating); \
-	return attempting
-#define IS_CHEAT(ent,i,argc,fr) \
-	if((++attempting, !CheatsAllowed(ent,i,argc,fr))) \
-		break
+/*qc2rust::define::BEGIN_CHEAT_FUNCTION*/
+#define BEGIN_CHEAT_FUNCTION() /*qc2rust::macro_begin::BEGIN_CHEAT_FUNCTION*/float cheating = 0, attempting = 0 /*qc2rust::macro_end::BEGIN_CHEAT_FUNCTION*/
+/*qc2rust::define::DID_CHEAT*/
+#define DID_CHEAT() /*qc2rust::macro_begin::DID_CHEAT*/++cheating /*qc2rust::macro_end::DID_CHEAT*/
+/*qc2rust::define::ADD_CHEATS*/
+#define ADD_CHEATS(e,n) /*qc2rust::macro_begin::ADD_CHEATS*/cheatcount_total +=  /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/; 	 /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/.cheatcount +=  /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/ /*qc2rust::macro_end::ADD_CHEATS*/
+/*qc2rust::define::END_CHEAT_FUNCTION*/
+#define END_CHEAT_FUNCTION() /*qc2rust::macro_begin::END_CHEAT_FUNCTION*/ADD_CHEATS(this, cheating); 	return attempting /*qc2rust::macro_end::END_CHEAT_FUNCTION*/
+/*qc2rust::define::IS_CHEAT*/
+#define IS_CHEAT(ent,i,argc,fr) /*qc2rust::macro_begin::IS_CHEAT*/if((++attempting, !CheatsAllowed( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/, /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, /*qc2rust::param_begin::argc*/argc /*qc2rust::param_end::argc*/, /*qc2rust::param_begin::fr*/fr /*qc2rust::param_end::fr*/))) 		break /*qc2rust::macro_end::IS_CHEAT*/
 
 float num_autoscreenshot;
 void info_autoscreenshot_findtarget(entity this)

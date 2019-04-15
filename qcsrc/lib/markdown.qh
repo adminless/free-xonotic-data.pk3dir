@@ -44,12 +44,8 @@ string markdown(string s)
 
 TEST(Markdown, LineWrap)
 {
-	#define X(expect, in) MACRO_BEGIN \
-		string out = markdown(in); \
-		EXPECT_TRUE(expect == out); \
-		LOG_INFO(expect); \
-		LOG_INFO(out); \
-	MACRO_END
+/*qc2rust::define::X*/
+#define X(expect,in) /*qc2rust::macro_begin::X*/MACRO_BEGIN 		string out = markdown( /*qc2rust::param_begin::in*/in /*qc2rust::param_end::in*/); 		EXPECT_TRUE( /*qc2rust::param_begin::expect*/expect /*qc2rust::param_end::expect*/ == out); 		LOG_INFO( /*qc2rust::param_begin::expect*/expect /*qc2rust::param_end::expect*/); 		LOG_INFO(out); 	MACRO_END /*qc2rust::macro_end::X*/
 
 	// identity
 	X("lorem ipsum", "lorem ipsum");

@@ -464,11 +464,16 @@ NET_HANDLE(debug_text_3d, bool is_new) {
 #ifdef SVQC
 
 // can't use autocvars because they give unused warning unless the macros are expanded
-#define debug_text_3d(...) EVAL(OVERLOAD(debug_text_3d, __VA_ARGS__))
-#define debug_text_3d_2(pos, msg) debug_text_3d_3(pos, msg, cvar("debug_text_3d_default_align"))
-#define debug_text_3d_3(pos, msg, align) debug_text_3d_4(pos, msg, align, cvar("debug_text_3d_default_duration"))
-#define debug_text_3d_4(pos, msg, align, dur) debug_text_3d_5(pos, msg, align, dur, stov(cvar_string("debug_text_3d_default_velocity")))
-#define debug_text_3d_5(pos, msg, align, dur, vel) debug_text_3d_fn(pos, msg, align, dur, vel)
+/*qc2rust::define::debug_text_3d*/
+#define debug_text_3d(...) /*qc2rust::macro_begin::debug_text_3d*/EVAL(OVERLOAD(debug_text_3d,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::debug_text_3d*/
+/*qc2rust::define::debug_text_3d_2*/
+#define debug_text_3d_2(pos,msg) /*qc2rust::macro_begin::debug_text_3d_2*/debug_text_3d_3( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/,  /*qc2rust::param_begin::msg*/msg /*qc2rust::param_end::msg*/, cvar("debug_text_3d_default_align")) /*qc2rust::macro_end::debug_text_3d_2*/
+/*qc2rust::define::debug_text_3d_3*/
+#define debug_text_3d_3(pos,msg,align) /*qc2rust::macro_begin::debug_text_3d_3*/debug_text_3d_4( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/,  /*qc2rust::param_begin::msg*/msg /*qc2rust::param_end::msg*/,  /*qc2rust::param_begin::align*/align /*qc2rust::param_end::align*/, cvar("debug_text_3d_default_duration")) /*qc2rust::macro_end::debug_text_3d_3*/
+/*qc2rust::define::debug_text_3d_4*/
+#define debug_text_3d_4(pos,msg,align,dur) /*qc2rust::macro_begin::debug_text_3d_4*/debug_text_3d_5( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/,  /*qc2rust::param_begin::msg*/msg /*qc2rust::param_end::msg*/,  /*qc2rust::param_begin::align*/align /*qc2rust::param_end::align*/,  /*qc2rust::param_begin::dur*/dur /*qc2rust::param_end::dur*/, stov(cvar_string("debug_text_3d_default_velocity"))) /*qc2rust::macro_end::debug_text_3d_4*/
+/*qc2rust::define::debug_text_3d_5*/
+#define debug_text_3d_5(pos,msg,align,dur,vel) /*qc2rust::macro_begin::debug_text_3d_5*/debug_text_3d_fn( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/,  /*qc2rust::param_begin::msg*/msg /*qc2rust::param_end::msg*/,  /*qc2rust::param_begin::align*/align /*qc2rust::param_end::align*/,  /*qc2rust::param_begin::dur*/dur /*qc2rust::param_end::dur*/,  /*qc2rust::param_begin::vel*/vel /*qc2rust::param_end::vel*/) /*qc2rust::macro_end::debug_text_3d_5*/
 
 ERASEABLE
 void debug_text_3d_fn(vector pos, string msg, float align, float duration, vector vel) {

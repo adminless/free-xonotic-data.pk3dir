@@ -4,10 +4,14 @@ AUTOCVAR(sv_damagetext, int, 2, "<= 0: disabled, >= 1: visible to spectators, >=
 
 REGISTER_MUTATOR(damagetext, true);
 
-#define SV_DAMAGETEXT_DISABLED()        (autocvar_sv_damagetext <= 0)
-#define SV_DAMAGETEXT_SPECTATORS_ONLY() (autocvar_sv_damagetext >= 1)
-#define SV_DAMAGETEXT_PLAYERS()         (autocvar_sv_damagetext >= 2)
-#define SV_DAMAGETEXT_ALL()             (autocvar_sv_damagetext >= 3)
+/*qc2rust::define::SV_DAMAGETEXT_DISABLED*/
+#define SV_DAMAGETEXT_DISABLED() /*qc2rust::macro_begin::SV_DAMAGETEXT_DISABLED*/(autocvar_sv_damagetext <= 0) /*qc2rust::macro_end::SV_DAMAGETEXT_DISABLED*/
+/*qc2rust::define::SV_DAMAGETEXT_SPECTATORS_ONLY*/
+#define SV_DAMAGETEXT_SPECTATORS_ONLY() /*qc2rust::macro_begin::SV_DAMAGETEXT_SPECTATORS_ONLY*/(autocvar_sv_damagetext >= 1) /*qc2rust::macro_end::SV_DAMAGETEXT_SPECTATORS_ONLY*/
+/*qc2rust::define::SV_DAMAGETEXT_PLAYERS*/
+#define SV_DAMAGETEXT_PLAYERS() /*qc2rust::macro_begin::SV_DAMAGETEXT_PLAYERS*/(autocvar_sv_damagetext >= 2) /*qc2rust::macro_end::SV_DAMAGETEXT_PLAYERS*/
+/*qc2rust::define::SV_DAMAGETEXT_ALL*/
+#define SV_DAMAGETEXT_ALL() /*qc2rust::macro_begin::SV_DAMAGETEXT_ALL*/(autocvar_sv_damagetext >= 3) /*qc2rust::macro_end::SV_DAMAGETEXT_ALL*/
 MUTATOR_HOOKFUNCTION(damagetext, PlayerDamaged) {
     if (SV_DAMAGETEXT_DISABLED()) return;
     entity attacker = M_ARGV(0, entity);

@@ -1,19 +1,18 @@
 #pragma once
 
-#define particleeffectnum(e) \
-	_particleeffectnum(e.eent_eff_name)
+/*qc2rust::define::particleeffectnum*/
+#define particleeffectnum(e) /*qc2rust::macro_begin::particleeffectnum*/_particleeffectnum( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/.eent_eff_name) /*qc2rust::macro_end::particleeffectnum*/
 
 #if defined(SVQC)
-	#define pointparticles(effect, org, vel, howmany) \
-		Send_Effect(effect, org, vel, howmany)
-	#define trailparticles(e, effect, org, vel) \
-		((!e) ? Send_Effect(effect, org, vel, 0) \
-		: __trailparticles(e, particleeffectnum(effect), org, vel))
+/*qc2rust::define::pointparticles*/
+#define pointparticles(effect,org,vel,howmany) /*qc2rust::macro_begin::pointparticles*/Send_Effect( /*qc2rust::param_begin::effect*/effect /*qc2rust::param_end::effect*/,  /*qc2rust::param_begin::org*/org /*qc2rust::param_end::org*/,  /*qc2rust::param_begin::vel*/vel /*qc2rust::param_end::vel*/,  /*qc2rust::param_begin::howmany*/howmany /*qc2rust::param_end::howmany*/) /*qc2rust::macro_end::pointparticles*/
+/*qc2rust::define::trailparticles*/
+#define trailparticles(e,effect,org,vel) /*qc2rust::macro_begin::trailparticles*/((! /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) ? Send_Effect( /*qc2rust::param_begin::effect*/effect /*qc2rust::param_end::effect*/,  /*qc2rust::param_begin::org*/org /*qc2rust::param_end::org*/,  /*qc2rust::param_begin::vel*/vel /*qc2rust::param_end::vel*/, 0) 		: __trailparticles( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/, particleeffectnum( /*qc2rust::param_begin::effect*/effect /*qc2rust::param_end::effect*/),  /*qc2rust::param_begin::org*/org /*qc2rust::param_end::org*/,  /*qc2rust::param_begin::vel*/vel /*qc2rust::param_end::vel*/)) /*qc2rust::macro_end::trailparticles*/
 #elif defined(CSQC)
-	#define pointparticles(effect, org, vel, howmany) \
-		__pointparticles(particleeffectnum(effect), org, vel, howmany)
-	#define trailparticles(e, effect, org, vel) \
-		__trailparticles(e, particleeffectnum(effect), org, vel)
+/*qc2rust::define::pointparticles*/
+#define pointparticles(effect,org,vel,howmany) /*qc2rust::macro_begin::pointparticles*/__pointparticles(particleeffectnum( /*qc2rust::param_begin::effect*/effect /*qc2rust::param_end::effect*/),  /*qc2rust::param_begin::org*/org /*qc2rust::param_end::org*/,  /*qc2rust::param_begin::vel*/vel /*qc2rust::param_end::vel*/,  /*qc2rust::param_begin::howmany*/howmany /*qc2rust::param_end::howmany*/) /*qc2rust::macro_end::pointparticles*/
+/*qc2rust::define::trailparticles*/
+#define trailparticles(e,effect,org,vel) /*qc2rust::macro_begin::trailparticles*/__trailparticles( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/, particleeffectnum( /*qc2rust::param_begin::effect*/effect /*qc2rust::param_end::effect*/),  /*qc2rust::param_begin::org*/org /*qc2rust::param_end::org*/,  /*qc2rust::param_begin::vel*/vel /*qc2rust::param_end::vel*/) /*qc2rust::macro_end::trailparticles*/
 #endif
 
 .int m_id;

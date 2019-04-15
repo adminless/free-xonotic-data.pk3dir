@@ -101,10 +101,12 @@ CLASS(Gametype, Object)
 ENDCLASS(Gametype)
 
 REGISTRY(Gametypes, 24)
-#define Gametypes_from(i) _Gametypes_from(i, NULL)
+/*qc2rust::define::Gametypes_from*/
+#define Gametypes_from(i) /*qc2rust::macro_begin::Gametypes_from*/_Gametypes_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NULL) /*qc2rust::macro_end::Gametypes_from*/
 REGISTER_REGISTRY(Gametypes)
 REGISTRY_CHECK(Gametypes)
-#define REGISTER_GAMETYPE(NAME, inst) REGISTER(Gametypes, MAPINFO_TYPE, NAME, m_id, inst)
+/*qc2rust::define::REGISTER_GAMETYPE*/
+#define REGISTER_GAMETYPE(NAME,inst) /*qc2rust::macro_begin::REGISTER_GAMETYPE*/REGISTER(Gametypes, MAPINFO_TYPE,  /*qc2rust::param_begin::NAME*/NAME /*qc2rust::param_end::NAME*/, m_id,  /*qc2rust::param_begin::inst*/inst /*qc2rust::param_end::inst*/) /*qc2rust::macro_end::REGISTER_GAMETYPE*/
 
 #define IS_GAMETYPE(NAME) (MapInfo_LoadedGametype == MAPINFO_TYPE_##NAME)
 
@@ -180,7 +182,8 @@ CLASS(Race, Gametype)
     ATTRIB(Race, m_legacydefaults, string, "20 5 7 15 0");
 ENDCLASS(Race)
 REGISTER_GAMETYPE(RACE, NEW(Race));
-#define g_race IS_GAMETYPE(RACE)
+/*qc2rust::define::g_race*/
+#define g_race /*qc2rust::macro_begin::g_race*/IS_GAMETYPE(RACE) /*qc2rust::macro_end::g_race*/
 
 CLASS(RaceCTS, Gametype)
     INIT(RaceCTS)
@@ -210,7 +213,8 @@ CLASS(RaceCTS, Gametype)
     ATTRIB(RaceCTS, m_legacydefaults, string, "20 0 0");
 ENDCLASS(RaceCTS)
 REGISTER_GAMETYPE(CTS, NEW(RaceCTS));
-#define g_cts IS_GAMETYPE(CTS)
+/*qc2rust::define::g_cts*/
+#define g_cts /*qc2rust::macro_begin::g_cts*/IS_GAMETYPE(CTS) /*qc2rust::macro_end::g_cts*/
 
 CLASS(TeamDeathmatch, Gametype)
     INIT(TeamDeathmatch)
@@ -258,7 +262,8 @@ CLASS(TeamDeathmatch, Gametype)
     ATTRIB(TeamDeathmatch, m_legacydefaults, string, "50 20 2 0");
 ENDCLASS(TeamDeathmatch)
 REGISTER_GAMETYPE(TEAM_DEATHMATCH, NEW(TeamDeathmatch));
-#define g_tdm IS_GAMETYPE(TEAM_DEATHMATCH)
+/*qc2rust::define::g_tdm*/
+#define g_tdm /*qc2rust::macro_begin::g_tdm*/IS_GAMETYPE(TEAM_DEATHMATCH) /*qc2rust::macro_end::g_tdm*/
 
 #ifdef CSQC
 void HUD_Mod_CTF(vector pos, vector mySize);
@@ -294,7 +299,8 @@ CLASS(CaptureTheFlag, Gametype)
     ATTRIB(CaptureTheFlag, m_legacydefaults, string, "300 20 10 0");
 ENDCLASS(CaptureTheFlag)
 REGISTER_GAMETYPE(CTF, NEW(CaptureTheFlag));
-#define g_ctf IS_GAMETYPE(CTF)
+/*qc2rust::define::g_ctf*/
+#define g_ctf /*qc2rust::macro_begin::g_ctf*/IS_GAMETYPE(CTF) /*qc2rust::macro_end::g_ctf*/
 
 #ifdef CSQC
 void HUD_Mod_CA(vector pos, vector mySize);
@@ -338,7 +344,8 @@ CLASS(ClanArena, Gametype)
     ATTRIB(ClanArena, m_legacydefaults, string, "10 20 0");
 ENDCLASS(ClanArena)
 REGISTER_GAMETYPE(CA, NEW(ClanArena));
-#define g_ca IS_GAMETYPE(CA)
+/*qc2rust::define::g_ca*/
+#define g_ca /*qc2rust::macro_begin::g_ca*/IS_GAMETYPE(CA) /*qc2rust::macro_end::g_ca*/
 
 #ifdef CSQC
 void HUD_Mod_Dom(vector pos, vector mySize);
@@ -443,7 +450,8 @@ CLASS(Assault, Gametype)
     ATTRIB(Assault, m_legacydefaults, string, "20 0");
 ENDCLASS(Assault)
 REGISTER_GAMETYPE(ASSAULT, NEW(Assault));
-#define g_assault IS_GAMETYPE(ASSAULT)
+/*qc2rust::define::g_assault*/
+#define g_assault /*qc2rust::macro_begin::g_assault*/IS_GAMETYPE(ASSAULT) /*qc2rust::macro_end::g_assault*/
 
 CLASS(Onslaught, Gametype)
     INIT(Onslaught)
@@ -492,7 +500,8 @@ CLASS(NexBall, Gametype)
     ATTRIB(NexBall, m_legacydefaults, string, "5 20 0");
 ENDCLASS(NexBall)
 REGISTER_GAMETYPE(NEXBALL, NEW(NexBall));
-#define g_nexball IS_GAMETYPE(NEXBALL)
+/*qc2rust::define::g_nexball*/
+#define g_nexball /*qc2rust::macro_begin::g_nexball*/IS_GAMETYPE(NEXBALL) /*qc2rust::macro_end::g_nexball*/
 
 CLASS(FreezeTag, Gametype)
     INIT(FreezeTag)
@@ -533,7 +542,8 @@ CLASS(FreezeTag, Gametype)
     ATTRIB(FreezeTag, m_legacydefaults, string, "10 20 0");
 ENDCLASS(FreezeTag)
 REGISTER_GAMETYPE(FREEZETAG, NEW(FreezeTag));
-#define g_freezetag IS_GAMETYPE(FREEZETAG)
+/*qc2rust::define::g_freezetag*/
+#define g_freezetag /*qc2rust::macro_begin::g_freezetag*/IS_GAMETYPE(FREEZETAG) /*qc2rust::macro_end::g_freezetag*/
 
 #ifdef CSQC
 void HUD_Mod_Keepaway(vector pos, vector mySize);
@@ -602,7 +612,8 @@ CLASS(Duel, Gametype)
     }
 ENDCLASS(Duel)
 REGISTER_GAMETYPE(DUEL, NEW(Duel));
-#define g_duel IS_GAMETYPE(DUEL)
+/*qc2rust::define::g_duel*/
+#define g_duel /*qc2rust::macro_begin::g_duel*/IS_GAMETYPE(DUEL) /*qc2rust::macro_end::g_duel*/
 
 const int MAPINFO_FEATURE_WEAPONS       = 1; // not defined for instagib-only maps
 const int MAPINFO_FEATURE_VEHICLES      = 2;
@@ -673,5 +684,7 @@ void MapInfo_ClearTemps(); // call this when done with mapinfo for this frame
 
 void MapInfo_Shutdown(); // call this in the shutdown handler
 
-#define MAPINFO_SETTEMP_ACL_USER cvar_string("g_mapinfo_settemp_acl")
-#define MAPINFO_SETTEMP_ACL_SYSTEM "-g_mapinfo_* -rcon_* -_* -g_ban* -r_water +*"
+/*qc2rust::define::MAPINFO_SETTEMP_ACL_USER*/
+#define MAPINFO_SETTEMP_ACL_USER /*qc2rust::macro_begin::MAPINFO_SETTEMP_ACL_USER*/cvar_string("g_mapinfo_settemp_acl") /*qc2rust::macro_end::MAPINFO_SETTEMP_ACL_USER*/
+/*qc2rust::define::MAPINFO_SETTEMP_ACL_SYSTEM*/
+#define MAPINFO_SETTEMP_ACL_SYSTEM /*qc2rust::macro_begin::MAPINFO_SETTEMP_ACL_SYSTEM*/"-g_mapinfo_* -rcon_* -_* -g_ban* -r_water +*" /*qc2rust::macro_end::MAPINFO_SETTEMP_ACL_SYSTEM*/

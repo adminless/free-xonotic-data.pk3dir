@@ -891,8 +891,10 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerPreThink)
 		player.buff_medic_healtime = time + autocvar_g_buffs_medic_heal_delay;
 	}
 
-#define BUFF_ONADD(b) if ( (STAT(BUFFS, player) & (b).m_itemid) && !(player.oldbuffs & (b).m_itemid))
-#define BUFF_ONREM(b) if (!(STAT(BUFFS, player) & (b).m_itemid) &&  (player.oldbuffs & (b).m_itemid))
+/*qc2rust::define::BUFF_ONADD*/
+#define BUFF_ONADD(b) /*qc2rust::macro_begin::BUFF_ONADD*/if ( (STAT(BUFFS, player) & ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/).m_itemid) && !(player.oldbuffs & ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/).m_itemid)) /*qc2rust::macro_end::BUFF_ONADD*/
+/*qc2rust::define::BUFF_ONREM*/
+#define BUFF_ONREM(b) /*qc2rust::macro_begin::BUFF_ONREM*/if (!(STAT(BUFFS, player) & ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/).m_itemid) &&  (player.oldbuffs & ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/).m_itemid)) /*qc2rust::macro_end::BUFF_ONREM*/
 
 	if(STAT(BUFFS, player) != player.oldbuffs)
 	{

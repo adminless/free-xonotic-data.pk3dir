@@ -11,9 +11,11 @@
 
 bool autocvar_g_mapinfo_ignore_warnings;
 #ifdef MENUQC
-#define WARN_COND (!autocvar_g_mapinfo_ignore_warnings)
+/*qc2rust::define::WARN_COND*/
+#define WARN_COND /*qc2rust::macro_begin::WARN_COND*/(!autocvar_g_mapinfo_ignore_warnings) /*qc2rust::macro_end::WARN_COND*/
 #else
-#define WARN_COND (!autocvar_g_mapinfo_ignore_warnings && MapInfo_Map_bspname == mi_shortname)
+/*qc2rust::define::WARN_COND*/
+#define WARN_COND /*qc2rust::macro_begin::WARN_COND*/(!autocvar_g_mapinfo_ignore_warnings && MapInfo_Map_bspname == mi_shortname) /*qc2rust::macro_end::WARN_COND*/
 #endif
 
 // generic string stuff

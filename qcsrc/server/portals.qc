@@ -17,7 +17,8 @@
 #include "../common/vehicles/vehicle.qh"
 #include "../common/vehicles/sv_vehicles.qh"
 
-#define PORTALS_ARE_NOT_SOLID
+/*qc2rust::define::PORTALS_ARE_NOT_SOLID*/
+#define PORTALS_ARE_NOT_SOLID /*qc2rust::macro_begin::PORTALS_ARE_NOT_SOLID*/ /*qc2rust::macro_end::PORTALS_ARE_NOT_SOLID*/
 
 const vector SAFENUDGE = '1 1 1';
 const vector SAFERNUDGE = '8 8 8';

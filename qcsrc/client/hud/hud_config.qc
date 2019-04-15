@@ -7,9 +7,12 @@
 #include <client/miscfunctions.qh>
 #include <client/view.qh>
 
-#define HUD_Write(s) fputs(fh, s)
-#define HUD_Write_Cvar(cvar) HUD_Write(strcat("seta ", cvar, " \"", cvar_string(cvar), "\"\n"))
-#define HUD_Write_PanelCvar(cvar_suf) str = strcat("hud_panel_", panel.panel_name, cvar_suf), HUD_Write_Cvar(str)
+/*qc2rust::define::HUD_Write*/
+#define HUD_Write(s) /*qc2rust::macro_begin::HUD_Write*/fputs(fh,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::HUD_Write*/
+/*qc2rust::define::HUD_Write_Cvar*/
+#define HUD_Write_Cvar(cvar) /*qc2rust::macro_begin::HUD_Write_Cvar*/HUD_Write(strcat("seta ",  /*qc2rust::param_begin::cvar*/cvar /*qc2rust::param_end::cvar*/, " \"", cvar_string( /*qc2rust::param_begin::cvar*/cvar /*qc2rust::param_end::cvar*/), "\"\n")) /*qc2rust::macro_end::HUD_Write_Cvar*/
+/*qc2rust::define::HUD_Write_PanelCvar*/
+#define HUD_Write_PanelCvar(cvar_suf) /*qc2rust::macro_begin::HUD_Write_PanelCvar*/str = strcat("hud_panel_", panel.panel_name,  /*qc2rust::param_begin::cvar_suf*/cvar_suf /*qc2rust::param_end::cvar_suf*/), HUD_Write_Cvar(str) /*qc2rust::macro_end::HUD_Write_PanelCvar*/
 // Save the config
 void HUD_Panel_ExportCfg(string cfgname)
 {

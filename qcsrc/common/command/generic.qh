@@ -22,16 +22,21 @@ float GenericCommand(string command);
 
 // Returns command prefix specific for whatever program it is compiled in
 #ifdef SVQC
-	#define GetProgramCommandPrefix() "sv_cmd"
+/*qc2rust::define::GetProgramCommandPrefix*/
+#define GetProgramCommandPrefix() /*qc2rust::macro_begin::GetProgramCommandPrefix*/"sv_cmd" /*qc2rust::macro_end::GetProgramCommandPrefix*/
 #elif defined(CSQC)
-	#define GetProgramCommandPrefix() "cl_cmd"
+/*qc2rust::define::GetProgramCommandPrefix*/
+#define GetProgramCommandPrefix() /*qc2rust::macro_begin::GetProgramCommandPrefix*/"cl_cmd" /*qc2rust::macro_end::GetProgramCommandPrefix*/
 #elif defined(MENUQC)
-	#define GetProgramCommandPrefix() "menu_cmd"
+/*qc2rust::define::GetProgramCommandPrefix*/
+#define GetProgramCommandPrefix() /*qc2rust::macro_begin::GetProgramCommandPrefix*/"menu_cmd" /*qc2rust::macro_end::GetProgramCommandPrefix*/
 #endif
 
 // used by common/command/generic.qc:GenericCommand_dumpcommands to list all commands into a .txt file
-#define CMD_Write(s) fputs(fh, s)
-#define CMD_Write_Alias(execute,command,description) CMD_Write(sprintf("alias %-20s \"%-13s %-20s ${* ?}\" // %s\n", command, execute, command, description))
+/*qc2rust::define::CMD_Write*/
+#define CMD_Write(s) /*qc2rust::macro_begin::CMD_Write*/fputs(fh,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::CMD_Write*/
+/*qc2rust::define::CMD_Write_Alias*/
+#define CMD_Write_Alias(execute,command,description) /*qc2rust::macro_begin::CMD_Write_Alias*/CMD_Write(sprintf("alias %-20s \"%-13s %-20s ${* ?}\" // %s\n",  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/,  /*qc2rust::param_begin::execute*/execute /*qc2rust::param_end::execute*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/,  /*qc2rust::param_begin::description*/description /*qc2rust::param_end::description*/)) /*qc2rust::macro_end::CMD_Write_Alias*/
 void GenericCommand_macro_write_aliases(float fh);
 
 void Curl_URI_Get_Callback(int id, float status, string data);

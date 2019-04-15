@@ -546,8 +546,10 @@ float(string s) tokenize_console = #514;
 float(float i) argv_start_index = #515;
 float(float i) argv_end_index = #516;
 string(float, float) getgamedirinfo = #626;
-#define GETGAMEDIRINFO_NAME 0
-#define GETGAMEDIRINFO_DESCRIPTION 1
+/*qc2rust::define::GETGAMEDIRINFO_NAME*/
+#define GETGAMEDIRINFO_NAME /*qc2rust::macro_begin::GETGAMEDIRINFO_NAME*/0 /*qc2rust::macro_end::GETGAMEDIRINFO_NAME*/
+/*qc2rust::define::GETGAMEDIRINFO_DESCRIPTION*/
+#define GETGAMEDIRINFO_DESCRIPTION /*qc2rust::macro_begin::GETGAMEDIRINFO_DESCRIPTION*/1 /*qc2rust::macro_end::GETGAMEDIRINFO_DESCRIPTION*/
 float log(float f) = #532;
 string(string format, ...) sprintf = #627;
 string(string s) strdecolorize = #477;

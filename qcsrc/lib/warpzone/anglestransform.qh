@@ -1,15 +1,19 @@
 #pragma once
 
 #ifndef POSITIVE_PITCH_IS_DOWN
-#define POSITIVE_PITCH_IS_DOWN 1
+/*qc2rust::define::POSITIVE_PITCH_IS_DOWN*/
+#define POSITIVE_PITCH_IS_DOWN /*qc2rust::macro_begin::POSITIVE_PITCH_IS_DOWN*/1 /*qc2rust::macro_end::POSITIVE_PITCH_IS_DOWN*/
 #endif
 
 #if POSITIVE_PITCH_IS_DOWN
-    #define fixedmakevectors makevectors
+/*qc2rust::define::fixedmakevectors*/
+#define fixedmakevectors /*qc2rust::macro_begin::fixedmakevectors*/makevectors /*qc2rust::macro_end::fixedmakevectors*/
     noref vector _fixedvectoangles;
-    #define fixedvectoangles(a) (_fixedvectoangles = vectoangles(a), _fixedvectoangles.x *= -1, _fixedvectoangles)
+/*qc2rust::define::fixedvectoangles*/
+#define fixedvectoangles(a) /*qc2rust::macro_begin::fixedvectoangles*/(_fixedvectoangles = vectoangles( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/), _fixedvectoangles.x *= -1, _fixedvectoangles) /*qc2rust::macro_end::fixedvectoangles*/
     noref vector _fixedvectoangles2;
-    #define fixedvectoangles2(a, b) (_fixedvectoangles2 = vectoangles2(a, b), _fixedvectoangles2.x *= -1, _fixedvectoangles2)
+/*qc2rust::define::fixedvectoangles2*/
+#define fixedvectoangles2(a,b) /*qc2rust::macro_begin::fixedvectoangles2*/(_fixedvectoangles2 = vectoangles2( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/,  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/), _fixedvectoangles2.x *= -1, _fixedvectoangles2) /*qc2rust::macro_end::fixedvectoangles2*/
 #else
     void fixedmakevectors(vector a)
     {
@@ -17,8 +21,10 @@
         a.x = -a.x;
         makevectors(a);
     }
-    #define fixedvectoangles2 vectoangles2
-    #define fixedvectoangles vectoangles
+/*qc2rust::define::fixedvectoangles2*/
+#define fixedvectoangles2 /*qc2rust::macro_begin::fixedvectoangles2*/vectoangles2 /*qc2rust::macro_end::fixedvectoangles2*/
+/*qc2rust::define::fixedvectoangles*/
+#define fixedvectoangles /*qc2rust::macro_begin::fixedvectoangles*/vectoangles /*qc2rust::macro_end::fixedvectoangles*/
 #endif
 
 vector AnglesTransform_Apply(vector transform, vector v);

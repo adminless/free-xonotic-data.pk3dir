@@ -1,9 +1,7 @@
 #pragma once
 
 #define reinterpret_cast(T, it) _unsafe_cast_##T(0, it)
-#define X(T) \
-    T _unsafe_cast_##T(int dummy, ...) { return ...(0, T); } \
-    USING(T##_fld, .T); T##_fld _unsafe_cast_##T##_fld(int dummy, ...) { return ...(0, T##_fld); }
+#define X(T)     T _unsafe_cast_##T(int dummy, ...) { return ...(0, T); }     USING(T##_fld, .T); T##_fld _unsafe_cast_##T##_fld(int dummy, ...) { return ...(0, T##_fld); }
 X(bool)
 X(int)
 X(float)
@@ -14,14 +12,18 @@ USING(rawfunc, float(...));
 X(rawfunc)
 #undef X
 
-#define _strid(s) ITOF(reinterpret_cast(int, s))
-#define strid(s) stof(sprintf("%i", s))
+/*qc2rust::define::_strid*/
+#define _strid(s) /*qc2rust::macro_begin::_strid*/ITOF(reinterpret_cast(int,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/)) /*qc2rust::macro_end::_strid*/
+/*qc2rust::define::strid*/
+#define strid(s) /*qc2rust::macro_begin::strid*/stof(sprintf("%i",  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/)) /*qc2rust::macro_end::strid*/
 
 .int _unsafe_fld1, _unsafe_fld2;
 int INTEGER_ONE;
 
-#define FTOI(f) ((f) * INTEGER_ONE)
-#define ITOF(i) ((i) / INTEGER_ONE)
+/*qc2rust::define::FTOI*/
+#define FTOI(f) /*qc2rust::macro_begin::FTOI*/(( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) * INTEGER_ONE) /*qc2rust::macro_end::FTOI*/
+/*qc2rust::define::ITOF*/
+#define ITOF(i) /*qc2rust::macro_begin::ITOF*/(( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/) / INTEGER_ONE) /*qc2rust::macro_end::ITOF*/
 
 STATIC_INIT(INTEGER_ONE)
 {

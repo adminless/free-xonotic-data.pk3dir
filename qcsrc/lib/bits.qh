@@ -5,12 +5,16 @@
 /// Only ever assign into the first 24 bits in QC (so max is BIT(23)).
 /// QC converts the float to int, performs the bit operation, then converts it back.
 /// Assigning to the highest bits means some of the low ones might get lost due to float precision.
-#define BIT(n) (1 << (n))
-#define BITS(n) (BIT(n) - 1)
+/*qc2rust::define::BIT*/
+#define BIT(n) /*qc2rust::macro_begin::BIT*/(1 << ( /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/)) /*qc2rust::macro_end::BIT*/
+/*qc2rust::define::BITS*/
+#define BITS(n) /*qc2rust::macro_begin::BITS*/(BIT( /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/) - 1) /*qc2rust::macro_end::BITS*/
 #ifndef BRANCHLESS_BITSET
-	#define BITSET(var, mask, flag) (flag ? (var) | (mask) : (var) & ~(mask))
+/*qc2rust::define::BITSET*/
+#define BITSET(var,mask,flag) /*qc2rust::macro_begin::BITSET*/( /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/ ? ( /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/) | ( /*qc2rust::param_begin::mask*/mask /*qc2rust::param_end::mask*/) : ( /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/) & ~( /*qc2rust::param_begin::mask*/mask /*qc2rust::param_end::mask*/)) /*qc2rust::macro_end::BITSET*/
 #else
-	#define BITSET(var, mask, flag) ((var) ^ (-(flag) ^ (var)) & (mask))
+/*qc2rust::define::BITSET*/
+#define BITSET(var,mask,flag) /*qc2rust::macro_begin::BITSET*/(( /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/) ^ (-( /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/) ^ ( /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/)) & ( /*qc2rust::param_begin::mask*/mask /*qc2rust::param_end::mask*/)) /*qc2rust::macro_end::BITSET*/
 #endif
 
 ERASEABLE

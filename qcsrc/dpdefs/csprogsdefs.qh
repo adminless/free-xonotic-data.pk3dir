@@ -2,22 +2,36 @@
 
 #pragma noref 1
 
-#define true _true
-#define false _false
-#define TRUE _TRUE
-#define FALSE _FALSE
+/*qc2rust::define::true*/
+#define true /*qc2rust::macro_begin::true*/_true /*qc2rust::macro_end::true*/
+/*qc2rust::define::false*/
+#define false /*qc2rust::macro_begin::false*/_false /*qc2rust::macro_end::false*/
+/*qc2rust::define::TRUE*/
+#define TRUE /*qc2rust::macro_begin::TRUE*/_TRUE /*qc2rust::macro_end::TRUE*/
+/*qc2rust::define::FALSE*/
+#define FALSE /*qc2rust::macro_begin::FALSE*/_FALSE /*qc2rust::macro_end::FALSE*/
 
-#define spawn _spawn
-#define particleeffectnum _particleeffectnum
-#define trailparticles __trailparticles
-#define pointparticles __pointparticles
-#define setmodel _setmodel
+/*qc2rust::define::spawn*/
+#define spawn /*qc2rust::macro_begin::spawn*/_spawn /*qc2rust::macro_end::spawn*/
+/*qc2rust::define::particleeffectnum*/
+#define particleeffectnum /*qc2rust::macro_begin::particleeffectnum*/_particleeffectnum /*qc2rust::macro_end::particleeffectnum*/
+/*qc2rust::define::trailparticles*/
+#define trailparticles /*qc2rust::macro_begin::trailparticles*/__trailparticles /*qc2rust::macro_end::trailparticles*/
+/*qc2rust::define::pointparticles*/
+#define pointparticles /*qc2rust::macro_begin::pointparticles*/__pointparticles /*qc2rust::macro_end::pointparticles*/
+/*qc2rust::define::setmodel*/
+#define setmodel /*qc2rust::macro_begin::setmodel*/_setmodel /*qc2rust::macro_end::setmodel*/
 
-#define STAT_FRAGLIMIT _STAT_FRAGLIMIT
-#define STAT_TIMELIMIT _STAT_TIMELIMIT
-#define STAT_MOVEVARS_TICRATE _STAT_MOVEVARS_TICRATE
-#define STAT_MOVEVARS_TIMESCALE _STAT_MOVEVARS_TIMESCALE
-#define STAT_MOVEVARS_GRAVITY _STAT_MOVEVARS_GRAVITY
+/*qc2rust::define::STAT_FRAGLIMIT*/
+#define STAT_FRAGLIMIT /*qc2rust::macro_begin::STAT_FRAGLIMIT*/_STAT_FRAGLIMIT /*qc2rust::macro_end::STAT_FRAGLIMIT*/
+/*qc2rust::define::STAT_TIMELIMIT*/
+#define STAT_TIMELIMIT /*qc2rust::macro_begin::STAT_TIMELIMIT*/_STAT_TIMELIMIT /*qc2rust::macro_end::STAT_TIMELIMIT*/
+/*qc2rust::define::STAT_MOVEVARS_TICRATE*/
+#define STAT_MOVEVARS_TICRATE /*qc2rust::macro_begin::STAT_MOVEVARS_TICRATE*/_STAT_MOVEVARS_TICRATE /*qc2rust::macro_end::STAT_MOVEVARS_TICRATE*/
+/*qc2rust::define::STAT_MOVEVARS_TIMESCALE*/
+#define STAT_MOVEVARS_TIMESCALE /*qc2rust::macro_begin::STAT_MOVEVARS_TIMESCALE*/_STAT_MOVEVARS_TIMESCALE /*qc2rust::macro_end::STAT_MOVEVARS_TIMESCALE*/
+/*qc2rust::define::STAT_MOVEVARS_GRAVITY*/
+#define STAT_MOVEVARS_GRAVITY /*qc2rust::macro_begin::STAT_MOVEVARS_GRAVITY*/_STAT_MOVEVARS_GRAVITY /*qc2rust::macro_end::STAT_MOVEVARS_GRAVITY*/
 
 #include "upstream/csprogsdefs.qc"
 
@@ -40,6 +54,8 @@
 
 #pragma noref 0
 
-#define use use1
+/*qc2rust::define::use*/
+#define use /*qc2rust::macro_begin::use*/use1 /*qc2rust::macro_end::use*/
 .void(entity this, entity actor, entity trigger) use;
-#define touch move_touch
+/*qc2rust::define::touch*/
+#define touch /*qc2rust::macro_begin::touch*/move_touch /*qc2rust::macro_end::touch*/

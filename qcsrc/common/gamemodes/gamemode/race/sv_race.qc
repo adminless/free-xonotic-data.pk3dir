@@ -2,7 +2,8 @@
 
 #include <server/race.qh>
 
-#define autocvar_g_race_laps_limit cvar("g_race_laps_limit")
+/*qc2rust::define::autocvar_g_race_laps_limit*/
+#define autocvar_g_race_laps_limit /*qc2rust::macro_begin::autocvar_g_race_laps_limit*/cvar("g_race_laps_limit") /*qc2rust::macro_end::autocvar_g_race_laps_limit*/
 float autocvar_g_race_qualifying_timelimit;
 float autocvar_g_race_qualifying_timelimit_override;
 int autocvar_g_race_teams;

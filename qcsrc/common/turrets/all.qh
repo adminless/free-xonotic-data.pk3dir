@@ -6,8 +6,10 @@
 #include "turret.qh"
 
 REGISTRY(Turrets, BITS(5))
-#define Turrets_from(i) _Turrets_from(i, TUR_Null)
-#define get_turretinfo(i) Turrets_from(i)
+/*qc2rust::define::Turrets_from*/
+#define Turrets_from(i) /*qc2rust::macro_begin::Turrets_from*/_Turrets_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, TUR_Null) /*qc2rust::macro_end::Turrets_from*/
+/*qc2rust::define::get_turretinfo*/
+#define get_turretinfo(i) /*qc2rust::macro_begin::get_turretinfo*/Turrets_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/) /*qc2rust::macro_end::get_turretinfo*/
 REGISTER_REGISTRY(Turrets)
 REGISTRY_CHECK(Turrets)
 
@@ -67,9 +69,11 @@ GENERIC_COMMAND(dumpturrets, "Dump all turrets into turrets_dump.txt")
 
 
 const int TUR_FIRST = 1;
-#define TUR_LAST (Turrets_COUNT - 1)
+/*qc2rust::define::TUR_LAST*/
+#define TUR_LAST /*qc2rust::macro_begin::TUR_LAST*/(Turrets_COUNT - 1) /*qc2rust::macro_end::TUR_LAST*/
 
-#define REGISTER_TURRET(id, inst) REGISTER(Turrets, TUR, id, m_id, inst)
+/*qc2rust::define::REGISTER_TURRET*/
+#define REGISTER_TURRET(id,inst) /*qc2rust::macro_begin::REGISTER_TURRET*/REGISTER(Turrets, TUR,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, m_id,  /*qc2rust::param_begin::inst*/inst /*qc2rust::param_end::inst*/) /*qc2rust::macro_end::REGISTER_TURRET*/
 
 REGISTER_TURRET(Null, NEW(Turret));
 

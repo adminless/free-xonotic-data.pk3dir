@@ -3,12 +3,14 @@
 #include "waypointsprites.qh"
 
 REGISTRY(Waypoints, BITS(7))
-#define Waypoints_from(i) _Waypoints_from(i, WP_Null)
+/*qc2rust::define::Waypoints_from*/
+#define Waypoints_from(i) /*qc2rust::macro_begin::Waypoints_from*/_Waypoints_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, WP_Null) /*qc2rust::macro_end::Waypoints_from*/
 REGISTER_REGISTRY(Waypoints)
 REGISTRY_CHECK(Waypoints)
 
 /** If you register a new waypoint, make sure to add it to all.inc */
-#define REGISTER_WAYPOINT_(id, init) REGISTER(Waypoints, WP, id, m_id, init)
+/*qc2rust::define::REGISTER_WAYPOINT_*/
+#define REGISTER_WAYPOINT_(id,init) /*qc2rust::macro_begin::REGISTER_WAYPOINT_*/REGISTER(Waypoints, WP,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, m_id,  /*qc2rust::param_begin::init*/init /*qc2rust::param_end::init*/) /*qc2rust::macro_end::REGISTER_WAYPOINT_*/
 
 CLASS(Waypoint, Object)
     ATTRIB(Waypoint, m_id, int, 0);
@@ -27,15 +29,18 @@ CLASS(Waypoint, Object)
     }
 ENDCLASS(Waypoint)
 
-#define REGISTER_WAYPOINT(id, text, icon, color, blink) REGISTER_WAYPOINT_(id, NEW(Waypoint, #id, text, icon, color, blink))
+/*qc2rust::define::REGISTER_WAYPOINT*/
+#define REGISTER_WAYPOINT(id,text,icon,color,blink) /*qc2rust::macro_begin::REGISTER_WAYPOINT*/REGISTER_WAYPOINT_( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, NEW(Waypoint,  /*qc2rust::stringify_begin::id*/#id /*qc2rust::stringify_end::id*/,  /*qc2rust::param_begin::text*/text /*qc2rust::param_end::text*/,  /*qc2rust::param_begin::icon*/icon /*qc2rust::param_end::icon*/,  /*qc2rust::param_begin::color*/color /*qc2rust::param_end::color*/,  /*qc2rust::param_begin::blink*/blink /*qc2rust::param_end::blink*/)) /*qc2rust::macro_end::REGISTER_WAYPOINT*/
 
 REGISTRY(RadarIcons, BITS(7))
-#define RadarIcons_from(i) _RadarIcons_from(i, RADARICON_NONE)
+/*qc2rust::define::RadarIcons_from*/
+#define RadarIcons_from(i) /*qc2rust::macro_begin::RadarIcons_from*/_RadarIcons_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, RADARICON_NONE) /*qc2rust::macro_end::RadarIcons_from*/
 REGISTER_REGISTRY(RadarIcons)
 REGISTRY_CHECK(RadarIcons)
 
 .int m_radaricon;
-#define REGISTER_RADARICON(id, num) REGISTER(RadarIcons, RADARICON, id, m_id, new_pure(RadarIcon)) { this.m_radaricon = num; this.netname = #id; }
+/*qc2rust::define::REGISTER_RADARICON*/
+#define REGISTER_RADARICON(id,num) /*qc2rust::macro_begin::REGISTER_RADARICON*/REGISTER(RadarIcons, RADARICON,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, m_id, new_pure(RadarIcon)) { this.m_radaricon =  /*qc2rust::param_begin::num*/num /*qc2rust::param_end::num*/; this.netname =  /*qc2rust::stringify_begin::id*/#id /*qc2rust::stringify_end::id*/; } /*qc2rust::macro_end::REGISTER_RADARICON*/
 
 REGISTER_WAYPOINT(Null, "", "", '0 0 0', 1);
 

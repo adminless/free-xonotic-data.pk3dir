@@ -2,7 +2,8 @@
 
 entityclass(Promise);
 
-#define Promise_new() Promise_new_(new_pure(Promise))
+/*qc2rust::define::Promise_new*/
+#define Promise_new() /*qc2rust::macro_begin::Promise_new*/Promise_new_(new_pure(Promise)) /*qc2rust::macro_end::Promise_new*/
 Promise Promise_new_(Promise this);
 
 /**
@@ -10,7 +11,8 @@ Promise Promise_new_(Promise this);
  */
 void Promise_resolve(Promise this);
 
-#define Promise_then(this, handler, userdata) Promise_then_(this, Promise_new(), handler, userdata)
+/*qc2rust::define::Promise_then*/
+#define Promise_then(this,handler,userdata) /*qc2rust::macro_begin::Promise_then*/Promise_then_( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/, Promise_new(),  /*qc2rust::param_begin::handler*/handler /*qc2rust::param_end::handler*/,  /*qc2rust::param_begin::userdata*/userdata /*qc2rust::param_end::userdata*/) /*qc2rust::macro_end::Promise_then*/
 Promise Promise_then_(Promise this, Promise ret, Promise(Promise ret, entity result, entity userdata) handler, entity userdata);
 
 /**
@@ -18,7 +20,8 @@ Promise Promise_then_(Promise this, Promise ret, Promise(Promise ret, entity res
  */
 void Promise_reject(Promise this);
 
-#define Promise_catch(this, handler, userdata) Promise_catch_(this, Promise_new(), handler, userdata)
+/*qc2rust::define::Promise_catch*/
+#define Promise_catch(this,handler,userdata) /*qc2rust::macro_begin::Promise_catch*/Promise_catch_( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/, Promise_new(),  /*qc2rust::param_begin::handler*/handler /*qc2rust::param_end::handler*/,  /*qc2rust::param_begin::userdata*/userdata /*qc2rust::param_end::userdata*/) /*qc2rust::macro_end::Promise_catch*/
 Promise Promise_catch_(Promise this, Promise ret, Promise(Promise ret, entity err, entity userdata) handler, entity userdata);
 
 // utils

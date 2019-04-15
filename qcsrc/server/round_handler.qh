@@ -17,8 +17,13 @@ void round_handler_Spawn(bool() canRoundStart_func, bool() canRoundEnd_func, voi
 void round_handler_Reset(float next_think);
 void round_handler_Remove();
 
-#define round_handler_IsActive() (round_handler != NULL)
-#define round_handler_AwaitingNextRound() (round_handler.wait)
-#define round_handler_CountdownRunning() (!round_handler.wait && round_handler.cnt)
-#define round_handler_IsRoundStarted() (!round_handler.wait && !round_handler.cnt)
-#define round_handler_GetEndTime() (round_handler.round_endtime)
+/*qc2rust::define::round_handler_IsActive*/
+#define round_handler_IsActive() /*qc2rust::macro_begin::round_handler_IsActive*/(round_handler != NULL) /*qc2rust::macro_end::round_handler_IsActive*/
+/*qc2rust::define::round_handler_AwaitingNextRound*/
+#define round_handler_AwaitingNextRound() /*qc2rust::macro_begin::round_handler_AwaitingNextRound*/(round_handler.wait) /*qc2rust::macro_end::round_handler_AwaitingNextRound*/
+/*qc2rust::define::round_handler_CountdownRunning*/
+#define round_handler_CountdownRunning() /*qc2rust::macro_begin::round_handler_CountdownRunning*/(!round_handler.wait && round_handler.cnt) /*qc2rust::macro_end::round_handler_CountdownRunning*/
+/*qc2rust::define::round_handler_IsRoundStarted*/
+#define round_handler_IsRoundStarted() /*qc2rust::macro_begin::round_handler_IsRoundStarted*/(!round_handler.wait && !round_handler.cnt) /*qc2rust::macro_end::round_handler_IsRoundStarted*/
+/*qc2rust::define::round_handler_GetEndTime*/
+#define round_handler_GetEndTime() /*qc2rust::macro_begin::round_handler_GetEndTime*/(round_handler.round_endtime) /*qc2rust::macro_end::round_handler_GetEndTime*/

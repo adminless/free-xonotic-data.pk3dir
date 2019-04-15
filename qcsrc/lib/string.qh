@@ -46,19 +46,11 @@
 	}
 #endif
 
-#define strcpy(this, s) MACRO_BEGIN \
-	if (this) { \
-		strunzone(this); \
-	} \
-	this = strzone(s); \
-MACRO_END
+/*qc2rust::define::strcpy*/
+#define strcpy(this,s) /*qc2rust::macro_begin::strcpy*/MACRO_BEGIN 	if ( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/) { 		strunzone( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/); 	} 	 /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/ = strzone( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/); MACRO_END /*qc2rust::macro_end::strcpy*/
 
-#define strfree(this) MACRO_BEGIN \
-	if (this) { \
-		strunzone(this); \
-	} \
-	this = string_null; \
-MACRO_END
+/*qc2rust::define::strfree*/
+#define strfree(this) /*qc2rust::macro_begin::strfree*/MACRO_BEGIN 	if ( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/) { 		strunzone( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/); 	} 	 /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/ = string_null; MACRO_END /*qc2rust::macro_end::strfree*/
 
 ERASEABLE
 string seconds_tostring(float sec)
@@ -147,7 +139,8 @@ string CCR(string input)
 }
 #endif
 
-#define startsWith(haystack, needle) (strstrofs(haystack, needle, 0) == 0)
+/*qc2rust::define::startsWith*/
+#define startsWith(haystack,needle) /*qc2rust::macro_begin::startsWith*/(strstrofs( /*qc2rust::param_begin::haystack*/haystack /*qc2rust::param_end::haystack*/,  /*qc2rust::param_begin::needle*/needle /*qc2rust::param_end::needle*/, 0) == 0) /*qc2rust::macro_end::startsWith*/
 
 ERASEABLE
 bool startsWithNocase(string haystack, string needle)
@@ -156,7 +149,8 @@ bool startsWithNocase(string haystack, string needle)
 }
 
 noref string _endsWith_suffix;
-#define endsWith(this, suffix) (_endsWith_suffix = suffix, substring(this, -strlen(_endsWith_suffix), -1) == _endsWith_suffix)
+/*qc2rust::define::endsWith*/
+#define endsWith(this,suffix) /*qc2rust::macro_begin::endsWith*/(_endsWith_suffix =  /*qc2rust::param_begin::suffix*/suffix /*qc2rust::param_end::suffix*/, substring( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/, -strlen(_endsWith_suffix), -1) == _endsWith_suffix) /*qc2rust::macro_end::endsWith*/
 
 /** unzone the string, and return it as tempstring. Safe to be called on string_null */
 ERASEABLE
@@ -282,7 +276,8 @@ string strwords(string s, int w)
 	return substring(s, 0, endpos);
 }
 
-#define strhasword(s, w) (strstrofs(strcat(" ", s, " "), strcat(" ", w, " "), 0) >= 0)
+/*qc2rust::define::strhasword*/
+#define strhasword(s,w) /*qc2rust::macro_begin::strhasword*/(strstrofs(strcat(" ",  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/, " "), strcat(" ",  /*qc2rust::param_begin::w*/w /*qc2rust::param_end::w*/, " "), 0) >= 0) /*qc2rust::macro_end::strhasword*/
 
 ERASEABLE
 int u8_strsize(string s)
@@ -428,10 +423,15 @@ int vercmp(string v1, string v2)
 
 const string HEXDIGITS_MINSET = "0123456789ABCDEFabcdef";
 const string HEXDIGITS = "0123456789ABCDEF0123456789abcdef";
-#define HEXDIGIT_TO_DEC_RAW(d) (strstrofs(HEXDIGITS, (d), 0))
-#define HEXDIGIT_TO_DEC(d) ((HEXDIGIT_TO_DEC_RAW(d) | 0x10) - 0x10)
-#define DEC_TO_HEXDIGIT(d) (substring(HEXDIGITS_MINSET, (d), 1))
-#define IS_HEXDIGIT(d) (strstrofs(HEXDIGITS_MINSET, (d), 0) >= 0)
+/*qc2rust::define::HEXDIGIT_TO_DEC_RAW*/
+#define HEXDIGIT_TO_DEC_RAW(d) /*qc2rust::macro_begin::HEXDIGIT_TO_DEC_RAW*/(strstrofs(HEXDIGITS, ( /*qc2rust::param_begin::d*/d /*qc2rust::param_end::d*/), 0)) /*qc2rust::macro_end::HEXDIGIT_TO_DEC_RAW*/
+/*qc2rust::define::HEXDIGIT_TO_DEC*/
+#define HEXDIGIT_TO_DEC(d) /*qc2rust::macro_begin::HEXDIGIT_TO_DEC*/((HEXDIGIT_TO_DEC_RAW( /*qc2rust::param_begin::d*/d /*qc2rust::param_end::d*/) | 0x10) - 0x10) /*qc2rust::macro_end::HEXDIGIT_TO_DEC*/
+/*qc2rust::define::DEC_TO_HEXDIGIT*/
+#define DEC_TO_HEXDIGIT(d) /*qc2rust::macro_begin::DEC_TO_HEXDIGIT*/(substring(HEXDIGITS_MINSET, ( /*qc2rust::param_begin::d*/d /*qc2rust::param_end::d*/), 1)) /*qc2rust::macro_end::DEC_TO_HEXDIGIT*/
+/*qc2rust::define::IS_HEXDIGIT*/
+#define IS_HEXDIGIT(d) /*qc2rust::macro_begin::IS_HEXDIGIT*/(strstrofs(HEXDIGITS_MINSET, ( /*qc2rust::param_begin::d*/d /*qc2rust::param_end::d*/), 0) >= 0) /*qc2rust::macro_end::IS_HEXDIGIT*/
 
 const string DIGITS = "0123456789";
-#define IS_DIGIT(d) (strstrofs(DIGITS, (d), 0) >= 0)
+/*qc2rust::define::IS_DIGIT*/
+#define IS_DIGIT(d) /*qc2rust::macro_begin::IS_DIGIT*/(strstrofs(DIGITS, ( /*qc2rust::param_begin::d*/d /*qc2rust::param_end::d*/), 0) >= 0) /*qc2rust::macro_end::IS_DIGIT*/

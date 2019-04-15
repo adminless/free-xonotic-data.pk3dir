@@ -324,7 +324,8 @@ entity sandbox_ObjectPort_Load(entity this, string s, float database)
 	// now separate and apply the properties of each object
 	for(i = 0; i < n; ++i)
 	{
-		#define SANDBOX_GETARG arg = argv(++argv_num);
+/*qc2rust::define::SANDBOX_GETARG*/
+#define SANDBOX_GETARG /*qc2rust::macro_begin::SANDBOX_GETARG*/arg = argv(++argv_num); /*qc2rust::macro_end::SANDBOX_GETARG*/
 		int argv_num = -1; // starts at -1 so I don't need postincrement
 
 		string tagname = string_null;

@@ -41,7 +41,8 @@ const float WPFE_THINKRATE = 0.5;
 
 const vector FLAG_DROP_OFFSET = ('0 0 32');
 const vector FLAG_CARRY_OFFSET = ('-16 0 8');
-#define FLAG_SPAWN_OFFSET ('0 0 1' * (PL_MAX_CONST.z - 13))
+/*qc2rust::define::FLAG_SPAWN_OFFSET*/
+#define FLAG_SPAWN_OFFSET /*qc2rust::macro_begin::FLAG_SPAWN_OFFSET*/('0 0 1' * (PL_MAX_CONST.z - 13)) /*qc2rust::macro_end::FLAG_SPAWN_OFFSET*/
 const vector FLAG_WAYPOINT_OFFSET = ('0 0 64');
 const int FLAG_FLOAT_OFFSET_Z = 32;
 const int FLAG_PASS_ARC_OFFSET_Z = -10;
@@ -50,16 +51,23 @@ const vector VEHICLE_FLAG_OFFSET = ('0 0 96');
 const float VEHICLE_FLAG_SCALE = 1.0;
 
 // waypoint colors
-#define WPCOLOR_ENEMYFC(t) ((t) ? colormapPaletteColor(t - 1, false) * 0.75 : '1 1 1')
-#define WPCOLOR_FLAGCARRIER(t) ((t) ? colormapPaletteColor(t - 1, false) * 0.75 : '1 1 1')
+/*qc2rust::define::WPCOLOR_ENEMYFC*/
+#define WPCOLOR_ENEMYFC(t) /*qc2rust::macro_begin::WPCOLOR_ENEMYFC*/(( /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/) ? colormapPaletteColor( /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/ - 1, false) * 0.75 : '1 1 1') /*qc2rust::macro_end::WPCOLOR_ENEMYFC*/
+/*qc2rust::define::WPCOLOR_FLAGCARRIER*/
+#define WPCOLOR_FLAGCARRIER(t) /*qc2rust::macro_begin::WPCOLOR_FLAGCARRIER*/(( /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/) ? colormapPaletteColor( /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/ - 1, false) * 0.75 : '1 1 1') /*qc2rust::macro_end::WPCOLOR_FLAGCARRIER*/
 //#define WPCOLOR_FLAGCARRIER(t) (WP_FlagCarrier.m_color)
-#define WPCOLOR_DROPPEDFLAG(t) ((t) ? ('0.25 0.25 0.25' + colormapPaletteColor(t - 1, false)) * 0.5 : '1 1 1')
+/*qc2rust::define::WPCOLOR_DROPPEDFLAG*/
+#define WPCOLOR_DROPPEDFLAG(t) /*qc2rust::macro_begin::WPCOLOR_DROPPEDFLAG*/(( /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/) ? ('0.25 0.25 0.25' + colormapPaletteColor( /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/ - 1, false)) * 0.5 : '1 1 1') /*qc2rust::macro_end::WPCOLOR_DROPPEDFLAG*/
 
 // sounds
-#define snd_flag_taken noise
-#define snd_flag_returned noise1
-#define snd_flag_capture noise2
-#define snd_flag_respawn noise3
+/*qc2rust::define::snd_flag_taken*/
+#define snd_flag_taken /*qc2rust::macro_begin::snd_flag_taken*/noise /*qc2rust::macro_end::snd_flag_taken*/
+/*qc2rust::define::snd_flag_returned*/
+#define snd_flag_returned /*qc2rust::macro_begin::snd_flag_returned*/noise1 /*qc2rust::macro_end::snd_flag_returned*/
+/*qc2rust::define::snd_flag_capture*/
+#define snd_flag_capture /*qc2rust::macro_begin::snd_flag_capture*/noise2 /*qc2rust::macro_end::snd_flag_capture*/
+/*qc2rust::define::snd_flag_respawn*/
+#define snd_flag_respawn /*qc2rust::macro_begin::snd_flag_respawn*/noise3 /*qc2rust::macro_end::snd_flag_respawn*/
 .string snd_flag_dropped;
 .string snd_flag_touch;
 .string snd_flag_pass;
@@ -121,7 +129,8 @@ bool ctf_Stalemate_Customize(entity this, entity client);
 void ctf_Handle_Throw(entity player, entity receiver, float droptype);
 
 // flag properties
-#define ctf_spawnorigin dropped_origin
+/*qc2rust::define::ctf_spawnorigin*/
+#define ctf_spawnorigin /*qc2rust::macro_begin::ctf_spawnorigin*/dropped_origin /*qc2rust::macro_end::ctf_spawnorigin*/
 bool ctf_stalemate; // indicates that a stalemate is active
 float ctf_captimerecord; // record time for capturing the flag
 .float ctf_pickuptime;
@@ -165,5 +174,7 @@ const int HAVOCBOT_CTF_ROLE_ESCORT = 64;
 void havocbot_role_ctf_setrole(entity bot, int role);
 
 // team checking
-#define CTF_SAMETEAM(a,b) ((autocvar_g_ctf_reverse || (ctf_oneflag && autocvar_g_ctf_oneflag_reverse)) ? DIFF_TEAM(a,b) : SAME_TEAM(a,b))
-#define CTF_DIFFTEAM(a,b) ((autocvar_g_ctf_reverse || (ctf_oneflag && autocvar_g_ctf_oneflag_reverse)) ? SAME_TEAM(a,b) : DIFF_TEAM(a,b))
+/*qc2rust::define::CTF_SAMETEAM*/
+#define CTF_SAMETEAM(a,b) /*qc2rust::macro_begin::CTF_SAMETEAM*/((autocvar_g_ctf_reverse || (ctf_oneflag && autocvar_g_ctf_oneflag_reverse)) ? DIFF_TEAM( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/, /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/) : SAME_TEAM( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/, /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)) /*qc2rust::macro_end::CTF_SAMETEAM*/
+/*qc2rust::define::CTF_DIFFTEAM*/
+#define CTF_DIFFTEAM(a,b) /*qc2rust::macro_begin::CTF_DIFFTEAM*/((autocvar_g_ctf_reverse || (ctf_oneflag && autocvar_g_ctf_oneflag_reverse)) ? SAME_TEAM( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/, /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/) : DIFF_TEAM( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/, /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)) /*qc2rust::macro_end::CTF_DIFFTEAM*/

@@ -8,9 +8,12 @@
 #include "button.qh"
 #include "mainwindow.qh"
 
-#define ADDVALUE_FPS(i) e.addValue(e, strzone(sprintf(_("%d fps"), i)), #i)
-#define ADDVALUE_SPEED_KB(i) e.addValue(e, strzone(sprintf(_("%d KB/s"), i)), #i)
-#define ADDVALUE_SPEED_MB(i, j) e.addValue(e, strzone(sprintf(_("%d MB/s"), i)), #j)
+/*qc2rust::define::ADDVALUE_FPS*/
+#define ADDVALUE_FPS(i) /*qc2rust::macro_begin::ADDVALUE_FPS*/e.addValue(e, strzone(sprintf(_("%d fps"),  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/)),  /*qc2rust::stringify_begin::i*/#i /*qc2rust::stringify_end::i*/) /*qc2rust::macro_end::ADDVALUE_FPS*/
+/*qc2rust::define::ADDVALUE_SPEED_KB*/
+#define ADDVALUE_SPEED_KB(i) /*qc2rust::macro_begin::ADDVALUE_SPEED_KB*/e.addValue(e, strzone(sprintf(_("%d KB/s"),  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/)),  /*qc2rust::stringify_begin::i*/#i /*qc2rust::stringify_end::i*/) /*qc2rust::macro_end::ADDVALUE_SPEED_KB*/
+/*qc2rust::define::ADDVALUE_SPEED_MB*/
+#define ADDVALUE_SPEED_MB(i,j) /*qc2rust::macro_begin::ADDVALUE_SPEED_MB*/e.addValue(e, strzone(sprintf(_("%d MB/s"),  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/)),  /*qc2rust::stringify_begin::j*/#j /*qc2rust::stringify_end::j*/) /*qc2rust::macro_end::ADDVALUE_SPEED_MB*/
 entity makeXonoticMiscSettingsTab()
 {
 	entity me;

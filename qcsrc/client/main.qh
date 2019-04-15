@@ -71,8 +71,10 @@ bool warmup_stage;
 void Fog_Force();
 
 string _getcommandkey(string text, string command, bool forcename);
-#define getcommandkey(cmd_name, command) _getcommandkey(cmd_name, command, false)
-#define getcommandkey_forcename(cmd_name, command) _getcommandkey(cmd_name, command, true)
+/*qc2rust::define::getcommandkey*/
+#define getcommandkey(cmd_name,command) /*qc2rust::macro_begin::getcommandkey*/_getcommandkey( /*qc2rust::param_begin::cmd_name*/cmd_name /*qc2rust::param_end::cmd_name*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/, false) /*qc2rust::macro_end::getcommandkey*/
+/*qc2rust::define::getcommandkey_forcename*/
+#define getcommandkey_forcename(cmd_name,command) /*qc2rust::macro_begin::getcommandkey_forcename*/_getcommandkey( /*qc2rust::param_begin::cmd_name*/cmd_name /*qc2rust::param_end::cmd_name*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/, true) /*qc2rust::macro_end::getcommandkey_forcename*/
 
 string vote_called_vote;
 bool ready_waiting;

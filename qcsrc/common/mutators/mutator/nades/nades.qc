@@ -1264,9 +1264,8 @@ MUTATOR_HOOKFUNCTION(nades, ForbidThrowCurrentWeapon, CBC_ORDER_LAST)
 #endif
 
 // returns true if player is reviving it
-#define IS_REVIVING(player, it, revive_extra_size) \
-	(it != player && !STAT(FROZEN, it) && !IS_DEAD(it) && SAME_TEAM(it, player) \
-	&& boxesoverlap(player.absmin - revive_extra_size, player.absmax + revive_extra_size, it.absmin, it.absmax))
+/*qc2rust::define::IS_REVIVING*/
+#define IS_REVIVING(player,it,revive_extra_size) /*qc2rust::macro_begin::IS_REVIVING*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/ !=  /*qc2rust::param_begin::player*/player /*qc2rust::param_end::player*/ && !STAT(FROZEN,  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) && !IS_DEAD( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) && SAME_TEAM( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/,  /*qc2rust::param_begin::player*/player /*qc2rust::param_end::player*/) 	&& boxesoverlap( /*qc2rust::param_begin::player*/player /*qc2rust::param_end::player*/.absmin -  /*qc2rust::param_begin::revive_extra_size*/revive_extra_size /*qc2rust::param_end::revive_extra_size*/,  /*qc2rust::param_begin::player*/player /*qc2rust::param_end::player*/.absmax +  /*qc2rust::param_begin::revive_extra_size*/revive_extra_size /*qc2rust::param_end::revive_extra_size*/,  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/.absmin,  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/.absmax)) /*qc2rust::macro_end::IS_REVIVING*/
 
 MUTATOR_HOOKFUNCTION(nades, PlayerPreThink)
 {
@@ -1452,8 +1451,8 @@ MUTATOR_HOOKFUNCTION(nades, PlayerDies, CBC_ORDER_LAST)
 			nades_GiveBonus(frag_attacker, autocvar_g_nades_bonus_score_medium);
 		else if(autocvar_g_nades_bonus_score_spree && CS(frag_attacker).killcount > 1)
 		{
-			#define SPREE_ITEM(counta,countb,center,normal,gentle) \
-				case counta: { nades_GiveBonus(frag_attacker, autocvar_g_nades_bonus_score_spree); break; }
+/*qc2rust::define::SPREE_ITEM*/
+#define SPREE_ITEM(counta,countb,center,normal,gentle) /*qc2rust::macro_begin::SPREE_ITEM*/case  /*qc2rust::param_begin::counta*/counta /*qc2rust::param_end::counta*/: { nades_GiveBonus(frag_attacker, autocvar_g_nades_bonus_score_spree); break; } /*qc2rust::macro_end::SPREE_ITEM*/
 			switch(CS(frag_attacker).killcount)
 			{
 				KILL_SPREE_LIST

@@ -15,7 +15,8 @@ CLASS(PlayerState, Object)
 ENDCLASS(PlayerState)
 
 .PlayerState _ps;
-#define PS(this) ((this)._ps)
+/*qc2rust::define::PS*/
+#define PS(this) /*qc2rust::macro_begin::PS*/(( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/)._ps) /*qc2rust::macro_end::PS*/
 
 // TODO: renew on death
 void PlayerState_attach(entity this);
@@ -42,7 +43,8 @@ ENDCLASS(ClientState)
 .ClientState _cs;
 
 #if NDEBUG
-	#define CS(this) (this._cs)
+/*qc2rust::define::CS*/
+#define CS(this) /*qc2rust::macro_begin::CS*/( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/._cs) /*qc2rust::macro_end::CS*/
 #else
 	ClientState CS(Client this) { TC(Client, this); assert(this._cs); return this._cs; }
 #endif

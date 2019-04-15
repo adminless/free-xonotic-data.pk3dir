@@ -2,51 +2,89 @@
 
 // TODO the CSQC blocks in this sv_ file are currently not compiled but will be when dodging prediction gets enabled
 
-#define PHYS_DODGING 						g_dodging
-#define PHYS_DODGING_DELAY 					autocvar_sv_dodging_delay
-#define PHYS_DODGING_DISTANCE_THRESHOLD 	autocvar_sv_dodging_wall_distance_threshold
-#define PHYS_DODGING_FROZEN_DOUBLETAP		autocvar_sv_dodging_frozen_doubletap
-#define PHYS_DODGING_HEIGHT_THRESHOLD 		autocvar_sv_dodging_height_threshold
-#define PHYS_DODGING_HORIZ_SPEED_MIN		autocvar_sv_dodging_horiz_speed_min
-#define PHYS_DODGING_HORIZ_SPEED_MAX		autocvar_sv_dodging_horiz_speed_max
-#define PHYS_DODGING_HORIZ_FORCE_SLOWEST	autocvar_sv_dodging_horiz_force_slowest
-#define PHYS_DODGING_HORIZ_FORCE_FASTEST	autocvar_sv_dodging_horiz_force_fastest
-#define PHYS_DODGING_HORIZ_FORCE_FROZEN 	autocvar_sv_dodging_horiz_force_frozen
-#define PHYS_DODGING_RAMP_TIME 				autocvar_sv_dodging_ramp_time
-#define PHYS_DODGING_UP_SPEED 				autocvar_sv_dodging_up_speed
-#define PHYS_DODGING_WALL 					autocvar_sv_dodging_wall_dodging
-#define PHYS_DODGING_AIR 					autocvar_sv_dodging_air_dodging
-#define PHYS_DODGING_MAXSPEED 				autocvar_sv_dodging_maxspeed
-#define PHYS_DODGING_AIR_MAXSPEED			autocvar_sv_dodging_air_maxspeed
+/*qc2rust::define::PHYS_DODGING*/
+#define PHYS_DODGING /*qc2rust::macro_begin::PHYS_DODGING*/g_dodging /*qc2rust::macro_end::PHYS_DODGING*/
+/*qc2rust::define::PHYS_DODGING_DELAY*/
+#define PHYS_DODGING_DELAY /*qc2rust::macro_begin::PHYS_DODGING_DELAY*/autocvar_sv_dodging_delay /*qc2rust::macro_end::PHYS_DODGING_DELAY*/
+/*qc2rust::define::PHYS_DODGING_DISTANCE_THRESHOLD*/
+#define PHYS_DODGING_DISTANCE_THRESHOLD /*qc2rust::macro_begin::PHYS_DODGING_DISTANCE_THRESHOLD*/autocvar_sv_dodging_wall_distance_threshold /*qc2rust::macro_end::PHYS_DODGING_DISTANCE_THRESHOLD*/
+/*qc2rust::define::PHYS_DODGING_FROZEN_DOUBLETAP*/
+#define PHYS_DODGING_FROZEN_DOUBLETAP /*qc2rust::macro_begin::PHYS_DODGING_FROZEN_DOUBLETAP*/autocvar_sv_dodging_frozen_doubletap /*qc2rust::macro_end::PHYS_DODGING_FROZEN_DOUBLETAP*/
+/*qc2rust::define::PHYS_DODGING_HEIGHT_THRESHOLD*/
+#define PHYS_DODGING_HEIGHT_THRESHOLD /*qc2rust::macro_begin::PHYS_DODGING_HEIGHT_THRESHOLD*/autocvar_sv_dodging_height_threshold /*qc2rust::macro_end::PHYS_DODGING_HEIGHT_THRESHOLD*/
+/*qc2rust::define::PHYS_DODGING_HORIZ_SPEED_MIN*/
+#define PHYS_DODGING_HORIZ_SPEED_MIN /*qc2rust::macro_begin::PHYS_DODGING_HORIZ_SPEED_MIN*/autocvar_sv_dodging_horiz_speed_min /*qc2rust::macro_end::PHYS_DODGING_HORIZ_SPEED_MIN*/
+/*qc2rust::define::PHYS_DODGING_HORIZ_SPEED_MAX*/
+#define PHYS_DODGING_HORIZ_SPEED_MAX /*qc2rust::macro_begin::PHYS_DODGING_HORIZ_SPEED_MAX*/autocvar_sv_dodging_horiz_speed_max /*qc2rust::macro_end::PHYS_DODGING_HORIZ_SPEED_MAX*/
+/*qc2rust::define::PHYS_DODGING_HORIZ_FORCE_SLOWEST*/
+#define PHYS_DODGING_HORIZ_FORCE_SLOWEST /*qc2rust::macro_begin::PHYS_DODGING_HORIZ_FORCE_SLOWEST*/autocvar_sv_dodging_horiz_force_slowest /*qc2rust::macro_end::PHYS_DODGING_HORIZ_FORCE_SLOWEST*/
+/*qc2rust::define::PHYS_DODGING_HORIZ_FORCE_FASTEST*/
+#define PHYS_DODGING_HORIZ_FORCE_FASTEST /*qc2rust::macro_begin::PHYS_DODGING_HORIZ_FORCE_FASTEST*/autocvar_sv_dodging_horiz_force_fastest /*qc2rust::macro_end::PHYS_DODGING_HORIZ_FORCE_FASTEST*/
+/*qc2rust::define::PHYS_DODGING_HORIZ_FORCE_FROZEN*/
+#define PHYS_DODGING_HORIZ_FORCE_FROZEN /*qc2rust::macro_begin::PHYS_DODGING_HORIZ_FORCE_FROZEN*/autocvar_sv_dodging_horiz_force_frozen /*qc2rust::macro_end::PHYS_DODGING_HORIZ_FORCE_FROZEN*/
+/*qc2rust::define::PHYS_DODGING_RAMP_TIME*/
+#define PHYS_DODGING_RAMP_TIME /*qc2rust::macro_begin::PHYS_DODGING_RAMP_TIME*/autocvar_sv_dodging_ramp_time /*qc2rust::macro_end::PHYS_DODGING_RAMP_TIME*/
+/*qc2rust::define::PHYS_DODGING_UP_SPEED*/
+#define PHYS_DODGING_UP_SPEED /*qc2rust::macro_begin::PHYS_DODGING_UP_SPEED*/autocvar_sv_dodging_up_speed /*qc2rust::macro_end::PHYS_DODGING_UP_SPEED*/
+/*qc2rust::define::PHYS_DODGING_WALL*/
+#define PHYS_DODGING_WALL /*qc2rust::macro_begin::PHYS_DODGING_WALL*/autocvar_sv_dodging_wall_dodging /*qc2rust::macro_end::PHYS_DODGING_WALL*/
+/*qc2rust::define::PHYS_DODGING_AIR*/
+#define PHYS_DODGING_AIR /*qc2rust::macro_begin::PHYS_DODGING_AIR*/autocvar_sv_dodging_air_dodging /*qc2rust::macro_end::PHYS_DODGING_AIR*/
+/*qc2rust::define::PHYS_DODGING_MAXSPEED*/
+#define PHYS_DODGING_MAXSPEED /*qc2rust::macro_begin::PHYS_DODGING_MAXSPEED*/autocvar_sv_dodging_maxspeed /*qc2rust::macro_end::PHYS_DODGING_MAXSPEED*/
+/*qc2rust::define::PHYS_DODGING_AIR_MAXSPEED*/
+#define PHYS_DODGING_AIR_MAXSPEED /*qc2rust::macro_begin::PHYS_DODGING_AIR_MAXSPEED*/autocvar_sv_dodging_air_maxspeed /*qc2rust::macro_end::PHYS_DODGING_AIR_MAXSPEED*/
 
 // we ran out of stats slots! TODO: re-enable this when prediction is available for dodging
 #if 0
-#define PHYS_DODGING 						STAT(DODGING, this)
-#define PHYS_DODGING_DELAY 					STAT(DODGING_DELAY, this)
-#define PHYS_DODGING_DISTANCE_THRESHOLD 	STAT(DODGING_DISTANCE_THRESHOLD, this)
-#define PHYS_DODGING_FROZEN_DOUBLETAP		STAT(DODGING_FROZEN_DOUBLETAP, this)
-#define PHYS_DODGING_HEIGHT_THRESHOLD 		STAT(DODGING_HEIGHT_THRESHOLD, this)
-#define PHYS_DODGING_HORIZ_SPEED_MIN		STAT(DODGING_HORIZ_SPEED_MIN, this)
-#define PHYS_DODGING_HORIZ_SPEED_MAX		STAT(DODGING_HORIZ_SPEED_MAX, this)
-#define PHYS_DODGING_HORIZ_FORCE_SLOWEST	STAT(DODGING_HORIZ_FORCE_SLOWEST, this)
-#define PHYS_DODGING_HORIZ_FORCE_FASTEST	STAT(DODGING_HORIZ_FORCE_FASTEST, this)
-#define PHYS_DODGING_HORIZ_FORCE_FROZEN 	STAT(DODGING_HORIZ_FORCE_FROZEN, this)
-#define PHYS_DODGING_RAMP_TIME 				STAT(DODGING_RAMP_TIME, this)
-#define PHYS_DODGING_UP_SPEED 				STAT(DODGING_UP_SPEED, this)
-#define PHYS_DODGING_WALL 					STAT(DODGING_WALL, this)
-#define PHYS_DODGING_AIR 					STAT(DODGING_AIR, this)
-#define PHYS_DODGING_MAXSPEED 				STAT(DODGING_MAXSPEED, this)
-#define PHYS_DODGING_AIR_MAXSPEED 			STAT(DODGING_AIR_MAXSPEED, this)
+/*qc2rust::define::PHYS_DODGING*/
+#define PHYS_DODGING /*qc2rust::macro_begin::PHYS_DODGING*/STAT(DODGING, this) /*qc2rust::macro_end::PHYS_DODGING*/
+/*qc2rust::define::PHYS_DODGING_DELAY*/
+#define PHYS_DODGING_DELAY /*qc2rust::macro_begin::PHYS_DODGING_DELAY*/STAT(DODGING_DELAY, this) /*qc2rust::macro_end::PHYS_DODGING_DELAY*/
+/*qc2rust::define::PHYS_DODGING_DISTANCE_THRESHOLD*/
+#define PHYS_DODGING_DISTANCE_THRESHOLD /*qc2rust::macro_begin::PHYS_DODGING_DISTANCE_THRESHOLD*/STAT(DODGING_DISTANCE_THRESHOLD, this) /*qc2rust::macro_end::PHYS_DODGING_DISTANCE_THRESHOLD*/
+/*qc2rust::define::PHYS_DODGING_FROZEN_DOUBLETAP*/
+#define PHYS_DODGING_FROZEN_DOUBLETAP /*qc2rust::macro_begin::PHYS_DODGING_FROZEN_DOUBLETAP*/STAT(DODGING_FROZEN_DOUBLETAP, this) /*qc2rust::macro_end::PHYS_DODGING_FROZEN_DOUBLETAP*/
+/*qc2rust::define::PHYS_DODGING_HEIGHT_THRESHOLD*/
+#define PHYS_DODGING_HEIGHT_THRESHOLD /*qc2rust::macro_begin::PHYS_DODGING_HEIGHT_THRESHOLD*/STAT(DODGING_HEIGHT_THRESHOLD, this) /*qc2rust::macro_end::PHYS_DODGING_HEIGHT_THRESHOLD*/
+/*qc2rust::define::PHYS_DODGING_HORIZ_SPEED_MIN*/
+#define PHYS_DODGING_HORIZ_SPEED_MIN /*qc2rust::macro_begin::PHYS_DODGING_HORIZ_SPEED_MIN*/STAT(DODGING_HORIZ_SPEED_MIN, this) /*qc2rust::macro_end::PHYS_DODGING_HORIZ_SPEED_MIN*/
+/*qc2rust::define::PHYS_DODGING_HORIZ_SPEED_MAX*/
+#define PHYS_DODGING_HORIZ_SPEED_MAX /*qc2rust::macro_begin::PHYS_DODGING_HORIZ_SPEED_MAX*/STAT(DODGING_HORIZ_SPEED_MAX, this) /*qc2rust::macro_end::PHYS_DODGING_HORIZ_SPEED_MAX*/
+/*qc2rust::define::PHYS_DODGING_HORIZ_FORCE_SLOWEST*/
+#define PHYS_DODGING_HORIZ_FORCE_SLOWEST /*qc2rust::macro_begin::PHYS_DODGING_HORIZ_FORCE_SLOWEST*/STAT(DODGING_HORIZ_FORCE_SLOWEST, this) /*qc2rust::macro_end::PHYS_DODGING_HORIZ_FORCE_SLOWEST*/
+/*qc2rust::define::PHYS_DODGING_HORIZ_FORCE_FASTEST*/
+#define PHYS_DODGING_HORIZ_FORCE_FASTEST /*qc2rust::macro_begin::PHYS_DODGING_HORIZ_FORCE_FASTEST*/STAT(DODGING_HORIZ_FORCE_FASTEST, this) /*qc2rust::macro_end::PHYS_DODGING_HORIZ_FORCE_FASTEST*/
+/*qc2rust::define::PHYS_DODGING_HORIZ_FORCE_FROZEN*/
+#define PHYS_DODGING_HORIZ_FORCE_FROZEN /*qc2rust::macro_begin::PHYS_DODGING_HORIZ_FORCE_FROZEN*/STAT(DODGING_HORIZ_FORCE_FROZEN, this) /*qc2rust::macro_end::PHYS_DODGING_HORIZ_FORCE_FROZEN*/
+/*qc2rust::define::PHYS_DODGING_RAMP_TIME*/
+#define PHYS_DODGING_RAMP_TIME /*qc2rust::macro_begin::PHYS_DODGING_RAMP_TIME*/STAT(DODGING_RAMP_TIME, this) /*qc2rust::macro_end::PHYS_DODGING_RAMP_TIME*/
+/*qc2rust::define::PHYS_DODGING_UP_SPEED*/
+#define PHYS_DODGING_UP_SPEED /*qc2rust::macro_begin::PHYS_DODGING_UP_SPEED*/STAT(DODGING_UP_SPEED, this) /*qc2rust::macro_end::PHYS_DODGING_UP_SPEED*/
+/*qc2rust::define::PHYS_DODGING_WALL*/
+#define PHYS_DODGING_WALL /*qc2rust::macro_begin::PHYS_DODGING_WALL*/STAT(DODGING_WALL, this) /*qc2rust::macro_end::PHYS_DODGING_WALL*/
+/*qc2rust::define::PHYS_DODGING_AIR*/
+#define PHYS_DODGING_AIR /*qc2rust::macro_begin::PHYS_DODGING_AIR*/STAT(DODGING_AIR, this) /*qc2rust::macro_end::PHYS_DODGING_AIR*/
+/*qc2rust::define::PHYS_DODGING_MAXSPEED*/
+#define PHYS_DODGING_MAXSPEED /*qc2rust::macro_begin::PHYS_DODGING_MAXSPEED*/STAT(DODGING_MAXSPEED, this) /*qc2rust::macro_end::PHYS_DODGING_MAXSPEED*/
+/*qc2rust::define::PHYS_DODGING_AIR_MAXSPEED*/
+#define PHYS_DODGING_AIR_MAXSPEED /*qc2rust::macro_begin::PHYS_DODGING_AIR_MAXSPEED*/STAT(DODGING_AIR_MAXSPEED, this) /*qc2rust::macro_end::PHYS_DODGING_AIR_MAXSPEED*/
 #endif
 
 #ifdef CSQC
-	#define PHYS_DODGING_FRAMETIME				(1 / (frametime <= 0 ? 60 : frametime))
-	#define PHYS_DODGING_TIMEOUT(s) 			STAT(DODGING_TIMEOUT)
-	#define PHYS_DODGING_PRESSED_KEYS(s)		(s).pressedkeys
+/*qc2rust::define::PHYS_DODGING_FRAMETIME*/
+#define PHYS_DODGING_FRAMETIME /*qc2rust::macro_begin::PHYS_DODGING_FRAMETIME*/(1 / (frametime <= 0 ? 60 : frametime)) /*qc2rust::macro_end::PHYS_DODGING_FRAMETIME*/
+/*qc2rust::define::PHYS_DODGING_TIMEOUT*/
+#define PHYS_DODGING_TIMEOUT(s) /*qc2rust::macro_begin::PHYS_DODGING_TIMEOUT*/STAT(DODGING_TIMEOUT) /*qc2rust::macro_end::PHYS_DODGING_TIMEOUT*/
+/*qc2rust::define::PHYS_DODGING_PRESSED_KEYS*/
+#define PHYS_DODGING_PRESSED_KEYS(s) /*qc2rust::macro_begin::PHYS_DODGING_PRESSED_KEYS*/( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).pressedkeys /*qc2rust::macro_end::PHYS_DODGING_PRESSED_KEYS*/
 #elif defined(SVQC)
-	#define PHYS_DODGING_FRAMETIME				sys_frametime
-	#define PHYS_DODGING_TIMEOUT(s) 			CS(s).cvar_cl_dodging_timeout
-	#define PHYS_DODGING_PRESSED_KEYS(s)		CS(s).pressedkeys
+/*qc2rust::define::PHYS_DODGING_FRAMETIME*/
+#define PHYS_DODGING_FRAMETIME /*qc2rust::macro_begin::PHYS_DODGING_FRAMETIME*/sys_frametime /*qc2rust::macro_end::PHYS_DODGING_FRAMETIME*/
+/*qc2rust::define::PHYS_DODGING_TIMEOUT*/
+#define PHYS_DODGING_TIMEOUT(s) /*qc2rust::macro_begin::PHYS_DODGING_TIMEOUT*/CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).cvar_cl_dodging_timeout /*qc2rust::macro_end::PHYS_DODGING_TIMEOUT*/
+/*qc2rust::define::PHYS_DODGING_PRESSED_KEYS*/
+#define PHYS_DODGING_PRESSED_KEYS(s) /*qc2rust::macro_begin::PHYS_DODGING_PRESSED_KEYS*/CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).pressedkeys /*qc2rust::macro_end::PHYS_DODGING_PRESSED_KEYS*/
 #endif
 
 #ifdef SVQC
@@ -107,10 +145,8 @@ REGISTER_MUTATOR(dodging, true);
 .int pressedkeys;
 #endif
 
-#define X(dir) \
-	tracebox(this.origin, this.mins, this.maxs, this.origin + threshold * dir, true, this); \
-	if (trace_fraction < 1 && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY)) \
-		return true;
+/*qc2rust::define::X*/
+#define X(dir) /*qc2rust::macro_begin::X*/tracebox(this.origin, this.mins, this.maxs, this.origin + threshold *  /*qc2rust::param_begin::dir*/dir /*qc2rust::param_end::dir*/, true, this); 	if (trace_fraction < 1 && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY)) 		return true; /*qc2rust::macro_end::X*/
 
 // returns true if the player is close to a wall
 bool is_close_to_wall(entity this, float threshold)
@@ -152,19 +188,7 @@ bool PM_dodging_checkpressedkeys(entity this)
 	bool dodge_detected = false;
 	vector mymovement = PHYS_CS(this).movement;
 
-	#define X(COND,BTN,RESULT)																				\
-	if (mymovement_##COND) {																				\
-		/* is this a state change? */																		\
-		if(!(PHYS_DODGING_PRESSED_KEYS(this) & KEY_##BTN) || frozen_no_doubletap) {							\
-			tap_direction_##RESULT;																			\
-			if ((time - this.last_##BTN##_KEY_time) < PHYS_DODGING_TIMEOUT(this) || frozen_no_doubletap) {	\
-				dodge_detected = true;																		\
-			} else if(PHYS_INPUT_BUTTON_DODGE(this)) {														\
-				dodge_detected = true;																		\
-			}																								\
-			this.last_##BTN##_KEY_time = time;																\
-		}																									\
-	}
+	#define X(COND,BTN,RESULT)																					if (mymovement_##COND) {																						/* is this a state change? */																				if(!(PHYS_DODGING_PRESSED_KEYS(this) & KEY_##BTN) || frozen_no_doubletap) {										tap_direction_##RESULT;																						if ((time - this.last_##BTN##_KEY_time) < PHYS_DODGING_TIMEOUT(this) || frozen_no_doubletap) {					dodge_detected = true;																					} else if(PHYS_INPUT_BUTTON_DODGE(this)) {																		dodge_detected = true;																					}																											this.last_##BTN##_KEY_time = time;																		}																										}
 	X(x < 0, BACKWARD,	x--);
 	X(x > 0, FORWARD,	x++);
 	X(y < 0, LEFT,		y--);

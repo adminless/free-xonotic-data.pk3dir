@@ -159,9 +159,12 @@ void cvar_changes_init()
 	{
 		k = bufstr_get(h, i);
 
-#define BADPREFIX(p) if(substring(k, 0, strlen(p)) == p) continue
-#define BADPRESUFFIX(p,s) if(substring(k, 0, strlen(p)) == p && substring(k, -strlen(s), -1) == s) continue
-#define BADCVAR(p) if(k == p) continue
+/*qc2rust::define::BADPREFIX*/
+#define BADPREFIX(p) /*qc2rust::macro_begin::BADPREFIX*/if(substring(k, 0, strlen( /*qc2rust::param_begin::p*/p /*qc2rust::param_end::p*/)) ==  /*qc2rust::param_begin::p*/p /*qc2rust::param_end::p*/) continue /*qc2rust::macro_end::BADPREFIX*/
+/*qc2rust::define::BADPRESUFFIX*/
+#define BADPRESUFFIX(p,s) /*qc2rust::macro_begin::BADPRESUFFIX*/if(substring(k, 0, strlen( /*qc2rust::param_begin::p*/p /*qc2rust::param_end::p*/)) ==  /*qc2rust::param_begin::p*/p /*qc2rust::param_end::p*/ && substring(k, -strlen( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/), -1) ==  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) continue /*qc2rust::macro_end::BADPRESUFFIX*/
+/*qc2rust::define::BADCVAR*/
+#define BADCVAR(p) /*qc2rust::macro_begin::BADCVAR*/if(k ==  /*qc2rust::param_begin::p*/p /*qc2rust::param_end::p*/) continue /*qc2rust::macro_end::BADCVAR*/
 
 		// general excludes and namespaces for server admin used cvars
 		BADPREFIX("help_"); // PN's server has this listed as changed, let's not rat him out for THAT
@@ -925,17 +928,8 @@ spawnfunc(worldspawn)
 			s = cons(s, pkg);
 		}
 		// add automatically managed files to the list
-		#define X(match) MACRO_BEGIN \
-			int fd = search_begin(match, true, false); \
-			if (fd >= 0) \
-			{ \
-				for (int i = 0, j = search_getsize(fd); i < j; ++i) \
-				{ \
-					s = cons(s, search_getfilename(fd, i)); \
-				} \
-				search_end(fd); \
-			} \
-		MACRO_END
+/*qc2rust::define::X*/
+#define X(match) /*qc2rust::macro_begin::X*/MACRO_BEGIN 			int fd = search_begin( /*qc2rust::param_begin::match*/match /*qc2rust::param_end::match*/, true, false); 			if (fd >= 0) 			{ 				for (int i = 0, j = search_getsize(fd); i < j; ++i) 				{ 					s = cons(s, search_getfilename(fd, i)); 				} 				search_end(fd); 			} 		MACRO_END /*qc2rust::macro_end::X*/
 		X("*-serverpackage.txt");
 		X("*.serverpackage");
 		#undef X

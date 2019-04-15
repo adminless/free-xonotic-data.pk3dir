@@ -1,17 +1,12 @@
 #pragma once
 
-#define EV_NO_ARGS(i, o)
+/*qc2rust::define::EV_NO_ARGS*/
+#define EV_NO_ARGS(i,o) /*qc2rust::macro_begin::EV_NO_ARGS*/ /*qc2rust::macro_end::EV_NO_ARGS*/
 
 #pragma noref 1
 
-#define MUTATOR_TYPES(_, x) \
-    _(x, bool) \
-    _(x, int) \
-    _(x, entity) \
-    _(x, float) \
-    _(x, vector) \
-    _(x, string) \
-    /**/
+/*qc2rust::define::MUTATOR_TYPES*/
+#define MUTATOR_TYPES(_,x) /*qc2rust::macro_begin::MUTATOR_TYPES*/ /*qc2rust::param_begin::_*/_ /*qc2rust::param_end::_*/( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/, bool)      /*qc2rust::param_begin::_*/_ /*qc2rust::param_end::_*/( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/, int)      /*qc2rust::param_begin::_*/_ /*qc2rust::param_end::_*/( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/, entity)      /*qc2rust::param_begin::_*/_ /*qc2rust::param_end::_*/( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/, float)      /*qc2rust::param_begin::_*/_ /*qc2rust::param_end::_*/( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/, vector)      /*qc2rust::param_begin::_*/_ /*qc2rust::param_end::_*/( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/, string)     /**/ /*qc2rust::macro_end::MUTATOR_TYPES*/
 
 // TODO: migrate to arrays some day when no other globals are used
 #define M_ARGV(x, type) MUTATOR_ARGV_##x##_##type
@@ -35,80 +30,52 @@ MUTATOR_TYPES(MUTATOR_NEWGLOBAL, 10)
 #pragma noref 0
 
 /** appends ":mutatorname" to argument for logging */
-#define EV_BuildMutatorsString(i, o) \
-    /** mutator string */ i(string, MUTATOR_ARGV_0_string) \
-    /**/                  o(string, MUTATOR_ARGV_0_string) \
-    /**/
+/*qc2rust::define::EV_BuildMutatorsString*/
+#define EV_BuildMutatorsString(i,o) /*qc2rust::macro_begin::EV_BuildMutatorsString*//** mutator string */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, MUTATOR_ARGV_0_string)     /**/                   /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(string, MUTATOR_ARGV_0_string)     /**/ /*qc2rust::macro_end::EV_BuildMutatorsString*/
 MUTATOR_HOOKABLE(BuildMutatorsString, EV_BuildMutatorsString);
 
 /** appends ", Mutator name" to ret_string for display */
-#define EV_BuildMutatorsPrettyString(i, o) \
-    /** mutator string */ i(string, MUTATOR_ARGV_0_string) \
-    /**/                  o(string, MUTATOR_ARGV_0_string) \
-    /**/
+/*qc2rust::define::EV_BuildMutatorsPrettyString*/
+#define EV_BuildMutatorsPrettyString(i,o) /*qc2rust::macro_begin::EV_BuildMutatorsPrettyString*//** mutator string */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, MUTATOR_ARGV_0_string)     /**/                   /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(string, MUTATOR_ARGV_0_string)     /**/ /*qc2rust::macro_end::EV_BuildMutatorsPrettyString*/
 MUTATOR_HOOKABLE(BuildMutatorsPrettyString, EV_BuildMutatorsPrettyString);
 
 /** appends mutator string for displaying extra gameplay tips */
-#define EV_BuildGameplayTipsString(i, o) \
-    /** tips string */    i(string, MUTATOR_ARGV_0_string) \
-    /**/                  o(string, MUTATOR_ARGV_0_string) \
-    /**/
+/*qc2rust::define::EV_BuildGameplayTipsString*/
+#define EV_BuildGameplayTipsString(i,o) /*qc2rust::macro_begin::EV_BuildGameplayTipsString*//** tips string */     /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, MUTATOR_ARGV_0_string)     /**/                   /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(string, MUTATOR_ARGV_0_string)     /**/ /*qc2rust::macro_end::EV_BuildGameplayTipsString*/
 MUTATOR_HOOKABLE(BuildGameplayTipsString, EV_BuildGameplayTipsString);
 
-#define EV_IsFlying(i, o) \
-	/**/ i(entity, MUTATOR_ARGV_0_entity) \
-	/**/
+/*qc2rust::define::EV_IsFlying*/
+#define EV_IsFlying(i,o) /*qc2rust::macro_begin::EV_IsFlying*//**/  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(entity, MUTATOR_ARGV_0_entity) 	/**/ /*qc2rust::macro_end::EV_IsFlying*/
 MUTATOR_HOOKABLE(IsFlying, EV_IsFlying);
 
-#define EV_WP_Format(i, o) \
-    /**/ i(entity, MUTATOR_ARGV_0_entity) \
-    /**/ i(string, MUTATOR_ARGV_1_string) \
-    /**/ o(vector, MUTATOR_ARGV_2_vector) \
-    /**/ o(string, MUTATOR_ARGV_3_string) \
-    /**/ o(string, MUTATOR_ARGV_4_string) \
-    /**/
+/*qc2rust::define::EV_WP_Format*/
+#define EV_WP_Format(i,o) /*qc2rust::macro_begin::EV_WP_Format*//**/  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(entity, MUTATOR_ARGV_0_entity)     /**/  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, MUTATOR_ARGV_1_string)     /**/  /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(vector, MUTATOR_ARGV_2_vector)     /**/  /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(string, MUTATOR_ARGV_3_string)     /**/  /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(string, MUTATOR_ARGV_4_string)     /**/ /*qc2rust::macro_end::EV_WP_Format*/
 MUTATOR_HOOKABLE(WP_Format, EV_WP_Format);
 
 /**
  * called before any player physics, may adjust variables for movement,
  * is run AFTER bot code and idle checking on the server
  */
-#define EV_PlayerPhysics(i, o) \
-    /** player */ i(entity, MUTATOR_ARGV_0_entity) \
-    /** ticrate*/ i(float, MUTATOR_ARGV_1_float) \
-    /**/
+/*qc2rust::define::EV_PlayerPhysics*/
+#define EV_PlayerPhysics(i,o) /*qc2rust::macro_begin::EV_PlayerPhysics*//** player */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(entity, MUTATOR_ARGV_0_entity)     /** ticrate*/  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(float, MUTATOR_ARGV_1_float)     /**/ /*qc2rust::macro_end::EV_PlayerPhysics*/
 MUTATOR_HOOKABLE(PlayerPhysics, EV_PlayerPhysics);
 
 /** called when a player presses the jump key */
-#define EV_PlayerJump(i, o) \
-    /** player */      i(entity, MUTATOR_ARGV_0_entity) \
-    /** jump height */ i(float, MUTATOR_ARGV_1_float) \
-    /**/               o(float, MUTATOR_ARGV_1_float) \
-    /** multijump */   i(bool, MUTATOR_ARGV_2_bool) \
-    /**/               o(bool, MUTATOR_ARGV_2_bool) \
-    /**/
+/*qc2rust::define::EV_PlayerJump*/
+#define EV_PlayerJump(i,o) /*qc2rust::macro_begin::EV_PlayerJump*//** player */       /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(entity, MUTATOR_ARGV_0_entity)     /** jump height */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(float, MUTATOR_ARGV_1_float)     /**/                /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(float, MUTATOR_ARGV_1_float)     /** multijump */    /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(bool, MUTATOR_ARGV_2_bool)     /**/                /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(bool, MUTATOR_ARGV_2_bool)     /**/ /*qc2rust::macro_end::EV_PlayerJump*/
 MUTATOR_HOOKABLE(PlayerJump, EV_PlayerJump);
 
 /** called during player physics, allows adjusting the movement type used */
-#define EV_PM_Physics(i, o) \
-    /** player */       i(entity, MUTATOR_ARGV_0_entity) \
-    /** maxspeed_mod */ i(float, MUTATOR_ARGV_1_float) \
-    /** tick rate */    i(float, MUTATOR_ARGV_2_float) \
-    /**/
+/*qc2rust::define::EV_PM_Physics*/
+#define EV_PM_Physics(i,o) /*qc2rust::macro_begin::EV_PM_Physics*//** player */        /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(entity, MUTATOR_ARGV_0_entity)     /** maxspeed_mod */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(float, MUTATOR_ARGV_1_float)     /** tick rate */     /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(float, MUTATOR_ARGV_2_float)     /**/ /*qc2rust::macro_end::EV_PM_Physics*/
 MUTATOR_HOOKABLE(PM_Physics, EV_PM_Physics);
 
 /** called when a weapon sound is about to be played, allows custom paths etc. */
-#define EV_WeaponSound(i, o) \
-    /** sound       */ i(string, MUTATOR_ARGV_0_string) \
-    /** output      */ i(string, MUTATOR_ARGV_1_string) \
-    /**/               o(string, MUTATOR_ARGV_1_string) \
-    /**/
+/*qc2rust::define::EV_WeaponSound*/
+#define EV_WeaponSound(i,o) /*qc2rust::macro_begin::EV_WeaponSound*//** sound       */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, MUTATOR_ARGV_0_string)     /** output      */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, MUTATOR_ARGV_1_string)     /**/                /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(string, MUTATOR_ARGV_1_string)     /**/ /*qc2rust::macro_end::EV_WeaponSound*/
 MUTATOR_HOOKABLE(WeaponSound, EV_WeaponSound);
 
 /** called when a weapon model is about to be set, allows custom paths etc. */
-#define EV_WeaponModel(i, o) \
-    /** model */  i(string, MUTATOR_ARGV_0_string) \
-    /** output */ i(string, MUTATOR_ARGV_1_string) \
-    /**/          o(string, MUTATOR_ARGV_1_string) \
-    /**/
+/*qc2rust::define::EV_WeaponModel*/
+#define EV_WeaponModel(i,o) /*qc2rust::macro_begin::EV_WeaponModel*//** model */   /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, MUTATOR_ARGV_0_string)     /** output */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, MUTATOR_ARGV_1_string)     /**/           /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(string, MUTATOR_ARGV_1_string)     /**/ /*qc2rust::macro_end::EV_WeaponModel*/
 MUTATOR_HOOKABLE(WeaponModel, EV_WeaponModel);

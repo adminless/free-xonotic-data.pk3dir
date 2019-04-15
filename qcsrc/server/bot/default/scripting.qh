@@ -1,12 +1,18 @@
 #pragma once
 
-#define BOT_EXEC_STATUS_IDLE 0
-#define BOT_EXEC_STATUS_PAUSED 1
-#define BOT_EXEC_STATUS_WAITING 2
+/*qc2rust::define::BOT_EXEC_STATUS_IDLE*/
+#define BOT_EXEC_STATUS_IDLE /*qc2rust::macro_begin::BOT_EXEC_STATUS_IDLE*/0 /*qc2rust::macro_end::BOT_EXEC_STATUS_IDLE*/
+/*qc2rust::define::BOT_EXEC_STATUS_PAUSED*/
+#define BOT_EXEC_STATUS_PAUSED /*qc2rust::macro_begin::BOT_EXEC_STATUS_PAUSED*/1 /*qc2rust::macro_end::BOT_EXEC_STATUS_PAUSED*/
+/*qc2rust::define::BOT_EXEC_STATUS_WAITING*/
+#define BOT_EXEC_STATUS_WAITING /*qc2rust::macro_begin::BOT_EXEC_STATUS_WAITING*/2 /*qc2rust::macro_end::BOT_EXEC_STATUS_WAITING*/
 
-#define CMD_STATUS_EXECUTING 0
-#define CMD_STATUS_FINISHED 1
-#define CMD_STATUS_ERROR 2
+/*qc2rust::define::CMD_STATUS_EXECUTING*/
+#define CMD_STATUS_EXECUTING /*qc2rust::macro_begin::CMD_STATUS_EXECUTING*/0 /*qc2rust::macro_end::CMD_STATUS_EXECUTING*/
+/*qc2rust::define::CMD_STATUS_FINISHED*/
+#define CMD_STATUS_FINISHED /*qc2rust::macro_begin::CMD_STATUS_FINISHED*/1 /*qc2rust::macro_end::CMD_STATUS_FINISHED*/
+/*qc2rust::define::CMD_STATUS_ERROR*/
+#define CMD_STATUS_ERROR /*qc2rust::macro_begin::CMD_STATUS_ERROR*/2 /*qc2rust::macro_end::CMD_STATUS_ERROR*/
 
 
 // NOTE: New commands should be added here. Do not forget to update BOT_CMD_COUNTER

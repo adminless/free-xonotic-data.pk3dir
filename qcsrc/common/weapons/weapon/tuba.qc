@@ -5,7 +5,8 @@
 .entity tuba_note;
 .float tuba_smoketime;
 
-#define MAX_TUBANOTES 32
+/*qc2rust::define::MAX_TUBANOTES*/
+#define MAX_TUBANOTES /*qc2rust::macro_begin::MAX_TUBANOTES*/32 /*qc2rust::macro_end::MAX_TUBANOTES*/
 .float tuba_lastnotes_last;
 .float tuba_lastnotes_cnt; // over
 .vector tuba_lastnotes[MAX_TUBANOTES];
@@ -425,7 +426,8 @@ METHOD(Tuba, wr_viewmodel, string(Tuba this, entity wep))
 
 #ifdef CSQC
 
-#define TUBA_STARTNOTE(i, n) _Sound_fixpath(W_Sound(strcat("tuba", (i ? ftos(i) : ""), "_loopnote", ftos(n))))
+/*qc2rust::define::TUBA_STARTNOTE*/
+#define TUBA_STARTNOTE(i,n) /*qc2rust::macro_begin::TUBA_STARTNOTE*/_Sound_fixpath(W_Sound(strcat("tuba", ( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/ ? ftos( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/) : ""), "_loopnote", ftos( /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/)))) /*qc2rust::macro_end::TUBA_STARTNOTE*/
 
 const int TUBA_MIN = -18;
 const int TUBA_MAX = 27;

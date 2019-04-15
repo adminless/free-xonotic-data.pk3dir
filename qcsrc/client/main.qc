@@ -35,7 +35,8 @@
 // BEGIN REQUIRED CSQC FUNCTIONS
 //include "main.qh"
 
-#define DP_CSQC_ENTITY_REMOVE_IS_B0RKED
+/*qc2rust::define::DP_CSQC_ENTITY_REMOVE_IS_B0RKED*/
+#define DP_CSQC_ENTITY_REMOVE_IS_B0RKED /*qc2rust::macro_begin::DP_CSQC_ENTITY_REMOVE_IS_B0RKED*/ /*qc2rust::macro_end::DP_CSQC_ENTITY_REMOVE_IS_B0RKED*/
 
 void draw_cursor(vector pos, vector ofs, string img, vector col, float a)
 {

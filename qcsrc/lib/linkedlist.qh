@@ -11,9 +11,11 @@ CLASS(LinkedList, Object)
 	ATTRIB(LinkedList, ll_tail, LinkedListNode);
 ENDCLASS(LinkedList)
 
-#define LL_NEW() NEW(LinkedList)
+/*qc2rust::define::LL_NEW*/
+#define LL_NEW() /*qc2rust::macro_begin::LL_NEW*/NEW(LinkedList) /*qc2rust::macro_end::LL_NEW*/
 
-#define LL_EMPTY(ll) (ll.ll_head == NULL)
+/*qc2rust::define::LL_EMPTY*/
+#define LL_EMPTY(ll) /*qc2rust::macro_begin::LL_EMPTY*/( /*qc2rust::param_begin::ll*/ll /*qc2rust::param_end::ll*/.ll_head == NULL) /*qc2rust::macro_end::LL_EMPTY*/
 
 /**
  * Push to tail
@@ -44,38 +46,23 @@ entity LL_POP(LinkedList this)
 	return e;
 }
 
-#define LL_CLEAR(...) EVAL_LL_CLEAR(OVERLOAD(LL_CLEAR, __VA_ARGS__))
-#define EVAL_LL_CLEAR(...) __VA_ARGS__
-#define LL_CLEAR_1(this) LL_CLEAR_2(this, LAMBDA())
-#define LL_CLEAR_2(this, dtor) \
-	MACRO_BEGIN \
-		LinkedList _ll = this; \
-		assert(_ll); \
-		while (_ll.ll_tail) \
-		{ \
-			entity it = LL_POP(_ll); \
-			if (!it) continue; \
-			dtor \
-			delete(it); \
-		} \
-	MACRO_END
+/*qc2rust::define::LL_CLEAR*/
+#define LL_CLEAR(...) /*qc2rust::macro_begin::LL_CLEAR*/EVAL_LL_CLEAR(OVERLOAD(LL_CLEAR,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LL_CLEAR*/
+/*qc2rust::define::EVAL_LL_CLEAR*/
+#define EVAL_LL_CLEAR(...) /*qc2rust::macro_begin::EVAL_LL_CLEAR*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_LL_CLEAR*/
+/*qc2rust::define::LL_CLEAR_1*/
+#define LL_CLEAR_1(this) /*qc2rust::macro_begin::LL_CLEAR_1*/LL_CLEAR_2( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/, LAMBDA()) /*qc2rust::macro_end::LL_CLEAR_1*/
+/*qc2rust::define::LL_CLEAR_2*/
+#define LL_CLEAR_2(this,dtor) /*qc2rust::macro_begin::LL_CLEAR_2*/MACRO_BEGIN 		LinkedList _ll =  /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/; 		assert(_ll); 		while (_ll.ll_tail) 		{ 			entity it = LL_POP(_ll); 			if (!it) continue; 			 /*qc2rust::param_begin::dtor*/dtor /*qc2rust::param_end::dtor*/ 			delete(it); 		} 	MACRO_END /*qc2rust::macro_end::LL_CLEAR_2*/
 
-#define LL_DELETE(...) EVAL_LL_DELETE(OVERLOAD(LL_DELETE, __VA_ARGS__))
-#define EVAL_LL_DELETE(...) __VA_ARGS__
-#define LL_DELETE_1(this) LL_DELETE_2(this, LAMBDA())
-#define LL_DELETE_2(this, dtor) \
-	MACRO_BEGIN \
-		LL_CLEAR_2(this, dtor); \
-		delete(this); \
-		this = NULL; \
-	MACRO_END
+/*qc2rust::define::LL_DELETE*/
+#define LL_DELETE(...) /*qc2rust::macro_begin::LL_DELETE*/EVAL_LL_DELETE(OVERLOAD(LL_DELETE,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LL_DELETE*/
+/*qc2rust::define::EVAL_LL_DELETE*/
+#define EVAL_LL_DELETE(...) /*qc2rust::macro_begin::EVAL_LL_DELETE*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_LL_DELETE*/
+/*qc2rust::define::LL_DELETE_1*/
+#define LL_DELETE_1(this) /*qc2rust::macro_begin::LL_DELETE_1*/LL_DELETE_2( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/, LAMBDA()) /*qc2rust::macro_end::LL_DELETE_1*/
+/*qc2rust::define::LL_DELETE_2*/
+#define LL_DELETE_2(this,dtor) /*qc2rust::macro_begin::LL_DELETE_2*/MACRO_BEGIN 		LL_CLEAR_2( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/,  /*qc2rust::param_begin::dtor*/dtor /*qc2rust::param_end::dtor*/); 		delete( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/); 		 /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/ = NULL; 	MACRO_END /*qc2rust::macro_end::LL_DELETE_2*/
 
-#define LL_EACH(list, cond, body) \
-	MACRO_BEGIN                                                         \
-		noref int i = 0;                                                \
-		for (entity _it = list.ll_head; _it; (_it = _it.ll_next, ++i))  \
-		{                                                               \
-			ITER_CONST noref entity it = _it.ll_data;                   \
-			if (cond) { body }                                          \
-		}                                                               \
-	MACRO_END
+/*qc2rust::define::LL_EACH*/
+#define LL_EACH(list,cond,body) /*qc2rust::macro_begin::LL_EACH*/MACRO_BEGIN                                                         		noref int i = 0;                                                		for (entity _it =  /*qc2rust::param_begin::list*/list /*qc2rust::param_end::list*/.ll_head; _it; (_it = _it.ll_next, ++i))  		{                                                               			ITER_CONST noref entity it = _it.ll_data;                   			if ( /*qc2rust::param_begin::cond*/cond /*qc2rust::param_end::cond*/) {  /*qc2rust::param_begin::body*/body /*qc2rust::param_end::body*/ }                                          		}                                                               	MACRO_END /*qc2rust::macro_end::LL_EACH*/

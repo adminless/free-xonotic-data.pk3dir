@@ -247,12 +247,18 @@ string Process_Notif_Args(
 
 				switch(strtolower(selected))
 				{
-					#define ARG_CASE_ARG_CS_SV_HA(selected,result) case selected: ++sel_num; break;
-					#define ARG_CASE_ARG_CS_SV_DC(selected,result) case selected: ++sel_num; break;
-					#define ARG_CASE_ARG_CS_SV(selected,result)    case selected: ++sel_num; break;
-					#define ARG_CASE_ARG_CS(selected,result)       case selected: ++sel_num; break;
-					#define ARG_CASE_ARG_SV(selected,result)       case selected: ++sel_num; break;
-					#define ARG_CASE_ARG_DC(selected,result)
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_HA*/
+#define ARG_CASE_ARG_CS_SV_HA(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_HA*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: ++sel_num; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_HA*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_DC*/
+#define ARG_CASE_ARG_CS_SV_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_DC*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: ++sel_num; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_DC*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV*/
+#define ARG_CASE_ARG_CS_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: ++sel_num; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV*/
+/*qc2rust::define::ARG_CASE_ARG_CS*/
+#define ARG_CASE_ARG_CS(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: ++sel_num; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS*/
+/*qc2rust::define::ARG_CASE_ARG_SV*/
+#define ARG_CASE_ARG_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_SV*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: ++sel_num; break; /*qc2rust::macro_end::ARG_CASE_ARG_SV*/
+/*qc2rust::define::ARG_CASE_ARG_DC*/
+#define ARG_CASE_ARG_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_DC*/ /*qc2rust::macro_end::ARG_CASE_ARG_DC*/
 					#define ARG_CASE(prog,selected,result)         ARG_CASE_##prog(selected,result)
 					NOTIF_ARGUMENT_LIST
 					#undef ARG_CASE
@@ -298,12 +304,18 @@ string Process_Notif_Args(
 
 				switch(strtolower(selected))
 				{
-					#define ARG_CASE_ARG_CS_SV_HA(selected,result) case selected: ++sel_num; break;
-					#define ARG_CASE_ARG_CS_SV_DC(selected,result)
-					#define ARG_CASE_ARG_CS_SV(selected,result)
-					#define ARG_CASE_ARG_CS(selected,result)
-					#define ARG_CASE_ARG_SV(selected,result)
-					#define ARG_CASE_ARG_DC(selected,result)
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_HA*/
+#define ARG_CASE_ARG_CS_SV_HA(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_HA*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: ++sel_num; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_HA*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_DC*/
+#define ARG_CASE_ARG_CS_SV_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_DC*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_DC*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV*/
+#define ARG_CASE_ARG_CS_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV*/
+/*qc2rust::define::ARG_CASE_ARG_CS*/
+#define ARG_CASE_ARG_CS(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS*/
+/*qc2rust::define::ARG_CASE_ARG_SV*/
+#define ARG_CASE_ARG_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_SV*/ /*qc2rust::macro_end::ARG_CASE_ARG_SV*/
+/*qc2rust::define::ARG_CASE_ARG_DC*/
+#define ARG_CASE_ARG_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_DC*/ /*qc2rust::macro_end::ARG_CASE_ARG_DC*/
 					#define ARG_CASE(prog,selected,result)         ARG_CASE_##prog(selected,result)
 					NOTIF_ARGUMENT_LIST
 					#undef ARG_CASE
@@ -349,12 +361,18 @@ string Process_Notif_Args(
 
 				switch(strtolower(selected))
 				{
-					#define ARG_CASE_ARG_CS_SV_HA(selected,result)
-					#define ARG_CASE_ARG_CS_SV_DC(selected,result) case selected: ++sel_num; break;
-					#define ARG_CASE_ARG_CS_SV(selected,result)
-					#define ARG_CASE_ARG_CS(selected,result)
-					#define ARG_CASE_ARG_SV(selected,result)
-					#define ARG_CASE_ARG_DC(selected,result)       case selected: ++sel_num; break;
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_HA*/
+#define ARG_CASE_ARG_CS_SV_HA(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_HA*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_HA*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_DC*/
+#define ARG_CASE_ARG_CS_SV_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_DC*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: ++sel_num; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_DC*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV*/
+#define ARG_CASE_ARG_CS_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV*/
+/*qc2rust::define::ARG_CASE_ARG_CS*/
+#define ARG_CASE_ARG_CS(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS*/
+/*qc2rust::define::ARG_CASE_ARG_SV*/
+#define ARG_CASE_ARG_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_SV*/ /*qc2rust::macro_end::ARG_CASE_ARG_SV*/
+/*qc2rust::define::ARG_CASE_ARG_DC*/
+#define ARG_CASE_ARG_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_DC*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: ++sel_num; break; /*qc2rust::macro_end::ARG_CASE_ARG_DC*/
 					#define ARG_CASE(prog,selected,result)         ARG_CASE_##prog(selected,result)
 					NOTIF_ARGUMENT_LIST
 					#undef ARG_CASE
@@ -438,7 +456,8 @@ void Create_Notification_Entity(entity notif,
 	}
 }
 
-#define AnnouncerFilename(snd) sprintf("announcer/%s/%s.wav", AnnouncerOption(), snd)
+/*qc2rust::define::AnnouncerFilename*/
+#define AnnouncerFilename(snd) /*qc2rust::macro_begin::AnnouncerFilename*/sprintf("announcer/%s/%s.wav", AnnouncerOption(),  /*qc2rust::param_begin::snd*/snd /*qc2rust::param_end::snd*/) /*qc2rust::macro_end::AnnouncerFilename*/
 
 void Create_Notification_Entity_Annce(entity notif,
 										float var_cvar,
@@ -608,18 +627,8 @@ void Create_Notification_Entity_InfoCenter(entity notif,
 				// ======================
 				//  Process Notif String
 				// ======================
-				#define SET_NOTIF_STRING(string,stringname) MACRO_BEGIN \
-					notif.nent_string = strzone(CCR( \
-						Process_Notif_Line( \
-							typeId, \
-							(var_cvar > 1), \
-							string, \
-							typestring, \
-							namestring, \
-							stringname \
-						)) \
-					); \
-				MACRO_END
+/*qc2rust::define::SET_NOTIF_STRING*/
+#define SET_NOTIF_STRING(string,stringname) /*qc2rust::macro_begin::SET_NOTIF_STRING*/MACRO_BEGIN 					notif.nent_string = strzone(CCR( 						Process_Notif_Line( 							typeId, 							(var_cvar > 1), 							 /*qc2rust::param_begin::string*/string /*qc2rust::param_end::string*/, 							typestring, 							namestring, 							 /*qc2rust::param_begin::stringname*/stringname /*qc2rust::param_end::stringname*/ 						)) 					); 				MACRO_END /*qc2rust::macro_end::SET_NOTIF_STRING*/
 
 				if(GENTLE)
 				{
@@ -777,24 +786,17 @@ void Notification_GetCvars(entity this)
 /** used to output notifications.cfg file */
 void Dump_Notifications(int fh, bool alsoprint)
 {
-	#define NOTIF_WRITE(str) write_String_To_File(fh, str, alsoprint)
+/*qc2rust::define::NOTIF_WRITE*/
+#define NOTIF_WRITE(str) /*qc2rust::macro_begin::NOTIF_WRITE*/write_String_To_File(fh,  /*qc2rust::param_begin::str*/str /*qc2rust::param_end::str*/, alsoprint) /*qc2rust::macro_end::NOTIF_WRITE*/
 
-	#define NOTIF_WRITE_ENTITY(e, description) \
-		NOTIF_WRITE(sprintf( \
-			"seta notification_%s \"%d\" \"%s\"\n", \
-			Get_Notif_CvarName(e), e.nent_default, description \
-		))
+/*qc2rust::define::NOTIF_WRITE_ENTITY*/
+#define NOTIF_WRITE_ENTITY(e,description) /*qc2rust::macro_begin::NOTIF_WRITE_ENTITY*/NOTIF_WRITE(sprintf( 			"seta notification_%s \"%d\" \"%s\"\n", 			Get_Notif_CvarName( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/),  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/.nent_default,  /*qc2rust::param_begin::description*/description /*qc2rust::param_end::description*/ 		)) /*qc2rust::macro_end::NOTIF_WRITE_ENTITY*/
 
-	#define NOTIF_WRITE_ENTITY_CHOICE(e, descriptiona, descriptionb) \
-		NOTIF_WRITE(sprintf( \
-			"seta notification_%s \"%d\" \"%s\"\n" \
-			"seta notification_%s_ALLOWED \"%d\" \"%s\"\n", \
-			Get_Notif_CvarName(e), e.nent_default, descriptiona, \
-			Get_Notif_CvarName(e), e.nent_challow_def, descriptionb \
-		))
+/*qc2rust::define::NOTIF_WRITE_ENTITY_CHOICE*/
+#define NOTIF_WRITE_ENTITY_CHOICE(e,descriptiona,descriptionb) /*qc2rust::macro_begin::NOTIF_WRITE_ENTITY_CHOICE*/NOTIF_WRITE(sprintf( 			"seta notification_%s \"%d\" \"%s\"\n" 			"seta notification_%s_ALLOWED \"%d\" \"%s\"\n", 			Get_Notif_CvarName( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/),  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/.nent_default,  /*qc2rust::param_begin::descriptiona*/descriptiona /*qc2rust::param_end::descriptiona*/, 			Get_Notif_CvarName( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/),  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/.nent_challow_def,  /*qc2rust::param_begin::descriptionb*/descriptionb /*qc2rust::param_end::descriptionb*/ 		)) /*qc2rust::macro_end::NOTIF_WRITE_ENTITY_CHOICE*/
 
-	#define NOTIF_WRITE_HARDCODED(cvar, default, description) \
-		NOTIF_WRITE("seta notification_" cvar " \"" default "\" \"" description "\"\n")
+/*qc2rust::define::NOTIF_WRITE_HARDCODED*/
+#define NOTIF_WRITE_HARDCODED(cvar,default,description) /*qc2rust::macro_begin::NOTIF_WRITE_HARDCODED*/NOTIF_WRITE("seta notification_"  /*qc2rust::param_begin::cvar*/cvar /*qc2rust::param_end::cvar*/ " \""  /*qc2rust::param_begin::default*/default /*qc2rust::param_end::default*/ "\" \""  /*qc2rust::param_begin::description*/description /*qc2rust::param_end::description*/ "\"\n") /*qc2rust::macro_end::NOTIF_WRITE_HARDCODED*/
 
 	// Note: This warning only applies to the notifications.cfg file that is output...
 	// You ARE supposed to manually edit this function to add i.e. hard coded
@@ -1011,17 +1013,25 @@ string Local_Notification_sprintf(
 		string tmp_s; // used by NOTIF_ARGUMENT_LIST
 		switch (strtolower(selected))
 		{
-			#define ARG_CASE_ARG_CS_SV_HA(selected, result) case selected: arg_slot[sel_num++] = result; break;
-			#define ARG_CASE_ARG_CS_SV_DC(selected, result) case selected: arg_slot[sel_num++] = result; break;
-			#define ARG_CASE_ARG_CS_SV(selected, result)    case selected: arg_slot[sel_num++] = result; break;
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_HA*/
+#define ARG_CASE_ARG_CS_SV_HA(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_HA*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: arg_slot[sel_num++] =  /*qc2rust::param_begin::result*/result /*qc2rust::param_end::result*/; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_HA*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_DC*/
+#define ARG_CASE_ARG_CS_SV_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_DC*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: arg_slot[sel_num++] =  /*qc2rust::param_begin::result*/result /*qc2rust::param_end::result*/; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_DC*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV*/
+#define ARG_CASE_ARG_CS_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: arg_slot[sel_num++] =  /*qc2rust::param_begin::result*/result /*qc2rust::param_end::result*/; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV*/
 #ifdef CSQC
-			#define ARG_CASE_ARG_CS(selected, result)       case selected: arg_slot[sel_num++] = result; break;
-			#define ARG_CASE_ARG_SV(selected, result)
+/*qc2rust::define::ARG_CASE_ARG_CS*/
+#define ARG_CASE_ARG_CS(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: arg_slot[sel_num++] =  /*qc2rust::param_begin::result*/result /*qc2rust::param_end::result*/; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS*/
+/*qc2rust::define::ARG_CASE_ARG_SV*/
+#define ARG_CASE_ARG_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_SV*/ /*qc2rust::macro_end::ARG_CASE_ARG_SV*/
 #else
-			#define ARG_CASE_ARG_CS(selected, result)
-			#define ARG_CASE_ARG_SV(selected, result)       case selected: arg_slot[sel_num++] = result; break;
+/*qc2rust::define::ARG_CASE_ARG_CS*/
+#define ARG_CASE_ARG_CS(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS*/
+/*qc2rust::define::ARG_CASE_ARG_SV*/
+#define ARG_CASE_ARG_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_SV*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: arg_slot[sel_num++] =  /*qc2rust::param_begin::result*/result /*qc2rust::param_end::result*/; break; /*qc2rust::macro_end::ARG_CASE_ARG_SV*/
 #endif
-			#define ARG_CASE_ARG_DC(selected, result)
+/*qc2rust::define::ARG_CASE_ARG_DC*/
+#define ARG_CASE_ARG_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_DC*/ /*qc2rust::macro_end::ARG_CASE_ARG_DC*/
 			#define ARG_CASE(prog, selected, result)        ARG_CASE_##prog(selected, result)
 			NOTIF_ARGUMENT_LIST
 			#undef ARG_CASE
@@ -1099,12 +1109,18 @@ void Local_Notification_HUD_Notify_Push(
 		NOTIF_HIT_MAX(NOTIF_MAX_HUDARGS, "Local_Notification_HUD_Notify_Push");
 		switch (strtolower(selected))
 		{
-			#define ARG_CASE_ARG_CS_SV_HA(selected, result) case selected: arg_slot[sel_num++] = result; break;
-			#define ARG_CASE_ARG_CS_SV_DC(selected, result)
-			#define ARG_CASE_ARG_CS_SV(selected, result)
-			#define ARG_CASE_ARG_CS(selected, result)
-			#define ARG_CASE_ARG_SV(selected, result)
-			#define ARG_CASE_ARG_DC(selected, result)
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_HA*/
+#define ARG_CASE_ARG_CS_SV_HA(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_HA*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: arg_slot[sel_num++] =  /*qc2rust::param_begin::result*/result /*qc2rust::param_end::result*/; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_HA*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_DC*/
+#define ARG_CASE_ARG_CS_SV_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_DC*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_DC*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV*/
+#define ARG_CASE_ARG_CS_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV*/
+/*qc2rust::define::ARG_CASE_ARG_CS*/
+#define ARG_CASE_ARG_CS(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS*/
+/*qc2rust::define::ARG_CASE_ARG_SV*/
+#define ARG_CASE_ARG_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_SV*/ /*qc2rust::macro_end::ARG_CASE_ARG_SV*/
+/*qc2rust::define::ARG_CASE_ARG_DC*/
+#define ARG_CASE_ARG_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_DC*/ /*qc2rust::macro_end::ARG_CASE_ARG_DC*/
 			#define ARG_CASE(prog, selected, result)        ARG_CASE_##prog(selected, result)
 			NOTIF_ARGUMENT_LIST
 			#undef ARG_CASE
@@ -1142,12 +1158,18 @@ void Local_Notification_centerprint_generic(
 		NOTIF_HIT_MAX(NOTIF_MAX_DURCNT, "Local_Notification_centerprint_generic");
 		switch (strtolower(selected))
 		{
-			#define ARG_CASE_ARG_CS_SV_HA(selected, result)
-			#define ARG_CASE_ARG_CS_SV_DC(selected, result) case selected: arg_slot[sel_num++] = result; break;
-			#define ARG_CASE_ARG_CS_SV(selected, result)
-			#define ARG_CASE_ARG_CS(selected, result)
-			#define ARG_CASE_ARG_SV(selected, result)
-			#define ARG_CASE_ARG_DC(selected, result)       case selected: arg_slot[sel_num++] = result; break;
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_HA*/
+#define ARG_CASE_ARG_CS_SV_HA(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_HA*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_HA*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV_DC*/
+#define ARG_CASE_ARG_CS_SV_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV_DC*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: arg_slot[sel_num++] =  /*qc2rust::param_begin::result*/result /*qc2rust::param_end::result*/; break; /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV_DC*/
+/*qc2rust::define::ARG_CASE_ARG_CS_SV*/
+#define ARG_CASE_ARG_CS_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS_SV*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS_SV*/
+/*qc2rust::define::ARG_CASE_ARG_CS*/
+#define ARG_CASE_ARG_CS(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_CS*/ /*qc2rust::macro_end::ARG_CASE_ARG_CS*/
+/*qc2rust::define::ARG_CASE_ARG_SV*/
+#define ARG_CASE_ARG_SV(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_SV*/ /*qc2rust::macro_end::ARG_CASE_ARG_SV*/
+/*qc2rust::define::ARG_CASE_ARG_DC*/
+#define ARG_CASE_ARG_DC(selected,result) /*qc2rust::macro_begin::ARG_CASE_ARG_DC*/case  /*qc2rust::param_begin::selected*/selected /*qc2rust::param_end::selected*/: arg_slot[sel_num++] =  /*qc2rust::param_begin::result*/result /*qc2rust::param_end::result*/; break; /*qc2rust::macro_end::ARG_CASE_ARG_DC*/
 			#define ARG_CASE(prog, selected, result)        ARG_CASE_##prog(selected,result)
 			NOTIF_ARGUMENT_LIST
 			#undef ARG_CASE
@@ -1368,9 +1390,8 @@ void Local_Notification_WOVA(
 	string s1, string s2, string s3, string s4,
 	float f1, float f2, float f3, float f4)
 {
-	#define VARITEM(stringc, floatc, args) \
-		if ((stringcount == stringc) && (floatcount == floatc)) \
-		{ Local_Notification(net_type, net_name, args); return; }
+/*qc2rust::define::VARITEM*/
+#define VARITEM(stringc,floatc,args) /*qc2rust::macro_begin::VARITEM*/if ((stringcount ==  /*qc2rust::param_begin::stringc*/stringc /*qc2rust::param_end::stringc*/) && (floatcount ==  /*qc2rust::param_begin::floatc*/floatc /*qc2rust::param_end::floatc*/)) 		{ Local_Notification(net_type, net_name,  /*qc2rust::param_begin::args*/args /*qc2rust::param_end::args*/); return; } /*qc2rust::macro_end::VARITEM*/
 	EIGHT_VARS_TO_VARARGS_VARLIST
 	#undef VARITEM
 	Local_Notification(net_type, net_name); // some notifications don't have any arguments at all
@@ -1603,27 +1624,8 @@ void Send_Notification(
 		//   2. Manually handling each separate call on per-usage basis (See old CTF usage of verbose)
 		entity found_choice;
 
-		#define RECURSE_FROM_CHOICE(ent,action) MACRO_BEGIN \
-			if (notif.nent_challow_var && (warmup_stage || (notif.nent_challow_var == 2))) { \
-				switch (CS(ent).msg_choice_choices[net_name.nent_choice_idx]) \
-				{ \
-					case 1: found_choice = notif.nent_optiona; break; \
-					case 2: found_choice = notif.nent_optionb; break; \
-					default: action; \
-				} \
-			} else { \
-				found_choice = notif.nent_optiona; \
-			} \
-			Send_Notification_WOVA( \
-				NOTIF_ONE_ONLY, \
-				ent, \
-				found_choice.nent_type, \
-				found_choice, \
-				found_choice.nent_stringcount, \
-				found_choice.nent_floatcount, \
-				s1, s2, s3, s4, \
-				f1, f2, f3, f4); \
-		MACRO_END
+/*qc2rust::define::RECURSE_FROM_CHOICE*/
+#define RECURSE_FROM_CHOICE(ent,action) /*qc2rust::macro_begin::RECURSE_FROM_CHOICE*/MACRO_BEGIN 			if (notif.nent_challow_var && (warmup_stage || (notif.nent_challow_var == 2))) { 				switch (CS( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/).msg_choice_choices[net_name.nent_choice_idx]) 				{ 					case 1: found_choice = notif.nent_optiona; break; 					case 2: found_choice = notif.nent_optionb; break; 					default:  /*qc2rust::param_begin::action*/action /*qc2rust::param_end::action*/; 				} 			} else { 				found_choice = notif.nent_optiona; 			} 			Send_Notification_WOVA( 				NOTIF_ONE_ONLY, 				 /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/, 				found_choice.nent_type, 				found_choice, 				found_choice.nent_stringcount, 				found_choice.nent_floatcount, 				s1, s2, s3, s4, 				f1, f2, f3, f4); 		MACRO_END /*qc2rust::macro_end::RECURSE_FROM_CHOICE*/
 
 		switch (broadcast)
 		{
@@ -1697,9 +1699,8 @@ void Send_Notification_WOVA(
 	));
 	#endif
 
-	#define VARITEM(stringc, floatc, args) \
-		if ((stringcount == stringc) && (floatcount == floatc)) \
-		{ Send_Notification(broadcast, client, net_type, net_name, args); return; }
+/*qc2rust::define::VARITEM*/
+#define VARITEM(stringc,floatc,args) /*qc2rust::macro_begin::VARITEM*/if ((stringcount ==  /*qc2rust::param_begin::stringc*/stringc /*qc2rust::param_end::stringc*/) && (floatcount ==  /*qc2rust::param_begin::floatc*/floatc /*qc2rust::param_end::floatc*/)) 		{ Send_Notification(broadcast, client, net_type, net_name,  /*qc2rust::param_begin::args*/args /*qc2rust::param_end::args*/); return; } /*qc2rust::macro_end::VARITEM*/
 	EIGHT_VARS_TO_VARARGS_VARLIST
 	#undef VARITEM
 	Send_Notification(broadcast, client, net_type, net_name); // some notifications don't have any arguments at all
@@ -1729,9 +1730,8 @@ void Send_Notification_WOCOVA(
 	));
 	#endif
 
-	#define VARITEM(stringc, floatc, args) \
-		if ((notif.nent_stringcount == stringc) && (notif.nent_floatcount == floatc)) \
-		{ Send_Notification(broadcast, client, net_type, net_name, args); return; }
+/*qc2rust::define::VARITEM*/
+#define VARITEM(stringc,floatc,args) /*qc2rust::macro_begin::VARITEM*/if ((notif.nent_stringcount ==  /*qc2rust::param_begin::stringc*/stringc /*qc2rust::param_end::stringc*/) && (notif.nent_floatcount ==  /*qc2rust::param_begin::floatc*/floatc /*qc2rust::param_end::floatc*/)) 		{ Send_Notification(broadcast, client, net_type, net_name,  /*qc2rust::param_begin::args*/args /*qc2rust::param_end::args*/); return; } /*qc2rust::macro_end::VARITEM*/
 	EIGHT_VARS_TO_VARARGS_VARLIST
 	#undef VARITEM
 	Send_Notification(broadcast, client, net_type, net_name); // some notifications don't have any arguments at all

@@ -20,13 +20,12 @@ bool _json_parse_number();
     bool _json_parse_float();
     bool _json_parse_int();
 
-#define JSON_BEGIN() int __i = STRING_ITERATOR_SAVE(_json)
-#define JSON_FAIL(reason) goto fail
-#define JSON_END() \
-   return true; \
-:fail \
-   STRING_ITERATOR_LOAD(_json, __i); \
-   return false;
+/*qc2rust::define::JSON_BEGIN*/
+#define JSON_BEGIN() /*qc2rust::macro_begin::JSON_BEGIN*/int __i = STRING_ITERATOR_SAVE(_json) /*qc2rust::macro_end::JSON_BEGIN*/
+/*qc2rust::define::JSON_FAIL*/
+#define JSON_FAIL(reason) /*qc2rust::macro_begin::JSON_FAIL*/goto fail /*qc2rust::macro_end::JSON_FAIL*/
+/*qc2rust::define::JSON_END*/
+#define JSON_END() /*qc2rust::macro_begin::JSON_END*/return true; :fail    STRING_ITERATOR_LOAD(_json, __i);    return false; /*qc2rust::macro_end::JSON_END*/
 // Current namespace
 string _json_ns;
 // Current keys
@@ -301,13 +300,7 @@ void json_dump(int buf)
 
 TEST(json, Parse)
 {
-    string s = "{\n\
-    \"m_string\": \"\\\"string\\\"\",\n\
-    \"m_int\": 123,\n\
-    \"m_bool\": true,\n\
-    \"m_null\": null,\n\
-    \"m_obj\": { },\n\
-    \"m_arr\": [ ]\n}"; // "
+    string s = "{\n    \"m_string\": \"\\\"string\\\"\",\n    \"m_int\": 123,\n    \"m_bool\": true,\n    \"m_null\": null,\n    \"m_obj\": { },\n    \"m_arr\": [ ]\n}"; // "
     print(s, "\n");
     int buf = json_parse(s, _json_parse_object);
     EXPECT_NE(-1, buf);

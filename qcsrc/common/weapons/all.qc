@@ -1,6 +1,7 @@
 #include "all.qh"
 #ifndef WEAPONS_ALL_C
-#define WEAPONS_ALL_C
+/*qc2rust::define::WEAPONS_ALL_C*/
+#define WEAPONS_ALL_C /*qc2rust::macro_begin::WEAPONS_ALL_C*/ /*qc2rust::macro_end::WEAPONS_ALL_C*/
 
 #if defined(CSQC)
 	#include <client/defs.qh>
@@ -324,7 +325,8 @@ vector shotorg_adjust_values(vector vecs, bool y_is_right, bool visual, int algn
 	return vecs;
 }
 
-#define shotorg_adjust shotorg_adjust_values
+/*qc2rust::define::shotorg_adjust*/
+#define shotorg_adjust /*qc2rust::macro_begin::shotorg_adjust*/shotorg_adjust_values /*qc2rust::macro_end::shotorg_adjust*/
 
 /**
  * supported formats:

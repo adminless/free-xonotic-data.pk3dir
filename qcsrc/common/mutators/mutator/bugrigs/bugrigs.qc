@@ -24,21 +24,36 @@ REGISTER_MUTATOR(bugrigs, true);
 #endif
 
 
-#define PHYS_BUGRIGS(s)                        STAT(BUGRIGS, s)
-#define PHYS_BUGRIGS_ACCEL(s)                  STAT(BUGRIGS_ACCEL, s)
-#define PHYS_BUGRIGS_AIR_STEERING(s)           STAT(BUGRIGS_AIR_STEERING, s)
-#define PHYS_BUGRIGS_ANGLE_SMOOTHING(s)        STAT(BUGRIGS_ANGLE_SMOOTHING, s)
-#define PHYS_BUGRIGS_CAR_JUMPING(s)            STAT(BUGRIGS_CAR_JUMPING, s)
-#define PHYS_BUGRIGS_FRICTION_AIR(s)           STAT(BUGRIGS_FRICTION_AIR, s)
-#define PHYS_BUGRIGS_FRICTION_BRAKE(s)         STAT(BUGRIGS_FRICTION_BRAKE, s)
-#define PHYS_BUGRIGS_FRICTION_FLOOR(s)         STAT(BUGRIGS_FRICTION_FLOOR, s)
-#define PHYS_BUGRIGS_PLANAR_MOVEMENT(s)        STAT(BUGRIGS_PLANAR_MOVEMENT, s)
-#define PHYS_BUGRIGS_REVERSE_SPEEDING(s)       STAT(BUGRIGS_REVERSE_SPEEDING, s)
-#define PHYS_BUGRIGS_REVERSE_SPINNING(s)       STAT(BUGRIGS_REVERSE_SPINNING, s)
-#define PHYS_BUGRIGS_REVERSE_STOPPING(s)       STAT(BUGRIGS_REVERSE_STOPPING, s)
-#define PHYS_BUGRIGS_SPEED_POW(s)              STAT(BUGRIGS_SPEED_POW, s)
-#define PHYS_BUGRIGS_SPEED_REF(s)              STAT(BUGRIGS_SPEED_REF, s)
-#define PHYS_BUGRIGS_STEER(s)                  STAT(BUGRIGS_STEER, s)
+/*qc2rust::define::PHYS_BUGRIGS*/
+#define PHYS_BUGRIGS(s) /*qc2rust::macro_begin::PHYS_BUGRIGS*/STAT(BUGRIGS,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS*/
+/*qc2rust::define::PHYS_BUGRIGS_ACCEL*/
+#define PHYS_BUGRIGS_ACCEL(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_ACCEL*/STAT(BUGRIGS_ACCEL,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_ACCEL*/
+/*qc2rust::define::PHYS_BUGRIGS_AIR_STEERING*/
+#define PHYS_BUGRIGS_AIR_STEERING(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_AIR_STEERING*/STAT(BUGRIGS_AIR_STEERING,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_AIR_STEERING*/
+/*qc2rust::define::PHYS_BUGRIGS_ANGLE_SMOOTHING*/
+#define PHYS_BUGRIGS_ANGLE_SMOOTHING(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_ANGLE_SMOOTHING*/STAT(BUGRIGS_ANGLE_SMOOTHING,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_ANGLE_SMOOTHING*/
+/*qc2rust::define::PHYS_BUGRIGS_CAR_JUMPING*/
+#define PHYS_BUGRIGS_CAR_JUMPING(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_CAR_JUMPING*/STAT(BUGRIGS_CAR_JUMPING,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_CAR_JUMPING*/
+/*qc2rust::define::PHYS_BUGRIGS_FRICTION_AIR*/
+#define PHYS_BUGRIGS_FRICTION_AIR(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_FRICTION_AIR*/STAT(BUGRIGS_FRICTION_AIR,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_FRICTION_AIR*/
+/*qc2rust::define::PHYS_BUGRIGS_FRICTION_BRAKE*/
+#define PHYS_BUGRIGS_FRICTION_BRAKE(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_FRICTION_BRAKE*/STAT(BUGRIGS_FRICTION_BRAKE,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_FRICTION_BRAKE*/
+/*qc2rust::define::PHYS_BUGRIGS_FRICTION_FLOOR*/
+#define PHYS_BUGRIGS_FRICTION_FLOOR(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_FRICTION_FLOOR*/STAT(BUGRIGS_FRICTION_FLOOR,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_FRICTION_FLOOR*/
+/*qc2rust::define::PHYS_BUGRIGS_PLANAR_MOVEMENT*/
+#define PHYS_BUGRIGS_PLANAR_MOVEMENT(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_PLANAR_MOVEMENT*/STAT(BUGRIGS_PLANAR_MOVEMENT,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_PLANAR_MOVEMENT*/
+/*qc2rust::define::PHYS_BUGRIGS_REVERSE_SPEEDING*/
+#define PHYS_BUGRIGS_REVERSE_SPEEDING(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_REVERSE_SPEEDING*/STAT(BUGRIGS_REVERSE_SPEEDING,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_REVERSE_SPEEDING*/
+/*qc2rust::define::PHYS_BUGRIGS_REVERSE_SPINNING*/
+#define PHYS_BUGRIGS_REVERSE_SPINNING(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_REVERSE_SPINNING*/STAT(BUGRIGS_REVERSE_SPINNING,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_REVERSE_SPINNING*/
+/*qc2rust::define::PHYS_BUGRIGS_REVERSE_STOPPING*/
+#define PHYS_BUGRIGS_REVERSE_STOPPING(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_REVERSE_STOPPING*/STAT(BUGRIGS_REVERSE_STOPPING,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_REVERSE_STOPPING*/
+/*qc2rust::define::PHYS_BUGRIGS_SPEED_POW*/
+#define PHYS_BUGRIGS_SPEED_POW(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_SPEED_POW*/STAT(BUGRIGS_SPEED_POW,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_SPEED_POW*/
+/*qc2rust::define::PHYS_BUGRIGS_SPEED_REF*/
+#define PHYS_BUGRIGS_SPEED_REF(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_SPEED_REF*/STAT(BUGRIGS_SPEED_REF,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_SPEED_REF*/
+/*qc2rust::define::PHYS_BUGRIGS_STEER*/
+#define PHYS_BUGRIGS_STEER(s) /*qc2rust::macro_begin::PHYS_BUGRIGS_STEER*/STAT(BUGRIGS_STEER,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_BUGRIGS_STEER*/
 
 #if defined(SVQC)
 

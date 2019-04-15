@@ -5,33 +5,26 @@
 void print_assertfailed_severe(string expr);
 void print_assertfailed_fatal(string expr);
 
-#define assert(expr, ...) _assert(print_assertfailed_severe, expr, __VA_ARGS__)
-#define devassert(...) MACRO_BEGIN if (autocvar_developer) assert(__VA_ARGS__); MACRO_END
+/*qc2rust::define::assert*/
+#define assert(expr,...) /*qc2rust::macro_begin::assert*/_assert(print_assertfailed_severe,  /*qc2rust::param_begin::expr*/expr /*qc2rust::param_end::expr*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::assert*/
+/*qc2rust::define::devassert*/
+#define devassert(...) /*qc2rust::macro_begin::devassert*/MACRO_BEGIN if (autocvar_developer) assert( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/); MACRO_END /*qc2rust::macro_end::devassert*/
 
-#define assert_once(expr, ...) \
-	MACRO_BEGIN \
-		static bool __once; \
-		if (!__once) \
-		{ \
-			assert(expr, __VA_ARGS__); \
-			__once = true; \
-		} \
-	MACRO_END
-#define devassert_once(...) MACRO_BEGIN if (autocvar_developer) assert_once(__VA_ARGS__); MACRO_END
+/*qc2rust::define::assert_once*/
+#define assert_once(expr,...) /*qc2rust::macro_begin::assert_once*/MACRO_BEGIN 		static bool __once; 		if (!__once) 		{ 			assert( /*qc2rust::param_begin::expr*/expr /*qc2rust::param_end::expr*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/); 			__once = true; 		} 	MACRO_END /*qc2rust::macro_end::assert_once*/
+/*qc2rust::define::devassert_once*/
+#define devassert_once(...) /*qc2rust::macro_begin::devassert_once*/MACRO_BEGIN if (autocvar_developer) assert_once( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/); MACRO_END /*qc2rust::macro_end::devassert_once*/
 
-#define demand(expr, ...) _assert(print_assertfailed_fatal, expr, __VA_ARGS__)
-#define devdemand(...) MACRO_BEGIN if (autocvar_developer) demand(__VA_ARGS__); MACRO_END
+/*qc2rust::define::demand*/
+#define demand(expr,...) /*qc2rust::macro_begin::demand*/_assert(print_assertfailed_fatal,  /*qc2rust::param_begin::expr*/expr /*qc2rust::param_end::expr*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::demand*/
+/*qc2rust::define::devdemand*/
+#define devdemand(...) /*qc2rust::macro_begin::devdemand*/MACRO_BEGIN if (autocvar_developer) demand( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/); MACRO_END /*qc2rust::macro_end::devdemand*/
 
-#define _assert(f, expr, then) \
-	MACRO_BEGIN \
-		if (!(expr)) \
-		{ \
-			f(#expr); \
-			then; \
-		} \
-	MACRO_END
+/*qc2rust::define::_assert*/
+#define _assert(f,expr,then) /*qc2rust::macro_begin::_assert*/MACRO_BEGIN 		if (!( /*qc2rust::param_begin::expr*/expr /*qc2rust::param_end::expr*/)) 		{ 			 /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::stringify_begin::expr*/#expr /*qc2rust::stringify_end::expr*/); 			 /*qc2rust::param_begin::then*/then /*qc2rust::param_end::then*/; 		} 	MACRO_END /*qc2rust::macro_end::_assert*/
 
-#define ASSERT_LESS(name, var, const) noref int name[(const - var + 1)];
+/*qc2rust::define::ASSERT_LESS*/
+#define ASSERT_LESS(name,var,const) /*qc2rust::macro_begin::ASSERT_LESS*/noref int  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/[( /*qc2rust::param_begin::const*/const /*qc2rust::param_end::const*/ -  /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/ + 1)]; /*qc2rust::macro_end::ASSERT_LESS*/
 
 
 #if defined(MENUQC)
@@ -43,77 +36,80 @@ string(string, string...) strcat1n = #115;
 // would be nice if __FUNC__ could be concatenated at compile time
 #if 0
 	// less work, bigger binary
-	#define __SOURCELOC__ (sprintf("^7%s^9(^9"__FILE__"^7:^9"STR(__LINE__)"^7)", __FUNC__))
+/*qc2rust::define::__SOURCELOC__*/
+#define __SOURCELOC__ /*qc2rust::macro_begin::__SOURCELOC__*/(sprintf("^7%s^9(^9"__FILE__"^7:^9"STR(__LINE__)"^7)", __FUNC__)) /*qc2rust::macro_end::__SOURCELOC__*/
 #else
-	#define __SOURCELOC__ (sprintf("^7%s^9(^9%s^7:^9%s^7)", __FUNC__, __FILE__, STR(__LINE__)))
+/*qc2rust::define::__SOURCELOC__*/
+#define __SOURCELOC__ /*qc2rust::macro_begin::__SOURCELOC__*/(sprintf("^7%s^9(^9%s^7:^9%s^7)", __FUNC__, __FILE__, STR(__LINE__))) /*qc2rust::macro_end::__SOURCELOC__*/
 #endif
 
-#define _LOG_HEADER(level) "^9[::^7"PROGNAME"^9::"level"^9] ", __SOURCELOC__
-#define _LOG(f, level, s) \
-	MACRO_BEGIN \
-		f(strcat1n(_LOG_HEADER(level), "\n^7", s, "\n")); \
-	MACRO_END
+/*qc2rust::define::_LOG_HEADER*/
+#define _LOG_HEADER(level) /*qc2rust::macro_begin::_LOG_HEADER*/"^9[::^7"PROGNAME"^9::" /*qc2rust::param_begin::level*/level /*qc2rust::param_end::level*/"^9] ", __SOURCELOC__ /*qc2rust::macro_end::_LOG_HEADER*/
+/*qc2rust::define::_LOG*/
+#define _LOG(f,level,s) /*qc2rust::macro_begin::_LOG*/MACRO_BEGIN 		 /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/(strcat1n(_LOG_HEADER( /*qc2rust::param_begin::level*/level /*qc2rust::param_end::level*/), "\n^7",  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/, "\n")); 	MACRO_END /*qc2rust::macro_end::_LOG*/
 
-#define  LOG_FATAL(...) _LOG_FATAL(strcat1n(__VA_ARGS__))
-#define  LOG_FATALF(...) _LOG_FATAL(sprintf(__VA_ARGS__))
-#define _LOG_FATAL(s) _LOG(error, "^1FATAL", s)
+/*qc2rust::define::LOG_FATAL*/
+#define LOG_FATAL(...) /*qc2rust::macro_begin::LOG_FATAL*/_LOG_FATAL(strcat1n( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_FATAL*/
+/*qc2rust::define::LOG_FATALF*/
+#define LOG_FATALF(...) /*qc2rust::macro_begin::LOG_FATALF*/_LOG_FATAL(sprintf( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_FATALF*/
+/*qc2rust::define::_LOG_FATAL*/
+#define _LOG_FATAL(s) /*qc2rust::macro_begin::_LOG_FATAL*/_LOG(error, "^1FATAL",  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::_LOG_FATAL*/
 
-#define  LOG_SEVERE(...) _LOG_SEVERE(strcat1n(__VA_ARGS__))
-#define  LOG_SEVEREF(...) _LOG_SEVERE(sprintf(__VA_ARGS__))
-#define _LOG_SEVERE(s) _LOG(backtrace, "^1SEVERE", s)
+/*qc2rust::define::LOG_SEVERE*/
+#define LOG_SEVERE(...) /*qc2rust::macro_begin::LOG_SEVERE*/_LOG_SEVERE(strcat1n( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_SEVERE*/
+/*qc2rust::define::LOG_SEVEREF*/
+#define LOG_SEVEREF(...) /*qc2rust::macro_begin::LOG_SEVEREF*/_LOG_SEVERE(sprintf( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_SEVEREF*/
+/*qc2rust::define::_LOG_SEVERE*/
+#define _LOG_SEVERE(s) /*qc2rust::macro_begin::_LOG_SEVERE*/_LOG(backtrace, "^1SEVERE",  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::_LOG_SEVERE*/
 
-#define  LOG_WARN(...) _LOG_WARN(strcat1n(__VA_ARGS__))
-#define  LOG_WARNF(...) _LOG_WARN(sprintf(__VA_ARGS__))
-#define _LOG_WARN(s) _LOG(print, "^3WARNING", s)
+/*qc2rust::define::LOG_WARN*/
+#define LOG_WARN(...) /*qc2rust::macro_begin::LOG_WARN*/_LOG_WARN(strcat1n( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_WARN*/
+/*qc2rust::define::LOG_WARNF*/
+#define LOG_WARNF(...) /*qc2rust::macro_begin::LOG_WARNF*/_LOG_WARN(sprintf( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_WARNF*/
+/*qc2rust::define::_LOG_WARN*/
+#define _LOG_WARN(s) /*qc2rust::macro_begin::_LOG_WARN*/_LOG(print, "^3WARNING",  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::_LOG_WARN*/
 
-#define  LOG_INFO(...) _LOG_INFO(strcat1n(__VA_ARGS__))
-#define  LOG_INFOF(...) _LOG_INFO(sprintf(__VA_ARGS__))
-#define _LOG_INFO(s) \
-	MACRO_BEGIN \
-		dprint(_LOG_HEADER("^5INFO")); \
-		string __s = s; \
-		print("\n^7", __s); \
-		/* TODO: unconditionally add a newline when possible */ \
-		if (str2chr(__s, strlen(__s) - 1) != '\n') { print("\n"); } \
-	MACRO_END
+/*qc2rust::define::LOG_INFO*/
+#define LOG_INFO(...) /*qc2rust::macro_begin::LOG_INFO*/_LOG_INFO(strcat1n( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_INFO*/
+/*qc2rust::define::LOG_INFOF*/
+#define LOG_INFOF(...) /*qc2rust::macro_begin::LOG_INFOF*/_LOG_INFO(sprintf( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_INFOF*/
+/*qc2rust::define::_LOG_INFO*/
+#define _LOG_INFO(s) /*qc2rust::macro_begin::_LOG_INFO*/MACRO_BEGIN 		dprint(_LOG_HEADER("^5INFO")); 		string __s =  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/; 		print("\n^7", __s); 		/* TODO: unconditionally add a newline when possible */ 		if (str2chr(__s, strlen(__s) - 1) != '\n') { print("\n"); } 	MACRO_END /*qc2rust::macro_end::_LOG_INFO*/
 
-#define  LOG_TRACE(...) _LOG_TRACE(strcat1n(__VA_ARGS__))
-#define  LOG_TRACEF(...) _LOG_TRACE(sprintf(__VA_ARGS__))
-#define _LOG_TRACE(s) _LOG(dprint, "^6TRACE", s)
+/*qc2rust::define::LOG_TRACE*/
+#define LOG_TRACE(...) /*qc2rust::macro_begin::LOG_TRACE*/_LOG_TRACE(strcat1n( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_TRACE*/
+/*qc2rust::define::LOG_TRACEF*/
+#define LOG_TRACEF(...) /*qc2rust::macro_begin::LOG_TRACEF*/_LOG_TRACE(sprintf( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_TRACEF*/
+/*qc2rust::define::_LOG_TRACE*/
+#define _LOG_TRACE(s) /*qc2rust::macro_begin::_LOG_TRACE*/_LOG(dprint, "^6TRACE",  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::_LOG_TRACE*/
 
-#define  LOG_DEBUG(...) _LOG_DEBUG(strcat1n(__VA_ARGS__))
-#define  LOG_DEBUGF(...) _LOG_DEBUG(sprintf(__VA_ARGS__))
-#define _LOG_DEBUG(s) _LOG(dprint2, "^2DEBUG", s)
+/*qc2rust::define::LOG_DEBUG*/
+#define LOG_DEBUG(...) /*qc2rust::macro_begin::LOG_DEBUG*/_LOG_DEBUG(strcat1n( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_DEBUG*/
+/*qc2rust::define::LOG_DEBUGF*/
+#define LOG_DEBUGF(...) /*qc2rust::macro_begin::LOG_DEBUGF*/_LOG_DEBUG(sprintf( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::LOG_DEBUGF*/
+/*qc2rust::define::_LOG_DEBUG*/
+#define _LOG_DEBUG(s) /*qc2rust::macro_begin::_LOG_DEBUG*/_LOG(dprint2, "^2DEBUG",  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::_LOG_DEBUG*/
 
-#define dprint2(msg) \
-	MACRO_BEGIN \
-		if (autocvar_developer > 1) dprint(msg); \
-	MACRO_END
+/*qc2rust::define::dprint2*/
+#define dprint2(msg) /*qc2rust::macro_begin::dprint2*/MACRO_BEGIN 		if (autocvar_developer > 1) dprint( /*qc2rust::param_begin::msg*/msg /*qc2rust::param_end::msg*/); 	MACRO_END /*qc2rust::macro_end::dprint2*/
 
 // TODO: this sucks, lets find a better way to do backtraces?
-#define _backtrace() builtin_remove(NULL)
+/*qc2rust::define::_backtrace*/
+#define _backtrace() /*qc2rust::macro_begin::_backtrace*/builtin_remove(NULL) /*qc2rust::macro_end::_backtrace*/
 
 noref int autocvar_developer;
 noref bool autocvar_prvm_backtraceforwarnings;
 
 #ifdef SVQC
-#define bt_cvar_set(cvar, value) builtin_cvar_set(cvar, value)
+/*qc2rust::define::bt_cvar_set*/
+#define bt_cvar_set(cvar,value) /*qc2rust::macro_begin::bt_cvar_set*/builtin_cvar_set( /*qc2rust::param_begin::cvar*/cvar /*qc2rust::param_end::cvar*/,  /*qc2rust::param_begin::value*/value /*qc2rust::param_end::value*/) /*qc2rust::macro_end::bt_cvar_set*/
 #else
-#define bt_cvar_set(cvar, value) cvar_set(cvar, value)
+/*qc2rust::define::bt_cvar_set*/
+#define bt_cvar_set(cvar,value) /*qc2rust::macro_begin::bt_cvar_set*/cvar_set( /*qc2rust::param_begin::cvar*/cvar /*qc2rust::param_end::cvar*/,  /*qc2rust::param_begin::value*/value /*qc2rust::param_end::value*/) /*qc2rust::macro_end::bt_cvar_set*/
 #endif
 
-#define backtrace(msg) \
-	MACRO_BEGIN \
-		int dev = autocvar_developer; \
-		bool war = autocvar_prvm_backtraceforwarnings; \
-		bt_cvar_set("developer", "1"); \
-		bt_cvar_set("prvm_backtraceforwarnings", "1"); \
-		print("\n--- CUT HERE ---\n", msg); \
-		_backtrace(); \
-		print("\n--- CUT UNTIL HERE ---\n"); \
-		bt_cvar_set("developer", ftos(dev)); \
-		bt_cvar_set("prvm_backtraceforwarnings", ftos(war)); \
-	MACRO_END
+/*qc2rust::define::backtrace*/
+#define backtrace(msg) /*qc2rust::macro_begin::backtrace*/MACRO_BEGIN 		int dev = autocvar_developer; 		bool war = autocvar_prvm_backtraceforwarnings; 		bt_cvar_set("developer", "1"); 		bt_cvar_set("prvm_backtraceforwarnings", "1"); 		print("\n--- CUT HERE ---\n",  /*qc2rust::param_begin::msg*/msg /*qc2rust::param_end::msg*/); 		_backtrace(); 		print("\n--- CUT UNTIL HERE ---\n"); 		bt_cvar_set("developer", ftos(dev)); 		bt_cvar_set("prvm_backtraceforwarnings", ftos(war)); 	MACRO_END /*qc2rust::macro_end::backtrace*/
 
 void print_assertfailed_severe(string expr)
 {

@@ -54,16 +54,23 @@ string draw_UseSkinFor(string pic);
 // for each element, funcPre is called first, then funcPre and funcPost for all its children, and funcPost last
 void depthfirst(entity start, .entity up, .entity downleft, .entity right, void(entity, entity) funcPre, void(entity, entity) funcPost, entity pass);
 
-#define TIME_TO_NTHS(t,n) floor((t) * (n) + 0.5)
+/*qc2rust::define::TIME_TO_NTHS*/
+#define TIME_TO_NTHS(t,n) /*qc2rust::macro_begin::TIME_TO_NTHS*/floor(( /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/) * ( /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/) + 0.5) /*qc2rust::macro_end::TIME_TO_NTHS*/
 
 const int TIME_DECIMALS = 2;
 const float TIME_FACTOR = 100;
-#define TIME_ENCODED_TOSTRING(n) mmssss(n)
-#define RACE_RECORD "/race100record/"
-#define CTS_RECORD "/cts100record/"
-#define CTF_RECORD "/ctf100record/"
-#define TIME_ENCODE(t) TIME_TO_NTHS(t, TIME_FACTOR)
-#define TIME_DECODE(n) ((n) / TIME_FACTOR)
+/*qc2rust::define::TIME_ENCODED_TOSTRING*/
+#define TIME_ENCODED_TOSTRING(n) /*qc2rust::macro_begin::TIME_ENCODED_TOSTRING*/mmssss( /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/) /*qc2rust::macro_end::TIME_ENCODED_TOSTRING*/
+/*qc2rust::define::RACE_RECORD*/
+#define RACE_RECORD /*qc2rust::macro_begin::RACE_RECORD*/"/race100record/" /*qc2rust::macro_end::RACE_RECORD*/
+/*qc2rust::define::CTS_RECORD*/
+#define CTS_RECORD /*qc2rust::macro_begin::CTS_RECORD*/"/cts100record/" /*qc2rust::macro_end::CTS_RECORD*/
+/*qc2rust::define::CTF_RECORD*/
+#define CTF_RECORD /*qc2rust::macro_begin::CTF_RECORD*/"/ctf100record/" /*qc2rust::macro_end::CTF_RECORD*/
+/*qc2rust::define::TIME_ENCODE*/
+#define TIME_ENCODE(t) /*qc2rust::macro_begin::TIME_ENCODE*/TIME_TO_NTHS( /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/, TIME_FACTOR) /*qc2rust::macro_end::TIME_ENCODE*/
+/*qc2rust::define::TIME_DECODE*/
+#define TIME_DECODE(n) /*qc2rust::macro_begin::TIME_DECODE*/(( /*qc2rust::param_begin::n*/n /*qc2rust::param_end::n*/) / TIME_FACTOR) /*qc2rust::macro_end::TIME_DECODE*/
 
 #ifdef GAMEQC
 string ScoreString(float vflags, float value);
@@ -174,7 +181,8 @@ void Shutdown();
 .float skeleton_bones;
 void Skeleton_SetBones(entity e);
 // loops through the tags of model v using counter tagnum
-#define FOR_EACH_TAG(v) float tagnum; Skeleton_SetBones(v); for(tagnum = 0; tagnum < v.skeleton_bones; tagnum++, gettaginfo(v, tagnum))
+/*qc2rust::define::FOR_EACH_TAG*/
+#define FOR_EACH_TAG(v) /*qc2rust::macro_begin::FOR_EACH_TAG*/float tagnum; Skeleton_SetBones( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/); for(tagnum = 0; tagnum <  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/.skeleton_bones; tagnum++, gettaginfo( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/, tagnum)) /*qc2rust::macro_end::FOR_EACH_TAG*/
 #endif
 
 // execute-stuff-next-frame subsystem
@@ -186,19 +194,25 @@ USING(isConnectedFunction_t, float(entity a, entity b, entity pass));
 void FindConnectedComponent(entity e, .entity fld, findNextEntityNearFunction_t nxt, isConnectedFunction_t iscon, entity pass);
 
 // expand multiple arguments into one argument by stripping parenthesis
-#define XPD(...) __VA_ARGS__
+/*qc2rust::define::XPD*/
+#define XPD(...) /*qc2rust::macro_begin::XPD*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::XPD*/
 
 // Some common varargs functions. Lowercase as they match C.
-#define fprintf(file, ...) fputs(file, sprintf(__VA_ARGS__))
-#define bprintf(...) bprint(sprintf(__VA_ARGS__))
+/*qc2rust::define::fprintf*/
+#define fprintf(file,...) /*qc2rust::macro_begin::fprintf*/fputs( /*qc2rust::param_begin::file*/file /*qc2rust::param_end::file*/, sprintf( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::fprintf*/
+/*qc2rust::define::bprintf*/
+#define bprintf(...) /*qc2rust::macro_begin::bprintf*/bprint(sprintf( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::bprintf*/
 
 #ifdef GAMEQC
 	#ifdef CSQC
-		#define GENTLE (autocvar_cl_gentle || autocvar_cl_gentle_messages)
+/*qc2rust::define::GENTLE*/
+#define GENTLE /*qc2rust::macro_begin::GENTLE*/(autocvar_cl_gentle || autocvar_cl_gentle_messages) /*qc2rust::macro_end::GENTLE*/
 	#else
-		#define GENTLE autocvar_sv_gentle
+/*qc2rust::define::GENTLE*/
+#define GENTLE /*qc2rust::macro_begin::GENTLE*/autocvar_sv_gentle /*qc2rust::macro_end::GENTLE*/
 	#endif
-	#define normal_or_gentle(normal, gentle) (GENTLE ? ((gentle != "") ? gentle : normal) : normal)
+/*qc2rust::define::normal_or_gentle*/
+#define normal_or_gentle(normal,gentle) /*qc2rust::macro_begin::normal_or_gentle*/(GENTLE ? (( /*qc2rust::param_begin::gentle*/gentle /*qc2rust::param_end::gentle*/ != "") ?  /*qc2rust::param_begin::gentle*/gentle /*qc2rust::param_end::gentle*/ :  /*qc2rust::param_begin::normal*/normal /*qc2rust::param_end::normal*/) :  /*qc2rust::param_begin::normal*/normal /*qc2rust::param_end::normal*/) /*qc2rust::macro_end::normal_or_gentle*/
 #endif
 
 #ifdef GAMEQC
@@ -220,7 +234,9 @@ int Mod_Q1BSP_SuperContentsFromNativeContents(int nativecontents);
 int Mod_Q1BSP_NativeContentsFromSuperContents(int supercontents);
 #endif
 
-#define APPEND_TO_STRING(list,sep,add) ((list) = (((list) != "") ? strcat(list, sep, add) : (add)))
+/*qc2rust::define::APPEND_TO_STRING*/
+#define APPEND_TO_STRING(list,sep,add) /*qc2rust::macro_begin::APPEND_TO_STRING*/(( /*qc2rust::param_begin::list*/list /*qc2rust::param_end::list*/) = ((( /*qc2rust::param_begin::list*/list /*qc2rust::param_end::list*/) != "") ? strcat( /*qc2rust::param_begin::list*/list /*qc2rust::param_end::list*/,  /*qc2rust::param_begin::sep*/sep /*qc2rust::param_end::sep*/,  /*qc2rust::param_begin::add*/add /*qc2rust::param_end::add*/) : ( /*qc2rust::param_begin::add*/add /*qc2rust::param_end::add*/))) /*qc2rust::macro_end::APPEND_TO_STRING*/
 
 // Returns the correct difference between two always increasing numbers
-#define COMPARE_INCREASING(to,from) (to < from ? from + to + 2 : to - from)
+/*qc2rust::define::COMPARE_INCREASING*/
+#define COMPARE_INCREASING(to,from) /*qc2rust::macro_begin::COMPARE_INCREASING*/( /*qc2rust::param_begin::to*/to /*qc2rust::param_end::to*/ <  /*qc2rust::param_begin::from*/from /*qc2rust::param_end::from*/ ?  /*qc2rust::param_begin::from*/from /*qc2rust::param_end::from*/ +  /*qc2rust::param_begin::to*/to /*qc2rust::param_end::to*/ + 2 :  /*qc2rust::param_begin::to*/to /*qc2rust::param_end::to*/ -  /*qc2rust::param_begin::from*/from /*qc2rust::param_end::from*/) /*qc2rust::macro_end::COMPARE_INCREASING*/

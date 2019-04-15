@@ -49,8 +49,10 @@ bool autocvar_bot_ignore_bots;
 bool autocvar_bot_join_empty;
 bool autocvar_bot_navigation_ignoreplayers;
 bool autocvar_bot_nofire;
-#define autocvar_bot_prefix cvar_string("bot_prefix")
-#define autocvar_bot_suffix cvar_string("bot_suffix")
+/*qc2rust::define::autocvar_bot_prefix*/
+#define autocvar_bot_prefix /*qc2rust::macro_begin::autocvar_bot_prefix*/cvar_string("bot_prefix") /*qc2rust::macro_end::autocvar_bot_prefix*/
+/*qc2rust::define::autocvar_bot_suffix*/
+#define autocvar_bot_suffix /*qc2rust::macro_begin::autocvar_bot_suffix*/cvar_string("bot_suffix") /*qc2rust::macro_end::autocvar_bot_suffix*/
 bool autocvar_bot_usemodelnames;
 bool autocvar_bot_debug_tracewalk;
 bool autocvar_bot_debug_goalstack;

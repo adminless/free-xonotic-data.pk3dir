@@ -1,7 +1,8 @@
 #pragma once
 
 // this must be included BEFORE campaign_common.h to make this a memory saving
-#define CAMPAIGN_MAX_ENTRIES 2
+/*qc2rust::define::CAMPAIGN_MAX_ENTRIES*/
+#define CAMPAIGN_MAX_ENTRIES /*qc2rust::macro_begin::CAMPAIGN_MAX_ENTRIES*/2 /*qc2rust::macro_end::CAMPAIGN_MAX_ENTRIES*/
 
 string campaign_message;
 

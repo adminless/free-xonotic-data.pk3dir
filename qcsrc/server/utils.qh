@@ -6,23 +6,35 @@ const string STR_PLAYER = "player";
 const string STR_SPECTATOR = "spectator";
 const string STR_OBSERVER = "observer";
 
-#define IS_PLAYER(v) ((v).classname == STR_PLAYER)
-#define IS_SPEC(v) ((v).classname == STR_SPECTATOR)
-#define IS_OBSERVER(v) ((v).classname == STR_OBSERVER)
+/*qc2rust::define::IS_PLAYER*/
+#define IS_PLAYER(v) /*qc2rust::macro_begin::IS_PLAYER*/(( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/).classname == STR_PLAYER) /*qc2rust::macro_end::IS_PLAYER*/
+/*qc2rust::define::IS_SPEC*/
+#define IS_SPEC(v) /*qc2rust::macro_begin::IS_SPEC*/(( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/).classname == STR_SPECTATOR) /*qc2rust::macro_end::IS_SPEC*/
+/*qc2rust::define::IS_OBSERVER*/
+#define IS_OBSERVER(v) /*qc2rust::macro_begin::IS_OBSERVER*/(( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/).classname == STR_OBSERVER) /*qc2rust::macro_end::IS_OBSERVER*/
 
-#define IS_CLIENT(v) (v.flags & FL_CLIENT)
+/*qc2rust::define::IS_CLIENT*/
+#define IS_CLIENT(v) /*qc2rust::macro_begin::IS_CLIENT*/( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/.flags & FL_CLIENT) /*qc2rust::macro_end::IS_CLIENT*/
 /** want: (IS_CLIENT(v) && !IS_REAL_CLIENT(v)) */
-#define IS_BOT_CLIENT(v) (clienttype(v) == CLIENTTYPE_BOT)
-#define IS_FAKE_CLIENT(v) (clienttype(v) == CLIENTTYPE_NOTACLIENT)
-#define IS_REAL_CLIENT(v) (clienttype(v) == CLIENTTYPE_REAL)
+/*qc2rust::define::IS_BOT_CLIENT*/
+#define IS_BOT_CLIENT(v) /*qc2rust::macro_begin::IS_BOT_CLIENT*/(clienttype( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/) == CLIENTTYPE_BOT) /*qc2rust::macro_end::IS_BOT_CLIENT*/
+/*qc2rust::define::IS_FAKE_CLIENT*/
+#define IS_FAKE_CLIENT(v) /*qc2rust::macro_begin::IS_FAKE_CLIENT*/(clienttype( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/) == CLIENTTYPE_NOTACLIENT) /*qc2rust::macro_end::IS_FAKE_CLIENT*/
+/*qc2rust::define::IS_REAL_CLIENT*/
+#define IS_REAL_CLIENT(v) /*qc2rust::macro_begin::IS_REAL_CLIENT*/(clienttype( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/) == CLIENTTYPE_REAL) /*qc2rust::macro_end::IS_REAL_CLIENT*/
 /** was: (clienttype(v) == CLIENTTYPE_NOTACLIENT) */
-#define IS_NOT_A_CLIENT(v) (!IS_CLIENT(v))
+/*qc2rust::define::IS_NOT_A_CLIENT*/
+#define IS_NOT_A_CLIENT(v) /*qc2rust::macro_begin::IS_NOT_A_CLIENT*/(!IS_CLIENT( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/)) /*qc2rust::macro_end::IS_NOT_A_CLIENT*/
 
-#define IS_MONSTER(v) (v.flags & FL_MONSTER)
-#define IS_VEHICLE(v) (v.vehicle_flags & VHF_ISVEHICLE)
-#define IS_TURRET(v) (v.turret_flags & TUR_FLAG_ISTURRET)
+/*qc2rust::define::IS_MONSTER*/
+#define IS_MONSTER(v) /*qc2rust::macro_begin::IS_MONSTER*/( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/.flags & FL_MONSTER) /*qc2rust::macro_end::IS_MONSTER*/
+/*qc2rust::define::IS_VEHICLE*/
+#define IS_VEHICLE(v) /*qc2rust::macro_begin::IS_VEHICLE*/( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/.vehicle_flags & VHF_ISVEHICLE) /*qc2rust::macro_end::IS_VEHICLE*/
+/*qc2rust::define::IS_TURRET*/
+#define IS_TURRET(v) /*qc2rust::macro_begin::IS_TURRET*/( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/.turret_flags & TUR_FLAG_ISTURRET) /*qc2rust::macro_end::IS_TURRET*/
 
-#define IS_MOVABLE(v) ((IS_PLAYER(v) || IS_MONSTER(v)) && !STAT(FROZEN, v))
+/*qc2rust::define::IS_MOVABLE*/
+#define IS_MOVABLE(v) /*qc2rust::macro_begin::IS_MOVABLE*/((IS_PLAYER( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/) || IS_MONSTER( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/)) && !STAT(FROZEN,  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/)) /*qc2rust::macro_end::IS_MOVABLE*/
 
 // NOTE: FOR_EACH_CLIENTSLOT deprecated! Use the following instead: FOREACH_CLIENTSLOT(true, { code; });
 // NOTE: FOR_EACH_CLIENT deprecated! Use the following instead: FOREACH_CLIENT(true, { code; });
@@ -33,41 +45,17 @@ const string STR_OBSERVER = "observer";
 // NOTE: FOR_EACH_OBSERVER deprecated! Use the following instead: FOREACH_CLIENT(IS_OBSERVER(it), { code; });
 // NOTE: FOR_EACH_REALPLAYER deprecated! Use the following instead: FOREACH_CLIENT(IS_PLAYER(it) && IS_REAL_CLIENT(it), { code; });
 
-#define FOREACH_CLIENTSLOT(cond, body) \
-	MACRO_BEGIN \
-		for(int _i = 1; _i <= maxclients; ++_i) \
-		{ \
-			const noref int i = _i; \
-			ITER_CONST noref entity it = ftoe(i); \
-			if(cond) { LAMBDA(body) } \
-		} \
-	MACRO_END
+/*qc2rust::define::FOREACH_CLIENTSLOT*/
+#define FOREACH_CLIENTSLOT(cond,body) /*qc2rust::macro_begin::FOREACH_CLIENTSLOT*/MACRO_BEGIN 		for(int _i = 1; _i <= maxclients; ++_i) 		{ 			const noref int i = _i; 			ITER_CONST noref entity it = ftoe(i); 			if( /*qc2rust::param_begin::cond*/cond /*qc2rust::param_end::cond*/) { LAMBDA( /*qc2rust::param_begin::body*/body /*qc2rust::param_end::body*/) } 		} 	MACRO_END /*qc2rust::macro_end::FOREACH_CLIENTSLOT*/
 
-#define FOREACH_CLIENT(cond, body) FOREACH_CLIENTSLOT(IS_CLIENT(it) && (cond), LAMBDA(body))
+/*qc2rust::define::FOREACH_CLIENT*/
+#define FOREACH_CLIENT(cond,body) /*qc2rust::macro_begin::FOREACH_CLIENT*/FOREACH_CLIENTSLOT(IS_CLIENT(it) && ( /*qc2rust::param_begin::cond*/cond /*qc2rust::param_end::cond*/), LAMBDA( /*qc2rust::param_begin::body*/body /*qc2rust::param_end::body*/)) /*qc2rust::macro_end::FOREACH_CLIENT*/
 
 // using the "inside out" version of knuth-fisher-yates shuffle
 // https://en.wikipedia.org/wiki/Fisher–Yates_shuffle
 entity _FCR_clients[255];
 bool _FCR_entered = false;
-#define FOREACH_CLIENT_RANDOM(cond, body) \
-	MACRO_BEGIN \
-		if (_FCR_entered) LOG_FATAL("FOREACH_CLIENT_RANDOM must not be nested"); \
-		_FCR_entered = true; \
-		int _cnt = 0; \
-		FOREACH_CLIENT(cond, { \
-			int _j = floor(random() * (_cnt + 1)); \
-			if (_j != _cnt) \
-				_FCR_clients[_cnt] = _FCR_clients[_j]; \
-			_FCR_clients[_j] = it; \
-			++_cnt; \
-		}); \
-		for (int _i = 0; _i < _cnt; ++_i) \
-		{ \
-			const noref int i = _i; \
-			ITER_CONST noref entity it = _FCR_clients[i]; \
-			if (cond) { LAMBDA(body) } \
-		} \
-		_FCR_entered = false; \
-	MACRO_END
+/*qc2rust::define::FOREACH_CLIENT_RANDOM*/
+#define FOREACH_CLIENT_RANDOM(cond,body) /*qc2rust::macro_begin::FOREACH_CLIENT_RANDOM*/MACRO_BEGIN 		if (_FCR_entered) LOG_FATAL("FOREACH_CLIENT_RANDOM must not be nested"); 		_FCR_entered = true; 		int _cnt = 0; 		FOREACH_CLIENT( /*qc2rust::param_begin::cond*/cond /*qc2rust::param_end::cond*/, { 			int _j = floor(random() * (_cnt + 1)); 			if (_j != _cnt) 				_FCR_clients[_cnt] = _FCR_clients[_j]; 			_FCR_clients[_j] = it; 			++_cnt; 		}); 		for (int _i = 0; _i < _cnt; ++_i) 		{ 			const noref int i = _i; 			ITER_CONST noref entity it = _FCR_clients[i]; 			if ( /*qc2rust::param_begin::cond*/cond /*qc2rust::param_end::cond*/) { LAMBDA( /*qc2rust::param_begin::body*/body /*qc2rust::param_end::body*/) } 		} 		_FCR_entered = false; 	MACRO_END /*qc2rust::macro_end::FOREACH_CLIENT_RANDOM*/
 
 // NOTE: FOR_EACH_MONSTER deprecated! Use the following instead: IL_EACH(g_monsters, true, { code; });

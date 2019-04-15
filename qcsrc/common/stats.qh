@@ -21,25 +21,43 @@ const int MAX_CL_STATS = 256;
 // const int STAT_VIEWHEIGHT = 16;
 
 #if defined(CSQC)
-    #define g_stat_HEALTH getstati(STAT_HEALTH)
-    #define g_stat_ARMOR getstat_int(STAT_ARMOR)
-    #define g_stat_SHELLS getstat_int(STAT_SHELLS)
-    #define g_stat_NAILS getstat_int(STAT_NAILS)
-    #define g_stat_ROCKETS getstat_int(STAT_ROCKETS)
-    #define g_stat_CELLS getstat_int(STAT_CELLS)
-    #define g_stat_ACTIVEWEAPON getstat_int(STAT_ACTIVEWEAPON)
-    #define g_stat_ITEMS getstat_int(STAT_ITEMS)
-    #define g_stat_VIEWHEIGHT getstati(STAT_VIEWHEIGHT)
+/*qc2rust::define::g_stat_HEALTH*/
+#define g_stat_HEALTH /*qc2rust::macro_begin::g_stat_HEALTH*/getstati(STAT_HEALTH) /*qc2rust::macro_end::g_stat_HEALTH*/
+/*qc2rust::define::g_stat_ARMOR*/
+#define g_stat_ARMOR /*qc2rust::macro_begin::g_stat_ARMOR*/getstat_int(STAT_ARMOR) /*qc2rust::macro_end::g_stat_ARMOR*/
+/*qc2rust::define::g_stat_SHELLS*/
+#define g_stat_SHELLS /*qc2rust::macro_begin::g_stat_SHELLS*/getstat_int(STAT_SHELLS) /*qc2rust::macro_end::g_stat_SHELLS*/
+/*qc2rust::define::g_stat_NAILS*/
+#define g_stat_NAILS /*qc2rust::macro_begin::g_stat_NAILS*/getstat_int(STAT_NAILS) /*qc2rust::macro_end::g_stat_NAILS*/
+/*qc2rust::define::g_stat_ROCKETS*/
+#define g_stat_ROCKETS /*qc2rust::macro_begin::g_stat_ROCKETS*/getstat_int(STAT_ROCKETS) /*qc2rust::macro_end::g_stat_ROCKETS*/
+/*qc2rust::define::g_stat_CELLS*/
+#define g_stat_CELLS /*qc2rust::macro_begin::g_stat_CELLS*/getstat_int(STAT_CELLS) /*qc2rust::macro_end::g_stat_CELLS*/
+/*qc2rust::define::g_stat_ACTIVEWEAPON*/
+#define g_stat_ACTIVEWEAPON /*qc2rust::macro_begin::g_stat_ACTIVEWEAPON*/getstat_int(STAT_ACTIVEWEAPON) /*qc2rust::macro_end::g_stat_ACTIVEWEAPON*/
+/*qc2rust::define::g_stat_ITEMS*/
+#define g_stat_ITEMS /*qc2rust::macro_begin::g_stat_ITEMS*/getstat_int(STAT_ITEMS) /*qc2rust::macro_end::g_stat_ITEMS*/
+/*qc2rust::define::g_stat_VIEWHEIGHT*/
+#define g_stat_VIEWHEIGHT /*qc2rust::macro_begin::g_stat_VIEWHEIGHT*/getstati(STAT_VIEWHEIGHT) /*qc2rust::macro_end::g_stat_VIEWHEIGHT*/
 #elif defined(SVQC)
-    #define stat_HEALTH health
-    #define stat_ARMOR armorvalue
-    #define stat_SHELLS ammo_shells
-    #define stat_NAILS ammo_nails
-    #define stat_ROCKETS ammo_rockets
-    #define stat_CELLS ammo_cells
-    #define stat_ACTIVEWEAPON weapon
-    #define stat_ITEMS items
-    #define stat_VIEWHEIGHT view_ofs_z
+/*qc2rust::define::stat_HEALTH*/
+#define stat_HEALTH /*qc2rust::macro_begin::stat_HEALTH*/health /*qc2rust::macro_end::stat_HEALTH*/
+/*qc2rust::define::stat_ARMOR*/
+#define stat_ARMOR /*qc2rust::macro_begin::stat_ARMOR*/armorvalue /*qc2rust::macro_end::stat_ARMOR*/
+/*qc2rust::define::stat_SHELLS*/
+#define stat_SHELLS /*qc2rust::macro_begin::stat_SHELLS*/ammo_shells /*qc2rust::macro_end::stat_SHELLS*/
+/*qc2rust::define::stat_NAILS*/
+#define stat_NAILS /*qc2rust::macro_begin::stat_NAILS*/ammo_nails /*qc2rust::macro_end::stat_NAILS*/
+/*qc2rust::define::stat_ROCKETS*/
+#define stat_ROCKETS /*qc2rust::macro_begin::stat_ROCKETS*/ammo_rockets /*qc2rust::macro_end::stat_ROCKETS*/
+/*qc2rust::define::stat_CELLS*/
+#define stat_CELLS /*qc2rust::macro_begin::stat_CELLS*/ammo_cells /*qc2rust::macro_end::stat_CELLS*/
+/*qc2rust::define::stat_ACTIVEWEAPON*/
+#define stat_ACTIVEWEAPON /*qc2rust::macro_begin::stat_ACTIVEWEAPON*/weapon /*qc2rust::macro_end::stat_ACTIVEWEAPON*/
+/*qc2rust::define::stat_ITEMS*/
+#define stat_ITEMS /*qc2rust::macro_begin::stat_ITEMS*/items /*qc2rust::macro_end::stat_ITEMS*/
+/*qc2rust::define::stat_VIEWHEIGHT*/
+#define stat_VIEWHEIGHT /*qc2rust::macro_begin::stat_VIEWHEIGHT*/view_ofs_z /*qc2rust::macro_end::stat_VIEWHEIGHT*/
 #endif
 
 #ifdef SVQC

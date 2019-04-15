@@ -80,10 +80,8 @@ void cl_notice_run()
     drawfill(v1, v2, '0.5 0.5 0.5', 0.5, DRAWFLAG_NORMAL);
 
     vector v3 = v1 + '10 10 0';
-	#define OUT(s, z) MACRO_BEGIN \
-		drawcolorcodedstring(v3, s, '1 1 0' * z, 1, DRAWFLAG_NORMAL); \
-		v3.y += z + 4; \
-	MACRO_END
+/*qc2rust::define::OUT*/
+#define OUT(s,z) /*qc2rust::macro_begin::OUT*/MACRO_BEGIN 		drawcolorcodedstring(v3,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/, '1 1 0' *  /*qc2rust::param_begin::z*/z /*qc2rust::param_end::z*/, 1, DRAWFLAG_NORMAL); 		v3.y +=  /*qc2rust::param_begin::z*/z /*qc2rust::param_end::z*/ + 4; 	MACRO_END /*qc2rust::macro_end::OUT*/
 
     float cur_time = 0;
     float time_width = 48;

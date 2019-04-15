@@ -16,7 +16,8 @@ MUTATOR_HOOKFUNCTION(cl_nb, WantEventchase)
 .entity ballcarried;
 
 int autocvar_g_nexball_goalleadlimit;
-#define autocvar_g_nexball_goallimit cvar("g_nexball_goallimit")
+/*qc2rust::define::autocvar_g_nexball_goallimit*/
+#define autocvar_g_nexball_goallimit /*qc2rust::macro_begin::autocvar_g_nexball_goallimit*/cvar("g_nexball_goallimit") /*qc2rust::macro_end::autocvar_g_nexball_goallimit*/
 
 bool autocvar_g_nexball_basketball_jumppad = true;
 float autocvar_g_nexball_basketball_bouncefactor;

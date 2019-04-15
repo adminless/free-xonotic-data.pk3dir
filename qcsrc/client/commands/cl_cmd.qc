@@ -566,37 +566,17 @@ void GameCommand(string command)
 // These functions are here specifically to add special + - commands to the game, and are not really normal commands.
 // Please add client commands to the function above this, as this is only for special reasons.
 // NOTE: showaccuracy is kept as legacy command
-#define CONSOLE_COMMANDS_NORMAL() \
-	CONSOLE_COMMAND("+showscores", { scoreboard_showscores = true; }) \
-	CONSOLE_COMMAND("-showscores", { scoreboard_showscores = false; }) \
-	CONSOLE_COMMAND("+showaccuracy", { }) \
-	CONSOLE_COMMAND("-showaccuracy", { }) \
-	/* nothing */
+/*qc2rust::define::CONSOLE_COMMANDS_NORMAL*/
+#define CONSOLE_COMMANDS_NORMAL() /*qc2rust::macro_begin::CONSOLE_COMMANDS_NORMAL*/CONSOLE_COMMAND("+showscores", { scoreboard_showscores = true; }) 	CONSOLE_COMMAND("-showscores", { scoreboard_showscores = false; }) 	CONSOLE_COMMAND("+showaccuracy", { }) 	CONSOLE_COMMAND("-showaccuracy", { }) 	/* nothing */ /*qc2rust::macro_end::CONSOLE_COMMANDS_NORMAL*/
 
-#define CONSOLE_COMMANDS_MOVEMENT() \
-	CONSOLE_COMMAND("+forward", { ++camera_direction.x; }) \
-	CONSOLE_COMMAND("-forward", { --camera_direction.x; }) \
-	CONSOLE_COMMAND("+back", { --camera_direction.x; }) \
-	CONSOLE_COMMAND("-back", { ++camera_direction.x; }) \
-	CONSOLE_COMMAND("+moveup", { ++camera_direction.z; }) \
-	CONSOLE_COMMAND("-moveup", { --camera_direction.z; }) \
-	CONSOLE_COMMAND("+movedown", { --camera_direction.z; }) \
-	CONSOLE_COMMAND("-movedown", { ++camera_direction.z; }) \
-	CONSOLE_COMMAND("+moveright", { --camera_direction.y; }) \
-	CONSOLE_COMMAND("-moveright", { ++camera_direction.y; }) \
-	CONSOLE_COMMAND("+moveleft", { ++camera_direction.y; }) \
-	CONSOLE_COMMAND("-moveleft", { --camera_direction.y; }) \
-	CONSOLE_COMMAND("+roll_right", { ++camera_roll; }) \
-	CONSOLE_COMMAND("-roll_right", { --camera_roll; }) \
-	CONSOLE_COMMAND("+roll_left", { --camera_roll; }) \
-	CONSOLE_COMMAND("-roll_left", { ++camera_roll; }) \
-	/* nothing */
+/*qc2rust::define::CONSOLE_COMMANDS_MOVEMENT*/
+#define CONSOLE_COMMANDS_MOVEMENT() /*qc2rust::macro_begin::CONSOLE_COMMANDS_MOVEMENT*/CONSOLE_COMMAND("+forward", { ++camera_direction.x; }) 	CONSOLE_COMMAND("-forward", { --camera_direction.x; }) 	CONSOLE_COMMAND("+back", { --camera_direction.x; }) 	CONSOLE_COMMAND("-back", { ++camera_direction.x; }) 	CONSOLE_COMMAND("+moveup", { ++camera_direction.z; }) 	CONSOLE_COMMAND("-moveup", { --camera_direction.z; }) 	CONSOLE_COMMAND("+movedown", { --camera_direction.z; }) 	CONSOLE_COMMAND("-movedown", { ++camera_direction.z; }) 	CONSOLE_COMMAND("+moveright", { --camera_direction.y; }) 	CONSOLE_COMMAND("-moveright", { ++camera_direction.y; }) 	CONSOLE_COMMAND("+moveleft", { ++camera_direction.y; }) 	CONSOLE_COMMAND("-moveleft", { --camera_direction.y; }) 	CONSOLE_COMMAND("+roll_right", { ++camera_roll; }) 	CONSOLE_COMMAND("-roll_right", { --camera_roll; }) 	CONSOLE_COMMAND("+roll_left", { --camera_roll; }) 	CONSOLE_COMMAND("-roll_left", { ++camera_roll; }) 	/* nothing */ /*qc2rust::macro_end::CONSOLE_COMMANDS_MOVEMENT*/
 
 void ConsoleCommand_macro_init()
 {
 	// first init normal commands
-	#define CONSOLE_COMMAND(name, execution) \
-		{ registercommand(name); }
+/*qc2rust::define::CONSOLE_COMMAND*/
+#define CONSOLE_COMMAND(name,execution) /*qc2rust::macro_begin::CONSOLE_COMMAND*/{ registercommand( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/); } /*qc2rust::macro_end::CONSOLE_COMMAND*/
 
 	CONSOLE_COMMANDS_NORMAL();
 	#undef CONSOLE_COMMAND
@@ -606,8 +586,8 @@ void ConsoleCommand_macro_init()
 	if (isdemo())
 	{
 	#endif
-	#define CONSOLE_COMMAND(name, execution) \
-		registercommand(name);
+/*qc2rust::define::CONSOLE_COMMAND*/
+#define CONSOLE_COMMAND(name,execution) /*qc2rust::macro_begin::CONSOLE_COMMAND*/registercommand( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/); /*qc2rust::macro_end::CONSOLE_COMMAND*/
 
 	CONSOLE_COMMANDS_MOVEMENT();
 		#undef CONSOLE_COMMAND
@@ -618,8 +598,8 @@ void ConsoleCommand_macro_init()
 
 bool ConsoleCommand_macro_normal(string s, int argc)
 {
-	#define CONSOLE_COMMAND(name, execution) \
-		{ if (name == s) { { execution } return true; } }
+/*qc2rust::define::CONSOLE_COMMAND*/
+#define CONSOLE_COMMAND(name,execution) /*qc2rust::macro_begin::CONSOLE_COMMAND*/{ if ( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ == s) { {  /*qc2rust::param_begin::execution*/execution /*qc2rust::param_end::execution*/ } return true; } } /*qc2rust::macro_end::CONSOLE_COMMAND*/
 
 	CONSOLE_COMMANDS_NORMAL();
 	#undef CONSOLE_COMMAND
@@ -631,8 +611,8 @@ bool ConsoleCommand_macro_movement(string s, int argc)
 {
 	if (camera_active)
 	{
-		#define CONSOLE_COMMAND(name, execution) \
-			{ if (name == s) { { execution } return true; } }
+/*qc2rust::define::CONSOLE_COMMAND*/
+#define CONSOLE_COMMAND(name,execution) /*qc2rust::macro_begin::CONSOLE_COMMAND*/{ if ( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ == s) { {  /*qc2rust::param_begin::execution*/execution /*qc2rust::param_end::execution*/ } return true; } } /*qc2rust::macro_end::CONSOLE_COMMAND*/
 
 		CONSOLE_COMMANDS_MOVEMENT();
 		#undef CONSOLE_COMMAND

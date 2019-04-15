@@ -8,7 +8,8 @@
 /**
     Uniform pull towards a point
 **/
-#define steerlib_pull(ent,point) normalize(point - (ent).origin)
+/*qc2rust::define::steerlib_pull*/
+#define steerlib_pull(ent,point) /*qc2rust::macro_begin::steerlib_pull*/normalize( /*qc2rust::param_begin::point*/point /*qc2rust::param_end::point*/ - ( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/).origin) /*qc2rust::macro_end::steerlib_pull*/
 /*vector steerlib_pull(entity this, vector point)
 {
     return normalize(point - this.origin);
@@ -17,7 +18,8 @@
 /**
     Uniform push from a point
 **/
-#define steerlib_push(ent,point) normalize(ent.origin - point)
+/*qc2rust::define::steerlib_push*/
+#define steerlib_push(ent,point) /*qc2rust::macro_begin::steerlib_push*/normalize( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.origin -  /*qc2rust::param_begin::point*/point /*qc2rust::param_end::point*/) /*qc2rust::macro_end::steerlib_push*/
 /*
 vector steerlib_push(entity this, vector point)
 {

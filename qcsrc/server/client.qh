@@ -284,7 +284,9 @@ int GetPlayerLimit();
 bool joinAllowed(entity this);
 void Join(entity this);
 
-#define SPECTATE_COPY() ACCUMULATE void SpectateCopy(entity this, entity spectatee)
-#define SPECTATE_COPYFIELD(fld) SPECTATE_COPY() { this.(fld) = spectatee.(fld); }
+/*qc2rust::define::SPECTATE_COPY*/
+#define SPECTATE_COPY() /*qc2rust::macro_begin::SPECTATE_COPY*/ACCUMULATE void SpectateCopy(entity this, entity spectatee) /*qc2rust::macro_end::SPECTATE_COPY*/
+/*qc2rust::define::SPECTATE_COPYFIELD*/
+#define SPECTATE_COPYFIELD(fld) /*qc2rust::macro_begin::SPECTATE_COPYFIELD*/SPECTATE_COPY() { this.( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/) = spectatee.( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/); } /*qc2rust::macro_end::SPECTATE_COPYFIELD*/
 
 int Say(entity source, int teamsay, entity privatesay, string msgin, bool floodcontrol);

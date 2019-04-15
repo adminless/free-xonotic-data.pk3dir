@@ -3,7 +3,8 @@
 #include <common/weapons/_all.qh>
 #include <common/stats.qh>
 
-#define INDEPENDENT_ATTACK_FINISHED 1
+/*qc2rust::define::INDEPENDENT_ATTACK_FINISHED*/
+#define INDEPENDENT_ATTACK_FINISHED /*qc2rust::macro_begin::INDEPENDENT_ATTACK_FINISHED*/1 /*qc2rust::macro_end::INDEPENDENT_ATTACK_FINISHED*/
 
 // Globals
 
@@ -200,11 +201,14 @@ float bot_waypoints_for_items;
 .float attack_finished_for[Weapons_MAX * MAX_WEAPONSLOTS];
 .float attack_finished_single[MAX_WEAPONSLOTS];
 #if INDEPENDENT_ATTACK_FINISHED
-#define ATTACK_FINISHED_FOR(ent, w, slot) ((ent).(attack_finished_for[((w) - WEP_FIRST) * MAX_WEAPONSLOTS + (slot)]))
+/*qc2rust::define::ATTACK_FINISHED_FOR*/
+#define ATTACK_FINISHED_FOR(ent,w,slot) /*qc2rust::macro_begin::ATTACK_FINISHED_FOR*/(( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/).(attack_finished_for[(( /*qc2rust::param_begin::w*/w /*qc2rust::param_end::w*/) - WEP_FIRST) * MAX_WEAPONSLOTS + ( /*qc2rust::param_begin::slot*/slot /*qc2rust::param_end::slot*/)])) /*qc2rust::macro_end::ATTACK_FINISHED_FOR*/
 #else
-#define ATTACK_FINISHED_FOR(ent, w, slot) ((ent).attack_finished_single[slot])
+/*qc2rust::define::ATTACK_FINISHED_FOR*/
+#define ATTACK_FINISHED_FOR(ent,w,slot) /*qc2rust::macro_begin::ATTACK_FINISHED_FOR*/(( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/).attack_finished_single[ /*qc2rust::param_begin::slot*/slot /*qc2rust::param_end::slot*/]) /*qc2rust::macro_end::ATTACK_FINISHED_FOR*/
 #endif
-#define ATTACK_FINISHED(ent, w) ATTACK_FINISHED_FOR(ent, ent.(w).m_weapon.m_id, weaponslot(w))
+/*qc2rust::define::ATTACK_FINISHED*/
+#define ATTACK_FINISHED(ent,w) /*qc2rust::macro_begin::ATTACK_FINISHED*/ATTACK_FINISHED_FOR( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.( /*qc2rust::param_begin::w*/w /*qc2rust::param_end::w*/).m_weapon.m_id, weaponslot( /*qc2rust::param_begin::w*/w /*qc2rust::param_end::w*/)) /*qc2rust::macro_end::ATTACK_FINISHED*/
 
 // speedrun: when 1, player auto teleports back when capture timeout happens
 .float speedrunning;
@@ -224,7 +228,8 @@ int have_team_spawns_forteams; // if Xth bit is 1 then team X has spawns else it
 void Damage (entity targ, entity inflictor, entity attacker, float damage, int deathtype, .entity weaponentity, vector hitloc, vector force);
 
 // WEAPONTODO
-#define DMG_NOWEP (weaponentities[0])
+/*qc2rust::define::DMG_NOWEP*/
+#define DMG_NOWEP /*qc2rust::macro_begin::DMG_NOWEP*/(weaponentities[0]) /*qc2rust::macro_end::DMG_NOWEP*/
 
 float sv_maxidle;
 float sv_maxidle_spectatorsareidle;
@@ -242,9 +247,12 @@ float next_pingtime;
 
 int autocvar__independent_players;
 bool independent_players;
-#define INDEPENDENT_PLAYERS (autocvar__independent_players ? (autocvar__independent_players > 0) : independent_players)
-#define IS_INDEPENDENT_PLAYER(e) ((e).solid == SOLID_TRIGGER)
-#define MAKE_INDEPENDENT_PLAYER(e) (((e).solid = SOLID_TRIGGER), ((e).frags = FRAGS_PLAYER_OUT_OF_GAME))
+/*qc2rust::define::INDEPENDENT_PLAYERS*/
+#define INDEPENDENT_PLAYERS /*qc2rust::macro_begin::INDEPENDENT_PLAYERS*/(autocvar__independent_players ? (autocvar__independent_players > 0) : independent_players) /*qc2rust::macro_end::INDEPENDENT_PLAYERS*/
+/*qc2rust::define::IS_INDEPENDENT_PLAYER*/
+#define IS_INDEPENDENT_PLAYER(e) /*qc2rust::macro_begin::IS_INDEPENDENT_PLAYER*/(( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/).solid == SOLID_TRIGGER) /*qc2rust::macro_end::IS_INDEPENDENT_PLAYER*/
+/*qc2rust::define::MAKE_INDEPENDENT_PLAYER*/
+#define MAKE_INDEPENDENT_PLAYER(e) /*qc2rust::macro_begin::MAKE_INDEPENDENT_PLAYER*/((( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/).solid = SOLID_TRIGGER), (( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/).frags = FRAGS_PLAYER_OUT_OF_GAME)) /*qc2rust::macro_end::MAKE_INDEPENDENT_PLAYER*/
 
 string clientstuff;
 .float phase;
@@ -320,7 +328,8 @@ float client_cefc_accumulatortime;
 
 .int grab; // 0 = can't grab, 1 = owner can grab, 2 = owner and team mates can grab, 3 = anyone can grab
 
-#define PROJECTILE_MAKETRIGGER(e) (e).solid = SOLID_CORPSE; (e).dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE
+/*qc2rust::define::PROJECTILE_MAKETRIGGER*/
+#define PROJECTILE_MAKETRIGGER(e) /*qc2rust::macro_begin::PROJECTILE_MAKETRIGGER*/( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/).solid = SOLID_CORPSE; ( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/).dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE /*qc2rust::macro_end::PROJECTILE_MAKETRIGGER*/
 // when doing this, hagar can go through clones
 // #define PROJECTILE_MAKETRIGGER(e) (e).solid = SOLID_BBOX
 
@@ -387,9 +396,12 @@ const int MIF_GUIDED_ALL = MIF_GUIDED_MANUAL | MIF_GUIDED_HEAT | MIF_GUIDED_LASE
 const int MIF_GUIDED_TRACKING = MIF_GUIDED_HEAT | MIF_GUIDED_LASER | MIF_GUIDED_AI | MIF_GUIDED_TAG;
 const int MIF_GUIDED_CONFUSABLE = MIF_GUIDED_HEAT | MIF_GUIDED_AI;
 
-#define MISSILE_IS_CONFUSABLE(m) ((m.missile_flags & MIF_GUIDED_CONFUSABLE) ? true : false)
-#define MISSILE_IS_GUIDED(m) ((m.missile_flags & MIF_GUIDED_ALL) ? true : false)
-#define MISSILE_IS_TRACKING(m) ((m.missile_flags & MIF_GUIDED_TRACKING) ? true : false)
+/*qc2rust::define::MISSILE_IS_CONFUSABLE*/
+#define MISSILE_IS_CONFUSABLE(m) /*qc2rust::macro_begin::MISSILE_IS_CONFUSABLE*/(( /*qc2rust::param_begin::m*/m /*qc2rust::param_end::m*/.missile_flags & MIF_GUIDED_CONFUSABLE) ? true : false) /*qc2rust::macro_end::MISSILE_IS_CONFUSABLE*/
+/*qc2rust::define::MISSILE_IS_GUIDED*/
+#define MISSILE_IS_GUIDED(m) /*qc2rust::macro_begin::MISSILE_IS_GUIDED*/(( /*qc2rust::param_begin::m*/m /*qc2rust::param_end::m*/.missile_flags & MIF_GUIDED_ALL) ? true : false) /*qc2rust::macro_end::MISSILE_IS_GUIDED*/
+/*qc2rust::define::MISSILE_IS_TRACKING*/
+#define MISSILE_IS_TRACKING(m) /*qc2rust::macro_begin::MISSILE_IS_TRACKING*/(( /*qc2rust::param_begin::m*/m /*qc2rust::param_end::m*/.missile_flags & MIF_GUIDED_TRACKING) ? true : false) /*qc2rust::macro_end::MISSILE_IS_TRACKING*/
 
 ////
 

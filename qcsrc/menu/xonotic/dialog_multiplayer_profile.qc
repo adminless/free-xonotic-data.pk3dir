@@ -165,9 +165,12 @@ void XonoticProfileTab_fill(entity me)
 	#else
 			me.TD(me, 1, 3, e = makeXonoticHeaderLabel(_("Gender")));
 		me.TR(me);
-			#define GENDERWIDTH_OFFSET 0.25
-			#define GENDERWIDTH_LENGTH 2.5
-			#define GENDERWIDTH_ITEM (GENDERWIDTH_LENGTH / 3)
+/*qc2rust::define::GENDERWIDTH_OFFSET*/
+#define GENDERWIDTH_OFFSET /*qc2rust::macro_begin::GENDERWIDTH_OFFSET*/0.25 /*qc2rust::macro_end::GENDERWIDTH_OFFSET*/
+/*qc2rust::define::GENDERWIDTH_LENGTH*/
+#define GENDERWIDTH_LENGTH /*qc2rust::macro_begin::GENDERWIDTH_LENGTH*/2.5 /*qc2rust::macro_end::GENDERWIDTH_LENGTH*/
+/*qc2rust::define::GENDERWIDTH_ITEM*/
+#define GENDERWIDTH_ITEM /*qc2rust::macro_begin::GENDERWIDTH_ITEM*/(GENDERWIDTH_LENGTH / 3) /*qc2rust::macro_end::GENDERWIDTH_ITEM*/
 			me.TDempty(me, GENDERWIDTH_OFFSET);
 			me.TD(me, 1, GENDERWIDTH_ITEM, e = makeXonoticRadioButton(3, "_cl_gender", "2", _("Female")));
 			me.TD(me, 1, GENDERWIDTH_ITEM, e = makeXonoticRadioButton(3, "_cl_gender", "1", _("Male")));

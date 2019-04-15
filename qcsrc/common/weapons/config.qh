@@ -10,21 +10,16 @@ int wep_config_file;
 bool wep_config_alsoprint;
 
 int WEP_CONFIG_COUNT;
-#define WEP_CONFIG_QUEUE(a) { \
-	config_queue[WEP_CONFIG_COUNT] = a; \
-	++WEP_CONFIG_COUNT; }
+/*qc2rust::define::WEP_CONFIG_QUEUE*/
+#define WEP_CONFIG_QUEUE(a) /*qc2rust::macro_begin::WEP_CONFIG_QUEUE*/{ 	config_queue[WEP_CONFIG_COUNT] =  /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/; 	++WEP_CONFIG_COUNT; } /*qc2rust::macro_end::WEP_CONFIG_QUEUE*/
 
 
 #define WEP_CONFIG_WRITE_CVARS(wepname, name, T) WEP_CONFIG_WRITE_PROPS_##T(wepname, name)
 
-#define WEP_CONFIG_WRITE_PROPS_string(wepname, name) \
-	{ WEP_CONFIG_QUEUE( \
-		sprintf("set g_balance_%s_%s \"%s\"\n", #wepname, #name, \
-		cvar_string(sprintf("g_balance_%s_%s", #wepname, #name)))) }
+/*qc2rust::define::WEP_CONFIG_WRITE_PROPS_string*/
+#define WEP_CONFIG_WRITE_PROPS_string(wepname,name) /*qc2rust::macro_begin::WEP_CONFIG_WRITE_PROPS_string*/{ WEP_CONFIG_QUEUE( 		sprintf("set g_balance_%s_%s \"%s\"\n",  /*qc2rust::stringify_begin::wepname*/#wepname /*qc2rust::stringify_end::wepname*/,  /*qc2rust::stringify_begin::name*/#name /*qc2rust::stringify_end::name*/, 		cvar_string(sprintf("g_balance_%s_%s",  /*qc2rust::stringify_begin::wepname*/#wepname /*qc2rust::stringify_end::wepname*/,  /*qc2rust::stringify_begin::name*/#name /*qc2rust::stringify_end::name*/)))) } /*qc2rust::macro_end::WEP_CONFIG_WRITE_PROPS_string*/
 
-#define WEP_CONFIG_WRITE_PROPS_float(wepname, name) \
-	{ WEP_CONFIG_QUEUE( \
-		sprintf("set g_balance_%s_%s %g\n", #wepname, #name, \
-		cvar(sprintf("g_balance_%s_%s", #wepname, #name)))) }
+/*qc2rust::define::WEP_CONFIG_WRITE_PROPS_float*/
+#define WEP_CONFIG_WRITE_PROPS_float(wepname,name) /*qc2rust::macro_begin::WEP_CONFIG_WRITE_PROPS_float*/{ WEP_CONFIG_QUEUE( 		sprintf("set g_balance_%s_%s %g\n",  /*qc2rust::stringify_begin::wepname*/#wepname /*qc2rust::stringify_end::wepname*/,  /*qc2rust::stringify_begin::name*/#name /*qc2rust::stringify_end::name*/, 		cvar(sprintf("g_balance_%s_%s",  /*qc2rust::stringify_begin::wepname*/#wepname /*qc2rust::stringify_end::wepname*/,  /*qc2rust::stringify_begin::name*/#name /*qc2rust::stringify_end::name*/)))) } /*qc2rust::macro_end::WEP_CONFIG_WRITE_PROPS_float*/
 
 #endif

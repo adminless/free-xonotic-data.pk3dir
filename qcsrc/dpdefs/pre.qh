@@ -1,11 +1,20 @@
 #pragma once
 
-#define ChangeYaw builtin_ChangeYaw
-#define checkclient builtin_checkclient
-#define droptofloor builtin_droptofloor
-#define error builtin_error
-#define movetogoal builtin_movetogoal
-#define objerror builtin_objerror
-#define remove builtin_remove
-#define walkmove builtin_walkmove
-#define setcolor builtin_setcolor
+/*qc2rust::define::ChangeYaw*/
+#define ChangeYaw /*qc2rust::macro_begin::ChangeYaw*/builtin_ChangeYaw /*qc2rust::macro_end::ChangeYaw*/
+/*qc2rust::define::checkclient*/
+#define checkclient /*qc2rust::macro_begin::checkclient*/builtin_checkclient /*qc2rust::macro_end::checkclient*/
+/*qc2rust::define::droptofloor*/
+#define droptofloor /*qc2rust::macro_begin::droptofloor*/builtin_droptofloor /*qc2rust::macro_end::droptofloor*/
+/*qc2rust::define::error*/
+#define error /*qc2rust::macro_begin::error*/builtin_error /*qc2rust::macro_end::error*/
+/*qc2rust::define::movetogoal*/
+#define movetogoal /*qc2rust::macro_begin::movetogoal*/builtin_movetogoal /*qc2rust::macro_end::movetogoal*/
+/*qc2rust::define::objerror*/
+#define objerror /*qc2rust::macro_begin::objerror*/builtin_objerror /*qc2rust::macro_end::objerror*/
+/*qc2rust::define::remove*/
+#define remove /*qc2rust::macro_begin::remove*/builtin_remove /*qc2rust::macro_end::remove*/
+/*qc2rust::define::walkmove*/
+#define walkmove /*qc2rust::macro_begin::walkmove*/builtin_walkmove /*qc2rust::macro_end::walkmove*/
+/*qc2rust::define::setcolor*/
+#define setcolor /*qc2rust::macro_begin::setcolor*/builtin_setcolor /*qc2rust::macro_end::setcolor*/

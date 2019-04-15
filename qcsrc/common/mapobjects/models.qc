@@ -165,27 +165,11 @@ bool g_clientmodel_genericsendentity(entity this, entity to, int sf)
 }
 
 
-#define G_MODEL_INIT(ent,sol) \
-	if(ent.geomtype && autocvar_physics_ode && checkextension("DP_PHYSICS_ODE")) set_movetype(ent, MOVETYPE_PHYSICS); \
-	if(!ent.scale) ent.scale = ent.modelscale; \
-	SetBrushEntityModel(ent); \
-	ent.use = g_model_setcolormaptoactivator; \
-	InitializeEntity(ent, g_model_dropbyspawnflags, INITPRIO_DROPTOFLOOR); \
-	if(!ent.solid) ent.solid = (sol); \
-	else if(ent.solid < 0) ent.solid = SOLID_NOT;
+/*qc2rust::define::G_MODEL_INIT*/
+#define G_MODEL_INIT(ent,sol) /*qc2rust::macro_begin::G_MODEL_INIT*/if( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.geomtype && autocvar_physics_ode && checkextension("DP_PHYSICS_ODE")) set_movetype( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/, MOVETYPE_PHYSICS); 	if(! /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.scale)  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.scale =  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.modelscale; 	SetBrushEntityModel( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/); 	 /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.use = g_model_setcolormaptoactivator; 	InitializeEntity( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/, g_model_dropbyspawnflags, INITPRIO_DROPTOFLOOR); 	if(! /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.solid)  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.solid = ( /*qc2rust::param_begin::sol*/sol /*qc2rust::param_end::sol*/); 	else if( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.solid < 0)  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.solid = SOLID_NOT; /*qc2rust::macro_end::G_MODEL_INIT*/
 
-#define G_CLIENTMODEL_INIT(ent,sol) \
-	if(ent.geomtype && autocvar_physics_ode && checkextension("DP_PHYSICS_ODE")) set_movetype(ent, MOVETYPE_PHYSICS); \
-	if(!ent.scale) ent.scale = ent.modelscale; \
-	SetBrushEntityModel(ent); \
-	ent.use = g_clientmodel_use; \
-	InitializeEntity(ent, g_clientmodel_dropbyspawnflags, INITPRIO_DROPTOFLOOR); \
-	if(!ent.solid) ent.solid = (sol); \
-	else if(ent.solid < 0) ent.solid = SOLID_NOT; \
-	if(!ent.bgmscriptsustain) ent.bgmscriptsustain = 1; \
-	else if(ent.bgmscriptsustain < 0) ent.bgmscriptsustain = 0; \
-	Net_LinkEntity(ent, true, 0, g_clientmodel_genericsendentity); \
-	ent.default_solid = sol;
+/*qc2rust::define::G_CLIENTMODEL_INIT*/
+#define G_CLIENTMODEL_INIT(ent,sol) /*qc2rust::macro_begin::G_CLIENTMODEL_INIT*/if( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.geomtype && autocvar_physics_ode && checkextension("DP_PHYSICS_ODE")) set_movetype( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/, MOVETYPE_PHYSICS); 	if(! /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.scale)  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.scale =  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.modelscale; 	SetBrushEntityModel( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/); 	 /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.use = g_clientmodel_use; 	InitializeEntity( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/, g_clientmodel_dropbyspawnflags, INITPRIO_DROPTOFLOOR); 	if(! /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.solid)  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.solid = ( /*qc2rust::param_begin::sol*/sol /*qc2rust::param_end::sol*/); 	else if( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.solid < 0)  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.solid = SOLID_NOT; 	if(! /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.bgmscriptsustain)  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.bgmscriptsustain = 1; 	else if( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.bgmscriptsustain < 0)  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.bgmscriptsustain = 0; 	Net_LinkEntity( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/, true, 0, g_clientmodel_genericsendentity); 	 /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.default_solid =  /*qc2rust::param_begin::sol*/sol /*qc2rust::param_end::sol*/; /*qc2rust::macro_end::G_CLIENTMODEL_INIT*/
 
 // non-solid model entities:
 spawnfunc(misc_gamemodel)         { this.angles_x = -this.angles.x; G_MODEL_INIT      (this, SOLID_NOT) } // model entity

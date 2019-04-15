@@ -93,7 +93,8 @@ void walker_rocket_damage(entity this, entity inflictor, entity attacker, float 
         W_PrepareExplosionByDamage(this, this.owner, walker_rocket_explode);
 }
 
-#define WALKER_ROCKET_MOVE(s) movelib_move_simple((s), newdir, (autocvar_g_turrets_unit_walker_rocket_speed), (autocvar_g_turrets_unit_walker_rocket_turnrate)); UpdateCSQCProjectile(s)
+/*qc2rust::define::WALKER_ROCKET_MOVE*/
+#define WALKER_ROCKET_MOVE(s) /*qc2rust::macro_begin::WALKER_ROCKET_MOVE*/movelib_move_simple(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/), newdir, (autocvar_g_turrets_unit_walker_rocket_speed), (autocvar_g_turrets_unit_walker_rocket_turnrate)); UpdateCSQCProjectile( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::WALKER_ROCKET_MOVE*/
 void walker_rocket_loop(entity this);
 void walker_rocket_think(entity this)
 {

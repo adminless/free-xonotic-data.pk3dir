@@ -26,7 +26,8 @@ int monsters_killed;
 .int oldskin;
 .string mdl_dead; // dead model for goombas
 
-#define MONSTER_SKILLMOD(mon) (0.5 + mon.monster_skill * ((1.2 - 0.3) / 10))
+/*qc2rust::define::MONSTER_SKILLMOD*/
+#define MONSTER_SKILLMOD(mon) /*qc2rust::macro_begin::MONSTER_SKILLMOD*/(0.5 +  /*qc2rust::param_begin::mon*/mon /*qc2rust::param_end::mon*/.monster_skill * ((1.2 - 0.3) / 10)) /*qc2rust::macro_end::MONSTER_SKILLMOD*/
 
 // other properties
 .bool monster_attack; // indicates whether an entity can be attacked by monsters
@@ -95,15 +96,8 @@ int totalspawned;
 
 // monster sounds
 .float msound_delay; // temporary antilag system
-#define ALLMONSTERSOUNDS \
-		_MSOUND(death) \
-		_MSOUND(sight) \
-		_MSOUND(ranged) \
-		_MSOUND(melee) \
-		_MSOUND(pain) \
-		_MSOUND(spawn) \
-		_MSOUND(idle) \
-		_MSOUND(attack)
+/*qc2rust::define::ALLMONSTERSOUNDS*/
+#define ALLMONSTERSOUNDS /*qc2rust::macro_begin::ALLMONSTERSOUNDS*/_MSOUND(death) 		_MSOUND(sight) 		_MSOUND(ranged) 		_MSOUND(melee) 		_MSOUND(pain) 		_MSOUND(spawn) 		_MSOUND(idle) 		_MSOUND(attack) /*qc2rust::macro_end::ALLMONSTERSOUNDS*/
 
 #define _MSOUND(m) .string monstersound_##m;
 ALLMONSTERSOUNDS

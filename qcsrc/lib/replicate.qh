@@ -9,54 +9,32 @@
      * @param type  The field type
      * @param cvar  The cvar name
      */
-	#define REPLICATE(...) EVAL_REPLICATE(OVERLOAD(REPLICATE, __VA_ARGS__))
-	#define EVAL_REPLICATE(...) __VA_ARGS__
+/*qc2rust::define::REPLICATE*/
+#define REPLICATE(...) /*qc2rust::macro_begin::REPLICATE*/EVAL_REPLICATE(OVERLOAD(REPLICATE,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::REPLICATE*/
+/*qc2rust::define::EVAL_REPLICATE*/
+#define EVAL_REPLICATE(...) /*qc2rust::macro_begin::EVAL_REPLICATE*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_REPLICATE*/
 
 	ACCUMULATE void ReplicateVars(entity this, entity store, string thisname, int i) {}
 
-	#define REPLICATE_3(fld, type, var) REPLICATE_4(fld, type, var, )
+/*qc2rust::define::REPLICATE_3*/
+#define REPLICATE_3(fld,type,var) /*qc2rust::macro_begin::REPLICATE_3*/REPLICATE_4( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/,  /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/, ) /*qc2rust::macro_end::REPLICATE_3*/
 	#define REPLICATE_4(fld, type, var, func) REPLICATE_##type(fld, var, func)
-	#define REPLICATE_string(fld, var, func) \
-		REPLICATE_7(fld, string, var, , \
-	{ strcpy(field, it); }, \
-	{ strfree(field); }, \
-	{ \
-		/* also initialize to the default value of func when requesting cvars */ \
-		string s = func(field); \
-		if (s != field) \
-		{ \
-		    strcpy(field, s); \
-		} \
-	})
-	#define REPLICATE_float(fld, var, func) REPLICATE_7(fld, float, var, func,  { field = stof(it); },          , )
-	#define REPLICATE_bool(fld, var, func) REPLICATE_7(fld, bool, var, func,   { field = boolean(stoi(it)); }, , )
-	#define REPLICATE_int(fld, var, func) REPLICATE_7(fld, int, var, func,    { field = stoi(it); },          , )
+/*qc2rust::define::REPLICATE_string*/
+#define REPLICATE_string(fld,var,func) /*qc2rust::macro_begin::REPLICATE_string*/REPLICATE_7( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, string,  /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/, , 	{ strcpy(field, it); }, 	{ strfree(field); }, 	{ 		/* also initialize to the default value of func when requesting cvars */ 		string s =  /*qc2rust::param_begin::func*/func /*qc2rust::param_end::func*/(field); 		if (s != field) 		{ 		    strcpy(field, s); 		} 	}) /*qc2rust::macro_end::REPLICATE_string*/
+/*qc2rust::define::REPLICATE_float*/
+#define REPLICATE_float(fld,var,func) /*qc2rust::macro_begin::REPLICATE_float*/REPLICATE_7( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, float,  /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/,  /*qc2rust::param_begin::func*/func /*qc2rust::param_end::func*/,  { field = stof(it); },          , ) /*qc2rust::macro_end::REPLICATE_float*/
+/*qc2rust::define::REPLICATE_bool*/
+#define REPLICATE_bool(fld,var,func) /*qc2rust::macro_begin::REPLICATE_bool*/REPLICATE_7( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, bool,  /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/,  /*qc2rust::param_begin::func*/func /*qc2rust::param_end::func*/,   { field = boolean(stoi(it)); }, , ) /*qc2rust::macro_end::REPLICATE_bool*/
+/*qc2rust::define::REPLICATE_int*/
+#define REPLICATE_int(fld,var,func) /*qc2rust::macro_begin::REPLICATE_int*/REPLICATE_7( /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/, int,  /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/,  /*qc2rust::param_begin::func*/func /*qc2rust::param_end::func*/,    { field = stoi(it); },          , ) /*qc2rust::macro_end::REPLICATE_int*/
 
 	#if defined(SVQC)
-		#define REPLICATE_7(fld, type, var, func, create, destroy, after) \
-			void ReplicateVars(entity this, entity store, string thisname, int i) \
-			{ \
-				type field = store.fld; \
-				if (i < 0) { destroy } \
-				else \
-				{ \
-					string it = func(argv(i + 1)); \
-					bool current = thisname == var; \
-					if (i > 0) \
-					{ \
-						if (current) { create } \
-					} \
-					else \
-					{ \
-						stuffcmd(this, "cl_cmd sendcvar " var "\n"); \
-					} \
-					if (current) { after } \
-				} \
-				store.fld = field; \
-			}
+/*qc2rust::define::REPLICATE_7*/
+#define REPLICATE_7(fld,type,var,func,create,destroy,after) /*qc2rust::macro_begin::REPLICATE_7*/void ReplicateVars(entity this, entity store, string thisname, int i) 			{ 				 /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/ field = store. /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/; 				if (i < 0) {  /*qc2rust::param_begin::destroy*/destroy /*qc2rust::param_end::destroy*/ } 				else 				{ 					string it =  /*qc2rust::param_begin::func*/func /*qc2rust::param_end::func*/(argv(i + 1)); 					bool current = thisname ==  /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/; 					if (i > 0) 					{ 						if (current) {  /*qc2rust::param_begin::create*/create /*qc2rust::param_end::create*/ } 					} 					else 					{ 						stuffcmd(this, "cl_cmd sendcvar "  /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/ "\n"); 					} 					if (current) {  /*qc2rust::param_begin::after*/after /*qc2rust::param_end::after*/ } 				} 				store. /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/ = field; 			} /*qc2rust::macro_end::REPLICATE_7*/
 	#elif defined(CSQC)
 		// TODO
-		#define REPLICATE_7(fld, type, var, func, create, destroy, after)
+/*qc2rust::define::REPLICATE_7*/
+#define REPLICATE_7(fld,type,var,func,create,destroy,after) /*qc2rust::macro_begin::REPLICATE_7*/ /*qc2rust::macro_end::REPLICATE_7*/
 	#endif
 
 #endif

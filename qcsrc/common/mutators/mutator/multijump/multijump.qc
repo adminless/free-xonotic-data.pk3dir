@@ -14,23 +14,31 @@ REGISTER_MUTATOR(multijump, autocvar_g_multijump);
 REGISTER_MUTATOR(multijump, true);
 #endif
 
-#define PHYS_MULTIJUMP(s) 				STAT(MULTIJUMP, s)
-#define PHYS_MULTIJUMP_SPEED(s) 		STAT(MULTIJUMP_SPEED, s)
-#define PHYS_MULTIJUMP_ADD(s) 			STAT(MULTIJUMP_ADD, s)
-#define PHYS_MULTIJUMP_MAXSPEED(s) 		STAT(MULTIJUMP_MAXSPEED, s)
-#define PHYS_MULTIJUMP_DODGING(s) 		STAT(MULTIJUMP_DODGING, s)
-#define PHYS_MULTIJUMP_COUNT(s) 		STAT(MULTIJUMP_COUNT, s)
+/*qc2rust::define::PHYS_MULTIJUMP*/
+#define PHYS_MULTIJUMP(s) /*qc2rust::macro_begin::PHYS_MULTIJUMP*/STAT(MULTIJUMP,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_MULTIJUMP*/
+/*qc2rust::define::PHYS_MULTIJUMP_SPEED*/
+#define PHYS_MULTIJUMP_SPEED(s) /*qc2rust::macro_begin::PHYS_MULTIJUMP_SPEED*/STAT(MULTIJUMP_SPEED,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_MULTIJUMP_SPEED*/
+/*qc2rust::define::PHYS_MULTIJUMP_ADD*/
+#define PHYS_MULTIJUMP_ADD(s) /*qc2rust::macro_begin::PHYS_MULTIJUMP_ADD*/STAT(MULTIJUMP_ADD,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_MULTIJUMP_ADD*/
+/*qc2rust::define::PHYS_MULTIJUMP_MAXSPEED*/
+#define PHYS_MULTIJUMP_MAXSPEED(s) /*qc2rust::macro_begin::PHYS_MULTIJUMP_MAXSPEED*/STAT(MULTIJUMP_MAXSPEED,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_MULTIJUMP_MAXSPEED*/
+/*qc2rust::define::PHYS_MULTIJUMP_DODGING*/
+#define PHYS_MULTIJUMP_DODGING(s) /*qc2rust::macro_begin::PHYS_MULTIJUMP_DODGING*/STAT(MULTIJUMP_DODGING,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_MULTIJUMP_DODGING*/
+/*qc2rust::define::PHYS_MULTIJUMP_COUNT*/
+#define PHYS_MULTIJUMP_COUNT(s) /*qc2rust::macro_begin::PHYS_MULTIJUMP_COUNT*/STAT(MULTIJUMP_COUNT,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_MULTIJUMP_COUNT*/
 
 .bool multijump_ready;
 
 #ifdef CSQC
 bool autocvar_cl_multijump = true;
 
-	#define PHYS_MULTIJUMP_CLIENT(s)	autocvar_cl_multijump
+/*qc2rust::define::PHYS_MULTIJUMP_CLIENT*/
+#define PHYS_MULTIJUMP_CLIENT(s) /*qc2rust::macro_begin::PHYS_MULTIJUMP_CLIENT*/autocvar_cl_multijump /*qc2rust::macro_end::PHYS_MULTIJUMP_CLIENT*/
 #elif defined(SVQC)
 .bool cvar_cl_multijump;
 
-	#define PHYS_MULTIJUMP_CLIENT(s)	CS(s).cvar_cl_multijump
+/*qc2rust::define::PHYS_MULTIJUMP_CLIENT*/
+#define PHYS_MULTIJUMP_CLIENT(s) /*qc2rust::macro_begin::PHYS_MULTIJUMP_CLIENT*/CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).cvar_cl_multijump /*qc2rust::macro_end::PHYS_MULTIJUMP_CLIENT*/
 #endif
 
 MUTATOR_HOOKFUNCTION(multijump, PlayerPhysics)

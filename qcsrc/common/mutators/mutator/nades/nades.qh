@@ -22,11 +22,13 @@ const int PROJECTILE_NADE_VEIL = 86;
 const int PROJECTILE_NADE_VEIL_BURN = 87;
 
 REGISTRY(Nades, BITS(4))
-#define Nades_from(i) _Nades_from(i, NADE_TYPE_Null)
+/*qc2rust::define::Nades_from*/
+#define Nades_from(i) /*qc2rust::macro_begin::Nades_from*/_Nades_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NADE_TYPE_Null) /*qc2rust::macro_end::Nades_from*/
 REGISTER_REGISTRY(Nades)
 REGISTRY_CHECK(Nades)
 
-#define REGISTER_NADE(id) REGISTER(Nades, NADE_TYPE, id, m_id, NEW(Nade))
+/*qc2rust::define::REGISTER_NADE*/
+#define REGISTER_NADE(id) /*qc2rust::macro_begin::REGISTER_NADE*/REGISTER(Nades, NADE_TYPE,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, m_id, NEW(Nade)) /*qc2rust::macro_end::REGISTER_NADE*/
 
 CLASS(Nade, Object)
     ATTRIB(Nade, m_id, int, 0);
@@ -88,14 +90,8 @@ void nades_GiveBonus(entity player, float score);
 /**
  * called to adjust nade damage and force on hit
  */
-#define EV_Nade_Damage(i, o) \
-    /** nade */   i(entity, MUTATOR_ARGV_0_entity) \
- 	/** weapon */ i(entity, MUTATOR_ARGV_1_entity) \
-    /** force */  i(vector, MUTATOR_ARGV_2_vector) \
-    /**/          o(vector, MUTATOR_ARGV_2_vector) \
- 	/** damage */ i(float,  MUTATOR_ARGV_3_float) \
-    /**/          o(float,  MUTATOR_ARGV_3_float) \
-    /**/
+/*qc2rust::define::EV_Nade_Damage*/
+#define EV_Nade_Damage(i,o) /*qc2rust::macro_begin::EV_Nade_Damage*//** nade */    /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(entity, MUTATOR_ARGV_0_entity)  	/** weapon */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(entity, MUTATOR_ARGV_1_entity)     /** force */   /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(vector, MUTATOR_ARGV_2_vector)     /**/           /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(vector, MUTATOR_ARGV_2_vector)  	/** damage */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(float,  MUTATOR_ARGV_3_float)     /**/           /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/(float,  MUTATOR_ARGV_3_float)     /**/ /*qc2rust::macro_end::EV_Nade_Damage*/
 MUTATOR_HOOKABLE(Nade_Damage, EV_Nade_Damage);
 
 #endif

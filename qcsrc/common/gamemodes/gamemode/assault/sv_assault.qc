@@ -1,7 +1,8 @@
 #include "sv_assault.qh"
 
 .entity sprite;
-#define AS_ROUND_DELAY 5
+/*qc2rust::define::AS_ROUND_DELAY*/
+#define AS_ROUND_DELAY /*qc2rust::macro_begin::AS_ROUND_DELAY*/5 /*qc2rust::macro_end::AS_ROUND_DELAY*/
 
 IntrusiveList g_assault_destructibles;
 IntrusiveList g_assault_objectivedecreasers;

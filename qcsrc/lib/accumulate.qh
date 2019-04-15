@@ -1,35 +1,21 @@
 #pragma once
 
 #ifdef QCC_SUPPORT_ACCUMULATE
-	#define ACCUMULATE_FUNCTION(func, otherfunc) \
-		ACCUMULATE void func() \
-		{ \
-			otherfunc(); \
-		}
-	#define CALL_ACCUMULATED_FUNCTION(func) \
-		func()
+/*qc2rust::define::ACCUMULATE_FUNCTION*/
+#define ACCUMULATE_FUNCTION(func,otherfunc) /*qc2rust::macro_begin::ACCUMULATE_FUNCTION*/ACCUMULATE void  /*qc2rust::param_begin::func*/func /*qc2rust::param_end::func*/() 		{ 			 /*qc2rust::param_begin::otherfunc*/otherfunc /*qc2rust::param_end::otherfunc*/(); 		} /*qc2rust::macro_end::ACCUMULATE_FUNCTION*/
+/*qc2rust::define::CALL_ACCUMULATED_FUNCTION*/
+#define CALL_ACCUMULATED_FUNCTION(func) /*qc2rust::macro_begin::CALL_ACCUMULATED_FUNCTION*/ /*qc2rust::param_begin::func*/func /*qc2rust::param_end::func*/() /*qc2rust::macro_end::CALL_ACCUMULATED_FUNCTION*/
 #else
 	#ifdef HAVE_YO_DAWG_CPP
 // YO DAWG!
 // I HERD YO LIEK MACROS
 // SO I PUT A MACRO DEFINITION IN YO MACRO DEFINITION
 // SO YO CAN EXPAND MACROS WHILE YO EXPAND MACROS
-		#define ACCUMULATE_FUNCTION(func, otherfunc) \
-			#ifdef func \
-			void __merge__##otherfunc() \
-			{ \
-				func(); otherfunc(); \
-			} \
-			#undef func \
-			#define func __merge__##otherfunc \
-			#else \
-				#define func otherfunc \
-				#endif
-		#define CALL_ACCUMULATED_FUNCTION(func) \
-			func()
+		#define ACCUMULATE_FUNCTION(func, otherfunc) 			#ifdef func 			void __merge__##otherfunc() 			{ 				func(); otherfunc(); 			} 			#undef func 			#define func __merge__##otherfunc 			#else 				#define func otherfunc 				#endif
+/*qc2rust::define::CALL_ACCUMULATED_FUNCTION*/
+#define CALL_ACCUMULATED_FUNCTION(func) /*qc2rust::macro_begin::CALL_ACCUMULATED_FUNCTION*/ /*qc2rust::param_begin::func*/func /*qc2rust::param_end::func*/() /*qc2rust::macro_end::CALL_ACCUMULATED_FUNCTION*/
 	#else
-		#define ACCUMULATE_FUNCTION(func, otherfunc) \
-			.float _ACCUMULATE_##func##__##otherfunc;
+		#define ACCUMULATE_FUNCTION(func, otherfunc) 			.float _ACCUMULATE_##func##__##otherfunc;
 		void ACCUMULATE_call(string func)
 		{
 			float i;
@@ -42,15 +28,15 @@
 				if (substring(name, 0, funcprefixlen) == funcprefix) callfunction(substring(name, funcprefixlen, -1));
 			}
 		}
-		#define CALL_ACCUMULATED_FUNCTION(func) \
-			ACCUMULATE_call( #func)
+/*qc2rust::define::CALL_ACCUMULATED_FUNCTION*/
+#define CALL_ACCUMULATED_FUNCTION(func) /*qc2rust::macro_begin::CALL_ACCUMULATED_FUNCTION*/ACCUMULATE_call(  /*qc2rust::stringify_begin::func*/#func /*qc2rust::stringify_end::func*/) /*qc2rust::macro_end::CALL_ACCUMULATED_FUNCTION*/
 	#endif
 #endif
 
 // used for simplifying ACCUMULATE_FUNCTIONs
-#define SET_FIRST_OR_LAST(input, first, count) \
-	if (!input) { input = (first + count); }
-#define SET_FIELD_COUNT(field, first, count) \
-	if (!field) { field = (first + count); ++count; }
-#define CHECK_MAX_COUNT(name, max, count, type) \
-	if (count > max) { error(strcat("Maximum ", type, " hit: ", #name, ": ", ftos(count), ".\n")); }
+/*qc2rust::define::SET_FIRST_OR_LAST*/
+#define SET_FIRST_OR_LAST(input,first,count) /*qc2rust::macro_begin::SET_FIRST_OR_LAST*/if (! /*qc2rust::param_begin::input*/input /*qc2rust::param_end::input*/) {  /*qc2rust::param_begin::input*/input /*qc2rust::param_end::input*/ = ( /*qc2rust::param_begin::first*/first /*qc2rust::param_end::first*/ +  /*qc2rust::param_begin::count*/count /*qc2rust::param_end::count*/); } /*qc2rust::macro_end::SET_FIRST_OR_LAST*/
+/*qc2rust::define::SET_FIELD_COUNT*/
+#define SET_FIELD_COUNT(field,first,count) /*qc2rust::macro_begin::SET_FIELD_COUNT*/if (! /*qc2rust::param_begin::field*/field /*qc2rust::param_end::field*/) {  /*qc2rust::param_begin::field*/field /*qc2rust::param_end::field*/ = ( /*qc2rust::param_begin::first*/first /*qc2rust::param_end::first*/ +  /*qc2rust::param_begin::count*/count /*qc2rust::param_end::count*/); ++ /*qc2rust::param_begin::count*/count /*qc2rust::param_end::count*/; } /*qc2rust::macro_end::SET_FIELD_COUNT*/
+/*qc2rust::define::CHECK_MAX_COUNT*/
+#define CHECK_MAX_COUNT(name,max,count,type) /*qc2rust::macro_begin::CHECK_MAX_COUNT*/if ( /*qc2rust::param_begin::count*/count /*qc2rust::param_end::count*/ >  /*qc2rust::param_begin::max*/max /*qc2rust::param_end::max*/) { error(strcat("Maximum ",  /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/, " hit: ",  /*qc2rust::stringify_begin::name*/#name /*qc2rust::stringify_end::name*/, ": ", ftos( /*qc2rust::param_begin::count*/count /*qc2rust::param_end::count*/), ".\n")); } /*qc2rust::macro_end::CHECK_MAX_COUNT*/

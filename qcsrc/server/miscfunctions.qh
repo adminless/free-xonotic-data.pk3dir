@@ -12,8 +12,10 @@
 #include <common/turrets/all.qh>
 
 #ifdef RELEASE
-#define cvar_string_normal builtin_cvar_string
-#define cvar_normal builtin_cvar
+/*qc2rust::define::cvar_string_normal*/
+#define cvar_string_normal /*qc2rust::macro_begin::cvar_string_normal*/builtin_cvar_string /*qc2rust::macro_end::cvar_string_normal*/
+/*qc2rust::define::cvar_normal*/
+#define cvar_normal /*qc2rust::macro_begin::cvar_normal*/builtin_cvar /*qc2rust::macro_end::cvar_normal*/
 #else
 string cvar_string_normal(string n)
 {
@@ -27,7 +29,8 @@ float cvar_normal(string n)
 	return stof(cvar_string_normal(n));
 }
 #endif
-#define cvar_set_normal builtin_cvar_set
+/*qc2rust::define::cvar_set_normal*/
+#define cvar_set_normal /*qc2rust::macro_begin::cvar_set_normal*/builtin_cvar_set /*qc2rust::macro_end::cvar_set_normal*/
 
 .vector dropped_origin;
 
@@ -122,15 +125,20 @@ void WarpZone_crosshair_trace(entity pl);
 
 void WarpZone_traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag);
 
-#define IS_DEAD(s) ((s).deadflag != DEAD_NO)
+/*qc2rust::define::IS_DEAD*/
+#define IS_DEAD(s) /*qc2rust::macro_begin::IS_DEAD*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).deadflag != DEAD_NO) /*qc2rust::macro_end::IS_DEAD*/
 
 
-#define ITEM_TOUCH_NEEDKILL() (((trace_dpstartcontents | trace_dphitcontents) & DPCONTENTS_NODROP) || (trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY))
-#define ITEM_DAMAGE_NEEDKILL(dt) (((dt) == DEATH_HURTTRIGGER.m_id) || ((dt) == DEATH_SLIME.m_id) || ((dt) == DEATH_LAVA.m_id) || ((dt) == DEATH_SWAMP.m_id))
+/*qc2rust::define::ITEM_TOUCH_NEEDKILL*/
+#define ITEM_TOUCH_NEEDKILL() /*qc2rust::macro_begin::ITEM_TOUCH_NEEDKILL*/(((trace_dpstartcontents | trace_dphitcontents) & DPCONTENTS_NODROP) || (trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY)) /*qc2rust::macro_end::ITEM_TOUCH_NEEDKILL*/
+/*qc2rust::define::ITEM_DAMAGE_NEEDKILL*/
+#define ITEM_DAMAGE_NEEDKILL(dt) /*qc2rust::macro_begin::ITEM_DAMAGE_NEEDKILL*/((( /*qc2rust::param_begin::dt*/dt /*qc2rust::param_end::dt*/) == DEATH_HURTTRIGGER.m_id) || (( /*qc2rust::param_begin::dt*/dt /*qc2rust::param_end::dt*/) == DEATH_SLIME.m_id) || (( /*qc2rust::param_begin::dt*/dt /*qc2rust::param_end::dt*/) == DEATH_LAVA.m_id) || (( /*qc2rust::param_begin::dt*/dt /*qc2rust::param_end::dt*/) == DEATH_SWAMP.m_id)) /*qc2rust::macro_end::ITEM_DAMAGE_NEEDKILL*/
 
-#define PROJECTILE_TOUCH(e,t) MACRO_BEGIN if (WarpZone_Projectile_Touch(e,t)) return; MACRO_END
+/*qc2rust::define::PROJECTILE_TOUCH*/
+#define PROJECTILE_TOUCH(e,t) /*qc2rust::macro_begin::PROJECTILE_TOUCH*/MACRO_BEGIN if (WarpZone_Projectile_Touch( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/, /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/)) return; MACRO_END /*qc2rust::macro_end::PROJECTILE_TOUCH*/
 
-#define CENTER_OR_VIEWOFS(ent) (ent.origin + (IS_PLAYER(ent) ? ent.view_ofs : ((ent.mins + ent.maxs) * 0.5)))
+/*qc2rust::define::CENTER_OR_VIEWOFS*/
+#define CENTER_OR_VIEWOFS(ent) /*qc2rust::macro_begin::CENTER_OR_VIEWOFS*/( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.origin + (IS_PLAYER( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/) ?  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.view_ofs : (( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.mins +  /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.maxs) * 0.5))) /*qc2rust::macro_end::CENTER_OR_VIEWOFS*/
 
 // copies a string to a tempstring (so one can strunzone it)
 string strcat1(string s) = #115; // FRIK_FILE
@@ -206,7 +214,8 @@ float start_armorvalue;
 WepSet warmup_start_weapons;
 WepSet warmup_start_weapons_default;
 WepSet warmup_start_weapons_defaultmask;
-#define WARMUP_START_WEAPONS ((g_warmup_allguns == 1) ? (warmup_start_weapons & (weaponsInMap | start_weapons)) : warmup_start_weapons)
+/*qc2rust::define::WARMUP_START_WEAPONS*/
+#define WARMUP_START_WEAPONS /*qc2rust::macro_begin::WARMUP_START_WEAPONS*/((g_warmup_allguns == 1) ? (warmup_start_weapons & (weaponsInMap | start_weapons)) : warmup_start_weapons) /*qc2rust::macro_end::WARMUP_START_WEAPONS*/
 float warmup_start_ammo_shells;
 float warmup_start_ammo_nails;
 float warmup_start_ammo_rockets;

@@ -2,17 +2,12 @@
 
 #include <common/command/_mod.qh>
 REGISTRY(COMMON_COMMANDS, BITS(7))
-#define COMMON_COMMANDS_from(i) _COMMON_COMMANDS_from(i, NULL)
+/*qc2rust::define::COMMON_COMMANDS_from*/
+#define COMMON_COMMANDS_from(i) /*qc2rust::macro_begin::COMMON_COMMANDS_from*/_COMMON_COMMANDS_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NULL) /*qc2rust::macro_end::COMMON_COMMANDS_from*/
 REGISTER_REGISTRY(COMMON_COMMANDS)
 REGISTRY_SORT(COMMON_COMMANDS)
 
-#define COMMON_COMMAND(id, description) \
-	CLASS(commoncommand_##id, Command) \
-		ATTRIB(commoncommand_##id, m_name, string, #id); \
-    	ATTRIB(commoncommand_##id, m_description, string, description); \
-	ENDCLASS(commoncommand_##id) \
-    REGISTER(COMMON_COMMANDS, CMD_SV, id, m_id, NEW(commoncommand_##id)); \
-	METHOD(commoncommand_##id, m_invokecmd, void(commoncommand_##id this, int request, entity caller, int arguments, string command))
+#define COMMON_COMMAND(id, description) 	CLASS(commoncommand_##id, Command) 		ATTRIB(commoncommand_##id, m_name, string, #id);     	ATTRIB(commoncommand_##id, m_description, string, description); 	ENDCLASS(commoncommand_##id)     REGISTER(COMMON_COMMANDS, CMD_SV, id, m_id, NEW(commoncommand_##id)); 	METHOD(commoncommand_##id, m_invokecmd, void(commoncommand_##id this, int request, entity caller, int arguments, string command))
 
 STATIC_INIT(COMMON_COMMANDS_aliases) {
 	FOREACH(COMMON_COMMANDS, true, { localcmd(sprintf("alias %1$s \"%2$s %1$s ${* ?}\"\n", it.m_name, "qc_cmd_svcmd")); });
@@ -76,7 +71,8 @@ float VerifyClientEntity(entity client, float must_be_real, float must_be_bots);
 
 // if the client is not acceptable, return a string to be used for error messages
 string GetClientErrorString_color(float clienterror, string original_input, string col);
-#define GetClientErrorString(clienterror, original_input) GetClientErrorString_color(clienterror, original_input, "^7")
+/*qc2rust::define::GetClientErrorString*/
+#define GetClientErrorString(clienterror,original_input) /*qc2rust::macro_begin::GetClientErrorString*/GetClientErrorString_color( /*qc2rust::param_begin::clienterror*/clienterror /*qc2rust::param_end::clienterror*/,  /*qc2rust::param_begin::original_input*/original_input /*qc2rust::param_end::original_input*/, "^7") /*qc2rust::macro_end::GetClientErrorString*/
 
 // is this entity number even in the possible range of entities?
 float VerifyClientNumber(float tmp_number);

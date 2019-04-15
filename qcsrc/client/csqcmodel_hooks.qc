@@ -318,7 +318,8 @@ void CSQCPlayer_ModelAppearance_Apply(entity this, bool islocalplayer)
 #endif
 .int csqcmodel_framecount;
 
-#define IS_DEAD_FRAME(f) ((f) == 0 || (f) == 1)
+/*qc2rust::define::IS_DEAD_FRAME*/
+#define IS_DEAD_FRAME(f) /*qc2rust::macro_begin::IS_DEAD_FRAME*/(( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) == 0 || ( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) == 1) /*qc2rust::macro_end::IS_DEAD_FRAME*/
 void CSQCPlayer_FallbackFrame_PreUpdate(entity this)
 {
 	this.frame = this.csqcmodel_saveframe;
@@ -341,10 +342,8 @@ void CSQCPlayer_FallbackFrame_PostUpdate(entity this, bool isnew)
 	// player "pops in"
 	if(isnew)
 	{
-#define FIX_FRAMETIME(f,ft) MACRO_BEGIN \
-		if(IS_DEAD_FRAME(this.f) && this.ft != 0 && this.death_time != 0) \
-			this.ft = this.death_time; \
-MACRO_END
+/*qc2rust::define::FIX_FRAMETIME*/
+#define FIX_FRAMETIME(f,ft) /*qc2rust::macro_begin::FIX_FRAMETIME*/MACRO_BEGIN 		if(IS_DEAD_FRAME(this. /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) && this. /*qc2rust::param_begin::ft*/ft /*qc2rust::param_end::ft*/ != 0 && this.death_time != 0) 			this. /*qc2rust::param_begin::ft*/ft /*qc2rust::param_end::ft*/ = this.death_time; MACRO_END /*qc2rust::macro_end::FIX_FRAMETIME*/
 		FIX_FRAMETIME(frame, frame1time);
 		FIX_FRAMETIME(frame2, frame2time);
 #ifdef CSQCMODEL_HAVE_TWO_FRAMES

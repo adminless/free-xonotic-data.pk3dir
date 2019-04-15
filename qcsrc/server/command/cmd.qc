@@ -785,31 +785,13 @@ void ClientCommand_(entity caller, int request)
 // =====================================
 
 // Do not hard code aliases for these, instead create them in commands.cfg... also: keep in alphabetical order, please ;)
-#define CLIENT_COMMANDS(ent, request, arguments, command) \
-	CLIENT_COMMAND("autoswitch", ClientCommand_autoswitch(ent, request, arguments), "Whether or not to switch automatically when getting a better weapon") \
-	CLIENT_COMMAND("clientversion", ClientCommand_clientversion(ent, request, arguments), "Release version of the game") \
-	CLIENT_COMMAND("join", ClientCommand_join(ent, request), "Become a player in the game") \
-	CLIENT_COMMAND("kill", ClientCommand_kill(ent, request), "Become a member of the dead") \
-	CLIENT_COMMAND("minigame", ClientCommand_minigame(ent, request, arguments, command), "Start a minigame") \
-	CLIENT_COMMAND("mv_getpicture", ClientCommand_mv_getpicture(ent, request, arguments), "Retrieve mapshot picture from the server") \
-	CLIENT_COMMAND("physics", ClientCommand_physics(ent, request, arguments), "Change physics set") \
-	CLIENT_COMMAND("ready", ClientCommand_ready(ent, request), "Qualify as ready to end warmup stage (or restart server if allowed)") \
-	CLIENT_COMMAND("say", ClientCommand_say(ent, request, arguments, command), "Print a message to chat to all players") \
-	CLIENT_COMMAND("say_team", ClientCommand_say_team(ent, request, arguments, command), "Print a message to chat to all team mates") \
-	CLIENT_COMMAND("selectteam", ClientCommand_selectteam(ent, request, arguments), "Attempt to choose a team to join into") \
-	CLIENT_COMMAND("selfstuff", ClientCommand_selfstuff(ent, request, command), "Stuffcmd a command to your own client") \
-	CLIENT_COMMAND("sentcvar", ClientCommand_sentcvar(ent, request, arguments, command), "New system for sending a client cvar to the server") \
-	CLIENT_COMMAND("spectate", ClientCommand_spectate(ent, request), "Become an observer") \
-	CLIENT_COMMAND("suggestmap", ClientCommand_suggestmap(ent, request, arguments), "Suggest a map to the mapvote at match end") \
-	CLIENT_COMMAND("tell", ClientCommand_tell(ent, request, arguments, command), "Send a message directly to a player") \
-	CLIENT_COMMAND("voice", ClientCommand_voice(ent, request, arguments, command), "Send voice message via sound") \
-	CLIENT_COMMAND("wpeditor", ClientCommand_wpeditor(ent, request, arguments), "Waypoint editor commands") \
-	/* nothing */
+/*qc2rust::define::CLIENT_COMMANDS*/
+#define CLIENT_COMMANDS(ent,request,arguments,command) /*qc2rust::macro_begin::CLIENT_COMMANDS*/CLIENT_COMMAND("autoswitch", ClientCommand_autoswitch( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/), "Whether or not to switch automatically when getting a better weapon") 	CLIENT_COMMAND("clientversion", ClientCommand_clientversion( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/), "Release version of the game") 	CLIENT_COMMAND("join", ClientCommand_join( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/), "Become a player in the game") 	CLIENT_COMMAND("kill", ClientCommand_kill( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/), "Become a member of the dead") 	CLIENT_COMMAND("minigame", ClientCommand_minigame( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Start a minigame") 	CLIENT_COMMAND("mv_getpicture", ClientCommand_mv_getpicture( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/), "Retrieve mapshot picture from the server") 	CLIENT_COMMAND("physics", ClientCommand_physics( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/), "Change physics set") 	CLIENT_COMMAND("ready", ClientCommand_ready( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/), "Qualify as ready to end warmup stage (or restart server if allowed)") 	CLIENT_COMMAND("say", ClientCommand_say( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Print a message to chat to all players") 	CLIENT_COMMAND("say_team", ClientCommand_say_team( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Print a message to chat to all team mates") 	CLIENT_COMMAND("selectteam", ClientCommand_selectteam( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/), "Attempt to choose a team to join into") 	CLIENT_COMMAND("selfstuff", ClientCommand_selfstuff( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Stuffcmd a command to your own client") 	CLIENT_COMMAND("sentcvar", ClientCommand_sentcvar( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "New system for sending a client cvar to the server") 	CLIENT_COMMAND("spectate", ClientCommand_spectate( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/), "Become an observer") 	CLIENT_COMMAND("suggestmap", ClientCommand_suggestmap( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/), "Suggest a map to the mapvote at match end") 	CLIENT_COMMAND("tell", ClientCommand_tell( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Send a message directly to a player") 	CLIENT_COMMAND("voice", ClientCommand_voice( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Send voice message via sound") 	CLIENT_COMMAND("wpeditor", ClientCommand_wpeditor( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/,  /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/), "Waypoint editor commands") 	/* nothing */ /*qc2rust::macro_end::CLIENT_COMMANDS*/
 
 void ClientCommand_macro_help(entity caller)
 {
-	#define CLIENT_COMMAND(name, function, description) \
-		{ sprint(caller, "  ^2", name, "^7: ", description, "\n"); }
+/*qc2rust::define::CLIENT_COMMAND*/
+#define CLIENT_COMMAND(name,function,description) /*qc2rust::macro_begin::CLIENT_COMMAND*/{ sprint(caller, "  ^2",  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/, "^7: ",  /*qc2rust::param_begin::description*/description /*qc2rust::param_end::description*/, "\n"); } /*qc2rust::macro_end::CLIENT_COMMAND*/
 
 	CLIENT_COMMANDS(NULL, 0, 0, "");
 #undef CLIENT_COMMAND
@@ -817,8 +799,8 @@ void ClientCommand_macro_help(entity caller)
 
 float ClientCommand_macro_command(int argc, entity caller, string command)
 {
-	#define CLIENT_COMMAND(name, function, description) \
-		{ if (name == strtolower(argv(0))) { function; return true; } }
+/*qc2rust::define::CLIENT_COMMAND*/
+#define CLIENT_COMMAND(name,function,description) /*qc2rust::macro_begin::CLIENT_COMMAND*/{ if ( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ == strtolower(argv(0))) {  /*qc2rust::param_begin::function*/function /*qc2rust::param_end::function*/; return true; } } /*qc2rust::macro_end::CLIENT_COMMAND*/
 
 	CLIENT_COMMANDS(caller, CMD_REQUEST_COMMAND, argc, command);
 #undef CLIENT_COMMAND
@@ -828,8 +810,8 @@ float ClientCommand_macro_command(int argc, entity caller, string command)
 
 float ClientCommand_macro_usage(int argc, entity caller)
 {
-	#define CLIENT_COMMAND(name, function, description) \
-		{ if (name == strtolower(argv(1))) { function; return true; } }
+/*qc2rust::define::CLIENT_COMMAND*/
+#define CLIENT_COMMAND(name,function,description) /*qc2rust::macro_begin::CLIENT_COMMAND*/{ if ( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ == strtolower(argv(1))) {  /*qc2rust::param_begin::function*/function /*qc2rust::param_end::function*/; return true; } } /*qc2rust::macro_end::CLIENT_COMMAND*/
 
 	CLIENT_COMMANDS(caller, CMD_REQUEST_USAGE, argc, "");
 #undef CLIENT_COMMAND
@@ -839,8 +821,8 @@ float ClientCommand_macro_usage(int argc, entity caller)
 
 void ClientCommand_macro_write_aliases(float fh)
 {
-	#define CLIENT_COMMAND(name, function, description) \
-		{ CMD_Write_Alias("qc_cmd_cmd", name, description); }
+/*qc2rust::define::CLIENT_COMMAND*/
+#define CLIENT_COMMAND(name,function,description) /*qc2rust::macro_begin::CLIENT_COMMAND*/{ CMD_Write_Alias("qc_cmd_cmd",  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/,  /*qc2rust::param_begin::description*/description /*qc2rust::param_end::description*/); } /*qc2rust::macro_end::CLIENT_COMMAND*/
 
 	CLIENT_COMMANDS(NULL, 0, 0, "");
 #undef CLIENT_COMMAND

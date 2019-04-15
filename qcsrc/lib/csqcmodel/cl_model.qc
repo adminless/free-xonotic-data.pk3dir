@@ -250,14 +250,14 @@ NET_HANDLE(ENT_CLIENT_MODEL, bool isnew)
 	InterpolateOrigin_Undo(this);
 	CSQCModel_InterpolateAnimation_PreNote(this, sf);
 
-#define CSQCMODEL_IF(cond) if(cond) {
-#define CSQCMODEL_ENDIF }
-#define CSQCMODEL_PROPERTY(flag,t,r,w,f) \
-	if(sf & flag) \
-		this.f = r();
-#define CSQCMODEL_PROPERTY_SCALED(flag,t,r,w,f,s,mi,ma) \
-	if(sf & flag) \
-		this.f = (r() + mi) / s;
+/*qc2rust::define::CSQCMODEL_IF*/
+#define CSQCMODEL_IF(cond) /*qc2rust::macro_begin::CSQCMODEL_IF*/if( /*qc2rust::param_begin::cond*/cond /*qc2rust::param_end::cond*/) { /*qc2rust::macro_end::CSQCMODEL_IF*/
+/*qc2rust::define::CSQCMODEL_ENDIF*/
+#define CSQCMODEL_ENDIF /*qc2rust::macro_begin::CSQCMODEL_ENDIF*/} /*qc2rust::macro_end::CSQCMODEL_ENDIF*/
+/*qc2rust::define::CSQCMODEL_PROPERTY*/
+#define CSQCMODEL_PROPERTY(flag,t,r,w,f) /*qc2rust::macro_begin::CSQCMODEL_PROPERTY*/if(sf &  /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/) 		this. /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/ =  /*qc2rust::param_begin::r*/r /*qc2rust::param_end::r*/(); /*qc2rust::macro_end::CSQCMODEL_PROPERTY*/
+/*qc2rust::define::CSQCMODEL_PROPERTY_SCALED*/
+#define CSQCMODEL_PROPERTY_SCALED(flag,t,r,w,f,s,mi,ma) /*qc2rust::macro_begin::CSQCMODEL_PROPERTY_SCALED*/if(sf &  /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/) 		this. /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/ = ( /*qc2rust::param_begin::r*/r /*qc2rust::param_end::r*/() +  /*qc2rust::param_begin::mi*/mi /*qc2rust::param_end::mi*/) /  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/; /*qc2rust::macro_end::CSQCMODEL_PROPERTY_SCALED*/
 	ALLPROPERTIES
 #undef CSQCMODEL_PROPERTY_SCALED
 #undef CSQCMODEL_PROPERTY

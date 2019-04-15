@@ -12,7 +12,8 @@ bool client_hasweapon(entity this, Weapon wpn, .entity weaponentity, float andam
 .int weaponcomplainindex;
 float W_GetCycleWeapon(entity this, string weaponorder, float dir, float imp, float complain, float skipmissing, .entity weaponentity);
 
-#define w_getbestweapon(ent,wepent) Weapons_from(W_GetCycleWeapon(ent, CS(ent).cvar_cl_weaponpriority, 0, -1, false, true, wepent))
+/*qc2rust::define::w_getbestweapon*/
+#define w_getbestweapon(ent,wepent) /*qc2rust::macro_begin::w_getbestweapon*/Weapons_from(W_GetCycleWeapon( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/, CS( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/).cvar_cl_weaponpriority, 0, -1, false, true,  /*qc2rust::param_begin::wepent*/wepent /*qc2rust::param_end::wepent*/)) /*qc2rust::macro_end::w_getbestweapon*/
 
 void W_SwitchWeapon_Force(Player this, Weapon w, .entity weaponentity);
 

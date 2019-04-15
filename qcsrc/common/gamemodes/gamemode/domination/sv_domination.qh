@@ -1,7 +1,8 @@
 #pragma once
 
 #include <common/mutators/base.qh>
-#define autocvar_g_domination_point_limit cvar("g_domination_point_limit")
+/*qc2rust::define::autocvar_g_domination_point_limit*/
+#define autocvar_g_domination_point_limit /*qc2rust::macro_begin::autocvar_g_domination_point_limit*/cvar("g_domination_point_limit") /*qc2rust::macro_end::autocvar_g_domination_point_limit*/
 bool autocvar_g_domination_roundbased;
 int autocvar_g_domination_roundbased_point_limit;
 int autocvar_g_domination_point_leadlimit;

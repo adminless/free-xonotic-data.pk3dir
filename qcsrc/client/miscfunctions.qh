@@ -34,7 +34,8 @@ float PreviewExists(string name);
 vector Rotate(vector v, float a);
 
 
-#define IS_DEAD(s) (((s).classname == "csqcmodel") ? (s).csqcmodel_isdead : (GetResource((s), RES_HEALTH) <= 0))
+/*qc2rust::define::IS_DEAD*/
+#define IS_DEAD(s) /*qc2rust::macro_begin::IS_DEAD*/((( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).classname == "csqcmodel") ? ( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).csqcmodel_isdead : (GetResource(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/), RES_HEALTH) <= 0)) /*qc2rust::macro_end::IS_DEAD*/
 
 
 // decolorizes and team colors the player name when needed
@@ -45,8 +46,10 @@ float cvar_or(string cv, float v);
 vector project_3d_to_2d(vector vec);
 
 vector drawfontscale;
-#define draw_beginBoldFont() drawfont = FONT_USER + 2
-#define draw_endBoldFont() drawfont = FONT_USER + 1
+/*qc2rust::define::draw_beginBoldFont*/
+#define draw_beginBoldFont() /*qc2rust::macro_begin::draw_beginBoldFont*/drawfont = FONT_USER + 2 /*qc2rust::macro_end::draw_beginBoldFont*/
+/*qc2rust::define::draw_endBoldFont*/
+#define draw_endBoldFont() /*qc2rust::macro_begin::draw_endBoldFont*/drawfont = FONT_USER + 1 /*qc2rust::macro_end::draw_endBoldFont*/
 
 float expandingbox_sizefactor_from_fadelerp(float fadelerp);
 
@@ -59,10 +62,14 @@ void drawpic_tiled(vector pos, string pic, vector sz, vector area, vector color,
 void HUD_Scale_Disable();
 void HUD_Scale_Enable();
 
-#define HUD_ScaleX(f) (f * hud_scale.x)
-#define HUD_ScaleY(f) (f * hud_scale.y)
-#define HUD_ShiftX(f) (f + hud_shift.x + hud_shift.z * (f - hud_scale_center.x))
-#define HUD_ShiftY(f) (f + hud_shift.y + hud_shift.z * (f - hud_scale_center.y))
+/*qc2rust::define::HUD_ScaleX*/
+#define HUD_ScaleX(f) /*qc2rust::macro_begin::HUD_ScaleX*/( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/ * hud_scale.x) /*qc2rust::macro_end::HUD_ScaleX*/
+/*qc2rust::define::HUD_ScaleY*/
+#define HUD_ScaleY(f) /*qc2rust::macro_begin::HUD_ScaleY*/( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/ * hud_scale.y) /*qc2rust::macro_end::HUD_ScaleY*/
+/*qc2rust::define::HUD_ShiftX*/
+#define HUD_ShiftX(f) /*qc2rust::macro_begin::HUD_ShiftX*/( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/ + hud_shift.x + hud_shift.z * ( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/ - hud_scale_center.x)) /*qc2rust::macro_end::HUD_ShiftX*/
+/*qc2rust::define::HUD_ShiftY*/
+#define HUD_ShiftY(f) /*qc2rust::macro_begin::HUD_ShiftY*/( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/ + hud_shift.y + hud_shift.z * ( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/ - hud_scale_center.y)) /*qc2rust::macro_end::HUD_ShiftY*/
 vector HUD_Scale(vector v);
 vector HUD_Shift(vector v);
 
@@ -73,34 +80,33 @@ vector HUD_Shift(vector v);
 
 float stringwidth(string text, float handleColors, vector sz);
 
-#define drawpic(position, pic, size, rgb, alpha, flag) \
-	drawpic_builtin(HUD_Shift(position), pic, HUD_Scale(size), rgb, alpha, flag)
+/*qc2rust::define::drawpic*/
+#define drawpic(position,pic,size,rgb,alpha,flag) /*qc2rust::macro_begin::drawpic*/drawpic_builtin(HUD_Shift( /*qc2rust::param_begin::position*/position /*qc2rust::param_end::position*/),  /*qc2rust::param_begin::pic*/pic /*qc2rust::param_end::pic*/, HUD_Scale( /*qc2rust::param_begin::size*/size /*qc2rust::param_end::size*/),  /*qc2rust::param_begin::rgb*/rgb /*qc2rust::param_end::rgb*/,  /*qc2rust::param_begin::alpha*/alpha /*qc2rust::param_end::alpha*/,  /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/) /*qc2rust::macro_end::drawpic*/
 
-#define drawcharacter(position, character, scale, rgb, alpha, flag) \
-	drawcharacter_builtin(HUD_Shift(position), text, scale, rgb, alpha, flag)
+/*qc2rust::define::drawcharacter*/
+#define drawcharacter(position,character,scale,rgb,alpha,flag) /*qc2rust::macro_begin::drawcharacter*/drawcharacter_builtin(HUD_Shift( /*qc2rust::param_begin::position*/position /*qc2rust::param_end::position*/), text,  /*qc2rust::param_begin::scale*/scale /*qc2rust::param_end::scale*/,  /*qc2rust::param_begin::rgb*/rgb /*qc2rust::param_end::rgb*/,  /*qc2rust::param_begin::alpha*/alpha /*qc2rust::param_end::alpha*/,  /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/) /*qc2rust::macro_end::drawcharacter*/
 
-#define drawstring(position, text, scale, rgb, alpha, flag) \
-	drawstring_builtin(HUD_Shift(position), text, scale, rgb, alpha, flag)
+/*qc2rust::define::drawstring*/
+#define drawstring(position,text,scale,rgb,alpha,flag) /*qc2rust::macro_begin::drawstring*/drawstring_builtin(HUD_Shift( /*qc2rust::param_begin::position*/position /*qc2rust::param_end::position*/),  /*qc2rust::param_begin::text*/text /*qc2rust::param_end::text*/,  /*qc2rust::param_begin::scale*/scale /*qc2rust::param_end::scale*/,  /*qc2rust::param_begin::rgb*/rgb /*qc2rust::param_end::rgb*/,  /*qc2rust::param_begin::alpha*/alpha /*qc2rust::param_end::alpha*/,  /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/) /*qc2rust::macro_end::drawstring*/
 
-#define drawcolorcodedstring(position, text, scale, alpha, flag) \
-	drawcolorcodedstring_builtin(HUD_Shift(position), text, scale, alpha, flag)
+/*qc2rust::define::drawcolorcodedstring*/
+#define drawcolorcodedstring(position,text,scale,alpha,flag) /*qc2rust::macro_begin::drawcolorcodedstring*/drawcolorcodedstring_builtin(HUD_Shift( /*qc2rust::param_begin::position*/position /*qc2rust::param_end::position*/),  /*qc2rust::param_begin::text*/text /*qc2rust::param_end::text*/,  /*qc2rust::param_begin::scale*/scale /*qc2rust::param_end::scale*/,  /*qc2rust::param_begin::alpha*/alpha /*qc2rust::param_end::alpha*/,  /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/) /*qc2rust::macro_end::drawcolorcodedstring*/
 
-#define drawcolorcodedstring2(position, text, scale, rgb, alpha, flag) \
-	drawcolorcodedstring2_builtin(HUD_Shift(position), text, scale, rgb, alpha, flag)
+/*qc2rust::define::drawcolorcodedstring2*/
+#define drawcolorcodedstring2(position,text,scale,rgb,alpha,flag) /*qc2rust::macro_begin::drawcolorcodedstring2*/drawcolorcodedstring2_builtin(HUD_Shift( /*qc2rust::param_begin::position*/position /*qc2rust::param_end::position*/),  /*qc2rust::param_begin::text*/text /*qc2rust::param_end::text*/,  /*qc2rust::param_begin::scale*/scale /*qc2rust::param_end::scale*/,  /*qc2rust::param_begin::rgb*/rgb /*qc2rust::param_end::rgb*/,  /*qc2rust::param_begin::alpha*/alpha /*qc2rust::param_end::alpha*/,  /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/) /*qc2rust::macro_end::drawcolorcodedstring2*/
 
-#define drawfill(position, size, rgb, alpha, flag) \
-	drawfill_builtin(HUD_Shift(position), HUD_Scale(size), rgb, alpha, flag)
+/*qc2rust::define::drawfill*/
+#define drawfill(position,size,rgb,alpha,flag) /*qc2rust::macro_begin::drawfill*/drawfill_builtin(HUD_Shift( /*qc2rust::param_begin::position*/position /*qc2rust::param_end::position*/), HUD_Scale( /*qc2rust::param_begin::size*/size /*qc2rust::param_end::size*/),  /*qc2rust::param_begin::rgb*/rgb /*qc2rust::param_end::rgb*/,  /*qc2rust::param_begin::alpha*/alpha /*qc2rust::param_end::alpha*/,  /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/) /*qc2rust::macro_end::drawfill*/
 
-#define drawsetcliparea(xposition, yposition, w, h) \
-	drawsetcliparea_builtin(HUD_ShiftX(xposition), HUD_ShiftY(yposition), HUD_ScaleX(w), HUD_ScaleY(h))
+/*qc2rust::define::drawsetcliparea*/
+#define drawsetcliparea(xposition,yposition,w,h) /*qc2rust::macro_begin::drawsetcliparea*/drawsetcliparea_builtin(HUD_ShiftX( /*qc2rust::param_begin::xposition*/xposition /*qc2rust::param_end::xposition*/), HUD_ShiftY( /*qc2rust::param_begin::yposition*/yposition /*qc2rust::param_end::yposition*/), HUD_ScaleX( /*qc2rust::param_begin::w*/w /*qc2rust::param_end::w*/), HUD_ScaleY( /*qc2rust::param_begin::h*/h /*qc2rust::param_end::h*/)) /*qc2rust::macro_end::drawsetcliparea*/
 
 // Since drawsubpic usually gets called multiple times from within an
 // utility function, instead of scaling pos and size in every call
 // we scale them once for all in the beginning of that utility function.
 // That's why drawsubpic isn't remapped.
 /*
-#define drawsubpic(position, size, pic, srcPosition, srcSize, rgb, alpha, flag) \
-	drawsubpic_builtin(HUD_Shift(position), HUD_Scale(size), pic, HUD_Shift(srcPosition), HUD_Scale(srcSize), rgb, alpha, flag)
+#define drawsubpic(position, size, pic, srcPosition, srcSize, rgb, alpha, flag) 	drawsubpic_builtin(HUD_Shift(position), HUD_Scale(size), pic, HUD_Shift(srcPosition), HUD_Scale(srcSize), rgb, alpha, flag)
 */
 
 // drawpic wrapper to draw an image as large as possible with preserved aspect ratio into a box
@@ -109,68 +115,23 @@ vector _drawpic_imgsize;
 vector _drawpic_sz;
 float _drawpic_oldsz;
 string _drawpic_picpath;
-#define drawpic_aspect(pos,pic,mySize,color,theAlpha,drawflag)\
-	MACRO_BEGIN \
-		_drawpic_imgsize = draw_getimagesize(pic);\
-		if(_drawpic_imgsize != '0 0 0') {\
-			_drawpic_imgaspect = _drawpic_imgsize.x/_drawpic_imgsize.y;\
-			_drawpic_sz = mySize;\
-			if(_drawpic_sz.x/_drawpic_sz.y > _drawpic_imgaspect) {\
-				_drawpic_oldsz = _drawpic_sz.x;\
-				_drawpic_sz.x = _drawpic_sz.y * _drawpic_imgaspect;\
-				if(_drawpic_sz.x)\
-					drawpic(pos + eX * 0.5 * (_drawpic_oldsz - _drawpic_sz.x), pic, _drawpic_sz, color, theAlpha, drawflag);\
-			} else {\
-				_drawpic_oldsz = _drawpic_sz.y;\
-				_drawpic_sz.y = _drawpic_sz.x / _drawpic_imgaspect;\
-				if(_drawpic_sz.y)\
-					drawpic(pos + eY * 0.5 * (_drawpic_oldsz - _drawpic_sz.y), pic, _drawpic_sz, color, theAlpha, drawflag);\
-			}\
-		}\
-	MACRO_END
+/*qc2rust::define::drawpic_aspect*/
+#define drawpic_aspect(pos,pic,mySize,color,theAlpha,drawflag) /*qc2rust::macro_begin::drawpic_aspect*/MACRO_BEGIN 		_drawpic_imgsize = draw_getimagesize( /*qc2rust::param_begin::pic*/pic /*qc2rust::param_end::pic*/);		if(_drawpic_imgsize != '0 0 0') {			_drawpic_imgaspect = _drawpic_imgsize.x/_drawpic_imgsize.y;			_drawpic_sz =  /*qc2rust::param_begin::mySize*/mySize /*qc2rust::param_end::mySize*/;			if(_drawpic_sz.x/_drawpic_sz.y > _drawpic_imgaspect) {				_drawpic_oldsz = _drawpic_sz.x;				_drawpic_sz.x = _drawpic_sz.y * _drawpic_imgaspect;				if(_drawpic_sz.x)					drawpic( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/ + eX * 0.5 * (_drawpic_oldsz - _drawpic_sz.x),  /*qc2rust::param_begin::pic*/pic /*qc2rust::param_end::pic*/, _drawpic_sz,  /*qc2rust::param_begin::color*/color /*qc2rust::param_end::color*/,  /*qc2rust::param_begin::theAlpha*/theAlpha /*qc2rust::param_end::theAlpha*/,  /*qc2rust::param_begin::drawflag*/drawflag /*qc2rust::param_end::drawflag*/);			} else {				_drawpic_oldsz = _drawpic_sz.y;				_drawpic_sz.y = _drawpic_sz.x / _drawpic_imgaspect;				if(_drawpic_sz.y)					drawpic( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/ + eY * 0.5 * (_drawpic_oldsz - _drawpic_sz.y),  /*qc2rust::param_begin::pic*/pic /*qc2rust::param_end::pic*/, _drawpic_sz,  /*qc2rust::param_begin::color*/color /*qc2rust::param_end::color*/,  /*qc2rust::param_begin::theAlpha*/theAlpha /*qc2rust::param_end::theAlpha*/,  /*qc2rust::param_begin::drawflag*/drawflag /*qc2rust::param_end::drawflag*/);			}		}	MACRO_END /*qc2rust::macro_end::drawpic_aspect*/
 
 // draw HUD element with image from gfx/hud/hud_skin/foo.tga if it exists, otherwise gfx/hud/default/foo.tga
-#define drawpic_aspect_skin(pos,pic,sz,color,theAlpha,drawflag)\
-	MACRO_BEGIN \
-		_drawpic_picpath = strcat(hud_skin_path, "/", pic);\
-		if(precache_pic(_drawpic_picpath) == "") {\
-			_drawpic_picpath = strcat("gfx/hud/default/", pic);\
-		}\
-		drawpic_aspect(pos, _drawpic_picpath, sz, color, theAlpha, drawflag);\
-		_drawpic_picpath = string_null;\
-	MACRO_END
+/*qc2rust::define::drawpic_aspect_skin*/
+#define drawpic_aspect_skin(pos,pic,sz,color,theAlpha,drawflag) /*qc2rust::macro_begin::drawpic_aspect_skin*/MACRO_BEGIN 		_drawpic_picpath = strcat(hud_skin_path, "/",  /*qc2rust::param_begin::pic*/pic /*qc2rust::param_end::pic*/);		if(precache_pic(_drawpic_picpath) == "") {			_drawpic_picpath = strcat("gfx/hud/default/",  /*qc2rust::param_begin::pic*/pic /*qc2rust::param_end::pic*/);		}		drawpic_aspect( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/, _drawpic_picpath,  /*qc2rust::param_begin::sz*/sz /*qc2rust::param_end::sz*/,  /*qc2rust::param_begin::color*/color /*qc2rust::param_end::color*/,  /*qc2rust::param_begin::theAlpha*/theAlpha /*qc2rust::param_end::theAlpha*/,  /*qc2rust::param_begin::drawflag*/drawflag /*qc2rust::param_end::drawflag*/);		_drawpic_picpath = string_null;	MACRO_END /*qc2rust::macro_end::drawpic_aspect_skin*/
 
 // draw HUD element with image from gfx/hud/hud_skin/foo.tga if it exists, otherwise gfx/hud/default/foo.tga
-#define drawpic_skin(pos,pic,sz,color,theAlpha,drawflag)\
-	MACRO_BEGIN \
-		_drawpic_picpath = strcat(hud_skin_path, "/", pic);\
-		if(precache_pic(_drawpic_picpath) == "") {\
-			_drawpic_picpath = strcat("gfx/hud/default/", pic);\
-		}\
-		drawpic(pos, _drawpic_picpath, sz, color, theAlpha, drawflag);\
-		_drawpic_picpath = string_null;\
-	MACRO_END
+/*qc2rust::define::drawpic_skin*/
+#define drawpic_skin(pos,pic,sz,color,theAlpha,drawflag) /*qc2rust::macro_begin::drawpic_skin*/MACRO_BEGIN 		_drawpic_picpath = strcat(hud_skin_path, "/",  /*qc2rust::param_begin::pic*/pic /*qc2rust::param_end::pic*/);		if(precache_pic(_drawpic_picpath) == "") {			_drawpic_picpath = strcat("gfx/hud/default/",  /*qc2rust::param_begin::pic*/pic /*qc2rust::param_end::pic*/);		}		drawpic( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/, _drawpic_picpath,  /*qc2rust::param_begin::sz*/sz /*qc2rust::param_end::sz*/,  /*qc2rust::param_begin::color*/color /*qc2rust::param_end::color*/,  /*qc2rust::param_begin::theAlpha*/theAlpha /*qc2rust::param_end::theAlpha*/,  /*qc2rust::param_begin::drawflag*/drawflag /*qc2rust::param_end::drawflag*/);		_drawpic_picpath = string_null;	MACRO_END /*qc2rust::macro_end::drawpic_skin*/
 
 void drawpic_aspect_skin_expanding(vector position, string pic, vector theScale, vector rgb, float theAlpha, float flag, float fadelerp);
 
 void drawpic_aspect_skin_expanding_two(vector position, string pic, vector theScale, vector rgb, float theAlpha, float flag, float fadelerp);
 
-#define SET_POS_AND_SZ_Y_ASPECT(allow_colors) MACRO_BEGIN															\
-	float textaspect, oldsz;																						\
-	vector dfs = drawfontscale; \
-	drawfontscale = '1 1 0'; \
-	textaspect = stringwidth(text, allow_colors, '1 1 1' * sz.y) / sz.y;											\
-	drawfontscale = dfs; \
-	if(sz.x/sz.y > textaspect) {																					\
-		oldsz = sz.x;																								\
-		sz.x = sz.y * textaspect;																					\
-		pos.x += (oldsz - sz.x) * 0.5;																				\
-	} else {																										\
-		oldsz = sz.y;																								\
-		sz.y = sz.x / textaspect; 																					\
-		pos.y += (oldsz - sz.y) * 0.5;																				\
-	}																												\
-MACRO_END
+/*qc2rust::define::SET_POS_AND_SZ_Y_ASPECT*/
+#define SET_POS_AND_SZ_Y_ASPECT(allow_colors) /*qc2rust::macro_begin::SET_POS_AND_SZ_Y_ASPECT*/MACRO_BEGIN																float textaspect, oldsz;																							vector dfs = drawfontscale; 	drawfontscale = '1 1 0'; 	textaspect = stringwidth(text,  /*qc2rust::param_begin::allow_colors*/allow_colors /*qc2rust::param_end::allow_colors*/, '1 1 1' * sz.y) / sz.y;												drawfontscale = dfs; 	if(sz.x/sz.y > textaspect) {																							oldsz = sz.x;																										sz.x = sz.y * textaspect;																							pos.x += (oldsz - sz.x) * 0.5;																					} else {																												oldsz = sz.y;																										sz.y = sz.x / textaspect; 																							pos.y += (oldsz - sz.y) * 0.5;																					}																												MACRO_END /*qc2rust::macro_end::SET_POS_AND_SZ_Y_ASPECT*/
 
 // drawstring wrapper to draw a string as large as possible with preserved aspect ratio into a box
 void drawstring_aspect(vector pos, string text, vector sz, vector color, float theAlpha, float drawflag);

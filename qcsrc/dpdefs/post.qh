@@ -11,8 +11,11 @@
 #undef setcolor
 
 #ifdef MENUQC
-	#define NULL (RVALUE, null_entity)
-	#define world NULL
+/*qc2rust::define::NULL*/
+#define NULL /*qc2rust::macro_begin::NULL*/(RVALUE, null_entity) /*qc2rust::macro_end::NULL*/
+/*qc2rust::define::world*/
+#define world /*qc2rust::macro_begin::world*/NULL /*qc2rust::macro_end::world*/
 #else
-	#define NULL (RVALUE, world)
+/*qc2rust::define::NULL*/
+#define NULL /*qc2rust::macro_begin::NULL*/(RVALUE, world) /*qc2rust::macro_end::NULL*/
 #endif

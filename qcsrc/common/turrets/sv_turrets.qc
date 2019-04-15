@@ -302,7 +302,8 @@ void turret_respawn(entity this)
 
 
 // Main functions
-#define cvar_base "g_turrets_unit_"
+/*qc2rust::define::cvar_base*/
+#define cvar_base /*qc2rust::macro_begin::cvar_base*/"g_turrets_unit_" /*qc2rust::macro_end::cvar_base*/
 .float clientframe;
 void turrets_setframe(entity this, float _frame, float client_only)
 {
@@ -1231,7 +1232,8 @@ void turrets_manager_think(entity this)
 
 void turret_initparams(entity tur)
 {
-	#define TRY(x) (x) ? (x)
+/*qc2rust::define::TRY*/
+#define TRY(x) /*qc2rust::macro_begin::TRY*/( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/) ? ( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/) /*qc2rust::macro_end::TRY*/
 	tur.respawntime                 = max  (-1,              (TRY(tur.respawntime)               :  60                                         ));
 	tur.shot_refire                 = bound(0.01,            (TRY(tur.shot_refire)               :  1                                          ), 9999);
 	tur.shot_dmg                    = max  (1,               (TRY(tur.shot_dmg)                  :  tur.shot_refire * 50                       ));

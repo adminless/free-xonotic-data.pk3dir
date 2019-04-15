@@ -50,10 +50,8 @@ vector InfoMessages_drawstring(string s, vector pos, vector sz, float a, vector 
 	return pos;
 }
 
-#define InfoMessage(s) MACRO_BEGIN \
-	pos = InfoMessages_drawstring(s, pos, mySize, ((img_curr_group >= 0) ? panel_fg_alpha * img_fade[img_curr_group] : panel_fg_alpha), fontsize); \
-	img_curr_group = -1; \
-MACRO_END
+/*qc2rust::define::InfoMessage*/
+#define InfoMessage(s) /*qc2rust::macro_begin::InfoMessage*/MACRO_BEGIN 	pos = InfoMessages_drawstring( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/, pos, mySize, ((img_curr_group >= 0) ? panel_fg_alpha * img_fade[img_curr_group] : panel_fg_alpha), fontsize); 	img_curr_group = -1; MACRO_END /*qc2rust::macro_end::InfoMessage*/
 
 void HUD_InfoMessages()
 {

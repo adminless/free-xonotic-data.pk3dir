@@ -18,13 +18,8 @@ void KeyBinds_Read()
 {
 	KeyBinds_Count = 0;
 
-	#define KEYBIND_DEF(func, desc) MACRO_BEGIN \
-		if((KeyBinds_Count < MAX_KEYBINDS)) { \
-			KeyBinds_Functions[KeyBinds_Count] = strzone(func); \
-			KeyBinds_Descriptions[KeyBinds_Count] = strzone(desc); \
-			++KeyBinds_Count; \
-		} \
-	MACRO_END
+/*qc2rust::define::KEYBIND_DEF*/
+#define KEYBIND_DEF(func,desc) /*qc2rust::macro_begin::KEYBIND_DEF*/MACRO_BEGIN 		if((KeyBinds_Count < MAX_KEYBINDS)) { 			KeyBinds_Functions[KeyBinds_Count] = strzone( /*qc2rust::param_begin::func*/func /*qc2rust::param_end::func*/); 			KeyBinds_Descriptions[KeyBinds_Count] = strzone( /*qc2rust::param_begin::desc*/desc /*qc2rust::param_end::desc*/); 			++KeyBinds_Count; 		} 	MACRO_END /*qc2rust::macro_end::KEYBIND_DEF*/
 
 	KEYBIND_DEF(""                                      , _("Moving"));
 	KEYBIND_DEF("+forward"                              , _("forward"));
@@ -50,12 +45,8 @@ void KeyBinds_Read()
 
 	int i;
 
-	#define ADD_TO_W_LIST(pred) \
-		FOREACH(Weapons, it != WEP_Null, { \
-			if (it.impulse != imp) continue; \
-			if (!(pred)) continue; \
-			w_list = strcat(w_list, it.m_name, " / "); \
-		})
+/*qc2rust::define::ADD_TO_W_LIST*/
+#define ADD_TO_W_LIST(pred) /*qc2rust::macro_begin::ADD_TO_W_LIST*/FOREACH(Weapons, it != WEP_Null, { 			if (it.impulse != imp) continue; 			if (!( /*qc2rust::param_begin::pred*/pred /*qc2rust::param_end::pred*/)) continue; 			w_list = strcat(w_list, it.m_name, " / "); 		}) /*qc2rust::macro_end::ADD_TO_W_LIST*/
 
 	for(int imp = 1; imp <= 9; ++imp)
 	{

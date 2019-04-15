@@ -8,7 +8,8 @@
 
 .float height;
 
-#define IFTARGETED if(this.targetname && this.targetname != "")
+/*qc2rust::define::IFTARGETED*/
+#define IFTARGETED /*qc2rust::macro_begin::IFTARGETED*/if(this.targetname && this.targetname != "") /*qc2rust::macro_end::IFTARGETED*/
 
 .float lip;
 

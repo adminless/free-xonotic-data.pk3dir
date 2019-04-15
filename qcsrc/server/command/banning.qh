@@ -5,8 +5,10 @@
 //  Last updated: December 29th, 2011
 // =====================================
 
-#define GET_BAN_ARG(v, d) if (argc > reason_arg) { if ((v = stof(argv(reason_arg))) != 0) ++reason_arg; else v = d; } else { v = d; }
-#define GET_BAN_REASON(v, d) if (argc > reason_arg) v = substring(command, argv_start_index(reason_arg), strlen(command) - argv_start_index(reason_arg)); else v = d;
+/*qc2rust::define::GET_BAN_ARG*/
+#define GET_BAN_ARG(v,d) /*qc2rust::macro_begin::GET_BAN_ARG*/if (argc > reason_arg) { if (( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/ = stof(argv(reason_arg))) != 0) ++reason_arg; else  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/ =  /*qc2rust::param_begin::d*/d /*qc2rust::param_end::d*/; } else {  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/ =  /*qc2rust::param_begin::d*/d /*qc2rust::param_end::d*/; } /*qc2rust::macro_end::GET_BAN_ARG*/
+/*qc2rust::define::GET_BAN_REASON*/
+#define GET_BAN_REASON(v,d) /*qc2rust::macro_begin::GET_BAN_REASON*/if (argc > reason_arg)  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/ = substring(command, argv_start_index(reason_arg), strlen(command) - argv_start_index(reason_arg)); else  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/ =  /*qc2rust::param_begin::d*/d /*qc2rust::param_end::d*/; /*qc2rust::macro_end::GET_BAN_REASON*/
 
 // used by common/command/generic.qc:GenericCommand_dumpcommands to list all commands into a .txt file
 void BanCommand_macro_write_aliases(float fh);

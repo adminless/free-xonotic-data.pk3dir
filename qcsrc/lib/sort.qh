@@ -8,25 +8,11 @@ USING(comparefunc_t, int (int i1, int i2, entity pass));
 ERASEABLE
 void heapsort(int n, swapfunc_t swap, comparefunc_t cmp, entity pass)
 {
-	#define heapify(_count) \
-		MACRO_BEGIN \
-			for (int start = floor(((_count) - 2) / 2); start >= 0; --start) \
-			{ \
-				siftdown(start, (_count) - 1); \
-			} \
-		MACRO_END
+/*qc2rust::define::heapify*/
+#define heapify(_count) /*qc2rust::macro_begin::heapify*/MACRO_BEGIN 			for (int start = floor((( /*qc2rust::param_begin::_count*/_count /*qc2rust::param_end::_count*/) - 2) / 2); start >= 0; --start) 			{ 				siftdown(start, ( /*qc2rust::param_begin::_count*/_count /*qc2rust::param_end::_count*/) - 1); 			} 		MACRO_END /*qc2rust::macro_end::heapify*/
 
-	#define siftdown(_start, _end) \
-		MACRO_BEGIN \
-			for (int root = (_start); root * 2 + 1 <= (_end); ) \
-			{ \
-				int child = root * 2 + 1; \
-				if (child < (_end) && cmp(child, child + 1, pass) < 0) child += 1; \
-				if (cmp(root, child, pass) >= 0) break; \
-				swap(root, child, pass); \
-				root = child; \
-			} \
-		MACRO_END
+/*qc2rust::define::siftdown*/
+#define siftdown(_start,_end) /*qc2rust::macro_begin::siftdown*/MACRO_BEGIN 			for (int root = ( /*qc2rust::param_begin::_start*/_start /*qc2rust::param_end::_start*/); root * 2 + 1 <= ( /*qc2rust::param_begin::_end*/_end /*qc2rust::param_end::_end*/); ) 			{ 				int child = root * 2 + 1; 				if (child < ( /*qc2rust::param_begin::_end*/_end /*qc2rust::param_end::_end*/) && cmp(child, child + 1, pass) < 0) child += 1; 				if (cmp(root, child, pass) >= 0) break; 				swap(root, child, pass); 				root = child; 			} 		MACRO_END /*qc2rust::macro_end::siftdown*/
 
 	heapify(n);
 	int end = n - 1;

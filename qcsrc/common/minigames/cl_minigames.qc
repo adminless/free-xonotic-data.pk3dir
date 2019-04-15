@@ -55,19 +55,28 @@ string minigame_texture(string name)
 }
 
 #define FIELD(Flags, Type, Name) MSLE_CLEAN_##Type(this.Name)
-#define MSLE_CLEAN_String(x) strunzone(x);
-#define MSLE_CLEAN_Byte(x)
-#define MSLE_CLEAN_Char(x)
-#define MSLE_CLEAN_Short(x)
-#define MSLE_CLEAN_Long(x)
-#define MSLE_CLEAN_Coord(x)
-#define MSLE_CLEAN_Angle(x)
-#define MSLE_CLEAN_Float(x)
-#define MSLE_CLEAN_Vector(x)
-#define MSLE_CLEAN_Vector2D(x)
+/*qc2rust::define::MSLE_CLEAN_String*/
+#define MSLE_CLEAN_String(x) /*qc2rust::macro_begin::MSLE_CLEAN_String*/strunzone( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/); /*qc2rust::macro_end::MSLE_CLEAN_String*/
+/*qc2rust::define::MSLE_CLEAN_Byte*/
+#define MSLE_CLEAN_Byte(x) /*qc2rust::macro_begin::MSLE_CLEAN_Byte*/ /*qc2rust::macro_end::MSLE_CLEAN_Byte*/
+/*qc2rust::define::MSLE_CLEAN_Char*/
+#define MSLE_CLEAN_Char(x) /*qc2rust::macro_begin::MSLE_CLEAN_Char*/ /*qc2rust::macro_end::MSLE_CLEAN_Char*/
+/*qc2rust::define::MSLE_CLEAN_Short*/
+#define MSLE_CLEAN_Short(x) /*qc2rust::macro_begin::MSLE_CLEAN_Short*/ /*qc2rust::macro_end::MSLE_CLEAN_Short*/
+/*qc2rust::define::MSLE_CLEAN_Long*/
+#define MSLE_CLEAN_Long(x) /*qc2rust::macro_begin::MSLE_CLEAN_Long*/ /*qc2rust::macro_end::MSLE_CLEAN_Long*/
+/*qc2rust::define::MSLE_CLEAN_Coord*/
+#define MSLE_CLEAN_Coord(x) /*qc2rust::macro_begin::MSLE_CLEAN_Coord*/ /*qc2rust::macro_end::MSLE_CLEAN_Coord*/
+/*qc2rust::define::MSLE_CLEAN_Angle*/
+#define MSLE_CLEAN_Angle(x) /*qc2rust::macro_begin::MSLE_CLEAN_Angle*/ /*qc2rust::macro_end::MSLE_CLEAN_Angle*/
+/*qc2rust::define::MSLE_CLEAN_Float*/
+#define MSLE_CLEAN_Float(x) /*qc2rust::macro_begin::MSLE_CLEAN_Float*/ /*qc2rust::macro_end::MSLE_CLEAN_Float*/
+/*qc2rust::define::MSLE_CLEAN_Vector*/
+#define MSLE_CLEAN_Vector(x) /*qc2rust::macro_begin::MSLE_CLEAN_Vector*/ /*qc2rust::macro_end::MSLE_CLEAN_Vector*/
+/*qc2rust::define::MSLE_CLEAN_Vector2D*/
+#define MSLE_CLEAN_Vector2D(x) /*qc2rust::macro_begin::MSLE_CLEAN_Vector2D*/ /*qc2rust::macro_end::MSLE_CLEAN_Vector2D*/
 
-#define MSLE(Name,Fields) \
-	void msle_entremove_##Name(entity this) { strunzone(this.netname); Fields }
+#define MSLE(Name,Fields) 	void msle_entremove_##Name(entity this) { strunzone(this.netname); Fields }
 MINIGAME_SIMPLELINKED_ENTITIES
 #undef MSLE
 #undef FIELD
@@ -155,17 +164,10 @@ void minigame_player_entremove(entity this)
 
 string() ReadString_Raw = #366;
 string ReadString_Zoned() { return strzone(ReadString_Raw()); }
-#define ReadString ReadString_Zoned
+/*qc2rust::define::ReadString*/
+#define ReadString /*qc2rust::macro_begin::ReadString*/ReadString_Zoned /*qc2rust::macro_end::ReadString*/
 #define FIELD(Flags, Type,Name) if ( sf & (Flags) ) this.Name = Read##Type();
-#define MSLE(Name,Fields) \
-	else if ( this.classname == #Name ) { \
-		if ( sf & MINIG_SF_CREATE ) { \
-			minigame_read_owner(this); \
-			this.entremove = msle_entremove_##Name; \
-		} \
-		minigame_ent = this.owner; \
-		Fields \
-	}
+#define MSLE(Name,Fields) 	else if ( this.classname == #Name ) { 		if ( sf & MINIG_SF_CREATE ) { 			minigame_read_owner(this); 			this.entremove = msle_entremove_##Name; 		} 		minigame_ent = this.owner; 		Fields 	}
 void minigame_read_owner(entity this)
 {
 	string owner_name = ReadString_Raw();

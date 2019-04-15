@@ -3,7 +3,8 @@
 #include <common/mutators/base.qh>
 #include <common/scores.qh>
 .float lms_spectate_warning;
-#define autocvar_g_lms_lives_override cvar("g_lms_lives_override")
+/*qc2rust::define::autocvar_g_lms_lives_override*/
+#define autocvar_g_lms_lives_override /*qc2rust::macro_begin::autocvar_g_lms_lives_override*/cvar("g_lms_lives_override") /*qc2rust::macro_end::autocvar_g_lms_lives_override*/
 void lms_Initialize();
 
 REGISTER_MUTATOR(lms, false)

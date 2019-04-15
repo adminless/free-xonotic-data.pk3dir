@@ -52,10 +52,8 @@ void minigame_rmplayer(entity minigame_session, entity player)
 
 
 #define FIELD(Flags, Type,Name) if ( sf & (Flags) ) Write##Type(MSG_ENTITY, this.Name);
-#define MSLE(Name,Fields) \
-	else if ( this.classname == #Name ) { \
-		if ( sf & MINIG_SF_CREATE ) WriteString(MSG_ENTITY,this.owner.netname); \
-		Fields }
+/*qc2rust::define::MSLE*/
+#define MSLE(Name,Fields) /*qc2rust::macro_begin::MSLE*/else if ( this.classname ==  /*qc2rust::stringify_begin::Name*/#Name /*qc2rust::stringify_end::Name*/ ) { 		if ( sf & MINIG_SF_CREATE ) WriteString(MSG_ENTITY,this.owner.netname); 		 /*qc2rust::param_begin::Fields*/Fields /*qc2rust::param_end::Fields*/ } /*qc2rust::macro_end::MSLE*/
 
 // Send an entity to a client
 // only use on minigame entities or entities with a minigame owner

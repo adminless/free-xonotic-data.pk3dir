@@ -11,10 +11,5 @@ entity Sort_Spawn();
  * @param a FIRST entity
  * @param b entity after a
  */
-#define SORT_SWAP(a, b)                                  \
-	b.sort_prev = a.sort_prev;                          \
-	a.sort_next = b.sort_next;                          \
-	if (b.sort_next) b.sort_next.sort_prev = a;          \
-	if (a.sort_prev) a.sort_prev.sort_next = b;          \
-	a.sort_prev = b;                                    \
-	b.sort_next = a
+/*qc2rust::define::SORT_SWAP*/
+#define SORT_SWAP(a,b) /*qc2rust::macro_begin::SORT_SWAP*/ /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/.sort_prev =  /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/.sort_prev;                          	 /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/.sort_next =  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/.sort_next;                          	if ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/.sort_next)  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/.sort_next.sort_prev =  /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/;          	if ( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/.sort_prev)  /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/.sort_prev.sort_next =  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/;          	 /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/.sort_prev =  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/;                                    	 /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/.sort_next =  /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/ /*qc2rust::macro_end::SORT_SWAP*/

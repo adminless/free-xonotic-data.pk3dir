@@ -1,10 +1,13 @@
 #pragma once
 
-#define MAX_SCORE 64
+/*qc2rust::define::MAX_SCORE*/
+#define MAX_SCORE /*qc2rust::macro_begin::MAX_SCORE*/64 /*qc2rust::macro_end::MAX_SCORE*/
 
-#define REGISTER_SP(id) REGISTER(Scores, SP, id, m_id, new_pure(PlayerScoreField))
+/*qc2rust::define::REGISTER_SP*/
+#define REGISTER_SP(id) /*qc2rust::macro_begin::REGISTER_SP*/REGISTER(Scores, SP,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, m_id, new_pure(PlayerScoreField)) /*qc2rust::macro_end::REGISTER_SP*/
 REGISTRY(Scores, MAX_SCORE);
-#define Scores_from(i) _Scores_from(i, NULL)
+/*qc2rust::define::Scores_from*/
+#define Scores_from(i) /*qc2rust::macro_begin::Scores_from*/_Scores_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NULL) /*qc2rust::macro_end::Scores_from*/
 REGISTER_REGISTRY(Scores)
 REGISTRY_SORT(Scores);
 REGISTRY_CHECK(Scores);
@@ -115,7 +118,8 @@ const int SFL_RANK = BIT(5);
 const int SFL_TIME = BIT(6);
 
 // not an extra constant yet
-#define SFL_ZERO_IS_WORST SFL_TIME
+/*qc2rust::define::SFL_ZERO_IS_WORST*/
+#define SFL_ZERO_IS_WORST /*qc2rust::macro_begin::SFL_ZERO_IS_WORST*/SFL_TIME /*qc2rust::macro_end::SFL_ZERO_IS_WORST*/
 
 /**
  * Scoring priority (NOTE: PRIMARY is used for fraglimit)
@@ -124,25 +128,34 @@ const int SFL_SORT_PRIO_SECONDARY = 4;
 const int SFL_SORT_PRIO_PRIMARY = 8;
 const int SFL_SORT_PRIO_MASK = 12;
 
-#define IS_INCREASING(x) ( (x) & SFL_LOWER_IS_BETTER )
-#define IS_DECREASING(x) ( !((x) & SFL_LOWER_IS_BETTER) )
+/*qc2rust::define::IS_INCREASING*/
+#define IS_INCREASING(x) /*qc2rust::macro_begin::IS_INCREASING*/( ( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/) & SFL_LOWER_IS_BETTER ) /*qc2rust::macro_end::IS_INCREASING*/
+/*qc2rust::define::IS_DECREASING*/
+#define IS_DECREASING(x) /*qc2rust::macro_begin::IS_DECREASING*/( !(( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/) & SFL_LOWER_IS_BETTER) ) /*qc2rust::macro_end::IS_DECREASING*/
 
 USING(PlayerScoreField, entity);
 .int _scores[MAX_SCORE];
 .string m_name;
 .int m_flags;
 
-#define scores(this) _scores[(this).m_id]
-#define scores_label(this) ((this).m_name)
-#define scores_flags(this) ((this).m_flags)
+/*qc2rust::define::scores*/
+#define scores(this) /*qc2rust::macro_begin::scores*/_scores[( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/).m_id] /*qc2rust::macro_end::scores*/
+/*qc2rust::define::scores_label*/
+#define scores_label(this) /*qc2rust::macro_begin::scores_label*/(( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/).m_name) /*qc2rust::macro_end::scores_label*/
+/*qc2rust::define::scores_flags*/
+#define scores_flags(this) /*qc2rust::macro_begin::scores_flags*/(( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/).m_flags) /*qc2rust::macro_end::scores_flags*/
 
-#define MAX_TEAMSCORE 2
+/*qc2rust::define::MAX_TEAMSCORE*/
+#define MAX_TEAMSCORE /*qc2rust::macro_begin::MAX_TEAMSCORE*/2 /*qc2rust::macro_end::MAX_TEAMSCORE*/
 USING(ScoreTeam, string);
 .int _teamscores[MAX_TEAMSCORE];
-#define teamscores(i) _teamscores[i]
+/*qc2rust::define::teamscores*/
+#define teamscores(i) /*qc2rust::macro_begin::teamscores*/_teamscores[ /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/] /*qc2rust::macro_end::teamscores*/
 string _teamscores_label[MAX_TEAMSCORE];
-#define teamscores_label(i) _teamscores_label[i]
+/*qc2rust::define::teamscores_label*/
+#define teamscores_label(i) /*qc2rust::macro_begin::teamscores_label*/_teamscores_label[ /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/] /*qc2rust::macro_end::teamscores_label*/
 int _teamscores_flags[MAX_TEAMSCORE];
-#define teamscores_flags(i) _teamscores_flags[i]
+/*qc2rust::define::teamscores_flags*/
+#define teamscores_flags(i) /*qc2rust::macro_begin::teamscores_flags*/_teamscores_flags[ /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/] /*qc2rust::macro_end::teamscores_flags*/
 
 const int ST_SCORE = 0;

@@ -51,31 +51,19 @@ const int IT_PICKUPMASK                	= IT_UNLIMITED_AMMO | IT_JETPACK | IT_FU
 const .float strength_finished = _STAT(STRENGTH_FINISHED);
 const .float invincible_finished = _STAT(INVINCIBLE_FINISHED);
 
-#define spawnfunc_body(item) \
-	if (!Item_IsDefinitionAllowed(item)) \
-	{ \
-		startitem_failed = true; \
-		delete(this); \
-		return; \
-	} \
-	StartItem(this, item)
+/*qc2rust::define::spawnfunc_body*/
+#define spawnfunc_body(item) /*qc2rust::macro_begin::spawnfunc_body*/if (!Item_IsDefinitionAllowed( /*qc2rust::param_begin::item*/item /*qc2rust::param_end::item*/)) 	{ 		startitem_failed = true; 		delete(this); 		return; 	} 	StartItem(this,  /*qc2rust::param_begin::item*/item /*qc2rust::param_end::item*/) /*qc2rust::macro_end::spawnfunc_body*/
 
-#define SPAWNFUNC_ITEM(name, item) \
-	spawnfunc(name) \
-	{ \
-		spawnfunc_body(item); \
-	}
+/*qc2rust::define::SPAWNFUNC_ITEM*/
+#define SPAWNFUNC_ITEM(name,item) /*qc2rust::macro_begin::SPAWNFUNC_ITEM*/spawnfunc( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/) 	{ 		spawnfunc_body( /*qc2rust::param_begin::item*/item /*qc2rust::param_end::item*/); 	} /*qc2rust::macro_end::SPAWNFUNC_ITEM*/
 
-#define SPAWNFUNC_ITEM_COND(name, cond, item1, item2) \
-	spawnfunc(name) \
-	{ \
-		entity item = (cond) ? item1 : item2; \
-		spawnfunc_body(item); \
-	}
+/*qc2rust::define::SPAWNFUNC_ITEM_COND*/
+#define SPAWNFUNC_ITEM_COND(name,cond,item1,item2) /*qc2rust::macro_begin::SPAWNFUNC_ITEM_COND*/spawnfunc( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/) 	{ 		entity item = ( /*qc2rust::param_begin::cond*/cond /*qc2rust::param_end::cond*/) ?  /*qc2rust::param_begin::item1*/item1 /*qc2rust::param_end::item1*/ :  /*qc2rust::param_begin::item2*/item2 /*qc2rust::param_end::item2*/; 		spawnfunc_body(item); 	} /*qc2rust::macro_end::SPAWNFUNC_ITEM_COND*/
 
 #else
 
-#define SPAWNFUNC_ITEM(name, item)
+/*qc2rust::define::SPAWNFUNC_ITEM*/
+#define SPAWNFUNC_ITEM(name,item) /*qc2rust::macro_begin::SPAWNFUNC_ITEM*/ /*qc2rust::macro_end::SPAWNFUNC_ITEM*/
 
 #endif
 

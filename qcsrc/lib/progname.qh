@@ -1,11 +1,14 @@
 #pragma once
 
 #if defined(MENUQC)
-	#define PROGNAME "MENUQC"
+/*qc2rust::define::PROGNAME*/
+#define PROGNAME /*qc2rust::macro_begin::PROGNAME*/"MENUQC" /*qc2rust::macro_end::PROGNAME*/
 #elif defined(SVQC)
-	#define PROGNAME "SVQC"
+/*qc2rust::define::PROGNAME*/
+#define PROGNAME /*qc2rust::macro_begin::PROGNAME*/"SVQC" /*qc2rust::macro_end::PROGNAME*/
 #elif defined(CSQC)
-	#define PROGNAME "CSQC"
+/*qc2rust::define::PROGNAME*/
+#define PROGNAME /*qc2rust::macro_begin::PROGNAME*/"CSQC" /*qc2rust::macro_end::PROGNAME*/
 #else
 	#error "Unable to detect PROGNAME"
 #endif

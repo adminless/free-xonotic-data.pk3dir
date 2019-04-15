@@ -79,7 +79,8 @@ void XonoticServerCreateTab_fill(entity me)
 		me.TD(me, 1, 1, e = makeXonoticTextLabel(0, _("Time limit:")));
 		me.TD(me, 1, 2, e = makeXonoticTextSlider_T("timelimit_override",
 			_("Timelimit in minutes that when hit, will end the match")));
-			#define ADDVALUE_MINUTES(i) e.addValue(e, strzone(sprintf(_("%d minutes"), i)), #i)
+/*qc2rust::define::ADDVALUE_MINUTES*/
+#define ADDVALUE_MINUTES(i) /*qc2rust::macro_begin::ADDVALUE_MINUTES*/e.addValue(e, strzone(sprintf(_("%d minutes"),  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/)),  /*qc2rust::stringify_begin::i*/#i /*qc2rust::stringify_end::i*/) /*qc2rust::macro_end::ADDVALUE_MINUTES*/
 			e.addValue(e, ZCTX(_("TIMLIM^Default")), "-1");
 			e.addValue(e, _("1 minute"), "1");
 			ADDVALUE_MINUTES(2);

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <common/mutators/base.qh>
-#define autocvar_g_keyhunt_point_limit cvar("g_keyhunt_point_limit")
+/*qc2rust::define::autocvar_g_keyhunt_point_limit*/
+#define autocvar_g_keyhunt_point_limit /*qc2rust::macro_begin::autocvar_g_keyhunt_point_limit*/cvar("g_keyhunt_point_limit") /*qc2rust::macro_end::autocvar_g_keyhunt_point_limit*/
 int autocvar_g_keyhunt_point_leadlimit;
 bool autocvar_g_keyhunt_team_spawns;
 void kh_Initialize();
@@ -21,7 +22,8 @@ REGISTER_MUTATOR(kh, false)
 	return 0;
 }
 
-#define FOR_EACH_KH_KEY(v) for(v = kh_worldkeylist; v; v = v.kh_worldkeynext )
+/*qc2rust::define::FOR_EACH_KH_KEY*/
+#define FOR_EACH_KH_KEY(v) /*qc2rust::macro_begin::FOR_EACH_KH_KEY*/for( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/ = kh_worldkeylist;  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/;  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/ =  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/.kh_worldkeynext ) /*qc2rust::macro_end::FOR_EACH_KH_KEY*/
 
 // ALL OF THESE should be removed in the future, as other code should not have to care
 

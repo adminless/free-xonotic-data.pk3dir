@@ -937,13 +937,20 @@ float REFDEFFLAG_INTERMISSION = 8;
 // assorted builtins
 float	drawsubpic(vector position, vector size, string pic, vector srcPosition, vector srcSize, vector rgb, float alpha, float flag) = #328;
 vector	drawgetimagesize(string pic) = #318;
-#define SPA_POSITION 0
-#define SPA_S_AXIS 1
-#define SPA_T_AXIS 2
-#define SPA_R_AXIS 3
-#define SPA_TEXCOORDS0 4
-#define SPA_LIGHTMAP0_TEXCOORDS 5
-#define SPA_LIGHTMAP_COLOR 6
+/*qc2rust::define::SPA_POSITION*/
+#define SPA_POSITION /*qc2rust::macro_begin::SPA_POSITION*/0 /*qc2rust::macro_end::SPA_POSITION*/
+/*qc2rust::define::SPA_S_AXIS*/
+#define SPA_S_AXIS /*qc2rust::macro_begin::SPA_S_AXIS*/1 /*qc2rust::macro_end::SPA_S_AXIS*/
+/*qc2rust::define::SPA_T_AXIS*/
+#define SPA_T_AXIS /*qc2rust::macro_begin::SPA_T_AXIS*/2 /*qc2rust::macro_end::SPA_T_AXIS*/
+/*qc2rust::define::SPA_R_AXIS*/
+#define SPA_R_AXIS /*qc2rust::macro_begin::SPA_R_AXIS*/3 /*qc2rust::macro_end::SPA_R_AXIS*/
+/*qc2rust::define::SPA_TEXCOORDS0*/
+#define SPA_TEXCOORDS0 /*qc2rust::macro_begin::SPA_TEXCOORDS0*/4 /*qc2rust::macro_end::SPA_TEXCOORDS0*/
+/*qc2rust::define::SPA_LIGHTMAP0_TEXCOORDS*/
+#define SPA_LIGHTMAP0_TEXCOORDS /*qc2rust::macro_begin::SPA_LIGHTMAP0_TEXCOORDS*/5 /*qc2rust::macro_end::SPA_LIGHTMAP0_TEXCOORDS*/
+/*qc2rust::define::SPA_LIGHTMAP_COLOR*/
+#define SPA_LIGHTMAP_COLOR /*qc2rust::macro_begin::SPA_LIGHTMAP_COLOR*/6 /*qc2rust::macro_end::SPA_LIGHTMAP_COLOR*/
 // float (entity e, float s)						getsurfacenumpoints = #434;
 // vector (entity e, float s, float n)					getsurfacepoint = #435;
 // vector (entity e, float s)						getsurfacenormal = #436;

@@ -2,12 +2,17 @@
 
 #pragma noref 1
 
-#define true _true
-#define false _false
-#define TRUE _TRUE
-#define FALSE _FALSE
+/*qc2rust::define::true*/
+#define true /*qc2rust::macro_begin::true*/_true /*qc2rust::macro_end::true*/
+/*qc2rust::define::false*/
+#define false /*qc2rust::macro_begin::false*/_false /*qc2rust::macro_end::false*/
+/*qc2rust::define::TRUE*/
+#define TRUE /*qc2rust::macro_begin::TRUE*/_TRUE /*qc2rust::macro_end::TRUE*/
+/*qc2rust::define::FALSE*/
+#define FALSE /*qc2rust::macro_begin::FALSE*/_FALSE /*qc2rust::macro_end::FALSE*/
 
-#define spawn _spawn
+/*qc2rust::define::spawn*/
+#define spawn /*qc2rust::macro_begin::spawn*/_spawn /*qc2rust::macro_end::spawn*/
 
 #include "upstream/menudefs.qc"
 
@@ -18,26 +23,35 @@
 
 #undef spawn
 
-#define localcmd cmd
+/*qc2rust::define::localcmd*/
+#define localcmd /*qc2rust::macro_begin::localcmd*/cmd /*qc2rust::macro_end::localcmd*/
 
 int(string str, string sub, int startpos) _strstrofs = #221;
-#define strstrofs _strstrofs
+/*qc2rust::define::strstrofs*/
+#define strstrofs /*qc2rust::macro_begin::strstrofs*/_strstrofs /*qc2rust::macro_end::strstrofs*/
 int(string str, int ofs) _str2chr = #222;
-#define str2chr _str2chr
+/*qc2rust::define::str2chr*/
+#define str2chr /*qc2rust::macro_begin::str2chr*/_str2chr /*qc2rust::macro_end::str2chr*/
 string(int c, ...) _chr2str = #223;
-#define chr2str _chr2str
+/*qc2rust::define::chr2str*/
+#define chr2str /*qc2rust::macro_begin::chr2str*/_chr2str /*qc2rust::macro_end::chr2str*/
 
 int(string s1, string s2) _strcmp = #228;
-#define strcmp _strcmp
+/*qc2rust::define::strcmp*/
+#define strcmp /*qc2rust::macro_begin::strcmp*/_strcmp /*qc2rust::macro_end::strcmp*/
 int(string s1, string s2, int len) _strncmp = #228;
-#define strncmp _strncmp
+/*qc2rust::define::strncmp*/
+#define strncmp /*qc2rust::macro_begin::strncmp*/_strncmp /*qc2rust::macro_end::strncmp*/
 int(string s1, string s2) _strcasecmp = #229;
-#define strcasecmp _strcasecmp
+/*qc2rust::define::strcasecmp*/
+#define strcasecmp /*qc2rust::macro_begin::strcasecmp*/_strcasecmp /*qc2rust::macro_end::strcasecmp*/
 int(string s1, string s2, int len) _strncasecmp = #230;
-#define strncasecmp _strncasecmp
+/*qc2rust::define::strncasecmp*/
+#define strncasecmp /*qc2rust::macro_begin::strncasecmp*/_strncasecmp /*qc2rust::macro_end::strncasecmp*/
 
 int() _buf_create = #440;
-#define buf_create _buf_create
+/*qc2rust::define::buf_create*/
+#define buf_create /*qc2rust::macro_begin::buf_create*/_buf_create /*qc2rust::macro_end::buf_create*/
 
 bool(entity ent) wasfreed = #353;
 

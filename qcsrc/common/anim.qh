@@ -42,6 +42,8 @@
 .bool animstate_override;
 
 void anim_set(entity e, vector anim, bool looping, bool override, bool restart);
-#define setanim(...) anim_set(__VA_ARGS__)
+/*qc2rust::define::setanim*/
+#define setanim(...) /*qc2rust::macro_begin::setanim*/anim_set( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::setanim*/
 void anim_update(entity e);
-#define updateanim(...) anim_update(__VA_ARGS__)
+/*qc2rust::define::updateanim*/
+#define updateanim(...) /*qc2rust::macro_begin::updateanim*/anim_update( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::updateanim*/

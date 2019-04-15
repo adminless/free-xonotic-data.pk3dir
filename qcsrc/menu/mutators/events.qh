@@ -32,14 +32,10 @@ string cmd_string;
  *     return false;
  * }
  */
-#define EV_Menu_ConsoleCommand(i, o) \
-	/** command name */ i(string, cmd_name) \
-	/** also, argv() can be used */ i(int, cmd_argc) \
-	/** whole command, use only if you really have to */ i(string, cmd_string) \
-	/**/
+/*qc2rust::define::EV_Menu_ConsoleCommand*/
+#define EV_Menu_ConsoleCommand(i,o) /*qc2rust::macro_begin::EV_Menu_ConsoleCommand*//** command name */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, cmd_name) 	/** also, argv() can be used */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(int, cmd_argc) 	/** whole command, use only if you really have to */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(string, cmd_string) 	/**/ /*qc2rust::macro_end::EV_Menu_ConsoleCommand*/
 MUTATOR_HOOKABLE(Menu_ConsoleCommand, EV_Menu_ConsoleCommand);
 
-#define EV_ConfigureDialogs(i, o) \
-	/** main window entity */ i(entity, MUTATOR_ARGV_0_entity) \
-	/**/
+/*qc2rust::define::EV_ConfigureDialogs*/
+#define EV_ConfigureDialogs(i,o) /*qc2rust::macro_begin::EV_ConfigureDialogs*//** main window entity */  /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/(entity, MUTATOR_ARGV_0_entity) 	/**/ /*qc2rust::macro_end::EV_ConfigureDialogs*/
 MUTATOR_HOOKABLE(ConfigureDialogs, EV_ConfigureDialogs);

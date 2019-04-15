@@ -87,4 +87,5 @@ vector angleofs3(vector from, vector ang, vector to)
 	return v_res;
 }
 
-#define angleofs(from, to) angleofs3(from.origin, from.angles, to.origin)
+/*qc2rust::define::angleofs*/
+#define angleofs(from,to) /*qc2rust::macro_begin::angleofs*/angleofs3( /*qc2rust::param_begin::from*/from /*qc2rust::param_end::from*/.origin,  /*qc2rust::param_begin::from*/from /*qc2rust::param_end::from*/.angles,  /*qc2rust::param_begin::to*/to /*qc2rust::param_end::to*/.origin) /*qc2rust::macro_end::angleofs*/

@@ -17,8 +17,10 @@ REGISTER_NET_LINKED(ENT_CLIENT_INVENTORY)
 const int Inventory_groups_major = 16;
 const int Inventory_groups_minor = 8; // ceil(Items_MAX / Inventory_groups_major)
 
-#define G_MAJOR(id) (floor((id) / Inventory_groups_minor))
-#define G_MINOR(id) ((id) % Inventory_groups_minor)
+/*qc2rust::define::G_MAJOR*/
+#define G_MAJOR(id) /*qc2rust::macro_begin::G_MAJOR*/(floor(( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/) / Inventory_groups_minor)) /*qc2rust::macro_end::G_MAJOR*/
+/*qc2rust::define::G_MINOR*/
+#define G_MINOR(id) /*qc2rust::macro_begin::G_MINOR*/(( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/) % Inventory_groups_minor) /*qc2rust::macro_end::G_MINOR*/
 
 #ifdef CSQC
 Inventory g_inventory;
@@ -75,18 +77,8 @@ void Inventory_Write(Inventory data)
         if (changed) {
             if (maj != lastMaj) {
                 lastMaj = maj;
-#define X() MACRO_BEGIN \
-    if (minorBits) { \
-        WriteByte(MSG_ENTITY, minorBits); \
-        for (int j = 0; j < Inventory_groups_minor; ++j) { \
-            if (!(minorBits & BIT(j))) { \
-                continue; \
-            } \
-            const entity it = Items_from(Inventory_groups_minor * maj + j); \
-            WriteByte(MSG_ENTITY, data.inv_items[it.m_id]); \
-        } \
-    } \
-MACRO_END
+/*qc2rust::define::X*/
+#define X() /*qc2rust::macro_begin::X*/MACRO_BEGIN     if (minorBits) {         WriteByte(MSG_ENTITY, minorBits);         for (int j = 0; j < Inventory_groups_minor; ++j) {             if (!(minorBits & BIT(j))) {                 continue;             }             const entity it = Items_from(Inventory_groups_minor * maj + j);             WriteByte(MSG_ENTITY, data.inv_items[it.m_id]);         }     } MACRO_END /*qc2rust::macro_end::X*/
                 X();
                 minorBits = 0;
             }

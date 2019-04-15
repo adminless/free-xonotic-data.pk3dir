@@ -27,89 +27,155 @@ float AdjustAirAccelQW(float accelqw, float factor);
 
 bool IsFlying(entity a);
 
-#define PHYS_PL_MAX(s)						STAT(PL_MAX, s)
-#define PHYS_PL_MIN(s)						STAT(PL_MIN, s)
-#define PHYS_PL_CROUCH_MAX(s)				STAT(PL_CROUCH_MAX, s)
-#define PHYS_PL_CROUCH_MIN(s)				STAT(PL_CROUCH_MIN, s)
+/*qc2rust::define::PHYS_PL_MAX*/
+#define PHYS_PL_MAX(s) /*qc2rust::macro_begin::PHYS_PL_MAX*/STAT(PL_MAX,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_PL_MAX*/
+/*qc2rust::define::PHYS_PL_MIN*/
+#define PHYS_PL_MIN(s) /*qc2rust::macro_begin::PHYS_PL_MIN*/STAT(PL_MIN,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_PL_MIN*/
+/*qc2rust::define::PHYS_PL_CROUCH_MAX*/
+#define PHYS_PL_CROUCH_MAX(s) /*qc2rust::macro_begin::PHYS_PL_CROUCH_MAX*/STAT(PL_CROUCH_MAX,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_PL_CROUCH_MAX*/
+/*qc2rust::define::PHYS_PL_CROUCH_MIN*/
+#define PHYS_PL_CROUCH_MIN(s) /*qc2rust::macro_begin::PHYS_PL_CROUCH_MIN*/STAT(PL_CROUCH_MIN,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_PL_CROUCH_MIN*/
 
-#define PHYS_PL_VIEWOFS(s)					STAT(PL_VIEW_OFS, s)
-#define PHYS_PL_CROUCH_VIEWOFS(s)			STAT(PL_CROUCH_VIEW_OFS, s)
+/*qc2rust::define::PHYS_PL_VIEWOFS*/
+#define PHYS_PL_VIEWOFS(s) /*qc2rust::macro_begin::PHYS_PL_VIEWOFS*/STAT(PL_VIEW_OFS,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_PL_VIEWOFS*/
+/*qc2rust::define::PHYS_PL_CROUCH_VIEWOFS*/
+#define PHYS_PL_CROUCH_VIEWOFS(s) /*qc2rust::macro_begin::PHYS_PL_CROUCH_VIEWOFS*/STAT(PL_CROUCH_VIEW_OFS,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_PL_CROUCH_VIEWOFS*/
 
-#define PHYS_VIEWHEIGHT(s)					STAT(VIEWHEIGHT, s)
-#define PHYS_HEALTH(s)						STAT(HEALTH, s)
+/*qc2rust::define::PHYS_VIEWHEIGHT*/
+#define PHYS_VIEWHEIGHT(s) /*qc2rust::macro_begin::PHYS_VIEWHEIGHT*/STAT(VIEWHEIGHT,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_VIEWHEIGHT*/
+/*qc2rust::define::PHYS_HEALTH*/
+#define PHYS_HEALTH(s) /*qc2rust::macro_begin::PHYS_HEALTH*/STAT(HEALTH,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_HEALTH*/
 
-#define BUFFS_STAT(s)                       STAT(BUFFS, s)
+/*qc2rust::define::BUFFS_STAT*/
+#define BUFFS_STAT(s) /*qc2rust::macro_begin::BUFFS_STAT*/STAT(BUFFS,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::BUFFS_STAT*/
 
-#define PHYS_ACCELERATE(s)                  STAT(MOVEVARS_ACCELERATE, s)
-#define PHYS_AIRACCELERATE(s)               STAT(MOVEVARS_AIRACCELERATE, s)
-#define PHYS_AIRACCEL_QW(s)                 STAT(MOVEVARS_AIRACCEL_QW, s)
-#define PHYS_AIRACCEL_QW_STRETCHFACTOR(s)   STAT(MOVEVARS_AIRACCEL_QW_STRETCHFACTOR, s)
-#define PHYS_AIRACCEL_SIDEWAYS_FRICTION(s)  STAT(MOVEVARS_AIRACCEL_SIDEWAYS_FRICTION, s)
-#define PHYS_AIRCONTROL(s)                  STAT(MOVEVARS_AIRCONTROL, s)
-#define PHYS_AIRCONTROL_PENALTY(s)          STAT(MOVEVARS_AIRCONTROL_PENALTY, s)
-#define PHYS_AIRCONTROL_POWER(s)            STAT(MOVEVARS_AIRCONTROL_POWER, s)
-#define PHYS_AIRCONTROL_BACKWARDS(s)        STAT(MOVEVARS_AIRCONTROL_BACKWARDS, s)
-#define PHYS_AIRCONTROL_SIDEWARDS(s)        STAT(MOVEVARS_AIRCONTROL_SIDEWARDS, s)
-#define PHYS_AIRSPEEDLIMIT_NONQW(s)         STAT(MOVEVARS_AIRSPEEDLIMIT_NONQW, s)
-#define PHYS_AIRSTOPACCELERATE(s)           STAT(MOVEVARS_AIRSTOPACCELERATE, s)
-#define PHYS_AIRSTRAFEACCELERATE(s)         STAT(MOVEVARS_AIRSTRAFEACCELERATE, s)
-#define PHYS_AIRSTRAFEACCEL_QW(s)           STAT(MOVEVARS_AIRSTRAFEACCEL_QW, s)
+/*qc2rust::define::PHYS_ACCELERATE*/
+#define PHYS_ACCELERATE(s) /*qc2rust::macro_begin::PHYS_ACCELERATE*/STAT(MOVEVARS_ACCELERATE,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_ACCELERATE*/
+/*qc2rust::define::PHYS_AIRACCELERATE*/
+#define PHYS_AIRACCELERATE(s) /*qc2rust::macro_begin::PHYS_AIRACCELERATE*/STAT(MOVEVARS_AIRACCELERATE,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRACCELERATE*/
+/*qc2rust::define::PHYS_AIRACCEL_QW*/
+#define PHYS_AIRACCEL_QW(s) /*qc2rust::macro_begin::PHYS_AIRACCEL_QW*/STAT(MOVEVARS_AIRACCEL_QW,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRACCEL_QW*/
+/*qc2rust::define::PHYS_AIRACCEL_QW_STRETCHFACTOR*/
+#define PHYS_AIRACCEL_QW_STRETCHFACTOR(s) /*qc2rust::macro_begin::PHYS_AIRACCEL_QW_STRETCHFACTOR*/STAT(MOVEVARS_AIRACCEL_QW_STRETCHFACTOR,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRACCEL_QW_STRETCHFACTOR*/
+/*qc2rust::define::PHYS_AIRACCEL_SIDEWAYS_FRICTION*/
+#define PHYS_AIRACCEL_SIDEWAYS_FRICTION(s) /*qc2rust::macro_begin::PHYS_AIRACCEL_SIDEWAYS_FRICTION*/STAT(MOVEVARS_AIRACCEL_SIDEWAYS_FRICTION,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRACCEL_SIDEWAYS_FRICTION*/
+/*qc2rust::define::PHYS_AIRCONTROL*/
+#define PHYS_AIRCONTROL(s) /*qc2rust::macro_begin::PHYS_AIRCONTROL*/STAT(MOVEVARS_AIRCONTROL,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRCONTROL*/
+/*qc2rust::define::PHYS_AIRCONTROL_PENALTY*/
+#define PHYS_AIRCONTROL_PENALTY(s) /*qc2rust::macro_begin::PHYS_AIRCONTROL_PENALTY*/STAT(MOVEVARS_AIRCONTROL_PENALTY,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRCONTROL_PENALTY*/
+/*qc2rust::define::PHYS_AIRCONTROL_POWER*/
+#define PHYS_AIRCONTROL_POWER(s) /*qc2rust::macro_begin::PHYS_AIRCONTROL_POWER*/STAT(MOVEVARS_AIRCONTROL_POWER,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRCONTROL_POWER*/
+/*qc2rust::define::PHYS_AIRCONTROL_BACKWARDS*/
+#define PHYS_AIRCONTROL_BACKWARDS(s) /*qc2rust::macro_begin::PHYS_AIRCONTROL_BACKWARDS*/STAT(MOVEVARS_AIRCONTROL_BACKWARDS,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRCONTROL_BACKWARDS*/
+/*qc2rust::define::PHYS_AIRCONTROL_SIDEWARDS*/
+#define PHYS_AIRCONTROL_SIDEWARDS(s) /*qc2rust::macro_begin::PHYS_AIRCONTROL_SIDEWARDS*/STAT(MOVEVARS_AIRCONTROL_SIDEWARDS,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRCONTROL_SIDEWARDS*/
+/*qc2rust::define::PHYS_AIRSPEEDLIMIT_NONQW*/
+#define PHYS_AIRSPEEDLIMIT_NONQW(s) /*qc2rust::macro_begin::PHYS_AIRSPEEDLIMIT_NONQW*/STAT(MOVEVARS_AIRSPEEDLIMIT_NONQW,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRSPEEDLIMIT_NONQW*/
+/*qc2rust::define::PHYS_AIRSTOPACCELERATE*/
+#define PHYS_AIRSTOPACCELERATE(s) /*qc2rust::macro_begin::PHYS_AIRSTOPACCELERATE*/STAT(MOVEVARS_AIRSTOPACCELERATE,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRSTOPACCELERATE*/
+/*qc2rust::define::PHYS_AIRSTRAFEACCELERATE*/
+#define PHYS_AIRSTRAFEACCELERATE(s) /*qc2rust::macro_begin::PHYS_AIRSTRAFEACCELERATE*/STAT(MOVEVARS_AIRSTRAFEACCELERATE,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRSTRAFEACCELERATE*/
+/*qc2rust::define::PHYS_AIRSTRAFEACCEL_QW*/
+#define PHYS_AIRSTRAFEACCEL_QW(s) /*qc2rust::macro_begin::PHYS_AIRSTRAFEACCEL_QW*/STAT(MOVEVARS_AIRSTRAFEACCEL_QW,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AIRSTRAFEACCEL_QW*/
 
-#define PHYS_AMMO_FUEL(s)                   STAT(FUEL, s)
+/*qc2rust::define::PHYS_AMMO_FUEL*/
+#define PHYS_AMMO_FUEL(s) /*qc2rust::macro_begin::PHYS_AMMO_FUEL*/STAT(FUEL,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_AMMO_FUEL*/
 
-#define PHYS_DODGING_FROZEN(s)              STAT(DODGING_FROZEN, s)
+/*qc2rust::define::PHYS_DODGING_FROZEN*/
+#define PHYS_DODGING_FROZEN(s) /*qc2rust::macro_begin::PHYS_DODGING_FROZEN*/STAT(DODGING_FROZEN,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_DODGING_FROZEN*/
 
-#define PHYS_FRICTION(s)                    STAT(MOVEVARS_FRICTION, s)
-#define PHYS_FRICTION_ONLAND(s)             STAT(MOVEVARS_FRICTION_ONLAND, s)
-#define PHYS_FRICTION_SLICK(s)              STAT(MOVEVARS_FRICTION_SLICK, s)
+/*qc2rust::define::PHYS_FRICTION*/
+#define PHYS_FRICTION(s) /*qc2rust::macro_begin::PHYS_FRICTION*/STAT(MOVEVARS_FRICTION,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_FRICTION*/
+/*qc2rust::define::PHYS_FRICTION_ONLAND*/
+#define PHYS_FRICTION_ONLAND(s) /*qc2rust::macro_begin::PHYS_FRICTION_ONLAND*/STAT(MOVEVARS_FRICTION_ONLAND,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_FRICTION_ONLAND*/
+/*qc2rust::define::PHYS_FRICTION_SLICK*/
+#define PHYS_FRICTION_SLICK(s) /*qc2rust::macro_begin::PHYS_FRICTION_SLICK*/STAT(MOVEVARS_FRICTION_SLICK,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_FRICTION_SLICK*/
 
-#define PHYS_FROZEN(s)                      STAT(FROZEN, s)
+/*qc2rust::define::PHYS_FROZEN*/
+#define PHYS_FROZEN(s) /*qc2rust::macro_begin::PHYS_FROZEN*/STAT(FROZEN,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_FROZEN*/
 
-#define PHYS_HIGHSPEED(s)                   STAT(MOVEVARS_HIGHSPEED, s)
+/*qc2rust::define::PHYS_HIGHSPEED*/
+#define PHYS_HIGHSPEED(s) /*qc2rust::macro_begin::PHYS_HIGHSPEED*/STAT(MOVEVARS_HIGHSPEED,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_HIGHSPEED*/
 
-#define PHYS_JETPACK_ACCEL_SIDE(s)          STAT(JETPACK_ACCEL_SIDE, s)
-#define PHYS_JETPACK_ACCEL_UP(s)            STAT(JETPACK_ACCEL_UP, s)
-#define PHYS_JETPACK_ANTIGRAVITY(s)         STAT(JETPACK_ANTIGRAVITY, s)
-#define PHYS_JETPACK_FUEL(s)                STAT(JETPACK_FUEL, s)
-#define PHYS_JETPACK_MAXSPEED_SIDE(s)       STAT(JETPACK_MAXSPEED_SIDE, s)
-#define PHYS_JETPACK_MAXSPEED_UP(s)         STAT(JETPACK_MAXSPEED_UP, s)
-#define PHYS_JETPACK_REVERSE_THRUST(s)		STAT(JETPACK_REVERSE_THRUST, s)
+/*qc2rust::define::PHYS_JETPACK_ACCEL_SIDE*/
+#define PHYS_JETPACK_ACCEL_SIDE(s) /*qc2rust::macro_begin::PHYS_JETPACK_ACCEL_SIDE*/STAT(JETPACK_ACCEL_SIDE,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_JETPACK_ACCEL_SIDE*/
+/*qc2rust::define::PHYS_JETPACK_ACCEL_UP*/
+#define PHYS_JETPACK_ACCEL_UP(s) /*qc2rust::macro_begin::PHYS_JETPACK_ACCEL_UP*/STAT(JETPACK_ACCEL_UP,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_JETPACK_ACCEL_UP*/
+/*qc2rust::define::PHYS_JETPACK_ANTIGRAVITY*/
+#define PHYS_JETPACK_ANTIGRAVITY(s) /*qc2rust::macro_begin::PHYS_JETPACK_ANTIGRAVITY*/STAT(JETPACK_ANTIGRAVITY,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_JETPACK_ANTIGRAVITY*/
+/*qc2rust::define::PHYS_JETPACK_FUEL*/
+#define PHYS_JETPACK_FUEL(s) /*qc2rust::macro_begin::PHYS_JETPACK_FUEL*/STAT(JETPACK_FUEL,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_JETPACK_FUEL*/
+/*qc2rust::define::PHYS_JETPACK_MAXSPEED_SIDE*/
+#define PHYS_JETPACK_MAXSPEED_SIDE(s) /*qc2rust::macro_begin::PHYS_JETPACK_MAXSPEED_SIDE*/STAT(JETPACK_MAXSPEED_SIDE,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_JETPACK_MAXSPEED_SIDE*/
+/*qc2rust::define::PHYS_JETPACK_MAXSPEED_UP*/
+#define PHYS_JETPACK_MAXSPEED_UP(s) /*qc2rust::macro_begin::PHYS_JETPACK_MAXSPEED_UP*/STAT(JETPACK_MAXSPEED_UP,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_JETPACK_MAXSPEED_UP*/
+/*qc2rust::define::PHYS_JETPACK_REVERSE_THRUST*/
+#define PHYS_JETPACK_REVERSE_THRUST(s) /*qc2rust::macro_begin::PHYS_JETPACK_REVERSE_THRUST*/STAT(JETPACK_REVERSE_THRUST,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_JETPACK_REVERSE_THRUST*/
 
-#define PHYS_JUMPSPEEDCAP_DISABLE_ONRAMPS(s) STAT(MOVEVARS_JUMPSPEEDCAP_DISABLE_ONRAMPS)
-#define PHYS_JUMPVELOCITY(s)                STAT(MOVEVARS_JUMPVELOCITY, s)
-#define PHYS_JUMPVELOCITY_CROUCH(s)         STAT(MOVEVARS_JUMPVELOCITY_CROUCH, s)
+/*qc2rust::define::PHYS_JUMPSPEEDCAP_DISABLE_ONRAMPS*/
+#define PHYS_JUMPSPEEDCAP_DISABLE_ONRAMPS(s) /*qc2rust::macro_begin::PHYS_JUMPSPEEDCAP_DISABLE_ONRAMPS*/STAT(MOVEVARS_JUMPSPEEDCAP_DISABLE_ONRAMPS) /*qc2rust::macro_end::PHYS_JUMPSPEEDCAP_DISABLE_ONRAMPS*/
+/*qc2rust::define::PHYS_JUMPVELOCITY*/
+#define PHYS_JUMPVELOCITY(s) /*qc2rust::macro_begin::PHYS_JUMPVELOCITY*/STAT(MOVEVARS_JUMPVELOCITY,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_JUMPVELOCITY*/
+/*qc2rust::define::PHYS_JUMPVELOCITY_CROUCH*/
+#define PHYS_JUMPVELOCITY_CROUCH(s) /*qc2rust::macro_begin::PHYS_JUMPVELOCITY_CROUCH*/STAT(MOVEVARS_JUMPVELOCITY_CROUCH,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_JUMPVELOCITY_CROUCH*/
 
-#define PHYS_MAXAIRSPEED(s)                 STAT(MOVEVARS_MAXAIRSPEED, s)
-#define PHYS_MAXAIRSTRAFESPEED(s)           STAT(MOVEVARS_MAXAIRSTRAFESPEED, s)
-#define PHYS_MAXSPEED(s)                    STAT(MOVEVARS_MAXSPEED, s)
+/*qc2rust::define::PHYS_MAXAIRSPEED*/
+#define PHYS_MAXAIRSPEED(s) /*qc2rust::macro_begin::PHYS_MAXAIRSPEED*/STAT(MOVEVARS_MAXAIRSPEED,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_MAXAIRSPEED*/
+/*qc2rust::define::PHYS_MAXAIRSTRAFESPEED*/
+#define PHYS_MAXAIRSTRAFESPEED(s) /*qc2rust::macro_begin::PHYS_MAXAIRSTRAFESPEED*/STAT(MOVEVARS_MAXAIRSTRAFESPEED,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_MAXAIRSTRAFESPEED*/
+/*qc2rust::define::PHYS_MAXSPEED*/
+#define PHYS_MAXSPEED(s) /*qc2rust::macro_begin::PHYS_MAXSPEED*/STAT(MOVEVARS_MAXSPEED,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_MAXSPEED*/
 
-#define PHYS_STOPSPEED(s)                   STAT(MOVEVARS_STOPSPEED, s)
+/*qc2rust::define::PHYS_STOPSPEED*/
+#define PHYS_STOPSPEED(s) /*qc2rust::macro_begin::PHYS_STOPSPEED*/STAT(MOVEVARS_STOPSPEED,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_STOPSPEED*/
 
-#define PHYS_TRACK_CANJUMP(s)               STAT(MOVEVARS_TRACK_CANJUMP, s)
+/*qc2rust::define::PHYS_TRACK_CANJUMP*/
+#define PHYS_TRACK_CANJUMP(s) /*qc2rust::macro_begin::PHYS_TRACK_CANJUMP*/STAT(MOVEVARS_TRACK_CANJUMP,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_TRACK_CANJUMP*/
 
-#define PHYS_WARSOWBUNNY_ACCEL(s)           STAT(MOVEVARS_WARSOWBUNNY_ACCEL, s)
-#define PHYS_WARSOWBUNNY_AIRFORWARDACCEL(s) STAT(MOVEVARS_WARSOWBUNNY_AIRFORWARDACCEL, s)
-#define PHYS_WARSOWBUNNY_BACKTOSIDERATIO(s) STAT(MOVEVARS_WARSOWBUNNY_BACKTOSIDERATIO, s)
-#define PHYS_WARSOWBUNNY_TOPSPEED(s)        STAT(MOVEVARS_WARSOWBUNNY_TOPSPEED, s)
-#define PHYS_WARSOWBUNNY_TURNACCEL(s)       STAT(MOVEVARS_WARSOWBUNNY_TURNACCEL, s)
+/*qc2rust::define::PHYS_WARSOWBUNNY_ACCEL*/
+#define PHYS_WARSOWBUNNY_ACCEL(s) /*qc2rust::macro_begin::PHYS_WARSOWBUNNY_ACCEL*/STAT(MOVEVARS_WARSOWBUNNY_ACCEL,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_WARSOWBUNNY_ACCEL*/
+/*qc2rust::define::PHYS_WARSOWBUNNY_AIRFORWARDACCEL*/
+#define PHYS_WARSOWBUNNY_AIRFORWARDACCEL(s) /*qc2rust::macro_begin::PHYS_WARSOWBUNNY_AIRFORWARDACCEL*/STAT(MOVEVARS_WARSOWBUNNY_AIRFORWARDACCEL,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_WARSOWBUNNY_AIRFORWARDACCEL*/
+/*qc2rust::define::PHYS_WARSOWBUNNY_BACKTOSIDERATIO*/
+#define PHYS_WARSOWBUNNY_BACKTOSIDERATIO(s) /*qc2rust::macro_begin::PHYS_WARSOWBUNNY_BACKTOSIDERATIO*/STAT(MOVEVARS_WARSOWBUNNY_BACKTOSIDERATIO,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_WARSOWBUNNY_BACKTOSIDERATIO*/
+/*qc2rust::define::PHYS_WARSOWBUNNY_TOPSPEED*/
+#define PHYS_WARSOWBUNNY_TOPSPEED(s) /*qc2rust::macro_begin::PHYS_WARSOWBUNNY_TOPSPEED*/STAT(MOVEVARS_WARSOWBUNNY_TOPSPEED,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_WARSOWBUNNY_TOPSPEED*/
+/*qc2rust::define::PHYS_WARSOWBUNNY_TURNACCEL*/
+#define PHYS_WARSOWBUNNY_TURNACCEL(s) /*qc2rust::macro_begin::PHYS_WARSOWBUNNY_TURNACCEL*/STAT(MOVEVARS_WARSOWBUNNY_TURNACCEL,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_WARSOWBUNNY_TURNACCEL*/
 
-#define PHYS_SLICK_APPLYGRAVITY(s)  		STAT(SLICK_APPLYGRAVITY)
+/*qc2rust::define::PHYS_SLICK_APPLYGRAVITY*/
+#define PHYS_SLICK_APPLYGRAVITY(s) /*qc2rust::macro_begin::PHYS_SLICK_APPLYGRAVITY*/STAT(SLICK_APPLYGRAVITY) /*qc2rust::macro_end::PHYS_SLICK_APPLYGRAVITY*/
 
-#define PHYS_INPUT_BUTTON_ATCK(s)           PHYS_INPUT_BUTTON_BUTTON1(s)
-#define PHYS_INPUT_BUTTON_JUMP(s)           PHYS_INPUT_BUTTON_BUTTON2(s)
-#define PHYS_INPUT_BUTTON_ATCK2(s)          PHYS_INPUT_BUTTON_BUTTON3(s)
-#define PHYS_INPUT_BUTTON_ZOOM(s)           PHYS_INPUT_BUTTON_BUTTON4(s)
-#define PHYS_INPUT_BUTTON_CROUCH(s)         PHYS_INPUT_BUTTON_BUTTON5(s)
-#define PHYS_INPUT_BUTTON_HOOK(s)           PHYS_INPUT_BUTTON_BUTTON6(s)
-#define PHYS_INPUT_BUTTON_INFO(s)           PHYS_INPUT_BUTTON_BUTTON7(s)
-#define PHYS_INPUT_BUTTON_DRAG(s)           PHYS_INPUT_BUTTON_BUTTON8(s)
-#define PHYS_INPUT_BUTTON_USE(s)            PHYS_INPUT_BUTTON_BUTTON_USE(s)
-#define PHYS_INPUT_BUTTON_CHAT(s)           PHYS_INPUT_BUTTON_BUTTON_CHAT(s)
-#define PHYS_INPUT_BUTTON_PRYDON(s)         PHYS_INPUT_BUTTON_BUTTON_PRYDON(s)
-#define PHYS_INPUT_BUTTON_ZOOMSCRIPT(s)     PHYS_INPUT_BUTTON_BUTTON9(s)
-#define PHYS_INPUT_BUTTON_JETPACK(s)        PHYS_INPUT_BUTTON_BUTTON10(s)
-#define PHYS_INPUT_BUTTON_DODGE(s)			PHYS_INPUT_BUTTON_BUTTON11(s)
-#define PHYS_INPUT_BUTTON_MINIGAME(s)		PHYS_INPUT_BUTTON_BUTTON12(s)
+/*qc2rust::define::PHYS_INPUT_BUTTON_ATCK*/
+#define PHYS_INPUT_BUTTON_ATCK(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_ATCK*/PHYS_INPUT_BUTTON_BUTTON1( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_ATCK*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_JUMP*/
+#define PHYS_INPUT_BUTTON_JUMP(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_JUMP*/PHYS_INPUT_BUTTON_BUTTON2( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_JUMP*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_ATCK2*/
+#define PHYS_INPUT_BUTTON_ATCK2(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_ATCK2*/PHYS_INPUT_BUTTON_BUTTON3( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_ATCK2*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_ZOOM*/
+#define PHYS_INPUT_BUTTON_ZOOM(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_ZOOM*/PHYS_INPUT_BUTTON_BUTTON4( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_ZOOM*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_CROUCH*/
+#define PHYS_INPUT_BUTTON_CROUCH(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_CROUCH*/PHYS_INPUT_BUTTON_BUTTON5( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_CROUCH*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_HOOK*/
+#define PHYS_INPUT_BUTTON_HOOK(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_HOOK*/PHYS_INPUT_BUTTON_BUTTON6( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_HOOK*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_INFO*/
+#define PHYS_INPUT_BUTTON_INFO(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_INFO*/PHYS_INPUT_BUTTON_BUTTON7( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_INFO*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_DRAG*/
+#define PHYS_INPUT_BUTTON_DRAG(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_DRAG*/PHYS_INPUT_BUTTON_BUTTON8( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_DRAG*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_USE*/
+#define PHYS_INPUT_BUTTON_USE(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_USE*/PHYS_INPUT_BUTTON_BUTTON_USE( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_USE*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_CHAT*/
+#define PHYS_INPUT_BUTTON_CHAT(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_CHAT*/PHYS_INPUT_BUTTON_BUTTON_CHAT( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_CHAT*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_PRYDON*/
+#define PHYS_INPUT_BUTTON_PRYDON(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_PRYDON*/PHYS_INPUT_BUTTON_BUTTON_PRYDON( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_PRYDON*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_ZOOMSCRIPT*/
+#define PHYS_INPUT_BUTTON_ZOOMSCRIPT(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_ZOOMSCRIPT*/PHYS_INPUT_BUTTON_BUTTON9( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_ZOOMSCRIPT*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_JETPACK*/
+#define PHYS_INPUT_BUTTON_JETPACK(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_JETPACK*/PHYS_INPUT_BUTTON_BUTTON10( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_JETPACK*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_DODGE*/
+#define PHYS_INPUT_BUTTON_DODGE(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_DODGE*/PHYS_INPUT_BUTTON_BUTTON11( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_DODGE*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_MINIGAME*/
+#define PHYS_INPUT_BUTTON_MINIGAME(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_MINIGAME*/PHYS_INPUT_BUTTON_BUTTON12( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_MINIGAME*/
 
 #ifdef CSQC
 STATIC_INIT(PHYS_INPUT_BUTTON)
@@ -127,45 +193,47 @@ STATIC_INIT(PHYS_INPUT_BUTTON)
 
 // if more buttons are needed, start using impulse bits as buttons
 
-#define PHYS_INPUT_BUTTON_BACKWARD(s)       (PHYS_INPUT_MOVEVALUES(s).x < 0)
-#define PHYS_INPUT_BUTTON_FORWARD(s)        (PHYS_INPUT_MOVEVALUES(s).x > 0)
-#define PHYS_INPUT_BUTTON_LEFT(s)           (PHYS_INPUT_MOVEVALUES(s).y < 0)
-#define PHYS_INPUT_BUTTON_RIGHT(s)          (PHYS_INPUT_MOVEVALUES(s).y > 0)
+/*qc2rust::define::PHYS_INPUT_BUTTON_BACKWARD*/
+#define PHYS_INPUT_BUTTON_BACKWARD(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BACKWARD*/(PHYS_INPUT_MOVEVALUES( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).x < 0) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BACKWARD*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_FORWARD*/
+#define PHYS_INPUT_BUTTON_FORWARD(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_FORWARD*/(PHYS_INPUT_MOVEVALUES( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).x > 0) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_FORWARD*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_LEFT*/
+#define PHYS_INPUT_BUTTON_LEFT(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_LEFT*/(PHYS_INPUT_MOVEVALUES( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).y < 0) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_LEFT*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_RIGHT*/
+#define PHYS_INPUT_BUTTON_RIGHT(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_RIGHT*/(PHYS_INPUT_MOVEVALUES( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).y > 0) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_RIGHT*/
 
 // used for special commands and idle checking, not from the engine
 // TODO: cache
-#define PHYS_INPUT_BUTTON_MASK(s) ( \
-	  (1 <<  0) * PHYS_INPUT_BUTTON_ATCK(s) \
-	| (1 <<  1) * PHYS_INPUT_BUTTON_JUMP(s) \
-	| (1 <<  2) * PHYS_INPUT_BUTTON_ATCK2(s) \
-	| (1 <<  3) * PHYS_INPUT_BUTTON_ZOOM(s) \
-	| (1 <<  4) * PHYS_INPUT_BUTTON_CROUCH(s) \
-	| (1 <<  5) * PHYS_INPUT_BUTTON_HOOK(s) \
-	| (1 <<  6) * PHYS_INPUT_BUTTON_USE(s) \
-	| (1 <<  7) * PHYS_INPUT_BUTTON_BACKWARD(s) \
-	| (1 <<  8) * PHYS_INPUT_BUTTON_FORWARD(s) \
-	| (1 <<  9) * PHYS_INPUT_BUTTON_LEFT(s) \
-	| (1 << 10) * PHYS_INPUT_BUTTON_RIGHT(s) \
-	)
+/*qc2rust::define::PHYS_INPUT_BUTTON_MASK*/
+#define PHYS_INPUT_BUTTON_MASK(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_MASK*/( 	  (1 <<  0) * PHYS_INPUT_BUTTON_ATCK( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	| (1 <<  1) * PHYS_INPUT_BUTTON_JUMP( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	| (1 <<  2) * PHYS_INPUT_BUTTON_ATCK2( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	| (1 <<  3) * PHYS_INPUT_BUTTON_ZOOM( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	| (1 <<  4) * PHYS_INPUT_BUTTON_CROUCH( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	| (1 <<  5) * PHYS_INPUT_BUTTON_HOOK( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	| (1 <<  6) * PHYS_INPUT_BUTTON_USE( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	| (1 <<  7) * PHYS_INPUT_BUTTON_BACKWARD( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	| (1 <<  8) * PHYS_INPUT_BUTTON_FORWARD( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	| (1 <<  9) * PHYS_INPUT_BUTTON_LEFT( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	| (1 << 10) * PHYS_INPUT_BUTTON_RIGHT( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) 	) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_MASK*/
 
-#define IS_JUMP_HELD(s)                     (!((s).flags & FL_JUMPRELEASED))
-#define SET_JUMP_HELD(s)                    ((s).flags &= ~FL_JUMPRELEASED)
-#define UNSET_JUMP_HELD(s)                  ((s).flags |= FL_JUMPRELEASED)
+/*qc2rust::define::IS_JUMP_HELD*/
+#define IS_JUMP_HELD(s) /*qc2rust::macro_begin::IS_JUMP_HELD*/(!(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags & FL_JUMPRELEASED)) /*qc2rust::macro_end::IS_JUMP_HELD*/
+/*qc2rust::define::SET_JUMP_HELD*/
+#define SET_JUMP_HELD(s) /*qc2rust::macro_begin::SET_JUMP_HELD*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags &= ~FL_JUMPRELEASED) /*qc2rust::macro_end::SET_JUMP_HELD*/
+/*qc2rust::define::UNSET_JUMP_HELD*/
+#define UNSET_JUMP_HELD(s) /*qc2rust::macro_begin::UNSET_JUMP_HELD*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags |= FL_JUMPRELEASED) /*qc2rust::macro_end::UNSET_JUMP_HELD*/
 
-#define WAS_ONGROUND(s)                     boolean((s).lastflags & FL_ONGROUND)
-#define WAS_ONSLICK(s)                      boolean((s).lastflags & FL_ONSLICK)
+/*qc2rust::define::WAS_ONGROUND*/
+#define WAS_ONGROUND(s) /*qc2rust::macro_begin::WAS_ONGROUND*/boolean(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).lastflags & FL_ONGROUND) /*qc2rust::macro_end::WAS_ONGROUND*/
+/*qc2rust::define::WAS_ONSLICK*/
+#define WAS_ONSLICK(s) /*qc2rust::macro_begin::WAS_ONSLICK*/boolean(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).lastflags & FL_ONSLICK) /*qc2rust::macro_end::WAS_ONSLICK*/
 
-#define ITEMS_STAT(s)                       ((s).items)
+/*qc2rust::define::ITEMS_STAT*/
+#define ITEMS_STAT(s) /*qc2rust::macro_begin::ITEMS_STAT*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).items) /*qc2rust::macro_end::ITEMS_STAT*/
 
 .float teleport_time;
-#define PHYS_TELEPORT_TIME(s)               ((s).teleport_time)
+/*qc2rust::define::PHYS_TELEPORT_TIME*/
+#define PHYS_TELEPORT_TIME(s) /*qc2rust::macro_begin::PHYS_TELEPORT_TIME*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).teleport_time) /*qc2rust::macro_end::PHYS_TELEPORT_TIME*/
 
 .float waterjump_time;
-#define PHYS_WATERJUMP_TIME(s)               ((s).waterjump_time)
+/*qc2rust::define::PHYS_WATERJUMP_TIME*/
+#define PHYS_WATERJUMP_TIME(s) /*qc2rust::macro_begin::PHYS_WATERJUMP_TIME*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).waterjump_time) /*qc2rust::macro_end::PHYS_WATERJUMP_TIME*/
 
 #ifdef CSQC
 
-	#define PHYS_FIXANGLE(s) ('0 0 0')
+/*qc2rust::define::PHYS_FIXANGLE*/
+#define PHYS_FIXANGLE(s) /*qc2rust::macro_begin::PHYS_FIXANGLE*/('0 0 0') /*qc2rust::macro_end::PHYS_FIXANGLE*/
 
 	string autocvar_cl_jumpspeedcap_min;
 	string autocvar_cl_jumpspeedcap_max;
@@ -190,58 +258,95 @@ STATIC_INIT(PHYS_INPUT_BUTTON)
 	.entity hook;
 
 // TODO
-	#define IS_CLIENT(s)                        (((s).isplayermodel & ISPLAYER_CLIENT) || (s) == csqcplayer)
-	#define IS_PLAYER(s)                        ((s).isplayermodel & ISPLAYER_PLAYER)
-	#define IS_NOT_A_CLIENT(s)                  (!(s).isplayermodel && (s) != csqcplayer)
-	#define isPushable(s)                       ((s).isplayermodel || (s).pushable || ((s).flags & FL_PROJECTILE))
+/*qc2rust::define::IS_CLIENT*/
+#define IS_CLIENT(s) /*qc2rust::macro_begin::IS_CLIENT*/((( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).isplayermodel & ISPLAYER_CLIENT) || ( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) == csqcplayer) /*qc2rust::macro_end::IS_CLIENT*/
+/*qc2rust::define::IS_PLAYER*/
+#define IS_PLAYER(s) /*qc2rust::macro_begin::IS_PLAYER*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).isplayermodel & ISPLAYER_PLAYER) /*qc2rust::macro_end::IS_PLAYER*/
+/*qc2rust::define::IS_NOT_A_CLIENT*/
+#define IS_NOT_A_CLIENT(s) /*qc2rust::macro_begin::IS_NOT_A_CLIENT*/(!( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).isplayermodel && ( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) != csqcplayer) /*qc2rust::macro_end::IS_NOT_A_CLIENT*/
+/*qc2rust::define::isPushable*/
+#define isPushable(s) /*qc2rust::macro_begin::isPushable*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).isplayermodel || ( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).pushable || (( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags & FL_PROJECTILE)) /*qc2rust::macro_end::isPushable*/
 
 	//float player_multijump;
 	//float player_jumpheight;
 
-	#define PHYS_INPUT_ANGLES(s)                input_angles
+/*qc2rust::define::PHYS_INPUT_ANGLES*/
+#define PHYS_INPUT_ANGLES(s) /*qc2rust::macro_begin::PHYS_INPUT_ANGLES*/input_angles /*qc2rust::macro_end::PHYS_INPUT_ANGLES*/
 // TODO
-	#define PHYS_WORLD_ANGLES(s)                input_angles
+/*qc2rust::define::PHYS_WORLD_ANGLES*/
+#define PHYS_WORLD_ANGLES(s) /*qc2rust::macro_begin::PHYS_WORLD_ANGLES*/input_angles /*qc2rust::macro_end::PHYS_WORLD_ANGLES*/
 
-	#define PHYS_INPUT_TIMELENGTH               input_timelength
-	#define PHYS_INPUT_FRAMETIME                serverdeltatime
+/*qc2rust::define::PHYS_INPUT_TIMELENGTH*/
+#define PHYS_INPUT_TIMELENGTH /*qc2rust::macro_begin::PHYS_INPUT_TIMELENGTH*/input_timelength /*qc2rust::macro_end::PHYS_INPUT_TIMELENGTH*/
+/*qc2rust::define::PHYS_INPUT_FRAMETIME*/
+#define PHYS_INPUT_FRAMETIME /*qc2rust::macro_begin::PHYS_INPUT_FRAMETIME*/serverdeltatime /*qc2rust::macro_end::PHYS_INPUT_FRAMETIME*/
 
-	#define PHYS_INPUT_MOVEVALUES(s)            input_movevalues
-	#define PHYS_CS(s)                          (s)
+/*qc2rust::define::PHYS_INPUT_MOVEVALUES*/
+#define PHYS_INPUT_MOVEVALUES(s) /*qc2rust::macro_begin::PHYS_INPUT_MOVEVALUES*/input_movevalues /*qc2rust::macro_end::PHYS_INPUT_MOVEVALUES*/
+/*qc2rust::define::PHYS_CS*/
+#define PHYS_CS(s) /*qc2rust::macro_begin::PHYS_CS*/( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_CS*/
 
-	#define PHYS_INPUT_BUTTON_BUTTON1(s)        boolean(input_buttons & BIT(0))
-	#define PHYS_INPUT_BUTTON_BUTTON2(s)        boolean(input_buttons & BIT(1))
-	#define PHYS_INPUT_BUTTON_BUTTON3(s)        boolean(input_buttons & BIT(2))
-	#define PHYS_INPUT_BUTTON_BUTTON4(s)        boolean(input_buttons & BIT(3))
-	#define PHYS_INPUT_BUTTON_BUTTON5(s)        boolean(input_buttons & BIT(4))
-	#define PHYS_INPUT_BUTTON_BUTTON6(s)        boolean(input_buttons & BIT(5))
-	#define PHYS_INPUT_BUTTON_BUTTON7(s)        boolean(input_buttons & BIT(6))
-	#define PHYS_INPUT_BUTTON_BUTTON8(s)        boolean(input_buttons & BIT(7))
-	#define PHYS_INPUT_BUTTON_BUTTON_USE(s)     boolean(input_buttons & BIT(8))
-	#define PHYS_INPUT_BUTTON_BUTTON_CHAT(s)    boolean(input_buttons & BIT(9))
-	#define PHYS_INPUT_BUTTON_BUTTON_PRYDON(s)  boolean(input_buttons & BIT(10))
-	#define PHYS_INPUT_BUTTON_BUTTON9(s)        boolean(input_buttons & BIT(11))
-	#define PHYS_INPUT_BUTTON_BUTTON10(s)       boolean(input_buttons & BIT(12))
-	#define PHYS_INPUT_BUTTON_BUTTON11(s)       boolean(input_buttons & BIT(13))
-	#define PHYS_INPUT_BUTTON_BUTTON12(s)       boolean(input_buttons & BIT(14))
-	#define PHYS_INPUT_BUTTON_BUTTON13(s)       boolean(input_buttons & BIT(15))
-	#define PHYS_INPUT_BUTTON_BUTTON14(s)       boolean(input_buttons & BIT(16))
-	#define PHYS_INPUT_BUTTON_BUTTON15(s)       boolean(input_buttons & BIT(17))
-	#define PHYS_INPUT_BUTTON_BUTTON16(s)       boolean(input_buttons & BIT(18))
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON1*/
+#define PHYS_INPUT_BUTTON_BUTTON1(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON1*/boolean(input_buttons & BIT(0)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON1*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON2*/
+#define PHYS_INPUT_BUTTON_BUTTON2(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON2*/boolean(input_buttons & BIT(1)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON2*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON3*/
+#define PHYS_INPUT_BUTTON_BUTTON3(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON3*/boolean(input_buttons & BIT(2)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON3*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON4*/
+#define PHYS_INPUT_BUTTON_BUTTON4(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON4*/boolean(input_buttons & BIT(3)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON4*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON5*/
+#define PHYS_INPUT_BUTTON_BUTTON5(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON5*/boolean(input_buttons & BIT(4)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON5*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON6*/
+#define PHYS_INPUT_BUTTON_BUTTON6(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON6*/boolean(input_buttons & BIT(5)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON6*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON7*/
+#define PHYS_INPUT_BUTTON_BUTTON7(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON7*/boolean(input_buttons & BIT(6)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON7*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON8*/
+#define PHYS_INPUT_BUTTON_BUTTON8(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON8*/boolean(input_buttons & BIT(7)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON8*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON_USE*/
+#define PHYS_INPUT_BUTTON_BUTTON_USE(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON_USE*/boolean(input_buttons & BIT(8)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON_USE*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON_CHAT*/
+#define PHYS_INPUT_BUTTON_BUTTON_CHAT(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON_CHAT*/boolean(input_buttons & BIT(9)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON_CHAT*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON_PRYDON*/
+#define PHYS_INPUT_BUTTON_BUTTON_PRYDON(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON_PRYDON*/boolean(input_buttons & BIT(10)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON_PRYDON*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON9*/
+#define PHYS_INPUT_BUTTON_BUTTON9(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON9*/boolean(input_buttons & BIT(11)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON9*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON10*/
+#define PHYS_INPUT_BUTTON_BUTTON10(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON10*/boolean(input_buttons & BIT(12)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON10*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON11*/
+#define PHYS_INPUT_BUTTON_BUTTON11(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON11*/boolean(input_buttons & BIT(13)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON11*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON12*/
+#define PHYS_INPUT_BUTTON_BUTTON12(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON12*/boolean(input_buttons & BIT(14)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON12*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON13*/
+#define PHYS_INPUT_BUTTON_BUTTON13(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON13*/boolean(input_buttons & BIT(15)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON13*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON14*/
+#define PHYS_INPUT_BUTTON_BUTTON14(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON14*/boolean(input_buttons & BIT(16)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON14*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON15*/
+#define PHYS_INPUT_BUTTON_BUTTON15(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON15*/boolean(input_buttons & BIT(17)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON15*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON16*/
+#define PHYS_INPUT_BUTTON_BUTTON16(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON16*/boolean(input_buttons & BIT(18)) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON16*/
 
-	#define IS_DUCKED(s)                        (boolean((s).flags & FL_DUCKED))
-	#define SET_DUCKED(s)                       ((s).flags |= FL_DUCKED)
-	#define UNSET_DUCKED(s)                     ((s).flags &= ~FL_DUCKED)
+/*qc2rust::define::IS_DUCKED*/
+#define IS_DUCKED(s) /*qc2rust::macro_begin::IS_DUCKED*/(boolean(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags & FL_DUCKED)) /*qc2rust::macro_end::IS_DUCKED*/
+/*qc2rust::define::SET_DUCKED*/
+#define SET_DUCKED(s) /*qc2rust::macro_begin::SET_DUCKED*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags |= FL_DUCKED) /*qc2rust::macro_end::SET_DUCKED*/
+/*qc2rust::define::UNSET_DUCKED*/
+#define UNSET_DUCKED(s) /*qc2rust::macro_begin::UNSET_DUCKED*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags &= ~FL_DUCKED) /*qc2rust::macro_end::UNSET_DUCKED*/
 
-	#define PHYS_INVEHICLE(s) 					(boolean(hud != HUD_NORMAL))
+/*qc2rust::define::PHYS_INVEHICLE*/
+#define PHYS_INVEHICLE(s) /*qc2rust::macro_begin::PHYS_INVEHICLE*/(boolean(hud != HUD_NORMAL)) /*qc2rust::macro_end::PHYS_INVEHICLE*/
 
-	#define PHYS_JUMPSPEEDCAP_MIN               autocvar_cl_jumpspeedcap_min
-	#define PHYS_JUMPSPEEDCAP_MAX               autocvar_cl_jumpspeedcap_max
+/*qc2rust::define::PHYS_JUMPSPEEDCAP_MIN*/
+#define PHYS_JUMPSPEEDCAP_MIN /*qc2rust::macro_begin::PHYS_JUMPSPEEDCAP_MIN*/autocvar_cl_jumpspeedcap_min /*qc2rust::macro_end::PHYS_JUMPSPEEDCAP_MIN*/
+/*qc2rust::define::PHYS_JUMPSPEEDCAP_MAX*/
+#define PHYS_JUMPSPEEDCAP_MAX /*qc2rust::macro_begin::PHYS_JUMPSPEEDCAP_MAX*/autocvar_cl_jumpspeedcap_max /*qc2rust::macro_end::PHYS_JUMPSPEEDCAP_MAX*/
 
-	#define PHYS_CL_TRACK_CANJUMP(s)            STAT(MOVEVARS_CL_TRACK_CANJUMP, s)
+/*qc2rust::define::PHYS_CL_TRACK_CANJUMP*/
+#define PHYS_CL_TRACK_CANJUMP(s) /*qc2rust::macro_begin::PHYS_CL_TRACK_CANJUMP*/STAT(MOVEVARS_CL_TRACK_CANJUMP,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_CL_TRACK_CANJUMP*/
 
 #elif defined(SVQC)
 
-	#define PHYS_FIXANGLE(s) ((s).fixangle)
+/*qc2rust::define::PHYS_FIXANGLE*/
+#define PHYS_FIXANGLE(s) /*qc2rust::macro_begin::PHYS_FIXANGLE*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).fixangle) /*qc2rust::macro_end::PHYS_FIXANGLE*/
 
 	bool Physics_Valid(string thecvar);
 
@@ -253,45 +358,77 @@ STATIC_INIT(PHYS_INPUT_BUTTON)
 	.string jumpspeedcap_min;
 	.string jumpspeedcap_max;
 
-	#define PHYS_INPUT_ANGLES(s)                ((s).v_angle)
-	#define PHYS_WORLD_ANGLES(s)                ((s).angles)
+/*qc2rust::define::PHYS_INPUT_ANGLES*/
+#define PHYS_INPUT_ANGLES(s) /*qc2rust::macro_begin::PHYS_INPUT_ANGLES*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).v_angle) /*qc2rust::macro_end::PHYS_INPUT_ANGLES*/
+/*qc2rust::define::PHYS_WORLD_ANGLES*/
+#define PHYS_WORLD_ANGLES(s) /*qc2rust::macro_begin::PHYS_WORLD_ANGLES*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).angles) /*qc2rust::macro_end::PHYS_WORLD_ANGLES*/
 
-	#define PHYS_INPUT_TIMELENGTH               frametime
-	#define PHYS_INPUT_FRAMETIME                sys_frametime
+/*qc2rust::define::PHYS_INPUT_TIMELENGTH*/
+#define PHYS_INPUT_TIMELENGTH /*qc2rust::macro_begin::PHYS_INPUT_TIMELENGTH*/frametime /*qc2rust::macro_end::PHYS_INPUT_TIMELENGTH*/
+/*qc2rust::define::PHYS_INPUT_FRAMETIME*/
+#define PHYS_INPUT_FRAMETIME /*qc2rust::macro_begin::PHYS_INPUT_FRAMETIME*/sys_frametime /*qc2rust::macro_end::PHYS_INPUT_FRAMETIME*/
 
-	#define PHYS_INPUT_MOVEVALUES(s)            CS(s).movement
-	#define PHYS_CS(s)                          CS(s)
+/*qc2rust::define::PHYS_INPUT_MOVEVALUES*/
+#define PHYS_INPUT_MOVEVALUES(s) /*qc2rust::macro_begin::PHYS_INPUT_MOVEVALUES*/CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).movement /*qc2rust::macro_end::PHYS_INPUT_MOVEVALUES*/
+/*qc2rust::define::PHYS_CS*/
+#define PHYS_CS(s) /*qc2rust::macro_begin::PHYS_CS*/CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_CS*/
 
-	#define PHYS_INPUT_BUTTON_BUTTON1(s)        (CS(s).button0)
-	#define PHYS_INPUT_BUTTON_BUTTON2(s)        (CS(s).button2)
-	#define PHYS_INPUT_BUTTON_BUTTON3(s)        (CS(s).button3)
-	#define PHYS_INPUT_BUTTON_BUTTON4(s)        (CS(s).button4)
-	#define PHYS_INPUT_BUTTON_BUTTON5(s)        (CS(s).button5)
-	#define PHYS_INPUT_BUTTON_BUTTON6(s)        (CS(s).button6)
-	#define PHYS_INPUT_BUTTON_BUTTON7(s)        (CS(s).button7)
-	#define PHYS_INPUT_BUTTON_BUTTON8(s)        (CS(s).button8)
-	#define PHYS_INPUT_BUTTON_BUTTON_USE(s)     (CS(s).buttonuse)
-	#define PHYS_INPUT_BUTTON_BUTTON_CHAT(s)    (CS(s).buttonchat)
-	#define PHYS_INPUT_BUTTON_BUTTON_PRYDON(s)  (CS(s).cursor_active)
-	#define PHYS_INPUT_BUTTON_BUTTON9(s)        (CS(s).button9)
-	#define PHYS_INPUT_BUTTON_BUTTON10(s)       (CS(s).button10)
-	#define PHYS_INPUT_BUTTON_BUTTON11(s)       (CS(s).button11)
-	#define PHYS_INPUT_BUTTON_BUTTON12(s)       (CS(s).button12)
-	#define PHYS_INPUT_BUTTON_BUTTON13(s)       (CS(s).button13)
-	#define PHYS_INPUT_BUTTON_BUTTON14(s)       (CS(s).button14)
-	#define PHYS_INPUT_BUTTON_BUTTON15(s)       (CS(s).button15)
-	#define PHYS_INPUT_BUTTON_BUTTON16(s)       (CS(s).button16)
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON1*/
+#define PHYS_INPUT_BUTTON_BUTTON1(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON1*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button0) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON1*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON2*/
+#define PHYS_INPUT_BUTTON_BUTTON2(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON2*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button2) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON2*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON3*/
+#define PHYS_INPUT_BUTTON_BUTTON3(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON3*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button3) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON3*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON4*/
+#define PHYS_INPUT_BUTTON_BUTTON4(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON4*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button4) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON4*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON5*/
+#define PHYS_INPUT_BUTTON_BUTTON5(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON5*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button5) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON5*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON6*/
+#define PHYS_INPUT_BUTTON_BUTTON6(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON6*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button6) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON6*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON7*/
+#define PHYS_INPUT_BUTTON_BUTTON7(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON7*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button7) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON7*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON8*/
+#define PHYS_INPUT_BUTTON_BUTTON8(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON8*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button8) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON8*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON_USE*/
+#define PHYS_INPUT_BUTTON_BUTTON_USE(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON_USE*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).buttonuse) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON_USE*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON_CHAT*/
+#define PHYS_INPUT_BUTTON_BUTTON_CHAT(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON_CHAT*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).buttonchat) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON_CHAT*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON_PRYDON*/
+#define PHYS_INPUT_BUTTON_BUTTON_PRYDON(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON_PRYDON*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).cursor_active) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON_PRYDON*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON9*/
+#define PHYS_INPUT_BUTTON_BUTTON9(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON9*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button9) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON9*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON10*/
+#define PHYS_INPUT_BUTTON_BUTTON10(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON10*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button10) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON10*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON11*/
+#define PHYS_INPUT_BUTTON_BUTTON11(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON11*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button11) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON11*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON12*/
+#define PHYS_INPUT_BUTTON_BUTTON12(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON12*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button12) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON12*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON13*/
+#define PHYS_INPUT_BUTTON_BUTTON13(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON13*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button13) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON13*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON14*/
+#define PHYS_INPUT_BUTTON_BUTTON14(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON14*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button14) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON14*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON15*/
+#define PHYS_INPUT_BUTTON_BUTTON15(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON15*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button15) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON15*/
+/*qc2rust::define::PHYS_INPUT_BUTTON_BUTTON16*/
+#define PHYS_INPUT_BUTTON_BUTTON16(s) /*qc2rust::macro_begin::PHYS_INPUT_BUTTON_BUTTON16*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).button16) /*qc2rust::macro_end::PHYS_INPUT_BUTTON_BUTTON16*/
 
-	#define IS_DUCKED(s)                        ((s).crouch)
-	#define SET_DUCKED(s)                       ((s).crouch = true)
-	#define UNSET_DUCKED(s)                     ((s).crouch = false)
+/*qc2rust::define::IS_DUCKED*/
+#define IS_DUCKED(s) /*qc2rust::macro_begin::IS_DUCKED*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).crouch) /*qc2rust::macro_end::IS_DUCKED*/
+/*qc2rust::define::SET_DUCKED*/
+#define SET_DUCKED(s) /*qc2rust::macro_begin::SET_DUCKED*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).crouch = true) /*qc2rust::macro_end::SET_DUCKED*/
+/*qc2rust::define::UNSET_DUCKED*/
+#define UNSET_DUCKED(s) /*qc2rust::macro_begin::UNSET_DUCKED*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).crouch = false) /*qc2rust::macro_end::UNSET_DUCKED*/
 
-	#define PHYS_INVEHICLE(s) 					(boolean((s).vehicle != NULL))
+/*qc2rust::define::PHYS_INVEHICLE*/
+#define PHYS_INVEHICLE(s) /*qc2rust::macro_begin::PHYS_INVEHICLE*/(boolean(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).vehicle != NULL)) /*qc2rust::macro_end::PHYS_INVEHICLE*/
 
-	#define PHYS_JUMPSPEEDCAP_MIN               autocvar_sv_jumpspeedcap_min
-	#define PHYS_JUMPSPEEDCAP_MAX               autocvar_sv_jumpspeedcap_max
+/*qc2rust::define::PHYS_JUMPSPEEDCAP_MIN*/
+#define PHYS_JUMPSPEEDCAP_MIN /*qc2rust::macro_begin::PHYS_JUMPSPEEDCAP_MIN*/autocvar_sv_jumpspeedcap_min /*qc2rust::macro_end::PHYS_JUMPSPEEDCAP_MIN*/
+/*qc2rust::define::PHYS_JUMPSPEEDCAP_MAX*/
+#define PHYS_JUMPSPEEDCAP_MAX /*qc2rust::macro_begin::PHYS_JUMPSPEEDCAP_MAX*/autocvar_sv_jumpspeedcap_max /*qc2rust::macro_end::PHYS_JUMPSPEEDCAP_MAX*/
 
-	#define PHYS_CL_TRACK_CANJUMP(s)            (CS(s).cvar_cl_movement_track_canjump)
+/*qc2rust::define::PHYS_CL_TRACK_CANJUMP*/
+#define PHYS_CL_TRACK_CANJUMP(s) /*qc2rust::macro_begin::PHYS_CL_TRACK_CANJUMP*/(CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).cvar_cl_movement_track_canjump) /*qc2rust::macro_end::PHYS_CL_TRACK_CANJUMP*/
 
 #endif
 

@@ -6,7 +6,8 @@
 #endif
 
 REGISTRY(EntCSProps, BITS(16) - 1)
-#define EntCSProps_from(i) _EntCSProps_from(i, NULL)
+/*qc2rust::define::EntCSProps_from*/
+#define EntCSProps_from(i) /*qc2rust::macro_begin::EntCSProps_from*/_EntCSProps_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NULL) /*qc2rust::macro_end::EntCSProps_from*/
 REGISTER_REGISTRY(EntCSProps)
 REGISTRY_SORT(EntCSProps)
 REGISTRY_CHECK(EntCSProps)
@@ -40,68 +41,31 @@ void entcs_force_origin(entity player)
 .void(entity ent) m_receive;
 
 #ifdef SVQC
-#define _ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive) \
-	void id##_set(entity ent, entity player) { setprop(ent.(checkprop), player.(checkprop)); } \
-	void id##_send(int chan, entity ent) { LAMBDA(svsend); } \
-	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { \
-		this.m_public = ispublic; \
-		this.m_check = id##_check; \
-		this.m_set = id##_set; \
-		this.m_send = id##_send; \
-	}
+#define _ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive) 	void id##_set(entity ent, entity player) { setprop(ent.(checkprop), player.(checkprop)); } 	void id##_send(int chan, entity ent) { LAMBDA(svsend); } 	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { 		this.m_public = ispublic; 		this.m_check = id##_check; 		this.m_set = id##_set; 		this.m_send = id##_send; 	}
 
-#define ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive) \
-	bool id##_check(entity ent, entity player) { return (ent.(checkprop) != player.(checkprop)); } \
-	_ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive)
+#define ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive) 	bool id##_check(entity ent, entity player) { return (ent.(checkprop) != player.(checkprop)); } 	_ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive)
 
-#define ENTCS_PROP_CODED(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) \
-	bool id##_check(entity ent, entity player) { \
-		return (floor(ent.(checkprop)) / decfactor != floor(player.(checkprop)) / decfactor); \
-	} \
-	_ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive)
+#define ENTCS_PROP_CODED(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) 	bool id##_check(entity ent, entity player) { 		return (floor(ent.(checkprop)) / decfactor != floor(player.(checkprop)) / decfactor); 	} 	_ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive)
 
 #elif defined(CSQC)
-#define ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive) \
-	void id##_receive(entity ent) { LAMBDA(clreceive); } \
-	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { \
-		this.m_public = ispublic; \
-		this.m_receive = id##_receive; \
-	}
+#define ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive) 	void id##_receive(entity ent) { LAMBDA(clreceive); } 	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { 		this.m_public = ispublic; 		this.m_receive = id##_receive; 	}
 
-#define ENTCS_PROP_CODED(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) \
-	ENTCS_PROP(id, ispublic, checkprop, setprop, svsend, clreceive)
+/*qc2rust::define::ENTCS_PROP_CODED*/
+#define ENTCS_PROP_CODED(id,ispublic,checkprop,setprop,decfactor,svsend,clreceive) /*qc2rust::macro_begin::ENTCS_PROP_CODED*/ENTCS_PROP( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/,  /*qc2rust::param_begin::ispublic*/ispublic /*qc2rust::param_end::ispublic*/,  /*qc2rust::param_begin::checkprop*/checkprop /*qc2rust::param_end::checkprop*/,  /*qc2rust::param_begin::setprop*/setprop /*qc2rust::param_end::setprop*/,  /*qc2rust::param_begin::svsend*/svsend /*qc2rust::param_end::svsend*/,  /*qc2rust::param_begin::clreceive*/clreceive /*qc2rust::param_end::clreceive*/) /*qc2rust::macro_end::ENTCS_PROP_CODED*/
 #endif
 
 #ifdef SVQC
-#define ENTCS_PROP_RESOURCE(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) \
-	bool id##_check(entity ent, entity player) { \
-		return (floor(GetResource(ent, checkprop) / decfactor) != floor(GetResource(player, checkprop) / decfactor)); \
-	} \
-	void id##_set(entity ent, entity player) { SetResourceExplicit(ent, checkprop, GetResource(player, checkprop)); } \
-	void id##_send(int chan, entity ent) { LAMBDA(svsend); } \
-	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { \
-		this.m_public = ispublic; \
-		this.m_check = id##_check; \
-		this.m_set = id##_set; \
-		this.m_send = id##_send; \
-	}
+#define ENTCS_PROP_RESOURCE(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) 	bool id##_check(entity ent, entity player) { 		return (floor(GetResource(ent, checkprop) / decfactor) != floor(GetResource(player, checkprop) / decfactor)); 	} 	void id##_set(entity ent, entity player) { SetResourceExplicit(ent, checkprop, GetResource(player, checkprop)); } 	void id##_send(int chan, entity ent) { LAMBDA(svsend); } 	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { 		this.m_public = ispublic; 		this.m_check = id##_check; 		this.m_set = id##_set; 		this.m_send = id##_send; 	}
 #elif defined(CSQC)
-#define ENTCS_PROP_RESOURCE(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) \
-	void id##_receive(entity ent) { LAMBDA(clreceive); } \
-	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { \
-		this.m_public = ispublic; \
-		this.m_receive = id##_receive; \
-	}
+#define ENTCS_PROP_RESOURCE(id, ispublic, checkprop, setprop, decfactor, svsend, clreceive) 	void id##_receive(entity ent) { LAMBDA(clreceive); } 	REGISTER(EntCSProps, ENTCS_PROP, id, m_id, new_pure(entcs_prop)) { 		this.m_public = ispublic; 		this.m_receive = id##_receive; 	}
 #endif
 
-#define ENTCS_SET_NORMAL(var, x) MACRO_BEGIN \
-	var = x; \
-MACRO_END
+/*qc2rust::define::ENTCS_SET_NORMAL*/
+#define ENTCS_SET_NORMAL(var,x) /*qc2rust::macro_begin::ENTCS_SET_NORMAL*/MACRO_BEGIN 	 /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/ =  /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/; MACRO_END /*qc2rust::macro_end::ENTCS_SET_NORMAL*/
 
 /** the engine player name strings are mutable! */
-#define ENTCS_SET_MUTABLE_STRING(var, x) MACRO_BEGIN \
-	strcpy(var, x); \
-MACRO_END
+/*qc2rust::define::ENTCS_SET_MUTABLE_STRING*/
+#define ENTCS_SET_MUTABLE_STRING(var,x) /*qc2rust::macro_begin::ENTCS_SET_MUTABLE_STRING*/MACRO_BEGIN 	strcpy( /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/,  /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/); MACRO_END /*qc2rust::macro_end::ENTCS_SET_MUTABLE_STRING*/
 
 ENTCS_PROP(ENTNUM, false, sv_entnum, ENTCS_SET_NORMAL, {}, {}) /* sentinel */
 
@@ -109,14 +73,16 @@ ENTCS_PROP(ORIGIN, false, origin, ENTCS_SET_NORMAL,
 	{ WriteVector(chan, ent.origin); },
 	{ ent.has_sv_origin = true; vector v = ReadVector(); setorigin(ent, v); })
 
-#define DEC_FACTOR (360 / 32)
+/*qc2rust::define::DEC_FACTOR*/
+#define DEC_FACTOR /*qc2rust::macro_begin::DEC_FACTOR*/(360 / 32) /*qc2rust::macro_end::DEC_FACTOR*/
 ENTCS_PROP_CODED(ANGLES, false, angles_y, ENTCS_SET_NORMAL, DEC_FACTOR,
 	{ WriteByte(chan, ent.angles.y / DEC_FACTOR); },
 	{ vector v = '0 0 0'; v.y = ReadByte() * DEC_FACTOR; ent.angles = v; })
 #undef DEC_FACTOR
 
 // FIXME: use a better scale?
-#define DEC_FACTOR 10
+/*qc2rust::define::DEC_FACTOR*/
+#define DEC_FACTOR /*qc2rust::macro_begin::DEC_FACTOR*/10 /*qc2rust::macro_end::DEC_FACTOR*/
 ENTCS_PROP_RESOURCE(HEALTH, false, RES_HEALTH, ENTCS_SET_NORMAL, DEC_FACTOR,
 	{ WriteByte(chan, bound(0, GetResource(ent, RES_HEALTH) / DEC_FACTOR, 255)); },
 	{ ent.healthvalue = ReadByte() * DEC_FACTOR; })

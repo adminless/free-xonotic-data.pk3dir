@@ -69,8 +69,10 @@ void PlayerStats_GameReport_AddTeam(float t);
 void PlayerStats_GameReport_AddEvent(string event_id);
 
 // call on each event to track, or at player disconnect OR match end for "global stuff"
-#define PlayerStats_GameReport_Event_Player(ent, eventid, val) PlayerStats_GameReport_Event(ent.playerstats_id, eventid, val)
-#define PlayerStats_GameReport_Event_Team(team, eventid, val) PlayerStats_GameReport_Event(sprintf("team#%d", team), eventid, val)
+/*qc2rust::define::PlayerStats_GameReport_Event_Player*/
+#define PlayerStats_GameReport_Event_Player(ent,eventid,val) /*qc2rust::macro_begin::PlayerStats_GameReport_Event_Player*/PlayerStats_GameReport_Event( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/.playerstats_id,  /*qc2rust::param_begin::eventid*/eventid /*qc2rust::param_end::eventid*/,  /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/) /*qc2rust::macro_end::PlayerStats_GameReport_Event_Player*/
+/*qc2rust::define::PlayerStats_GameReport_Event_Team*/
+#define PlayerStats_GameReport_Event_Team(team,eventid,val) /*qc2rust::macro_begin::PlayerStats_GameReport_Event_Team*/PlayerStats_GameReport_Event(sprintf("team#%d",  /*qc2rust::param_begin::team*/team /*qc2rust::param_end::team*/),  /*qc2rust::param_begin::eventid*/eventid /*qc2rust::param_end::eventid*/,  /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/) /*qc2rust::macro_end::PlayerStats_GameReport_Event_Team*/
 float PlayerStats_GameReport_Event(string prefix, string event_id, float value);
 
 void PlayerStats_GameReport_Accuracy(entity p);

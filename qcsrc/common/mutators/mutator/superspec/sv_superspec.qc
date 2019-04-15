@@ -3,8 +3,10 @@
 string autocvar_g_superspectate;
 REGISTER_MUTATOR(superspec, expr_evaluate(autocvar_g_superspectate));
 
-#define _SSMAGIX "SUPERSPEC_OPTIONSFILE_V1"
-#define _ISLOCAL(ent) ((edict_num(1) == (ent)) ? true : false)
+/*qc2rust::define::_SSMAGIX*/
+#define _SSMAGIX /*qc2rust::macro_begin::_SSMAGIX*/"SUPERSPEC_OPTIONSFILE_V1" /*qc2rust::macro_end::_SSMAGIX*/
+/*qc2rust::define::_ISLOCAL*/
+#define _ISLOCAL(ent) /*qc2rust::macro_begin::_ISLOCAL*/((edict_num(1) == ( /*qc2rust::param_begin::ent*/ent /*qc2rust::param_end::ent*/)) ? true : false) /*qc2rust::macro_end::_ISLOCAL*/
 
 const float ASF_STRENGTH 		= BIT(0);
 const float ASF_SHIELD 			= BIT(1);
@@ -151,9 +153,8 @@ MUTATOR_HOOKFUNCTION(superspec, ItemTouch)
 
 MUTATOR_HOOKFUNCTION(superspec, SV_ParseClientCommand)
 {
-#define OPTIONINFO(flag,var,test,text,long,short) \
-    var = strcat(var, ((flag & test) ? "^2[ON]  ^7" : "^1[OFF] ^7")); \
-    var = strcat(var, text," ^7(^3 ", long, "^7 | ^3", short, " ^7)\n")
+/*qc2rust::define::OPTIONINFO*/
+#define OPTIONINFO(flag,var,test,text,long,short) /*qc2rust::macro_begin::OPTIONINFO*/ /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/ = strcat( /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/, (( /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/ &  /*qc2rust::param_begin::test*/test /*qc2rust::param_end::test*/) ? "^2[ON]  ^7" : "^1[OFF] ^7"));      /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/ = strcat( /*qc2rust::param_begin::var*/var /*qc2rust::param_end::var*/,  /*qc2rust::param_begin::text*/text /*qc2rust::param_end::text*/," ^7(^3 ",  /*qc2rust::param_begin::long*/long /*qc2rust::param_end::long*/, "^7 | ^3",  /*qc2rust::param_begin::short*/short /*qc2rust::param_end::short*/, " ^7)\n") /*qc2rust::macro_end::OPTIONINFO*/
 
 	if(MUTATOR_RETURNVALUE) // command was already handled?
 		return;

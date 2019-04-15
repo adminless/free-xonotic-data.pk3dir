@@ -6,15 +6,16 @@
 //#define CSQCMODEL_SUPPORT_GETTAGINFO_BEFORE_DRAW
 
 // add properties you want networked to CSQC here
-#define CSQCMODEL_EXTRAPROPERTIES \
-	/* CSQCMODEL_PROPERTY(1, float, ReadShort, WriteShort, colormap) */ \
-	/* CSQCMODEL_PROPERTY(2, float, ReadInt24_t, WriteInt24_t, effects) */
+/*qc2rust::define::CSQCMODEL_EXTRAPROPERTIES*/
+#define CSQCMODEL_EXTRAPROPERTIES /*qc2rust::macro_begin::CSQCMODEL_EXTRAPROPERTIES*/ /*qc2rust::macro_end::CSQCMODEL_EXTRAPROPERTIES*/
 
 // add hook function calls here
-#define CSQCPLAYER_HOOK_POSTCAMERASETUP
+/*qc2rust::define::CSQCPLAYER_HOOK_POSTCAMERASETUP*/
+#define CSQCPLAYER_HOOK_POSTCAMERASETUP /*qc2rust::macro_begin::CSQCPLAYER_HOOK_POSTCAMERASETUP*/ /*qc2rust::macro_end::CSQCPLAYER_HOOK_POSTCAMERASETUP*/
 
 // force updates of player entities this frequently (per second) even if unchanged
-#define CSQCPLAYER_FORCE_UPDATES 4
+/*qc2rust::define::CSQCPLAYER_FORCE_UPDATES*/
+#define CSQCPLAYER_FORCE_UPDATES /*qc2rust::macro_begin::CSQCPLAYER_FORCE_UPDATES*/4 /*qc2rust::macro_end::CSQCPLAYER_FORCE_UPDATES*/
 
 // mod must define:
 //vector PL_MIN  = ...;

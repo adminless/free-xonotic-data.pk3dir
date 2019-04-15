@@ -11,10 +11,5 @@ CLASS(Lazy, Object)
 ENDCLASS(Lazy)
 
 #define LAZY(id) __lazy_##id
-#define LAZY_NEW(id, compute) \
-	entity LAZY(id)() { \
-		static bool done; \
-		static entity it; \
-		if (!done) { it = compute; done = true; } \
-		return it; \
-	}
+/*qc2rust::define::LAZY_NEW*/
+#define LAZY_NEW(id,compute) /*qc2rust::macro_begin::LAZY_NEW*/entity LAZY( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/)() { 		static bool done; 		static entity it; 		if (!done) { it =  /*qc2rust::param_begin::compute*/compute /*qc2rust::param_end::compute*/; done = true; } 		return it; 	} /*qc2rust::macro_end::LAZY_NEW*/

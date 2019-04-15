@@ -7,14 +7,13 @@
 .vector origin;
 
 .bool pure_data;
-#define is_pure(e) ((e).pure_data)
+/*qc2rust::define::is_pure*/
+#define is_pure(e) /*qc2rust::macro_begin::is_pure*/(( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/).pure_data) /*qc2rust::macro_end::is_pure*/
 /** @deprecated use new_pure or NEW(class) */
-#define make_pure(e) MACRO_BEGIN \
-	(e).pure_data = true; \
-MACRO_END
-#define make_impure(e) MACRO_BEGIN \
-	(e).pure_data = false; \
-MACRO_END
+/*qc2rust::define::make_pure*/
+#define make_pure(e) /*qc2rust::macro_begin::make_pure*/MACRO_BEGIN 	( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/).pure_data = true; MACRO_END /*qc2rust::macro_end::make_pure*/
+/*qc2rust::define::make_impure*/
+#define make_impure(e) /*qc2rust::macro_begin::make_impure*/MACRO_BEGIN 	( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/).pure_data = false; MACRO_END /*qc2rust::macro_end::make_impure*/
 
 .string classname;
 /** Location entity was spawned from in source */
@@ -22,14 +21,16 @@ MACRO_END
 entity _spawn();
 
 #ifndef SPAWN_PURE
-#define SPAWN_PURE 0
+/*qc2rust::define::SPAWN_PURE*/
+#define SPAWN_PURE /*qc2rust::macro_begin::SPAWN_PURE*/0 /*qc2rust::macro_end::SPAWN_PURE*/
 #endif
 
 // pure entities: need no .origin
 #if SPAWN_PURE
 entity spawn_pure() = #600;
 #else
-#define spawn_pure() _spawn()
+/*qc2rust::define::spawn_pure*/
+#define spawn_pure() /*qc2rust::macro_begin::spawn_pure*/_spawn() /*qc2rust::macro_end::spawn_pure*/
 #endif
 
 entity __spawn(string _classname, string _sourceLoc, bool pure)
@@ -50,38 +51,46 @@ entity __spawn(string _classname, string _sourceLoc, bool pure)
 }
 
 
-#define entityclass(...) EVAL_entityclass(OVERLOAD_(entityclass, __VA_ARGS__))
-#define EVAL_entityclass(...) __VA_ARGS__
-#define entityclass_1(name) entityclass_2(name, Object)
+/*qc2rust::define::entityclass*/
+#define entityclass(...) /*qc2rust::macro_begin::entityclass*/EVAL_entityclass(OVERLOAD_(entityclass,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::entityclass*/
+/*qc2rust::define::EVAL_entityclass*/
+#define EVAL_entityclass(...) /*qc2rust::macro_begin::EVAL_entityclass*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_entityclass*/
+/*qc2rust::define::entityclass_1*/
+#define entityclass_1(name) /*qc2rust::macro_begin::entityclass_1*/entityclass_2( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/, Object) /*qc2rust::macro_end::entityclass_1*/
 #ifndef QCC_SUPPORT_ENTITYCLASS
-	#define entityclass_2(name, base) USING(name, entity)
-	#define classfield(name)
-	#define _new(class, pure) __spawn(#class, __FILE__ ":" STR(__LINE__), pure)
+/*qc2rust::define::entityclass_2*/
+#define entityclass_2(name,base) /*qc2rust::macro_begin::entityclass_2*/USING( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/, entity) /*qc2rust::macro_end::entityclass_2*/
+/*qc2rust::define::classfield*/
+#define classfield(name) /*qc2rust::macro_begin::classfield*/ /*qc2rust::macro_end::classfield*/
+/*qc2rust::define::_new*/
+#define _new(class,pure) /*qc2rust::macro_begin::_new*/__spawn( /*qc2rust::stringify_begin::class*/#class /*qc2rust::stringify_end::class*/, __FILE__ ":" STR(__LINE__),  /*qc2rust::param_begin::pure*/pure /*qc2rust::param_end::pure*/) /*qc2rust::macro_end::_new*/
 #else
-	#define entityclass_2(name, base) entityclass name : base {}
-	#define classfield(name) [[class(name)]]
-	#define _new(class, pure) ((class) __spawn(#class, __FILE__ ":" STR(__LINE__), pure))
+/*qc2rust::define::entityclass_2*/
+#define entityclass_2(name,base) /*qc2rust::macro_begin::entityclass_2*/entityclass  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ :  /*qc2rust::param_begin::base*/base /*qc2rust::param_end::base*/ {} /*qc2rust::macro_end::entityclass_2*/
+/*qc2rust::define::classfield*/
+#define classfield(name) /*qc2rust::macro_begin::classfield*/[[class( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/)]] /*qc2rust::macro_end::classfield*/
+/*qc2rust::define::_new*/
+#define _new(class,pure) /*qc2rust::macro_begin::_new*/(( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/) __spawn( /*qc2rust::stringify_begin::class*/#class /*qc2rust::stringify_end::class*/, __FILE__ ":" STR(__LINE__),  /*qc2rust::param_begin::pure*/pure /*qc2rust::param_end::pure*/)) /*qc2rust::macro_end::_new*/
 #endif
 /** entities you care about seeing (.origin works) */
-#define new(class) _new(class, false)
+/*qc2rust::define::new*/
+#define new(class) /*qc2rust::macro_begin::new*/_new( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/, false) /*qc2rust::macro_end::new*/
 /** purely logical entities (.origin doesn't work) */
-#define new_pure(class) _new(class, true)
-#define spawn() __spawn("entity", __FILE__ ":" STR(__LINE__), false)
+/*qc2rust::define::new_pure*/
+#define new_pure(class) /*qc2rust::macro_begin::new_pure*/_new( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/, true) /*qc2rust::macro_end::new_pure*/
+/*qc2rust::define::spawn*/
+#define spawn() /*qc2rust::macro_begin::spawn*/__spawn("entity", __FILE__ ":" STR(__LINE__), false) /*qc2rust::macro_end::spawn*/
 
 ACCUMULATE void ONREMOVE(entity this) {}
 
 #ifndef SVQC
-	#define delete_fn builtin_remove
+/*qc2rust::define::delete_fn*/
+#define delete_fn /*qc2rust::macro_begin::delete_fn*/builtin_remove /*qc2rust::macro_end::delete_fn*/
 #endif
 
 .void(entity this) dtor;
-#define delete(this) MACRO_BEGIN \
-    entity _this = (this); \
-    void(entity) _dtor = _this.dtor; \
-    ONREMOVE(this); \
-    if (_dtor) _dtor(_this); else delete_fn(_this); \
-    /* this = NULL; */  \
-MACRO_END
+/*qc2rust::define::delete*/
+#define delete(this) /*qc2rust::macro_begin::delete*/MACRO_BEGIN     entity _this = ( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/);     void(entity) _dtor = _this.dtor;     ONREMOVE( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/);     if (_dtor) _dtor(_this); else delete_fn(_this);     /* this = NULL; */  MACRO_END /*qc2rust::macro_end::delete*/
 
 entity _clearentity_ent;
 STATIC_INIT(clearentity)
@@ -108,175 +117,111 @@ void clearentity(entity e)
 
 // Macros to hide this implementation detail:
 #ifdef __STDC__
-	#define NEW(cname, ...) \
-		OVERLOAD_(spawn##cname, new_pure(cname) P99_IF_EMPTY(__VA_ARGS__)()(, __VA_ARGS__))
+	#define NEW(cname, ...) 		OVERLOAD_(spawn##cname, new_pure(cname) P99_IF_EMPTY(__VA_ARGS__)()(, __VA_ARGS__))
 
-    #define _TRANSMUTE(cname, this, ...) \
-        OVERLOAD_(spawn##cname, this P99_IF_EMPTY(__VA_ARGS__)()(, __VA_ARGS__))
+    #define _TRANSMUTE(cname, this, ...)         OVERLOAD_(spawn##cname, this P99_IF_EMPTY(__VA_ARGS__)()(, __VA_ARGS__))
 
-	#define CONSTRUCT(cname, ...) \
-		OVERLOAD_(spawn##cname, this P99_IF_EMPTY(__VA_ARGS__)()(, __VA_ARGS__))
+	#define CONSTRUCT(cname, ...) 		OVERLOAD_(spawn##cname, this P99_IF_EMPTY(__VA_ARGS__)()(, __VA_ARGS__))
 #else
-	#define NEW(cname, ...) \
-		OVERLOAD(spawn##cname, new_pure(cname),##__VA_ARGS__)
+	#define NEW(cname, ...) 		OVERLOAD(spawn##cname, new_pure(cname),##__VA_ARGS__)
 
-    #define _TRANSMUTE(cname, this, ...) \
-        OVERLOAD(spawn##cname, this,##__VA_ARGS__)
+    #define _TRANSMUTE(cname, this, ...)         OVERLOAD(spawn##cname, this,##__VA_ARGS__)
 
-	#define CONSTRUCT(cname, ...) \
-		OVERLOAD(spawn##cname, this,##__VA_ARGS__)
+	#define CONSTRUCT(cname, ...) 		OVERLOAD(spawn##cname, this,##__VA_ARGS__)
 #endif
 
-#define TRANSMUTE(cname, this, ...) MACRO_BEGIN \
-    entity _e = (this); \
-    if (_e.vtblbase != cname##_vtbl) { \
-        _e.transmute = true; \
-        _e.classname = #cname; \
-        _TRANSMUTE(cname, _e, __VA_ARGS__); \
-    } \
-    MACRO_END
+#define TRANSMUTE(cname, this, ...) MACRO_BEGIN     entity _e = (this);     if (_e.vtblbase != cname##_vtbl) {         _e.transmute = true;         _e.classname = #cname;         _TRANSMUTE(cname, _e, __VA_ARGS__);     }     MACRO_END
 
-#define CLASS(...) EVAL_CLASS(OVERLOAD__(CLASS, __VA_ARGS__))
-#define EVAL_CLASS(...) __VA_ARGS__
+/*qc2rust::define::CLASS*/
+#define CLASS(...) /*qc2rust::macro_begin::CLASS*/EVAL_CLASS(OVERLOAD__(CLASS,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::CLASS*/
+/*qc2rust::define::EVAL_CLASS*/
+#define EVAL_CLASS(...) /*qc2rust::macro_begin::EVAL_CLASS*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_CLASS*/
 
-#define ATTRIB(...) EVAL_ATTRIB(OVERLOAD_(ATTRIB, __VA_ARGS__))
-#define EVAL_ATTRIB(...) __VA_ARGS__
+/*qc2rust::define::ATTRIB*/
+#define ATTRIB(...) /*qc2rust::macro_begin::ATTRIB*/EVAL_ATTRIB(OVERLOAD_(ATTRIB,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::ATTRIB*/
+/*qc2rust::define::EVAL_ATTRIB*/
+#define EVAL_ATTRIB(...) /*qc2rust::macro_begin::EVAL_ATTRIB*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_ATTRIB*/
 
 #ifdef QCC_SUPPORT_CLASS
 
 #warning "QCC_SUPPORT_CLASS not implemented"
 
-#define CLASS_1(name)                               CLASS_2(name, entity)
-#define CLASS_2(name, base)                         class name : base {
+/*qc2rust::define::CLASS_1*/
+#define CLASS_1(name) /*qc2rust::macro_begin::CLASS_1*/CLASS_2( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/, entity) /*qc2rust::macro_end::CLASS_1*/
+/*qc2rust::define::CLASS_2*/
+#define CLASS_2(name,base) /*qc2rust::macro_begin::CLASS_2*/class  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ :  /*qc2rust::param_begin::base*/base /*qc2rust::param_end::base*/ { /*qc2rust::macro_end::CLASS_2*/
 
-#define INIT(class)                                     void class::class()
-#define CONSTRUCTOR(class, ...)                         void class::class(__VA_ARGS__)
-#define DESTRUCTOR(class)                               class::~class()
+/*qc2rust::define::INIT*/
+#define INIT(class) /*qc2rust::macro_begin::INIT*/void  /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/:: /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/() /*qc2rust::macro_end::INIT*/
+/*qc2rust::define::CONSTRUCTOR*/
+#define CONSTRUCTOR(class,...) /*qc2rust::macro_begin::CONSTRUCTOR*/void  /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/:: /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::CONSTRUCTOR*/
+/*qc2rust::define::DESTRUCTOR*/
+#define DESTRUCTOR(class) /*qc2rust::macro_begin::DESTRUCTOR*/ /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/::~ /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/() /*qc2rust::macro_end::DESTRUCTOR*/
 
-#define SUPER(class)                                    super
+/*qc2rust::define::SUPER*/
+#define SUPER(class) /*qc2rust::macro_begin::SUPER*/super /*qc2rust::macro_end::SUPER*/
 
-#define ATTRIB_3(class, name, T)                        T name
-#define ATTRIB_4(class, name, T, val)                   ATTRIB_3(class, name, T) = val
-#define STATIC_ATTRIB(class, name, T, val)              static T name = val
+/*qc2rust::define::ATTRIB_3*/
+#define ATTRIB_3(class,name,T) /*qc2rust::macro_begin::ATTRIB_3*/ /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ /*qc2rust::macro_end::ATTRIB_3*/
+/*qc2rust::define::ATTRIB_4*/
+#define ATTRIB_4(class,name,T,val) /*qc2rust::macro_begin::ATTRIB_4*/ATTRIB_3( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/) =  /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/ /*qc2rust::macro_end::ATTRIB_4*/
+/*qc2rust::define::STATIC_ATTRIB*/
+#define STATIC_ATTRIB(class,name,T,val) /*qc2rust::macro_begin::STATIC_ATTRIB*/static  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ =  /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/ /*qc2rust::macro_end::STATIC_ATTRIB*/
 
-#define ATTRIB_STRZONE(class, name, T, val)             T name = val
-#define STATIC_ATTRIB_STRZONE(class, name, T, val)      static T name = val
+/*qc2rust::define::ATTRIB_STRZONE*/
+#define ATTRIB_STRZONE(class,name,T,val) /*qc2rust::macro_begin::ATTRIB_STRZONE*/ /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ =  /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/ /*qc2rust::macro_end::ATTRIB_STRZONE*/
+/*qc2rust::define::STATIC_ATTRIB_STRZONE*/
+#define STATIC_ATTRIB_STRZONE(class,name,T,val) /*qc2rust::macro_begin::STATIC_ATTRIB_STRZONE*/static  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ =  /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/ /*qc2rust::macro_end::STATIC_ATTRIB_STRZONE*/
 
-#define ATTRIBARRAY(class, name, T, val)                T name[val]
+/*qc2rust::define::ATTRIBARRAY*/
+#define ATTRIBARRAY(class,name,T,val) /*qc2rust::macro_begin::ATTRIBARRAY*/ /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/[ /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/] /*qc2rust::macro_end::ATTRIBARRAY*/
 
-#define METHOD(class, name, prototype)                  virtual void class::name()
-#define STATIC_METHOD(class, name, prototype)           static void class::name()
+/*qc2rust::define::METHOD*/
+#define METHOD(class,name,prototype) /*qc2rust::macro_begin::METHOD*/virtual void  /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/:: /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/() /*qc2rust::macro_end::METHOD*/
+/*qc2rust::define::STATIC_METHOD*/
+#define STATIC_METHOD(class,name,prototype) /*qc2rust::macro_begin::STATIC_METHOD*/static void  /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/:: /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/() /*qc2rust::macro_end::STATIC_METHOD*/
 
-#define ENDCLASS(class)                             };
+/*qc2rust::define::ENDCLASS*/
+#define ENDCLASS(class) /*qc2rust::macro_begin::ENDCLASS*/}; /*qc2rust::macro_end::ENDCLASS*/
 
 #else
 
-#define CLASS_1(cname) CLASS_2(cname, )
-#define CLASS_2(cname, base)                                                                       \
-	entityclass(cname, base);                                                                      \
-	classfield(cname).bool instanceOf##cname;                                                      \
-	DEBUG_STUFF(cname)                                                                             \
-	VTBL(cname, base)                                                                              \
-	_INIT_STATIC(cname)                                                                            \
-	{                                                                                              \
-		if (cname##_vtbl && !this.transmute)                                                       \
-		{                                                                                          \
-			copyentity(cname##_vtbl, this);                                                        \
-			return;                                                                                \
-		}                                                                                          \
-		spawn##base##_static(this);                                                                \
-		this.instanceOf##cname = true;                                                             \
-	}                                                                                              \
-	INIT(cname)                                                                                    \
-	{                                                                                              \
-		/* Only statically initialize the current class, it contains everything it inherits */     \
-		if (cname##_vtbl.vtblname == this.classname)                                               \
-		{                                                                                          \
-			spawn##cname##_static(this);                                                           \
-			this.transmute = false;                                                                \
-			this.classname = #cname;                                                               \
-			this.vtblname = string_null;                                                           \
-			this.vtblbase = cname##_vtbl;                                                          \
-		}                                                                                          \
-		spawn##base##_1(this);                                                                     \
-	}
+/*qc2rust::define::CLASS_1*/
+#define CLASS_1(cname) /*qc2rust::macro_begin::CLASS_1*/CLASS_2( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/, ) /*qc2rust::macro_end::CLASS_1*/
+#define CLASS_2(cname, base)                                                                       	entityclass(cname, base);                                                                      	classfield(cname).bool instanceOf##cname;                                                      	DEBUG_STUFF(cname)                                                                             	VTBL(cname, base)                                                                              	_INIT_STATIC(cname)                                                                            	{                                                                                              		if (cname##_vtbl && !this.transmute)                                                       		{                                                                                          			copyentity(cname##_vtbl, this);                                                        			return;                                                                                		}                                                                                          		spawn##base##_static(this);                                                                		this.instanceOf##cname = true;                                                             	}                                                                                              	INIT(cname)                                                                                    	{                                                                                              		/* Only statically initialize the current class, it contains everything it inherits */     		if (cname##_vtbl.vtblname == this.classname)                                               		{                                                                                          			spawn##cname##_static(this);                                                           			this.transmute = false;                                                                			this.classname = #cname;                                                               			this.vtblname = string_null;                                                           			this.vtblbase = cname##_vtbl;                                                          		}                                                                                          		spawn##base##_1(this);                                                                     	}
 
-#define INIT(cname)                                                                                \
-	ACCUMULATE cname spawn##cname##_1(cname this)
+#define INIT(cname)                                                                                	ACCUMULATE cname spawn##cname##_1(cname this)
 
-#define CONSTRUCTOR(cname, ...)                                                                    \
-	cname OVERLOAD(spawn##cname, cname this, __VA_ARGS__)                                          \
-	{                                                                                              \
-		return = this;                                                                             \
-	}                                                                                              \
-	ACCUMULATE cname OVERLOAD(spawn##cname, cname this, __VA_ARGS__)
+#define CONSTRUCTOR(cname, ...)                                                                    	cname OVERLOAD(spawn##cname, cname this, __VA_ARGS__)                                          	{                                                                                              		return = this;                                                                             	}                                                                                              	ACCUMULATE cname OVERLOAD(spawn##cname, cname this, __VA_ARGS__)
 
-#define DESTRUCTOR(cname)                                                                          \
-	STATIC_METHOD(cname, dtorimpl, void(cname this));                                              \
-    METHOD(cname, dtor, void(cname this))                                                          \
-    {                                                                                              \
-        METHOD_REFERENCE(cname, dtorimpl)(this);                                                   \
-        this.instanceOf##cname = false;                                                            \
-        entity super = SUPER(cname);                                                               \
-        if (super != cname##_vtbl) super.dtor(this);                                               \
-    }                                                                                              \
-	STATIC_METHOD(cname, dtorimpl, void(cname this))
+#define DESTRUCTOR(cname)                                                                          	STATIC_METHOD(cname, dtorimpl, void(cname this));                                                  METHOD(cname, dtor, void(cname this))                                                              {                                                                                                      METHOD_REFERENCE(cname, dtorimpl)(this);                                                           this.instanceOf##cname = false;                                                                    entity super = SUPER(cname);                                                                       if (super != cname##_vtbl) super.dtor(this);                                                   }                                                                                              	STATIC_METHOD(cname, dtorimpl, void(cname this))
 
 #define SUPER(cname) (cname##_vtbl.vtblbase)
 
-#define ATTRIB_3(cname, name, type) classfield(cname) .type name
-#define ATTRIB_4(cname, name, type, val)                                                           \
-	ATTRIB_3(cname, name, type);                                                                   \
-	INIT(cname)                                                                                    \
-	{                                                                                              \
-		noref bool strzone; /* Error on strzone() calls. */                                        \
-		this.name = val;                                                                           \
-	}                                                                                              \
-	ATTRIB_3(cname, name, type)
+/*qc2rust::define::ATTRIB_3*/
+#define ATTRIB_3(cname,name,type) /*qc2rust::macro_begin::ATTRIB_3*/classfield( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/) . /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ /*qc2rust::macro_end::ATTRIB_3*/
+/*qc2rust::define::ATTRIB_4*/
+#define ATTRIB_4(cname,name,type,val) /*qc2rust::macro_begin::ATTRIB_4*/ATTRIB_3( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/,  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/,  /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/);                                                                   	INIT( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/)                                                                                    	{                                                                                              		noref bool strzone; /* Error on strzone() calls. */                                        		this. /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ =  /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/;                                                                           	}                                                                                              	ATTRIB_3( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/,  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/,  /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/) /*qc2rust::macro_end::ATTRIB_4*/
 
-#define STATIC_ATTRIB(cname, name, type, val)                                                      \
-	type cname##_##name;                                                                           \
-	_INIT_STATIC(cname)                                                                            \
-	{                                                                                              \
-		noref bool strzone; /* Error on strzone() calls. */                                        \
-		cname##_##name = val;                                                                      \
-	}
+#define STATIC_ATTRIB(cname, name, type, val)                                                      	type cname##_##name;                                                                           	_INIT_STATIC(cname)                                                                            	{                                                                                              		noref bool strzone; /* Error on strzone() calls. */                                        		cname##_##name = val;                                                                      	}
 
 // cleanup potentially zoned strings from base classes
-#define ATTRIB_STRZONE(cname, name, type, val)                                                     \
-	classfield(cname).type name;                                                                   \
-	INIT(cname)                                                                                    \
-	{                                                                                              \
-		strcpy(this.name, val);                                                                    \
-	}
+/*qc2rust::define::ATTRIB_STRZONE*/
+#define ATTRIB_STRZONE(cname,name,type,val) /*qc2rust::macro_begin::ATTRIB_STRZONE*/classfield( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/). /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/;                                                                   	INIT( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/)                                                                                    	{                                                                                              		strcpy(this. /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/,  /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/);                                                                    	} /*qc2rust::macro_end::ATTRIB_STRZONE*/
 
-#define STATIC_ATTRIB_STRZONE(cname, name, type, val)                                              \
-	type cname##_##name;                                                                           \
-	_INIT_STATIC(cname)                                                                            \
-	{                                                                                              \
-		strcpy(cname##_##name, val);                                                               \
-	}
+#define STATIC_ATTRIB_STRZONE(cname, name, type, val)                                              	type cname##_##name;                                                                           	_INIT_STATIC(cname)                                                                            	{                                                                                              		strcpy(cname##_##name, val);                                                               	}
 
-#define ATTRIBARRAY(cname, name, type, cnt)                                                        \
-	classfield(cname) .type name[cnt]
+/*qc2rust::define::ATTRIBARRAY*/
+#define ATTRIBARRAY(cname,name,type,cnt) /*qc2rust::macro_begin::ATTRIBARRAY*/classfield( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/) . /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/[ /*qc2rust::param_begin::cnt*/cnt /*qc2rust::param_end::cnt*/] /*qc2rust::macro_end::ATTRIBARRAY*/
 
-#define METHOD(cname, name, prototype)                                                             \
-	STATIC_METHOD(cname, name, prototype);                                                         \
-	classfield(cname) .prototype name;                                                             \
-	_INIT_STATIC(cname)                                                                            \
-	{                                                                                              \
-		this.name = METHOD_REFERENCE(cname, name);                                                 \
-	}                                                                                              \
-	STATIC_METHOD(cname, name, prototype)
+/*qc2rust::define::METHOD*/
+#define METHOD(cname,name,prototype) /*qc2rust::macro_begin::METHOD*/STATIC_METHOD( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/,  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/,  /*qc2rust::param_begin::prototype*/prototype /*qc2rust::param_end::prototype*/);                                                         	classfield( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/) . /*qc2rust::param_begin::prototype*/prototype /*qc2rust::param_end::prototype*/  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/;                                                             	_INIT_STATIC( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/)                                                                            	{                                                                                              		this. /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ = METHOD_REFERENCE( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/,  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/);                                                 	}                                                                                              	STATIC_METHOD( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/,  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/,  /*qc2rust::param_begin::prototype*/prototype /*qc2rust::param_end::prototype*/) /*qc2rust::macro_end::METHOD*/
 
-#define STATIC_METHOD(cname, name, prototype)                                                      \
-	prototype METHOD_REFERENCE(cname, name)
+/*qc2rust::define::STATIC_METHOD*/
+#define STATIC_METHOD(cname,name,prototype) /*qc2rust::macro_begin::STATIC_METHOD*/ /*qc2rust::param_begin::prototype*/prototype /*qc2rust::param_end::prototype*/ METHOD_REFERENCE( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/,  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/) /*qc2rust::macro_end::STATIC_METHOD*/
 
-#define ENDCLASS(cname)                                                                            \
-	INIT(cname)                                                                                    \
-	{                                                                                              \
-		return this;                                                                               \
-	}
+/*qc2rust::define::ENDCLASS*/
+#define ENDCLASS(cname) /*qc2rust::macro_begin::ENDCLASS*/INIT( /*qc2rust::param_begin::cname*/cname /*qc2rust::param_end::cname*/)                                                                                    	{                                                                                              		return this;                                                                               	} /*qc2rust::macro_end::ENDCLASS*/
 
 // impl
 
@@ -289,41 +234,31 @@ STATIC_INIT(RegisterClasses)
 	RegisterClasses();
 }
 
-#define VTBL(cname, base) \
-	_INIT_STATIC(cname); \
-	entity cname##_vtbl; \
-	void cname##_vtbl_init() \
-	{ \
-		cname e = new_pure(vtbl); \
-		spawn##cname##_static(e); \
-		e.vtblname = #cname; \
-		/* Top level objects refer to themselves */ \
-		e.vtblbase = base##_vtbl ? base##_vtbl : e; \
-		cname##_vtbl = e; \
-	} \
-	ACCUMULATE_FUNCTION(RegisterClasses, cname##_vtbl_init)
+#define VTBL(cname, base) 	_INIT_STATIC(cname); 	entity cname##_vtbl; 	void cname##_vtbl_init() 	{ 		cname e = new_pure(vtbl); 		spawn##cname##_static(e); 		e.vtblname = #cname; 		/* Top level objects refer to themselves */ 		e.vtblbase = base##_vtbl ? base##_vtbl : e; 		cname##_vtbl = e; 	} 	ACCUMULATE_FUNCTION(RegisterClasses, cname##_vtbl_init)
 
 #define _INIT_STATIC(cname) ACCUMULATE void spawn##cname##_static(cname this)
 
 #if NDEBUG
-	#define DEBUG_STUFF(cname)
+/*qc2rust::define::DEBUG_STUFF*/
+#define DEBUG_STUFF(cname) /*qc2rust::macro_begin::DEBUG_STUFF*/ /*qc2rust::macro_end::DEBUG_STUFF*/
 #else
-	#define DEBUG_STUFF(cname) \
-		ERASEABLE bool is_##cname(entity e) { return e.instanceOf##cname; } \
-		ERASEABLE void isnt_##cname(entity e) { eprint(e); }
+	#define DEBUG_STUFF(cname) 		ERASEABLE bool is_##cname(entity e) { return e.instanceOf##cname; } 		ERASEABLE void isnt_##cname(entity e) { eprint(e); }
 #endif
 
-#define METHOD_REFERENCE(cname, name) \
-	cname##_##name
+#define METHOD_REFERENCE(cname, name) 	cname##_##name
 
 #endif
 
-#define spawn_static(this)
-#define spawn_1(this)
-#define _vtbl NULL
+/*qc2rust::define::spawn_static*/
+#define spawn_static(this) /*qc2rust::macro_begin::spawn_static*/ /*qc2rust::macro_end::spawn_static*/
+/*qc2rust::define::spawn_1*/
+#define spawn_1(this) /*qc2rust::macro_begin::spawn_1*/ /*qc2rust::macro_end::spawn_1*/
+/*qc2rust::define::_vtbl*/
+#define _vtbl /*qc2rust::macro_begin::_vtbl*/NULL /*qc2rust::macro_end::_vtbl*/
 CLASS(Object)
     DESTRUCTOR(Object) { builtin_remove(this); }
-    #define remove(this) delete(this)
+/*qc2rust::define::remove*/
+#define remove(this) /*qc2rust::macro_begin::remove*/delete( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/) /*qc2rust::macro_end::remove*/
 	METHOD(Object, describe, string(Object this))
 	{
 		TC(Object, this);

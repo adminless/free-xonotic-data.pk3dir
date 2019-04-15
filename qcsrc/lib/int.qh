@@ -1,11 +1,17 @@
 #pragma once
 
 #ifndef QCC_SUPPORT_INT
-	#define stoi(s) stof(s)
-	#define stob(s) stof(s)
-	#define itos(i) ftos(i)
+/*qc2rust::define::stoi*/
+#define stoi(s) /*qc2rust::macro_begin::stoi*/stof( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::stoi*/
+/*qc2rust::define::stob*/
+#define stob(s) /*qc2rust::macro_begin::stob*/stof( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::stob*/
+/*qc2rust::define::itos*/
+#define itos(i) /*qc2rust::macro_begin::itos*/ftos( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/) /*qc2rust::macro_end::itos*/
 #else
-	#define stoi(s) ((int) stof(s))
-	#define stob(s) ((bool) stof(s))
-	#define itos(i) ftos(i)
+/*qc2rust::define::stoi*/
+#define stoi(s) /*qc2rust::macro_begin::stoi*/((int) stof( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/)) /*qc2rust::macro_end::stoi*/
+/*qc2rust::define::stob*/
+#define stob(s) /*qc2rust::macro_begin::stob*/((bool) stof( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/)) /*qc2rust::macro_end::stob*/
+/*qc2rust::define::itos*/
+#define itos(i) /*qc2rust::macro_begin::itos*/ftos( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/) /*qc2rust::macro_end::itos*/
 #endif

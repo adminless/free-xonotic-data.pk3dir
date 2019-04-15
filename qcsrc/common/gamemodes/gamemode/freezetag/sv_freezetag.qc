@@ -457,9 +457,8 @@ MUTATOR_HOOKFUNCTION(ft, Unfreeze)
 #endif
 
 // returns true if player is reviving it
-#define IS_REVIVING(player, it, revive_extra_size) \
-	(it != player && !STAT(FROZEN, it) && !IS_DEAD(it) && SAME_TEAM(it, player) \
-	&& boxesoverlap(player.absmin - revive_extra_size, player.absmax + revive_extra_size, it.absmin, it.absmax))
+/*qc2rust::define::IS_REVIVING*/
+#define IS_REVIVING(player,it,revive_extra_size) /*qc2rust::macro_begin::IS_REVIVING*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/ !=  /*qc2rust::param_begin::player*/player /*qc2rust::param_end::player*/ && !STAT(FROZEN,  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) && !IS_DEAD( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) && SAME_TEAM( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/,  /*qc2rust::param_begin::player*/player /*qc2rust::param_end::player*/) 	&& boxesoverlap( /*qc2rust::param_begin::player*/player /*qc2rust::param_end::player*/.absmin -  /*qc2rust::param_begin::revive_extra_size*/revive_extra_size /*qc2rust::param_end::revive_extra_size*/,  /*qc2rust::param_begin::player*/player /*qc2rust::param_end::player*/.absmax +  /*qc2rust::param_begin::revive_extra_size*/revive_extra_size /*qc2rust::param_end::revive_extra_size*/,  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/.absmin,  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/.absmax)) /*qc2rust::macro_end::IS_REVIVING*/
 
 MUTATOR_HOOKFUNCTION(ft, PlayerPreThink, CBC_ORDER_FIRST)
 {

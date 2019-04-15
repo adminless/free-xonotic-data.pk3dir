@@ -26,7 +26,8 @@ int db_create()
 {
 	return buf_create();
 }
-#define HM_NEW(this) (this = db_create())
+/*qc2rust::define::HM_NEW*/
+#define HM_NEW(this) /*qc2rust::macro_begin::HM_NEW*/( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/ = db_create()) /*qc2rust::macro_end::HM_NEW*/
 
 ERASEABLE
 void db_put(int db, string key, string value);
@@ -85,7 +86,8 @@ void db_close(int db)
 {
 	buf_del(db);
 }
-#define HM_DELETE(this) db_close(this)
+/*qc2rust::define::HM_DELETE*/
+#define HM_DELETE(this) /*qc2rust::macro_begin::HM_DELETE*/db_close( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/) /*qc2rust::macro_end::HM_DELETE*/
 
 ERASEABLE
 string db_get(int db, string key)
@@ -93,9 +95,11 @@ string db_get(int db, string key)
 	int h = crc16(false, key) % DB_BUCKETS;
 	return uri_unescape(infoget(bufstr_get(db, h), key));
 }
-#define HM_gets(this, k) db_get(this, k)
+/*qc2rust::define::HM_gets*/
+#define HM_gets(this,k) /*qc2rust::macro_begin::HM_gets*/db_get( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/,  /*qc2rust::param_begin::k*/k /*qc2rust::param_end::k*/) /*qc2rust::macro_end::HM_gets*/
 
-#define db_remove(db, key) db_put(db, key, "")
+/*qc2rust::define::db_remove*/
+#define db_remove(db,key) /*qc2rust::macro_begin::db_remove*/db_put( /*qc2rust::param_begin::db*/db /*qc2rust::param_end::db*/,  /*qc2rust::param_begin::key*/key /*qc2rust::param_end::key*/, "") /*qc2rust::macro_end::db_remove*/
 
 ERASEABLE
 void db_put(int db, string key, string value)
@@ -103,7 +107,8 @@ void db_put(int db, string key, string value)
 	int h = crc16(false, key) % DB_BUCKETS;
 	bufstr_set(db, h, infoadd(bufstr_get(db, h), key, uri_escape(value)));
 }
-#define HM_sets(this, key, val) db_put(this, key, val)
+/*qc2rust::define::HM_sets*/
+#define HM_sets(this,key,val) /*qc2rust::macro_begin::HM_sets*/db_put( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/,  /*qc2rust::param_begin::key*/key /*qc2rust::param_end::key*/,  /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/) /*qc2rust::macro_end::HM_sets*/
 
 /*
 void db_test()

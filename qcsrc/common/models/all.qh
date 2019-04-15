@@ -3,12 +3,11 @@
 #include "model.qh"
 
 REGISTRY(Models, BITS(9))
-#define Models_from(i) _Models_from(i, MDL_Null)
+/*qc2rust::define::Models_from*/
+#define Models_from(i) /*qc2rust::macro_begin::Models_from*/_Models_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, MDL_Null) /*qc2rust::macro_end::Models_from*/
 REGISTER_REGISTRY(Models)
 
-#define MODEL(name, path) \
-    string MDL_##name##_get() { return path; } \
-    REGISTER(Models, MDL, name, m_id, NEW(Model, MDL_##name##_get))
+#define MODEL(name, path)     string MDL_##name##_get() { return path; }     REGISTER(Models, MDL, name, m_id, NEW(Model, MDL_##name##_get))
 
 STATIC_INIT(NULLMDL)
 {

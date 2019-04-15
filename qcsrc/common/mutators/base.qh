@@ -112,7 +112,8 @@ CLASS(CallbackChain, Object)
     }
 ENDCLASS(CallbackChain)
 
-#define _MUTATOR_HANDLE_NOP(type, id)
+/*qc2rust::define::_MUTATOR_HANDLE_NOP*/
+#define _MUTATOR_HANDLE_NOP(type,id) /*qc2rust::macro_begin::_MUTATOR_HANDLE_NOP*/ /*qc2rust::macro_end::_MUTATOR_HANDLE_NOP*/
 #define _MUTATOR_HANDLE_PARAMS(type, id) , type in_##id
 #define _MUTATOR_HANDLE_PREPARE(type, id) id = in_##id;
 #define _MUTATOR_HANDLE_PUSHTMP(type, id) TC(type, id); type tmp_##id = id;
@@ -123,21 +124,12 @@ ENDCLASS(CallbackChain)
 void RegisterHooks() {};
 void RegisterCallbacks() {};
 
-#define MUTATOR_HOOKABLE(id, params) _MUTATOR_HOOKABLE(id, params)
-#define _MUTATOR_HOOKABLE(id, params) \
-    CallbackChain HOOK_##id;  \
-    bool __Mutator_Send_##id(int params(_MUTATOR_HANDLE_PARAMS, _MUTATOR_HANDLE_NOP)) { \
-        params(_MUTATOR_HANDLE_PUSHTMP, _MUTATOR_HANDLE_NOP) \
-        params(_MUTATOR_HANDLE_PREPARE, _MUTATOR_HANDLE_NOP) \
-        bool ret = CallbackChain_Call(HOOK_##id); \
-        params(_MUTATOR_HANDLE_NOP,     _MUTATOR_HANDLE_PUSHOUT) \
-        params(_MUTATOR_HANDLE_POPTMP,  _MUTATOR_HANDLE_NOP) \
-        params(_MUTATOR_HANDLE_NOP,     _MUTATOR_HANDLE_POPOUT) \
-        return ret; \
-    } \
-    ACCUMULATE void RegisterHooks() { HOOK_##id = NEW(CallbackChain, #id); }
+/*qc2rust::define::MUTATOR_HOOKABLE*/
+#define MUTATOR_HOOKABLE(id,params) /*qc2rust::macro_begin::MUTATOR_HOOKABLE*/_MUTATOR_HOOKABLE( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/,  /*qc2rust::param_begin::params*/params /*qc2rust::param_end::params*/) /*qc2rust::macro_end::MUTATOR_HOOKABLE*/
+#define _MUTATOR_HOOKABLE(id, params)     CallbackChain HOOK_##id;      bool __Mutator_Send_##id(int params(_MUTATOR_HANDLE_PARAMS, _MUTATOR_HANDLE_NOP)) {         params(_MUTATOR_HANDLE_PUSHTMP, _MUTATOR_HANDLE_NOP)         params(_MUTATOR_HANDLE_PREPARE, _MUTATOR_HANDLE_NOP)         bool ret = CallbackChain_Call(HOOK_##id);         params(_MUTATOR_HANDLE_NOP,     _MUTATOR_HANDLE_PUSHOUT)         params(_MUTATOR_HANDLE_POPTMP,  _MUTATOR_HANDLE_NOP)         params(_MUTATOR_HANDLE_NOP,     _MUTATOR_HANDLE_POPOUT)         return ret;     }     ACCUMULATE void RegisterHooks() { HOOK_##id = NEW(CallbackChain, #id); }
 
-#define MUTATOR_CALLHOOK(id, ...) _MUTATOR_CALLHOOK(id, __VA_ARGS__)
+/*qc2rust::define::MUTATOR_CALLHOOK*/
+#define MUTATOR_CALLHOOK(id,...) /*qc2rust::macro_begin::MUTATOR_CALLHOOK*/_MUTATOR_CALLHOOK( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/) /*qc2rust::macro_end::MUTATOR_CALLHOOK*/
 #ifdef __STDC__
     #define _MUTATOR_CALLHOOK(id, ...) APPLY(__Mutator_Send_##id, 0 P99_IF_EMPTY(__VA_ARGS__)()(, __VA_ARGS__))
 #else
@@ -165,7 +157,8 @@ CLASS(Mutator, Object)
 ENDCLASS(Mutator)
 
 REGISTRY(Mutators, BITS(7))
-#define Mutators_from(i) _Mutators_from(i, NULL)
+/*qc2rust::define::Mutators_from*/
+#define Mutators_from(i) /*qc2rust::macro_begin::Mutators_from*/_Mutators_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NULL) /*qc2rust::macro_end::Mutators_from*/
 bool Mutator_Add(Mutator mut);
 void Mutator_Remove(Mutator mut);
 bool mutator_log = false;
@@ -258,16 +251,7 @@ void Mutator_Remove(Mutator mut)
 #endif
 }
 
-#define REGISTER_MUTATOR(id, dependence) \
-    bool MUTATORFUNC_##id##_hooks(int mode) { return = false; } \
-    bool MUTATORFUNC_##id(int mode) { \
-        return = false; \
-        bool ret = MUTATORFUNC_##id##_hooks(mode); if (ret) return ret; \
-    } \
-    bool MUTATOR_##id##_check() { return dependence; } \
-    REGISTER(Mutators, MUTATOR, id, m_id, NEW(Mutator, #id, MUTATORFUNC_##id)) \
-    { this.mutatorcheck = MUTATOR_##id##_check; } \
-    ACCUMULATE bool MUTATORFUNC_##id(int mode)
+#define REGISTER_MUTATOR(id, dependence)     bool MUTATORFUNC_##id##_hooks(int mode) { return = false; }     bool MUTATORFUNC_##id(int mode) {         return = false;         bool ret = MUTATORFUNC_##id##_hooks(mode); if (ret) return ret;     }     bool MUTATOR_##id##_check() { return dependence; }     REGISTER(Mutators, MUTATOR, id, m_id, NEW(Mutator, #id, MUTATORFUNC_##id))     { this.mutatorcheck = MUTATOR_##id##_check; }     ACCUMULATE bool MUTATORFUNC_##id(int mode)
 
 STATIC_INIT(Mutators) {
     RegisterHooks();
@@ -279,44 +263,32 @@ STATIC_INIT_LATE(Mutators) {
     FOREACH(Mutators, it.mutatorcheck(), Mutator_Add(it));
 }
 
-#define MUTATOR_ONADD                   if (mode == MUTATOR_ADDING)
-#define MUTATOR_ONREMOVE                if (mode == MUTATOR_REMOVING)
-#define MUTATOR_ONROLLBACK_OR_REMOVE    if (mode == MUTATOR_REMOVING || mode == MUTATOR_ROLLING_BACK)
+/*qc2rust::define::MUTATOR_ONADD*/
+#define MUTATOR_ONADD /*qc2rust::macro_begin::MUTATOR_ONADD*/if (mode == MUTATOR_ADDING) /*qc2rust::macro_end::MUTATOR_ONADD*/
+/*qc2rust::define::MUTATOR_ONREMOVE*/
+#define MUTATOR_ONREMOVE /*qc2rust::macro_begin::MUTATOR_ONREMOVE*/if (mode == MUTATOR_REMOVING) /*qc2rust::macro_end::MUTATOR_ONREMOVE*/
+/*qc2rust::define::MUTATOR_ONROLLBACK_OR_REMOVE*/
+#define MUTATOR_ONROLLBACK_OR_REMOVE /*qc2rust::macro_begin::MUTATOR_ONROLLBACK_OR_REMOVE*/if (mode == MUTATOR_REMOVING || mode == MUTATOR_ROLLING_BACK) /*qc2rust::macro_end::MUTATOR_ONROLLBACK_OR_REMOVE*/
 
-#define MUTATOR_STATIC() MACRO_BEGIN \
-    MUTATOR_ONADD { \
-        /* game loads at time 1 */ \
-        if (time > 1) { \
-            error("This is a game type and it cannot be added at runtime."); \
-        } \
-    } \
-	MUTATOR_ONREMOVE { \
-		LOG_INFO("This is a game type and it cannot be removed at runtime."); \
-		return -1; \
-	} \
-MACRO_END
+/*qc2rust::define::MUTATOR_STATIC*/
+#define MUTATOR_STATIC() /*qc2rust::macro_begin::MUTATOR_STATIC*/MACRO_BEGIN     MUTATOR_ONADD {         /* game loads at time 1 */         if (time > 1) {             error("This is a game type and it cannot be added at runtime.");         }     } 	MUTATOR_ONREMOVE { 		LOG_INFO("This is a game type and it cannot be removed at runtime."); 		return -1; 	} MACRO_END /*qc2rust::macro_end::MUTATOR_STATIC*/
 
 #define MUTATOR_ADD(name)               Mutator_Add(MUTATOR_##name)
 #define MUTATOR_REMOVE(name)            Mutator_Remove(MUTATOR_##name)
-#define MUTATOR_RETURNVALUE             CallbackChain_ReturnValue
+/*qc2rust::define::MUTATOR_RETURNVALUE*/
+#define MUTATOR_RETURNVALUE /*qc2rust::macro_begin::MUTATOR_RETURNVALUE*/CallbackChain_ReturnValue /*qc2rust::macro_end::MUTATOR_RETURNVALUE*/
 
-#define _MUTATOR_CALLBACK(name, func) \
-    Callback CB_##name; \
-    bool func(); \
-    ACCUMULATE void RegisterCallbacks() { CB_##name = NEW(Callback, func); }
+#define _MUTATOR_CALLBACK(name, func)     Callback CB_##name;     bool func();     ACCUMULATE void RegisterCallbacks() { CB_##name = NEW(Callback, func); }
 
-#define MUTATOR_HOOKFUNCTION(...) \
-    EVAL_MUTATOR_HOOKFUNCTION(OVERLOAD(MUTATOR_HOOKFUNCTION, __VA_ARGS__))
-#define EVAL_MUTATOR_HOOKFUNCTION(...) __VA_ARGS__
+/*qc2rust::define::MUTATOR_HOOKFUNCTION*/
+#define MUTATOR_HOOKFUNCTION(...) /*qc2rust::macro_begin::MUTATOR_HOOKFUNCTION*/EVAL_MUTATOR_HOOKFUNCTION(OVERLOAD(MUTATOR_HOOKFUNCTION,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::MUTATOR_HOOKFUNCTION*/
+/*qc2rust::define::EVAL_MUTATOR_HOOKFUNCTION*/
+#define EVAL_MUTATOR_HOOKFUNCTION(...) /*qc2rust::macro_begin::EVAL_MUTATOR_HOOKFUNCTION*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_MUTATOR_HOOKFUNCTION*/
 
-#define MUTATOR_HOOKFUNCTION_2(mut, cb) \
-    MUTATOR_HOOKFUNCTION_3(mut, cb, CBC_ORDER_ANY)
+/*qc2rust::define::MUTATOR_HOOKFUNCTION_2*/
+#define MUTATOR_HOOKFUNCTION_2(mut,cb) /*qc2rust::macro_begin::MUTATOR_HOOKFUNCTION_2*/MUTATOR_HOOKFUNCTION_3( /*qc2rust::param_begin::mut*/mut /*qc2rust::param_end::mut*/,  /*qc2rust::param_begin::cb*/cb /*qc2rust::param_end::cb*/, CBC_ORDER_ANY) /*qc2rust::macro_end::MUTATOR_HOOKFUNCTION_2*/
 
-#define MUTATOR_HOOKFUNCTION_3(mut, cb, order) \
-    _MUTATOR_CALLBACK(mut##_##cb, mut##_##cb) \
-    ACCUMULATE bool MUTATORFUNC_##mut##_hooks(int mode) { MUTATOR_HOOK(cb, mut##_##cb, order); } \
-    bool mut##_##cb() { return = false; } \
-    ACCUMULATE bool mut##_##cb()
+#define MUTATOR_HOOKFUNCTION_3(mut, cb, order)     _MUTATOR_CALLBACK(mut##_##cb, mut##_##cb)     ACCUMULATE bool MUTATORFUNC_##mut##_hooks(int mode) { MUTATOR_HOOK(cb, mut##_##cb, order); }     bool mut##_##cb() { return = false; }     ACCUMULATE bool mut##_##cb()
 
 void _mutPrintFail(string cb, string func)
 {
@@ -324,16 +296,6 @@ void _mutPrintFail(string cb, string func)
 	LOG_INFO("HOOK FAILED: ", cb, ":", func);
 }
 
-#define MUTATOR_HOOK(cb, func, order) MACRO_BEGIN \
-    MUTATOR_ONADD { \
-        if (!CallbackChain_Add(HOOK_##cb, CB_##func, order)) { \
-            _mutPrintFail(#cb, #func); \
-            return true; \
-        } \
-    } \
-    MUTATOR_ONROLLBACK_OR_REMOVE { \
-        CallbackChain_Remove(HOOK_##cb, CB_##func); \
-    } \
-MACRO_END
+#define MUTATOR_HOOK(cb, func, order) MACRO_BEGIN     MUTATOR_ONADD {         if (!CallbackChain_Add(HOOK_##cb, CB_##func, order)) {             _mutPrintFail(#cb, #func);             return true;         }     }     MUTATOR_ONROLLBACK_OR_REMOVE {         CallbackChain_Remove(HOOK_##cb, CB_##func);     } MACRO_END
 
 #include "events.qh"

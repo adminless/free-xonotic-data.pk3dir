@@ -51,9 +51,11 @@ float autocvar_hud_panel_itemstime_progressbar_reduced;
 bool autocvar_hud_panel_itemstime_hidespawned = 1;
 bool autocvar_hud_panel_itemstime_hidebig = false;
 int autocvar_hud_panel_itemstime_text = 1;
-#define hud_panel_itemstime_hidebig autocvar_hud_panel_itemstime_hidebig
+/*qc2rust::define::hud_panel_itemstime_hidebig*/
+#define hud_panel_itemstime_hidebig /*qc2rust::macro_begin::hud_panel_itemstime_hidebig*/autocvar_hud_panel_itemstime_hidebig /*qc2rust::macro_end::hud_panel_itemstime_hidebig*/
 #else
-#define hud_panel_itemstime_hidebig false
+/*qc2rust::define::hud_panel_itemstime_hidebig*/
+#define hud_panel_itemstime_hidebig /*qc2rust::macro_begin::hud_panel_itemstime_hidebig*/false /*qc2rust::macro_end::hud_panel_itemstime_hidebig*/
 #endif
 
 bool Item_ItemsTime_SpectatorOnly(GameItem it)

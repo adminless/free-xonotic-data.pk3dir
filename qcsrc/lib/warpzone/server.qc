@@ -14,7 +14,8 @@
 #endif
 
 #ifdef WARPZONELIB_KEEPDEBUG
-#define WARPZONELIB_REMOVEHACK
+/*qc2rust::define::WARPZONELIB_REMOVEHACK*/
+#define WARPZONELIB_REMOVEHACK /*qc2rust::macro_begin::WARPZONELIB_REMOVEHACK*/ /*qc2rust::macro_end::WARPZONELIB_REMOVEHACK*/
 #endif
 
 // for think function
@@ -29,12 +30,8 @@
 .float warpzone_teleport_finishtime;
 .entity warpzone_teleport_zone;
 
-#define WarpZone_StoreProjectileData(e_) MACRO_BEGIN \
-	entity e = e_; \
-	e.warpzone_oldorigin = e.origin; \
-	e.warpzone_oldvelocity = e.velocity; \
-	e.warpzone_oldangles = e.angles; \
-	MACRO_END
+/*qc2rust::define::WarpZone_StoreProjectileData*/
+#define WarpZone_StoreProjectileData(e_) /*qc2rust::macro_begin::WarpZone_StoreProjectileData*/MACRO_BEGIN 	entity e =  /*qc2rust::param_begin::e_*/e_ /*qc2rust::param_end::e_*/; 	e.warpzone_oldorigin = e.origin; 	e.warpzone_oldvelocity = e.velocity; 	e.warpzone_oldangles = e.angles; 	MACRO_END /*qc2rust::macro_end::WarpZone_StoreProjectileData*/
 
 void WarpZone_TeleportPlayer(entity teleporter, entity player, vector to, vector to_angles, vector to_velocity)
 {

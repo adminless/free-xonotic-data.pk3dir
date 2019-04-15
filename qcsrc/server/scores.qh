@@ -38,7 +38,8 @@ float PlayerScore_Set(entity player, PlayerScoreField scorefield, float score);
  * \param[in] scorefield Field of the score.
  * \return Player's score.
  */
-#define PlayerScore_Get(player, scorefield) PlayerScore_Add(player, scorefield, 0)
+/*qc2rust::define::PlayerScore_Get*/
+#define PlayerScore_Get(player,scorefield) /*qc2rust::macro_begin::PlayerScore_Get*/PlayerScore_Add( /*qc2rust::param_begin::player*/player /*qc2rust::param_end::player*/,  /*qc2rust::param_begin::scorefield*/scorefield /*qc2rust::param_end::scorefield*/, 0) /*qc2rust::macro_end::PlayerScore_Get*/
 
 /**
  * Initialize the score of this player if needed.
@@ -112,7 +113,8 @@ entity WinningConditionHelper_winner;       ///< the winning player, or NULL if 
 entity WinningConditionHelper_second;       ///< the second player, or NULL if none
 float WinningConditionHelper_lowerisbetter; ///< lower is better, duh
 float WinningConditionHelper_zeroisworst;   ///< zero is worst, duh
-#define WINNINGCONDITIONHELPER_LOWERISBETTER_WORST 999999999
+/*qc2rust::define::WINNINGCONDITIONHELPER_LOWERISBETTER_WORST*/
+#define WINNINGCONDITIONHELPER_LOWERISBETTER_WORST /*qc2rust::macro_begin::WINNINGCONDITIONHELPER_LOWERISBETTER_WORST*/999999999 /*qc2rust::macro_end::WINNINGCONDITIONHELPER_LOWERISBETTER_WORST*/
 
 /**
  * Returns score strings for eventlog etc.

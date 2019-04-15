@@ -18,32 +18,8 @@ CLASS(Hook, Weapon)
 /* wepname   */ ATTRIB(Hook, m_name, string, _("Grappling Hook"));
 	ATTRIB(Hook, ammo_factor, float, 1);
 
-#define X(BEGIN, P, END, class, prefix) \
-	BEGIN(class) \
-		P(class, prefix, ammo, float, PRI) \
-		P(class, prefix, animtime, float, BOTH) \
-		P(class, prefix, damageforcescale, float, SEC) \
-		P(class, prefix, damage, float, SEC) \
-		P(class, prefix, duration, float, SEC) \
-		P(class, prefix, edgedamage, float, SEC) \
-		P(class, prefix, force, float, SEC) \
-		P(class, prefix, gravity, float, SEC) \
-		P(class, prefix, health, float, SEC) \
-		P(class, prefix, hooked_ammo, float, PRI) \
-		P(class, prefix, hooked_time_free, float, PRI) \
-		P(class, prefix, hooked_time_max, float, PRI) \
-		P(class, prefix, lifetime, float, SEC) \
-		P(class, prefix, power, float, SEC) \
-		P(class, prefix, radius, float, SEC) \
-		P(class, prefix, refire, float, BOTH) \
-		P(class, prefix, speed, float, SEC) \
-        P(class, prefix, switchdelay_drop, float, NONE) \
-		P(class, prefix, switchdelay_raise, float, NONE) \
-        P(class, prefix, weaponreplace, string, NONE) \
-        P(class, prefix, weaponstartoverride, float, NONE) \
-        P(class, prefix, weaponstart, float, NONE) \
-        P(class, prefix, weaponthrowable, float, NONE) \
-	END()
+/*qc2rust::define::X*/
+#define X(BEGIN,P,END,class,prefix) /*qc2rust::macro_begin::X*/ /*qc2rust::param_begin::BEGIN*/BEGIN /*qc2rust::param_end::BEGIN*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, ammo, float, PRI) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, animtime, float, BOTH) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, damageforcescale, float, SEC) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, damage, float, SEC) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, duration, float, SEC) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, edgedamage, float, SEC) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, force, float, SEC) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, gravity, float, SEC) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, health, float, SEC) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, hooked_ammo, float, PRI) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, hooked_time_free, float, PRI) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, hooked_time_max, float, PRI) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, lifetime, float, SEC) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, power, float, SEC) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, radius, float, SEC) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, refire, float, BOTH) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, speed, float, SEC)          /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, switchdelay_drop, float, NONE) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, switchdelay_raise, float, NONE)          /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, weaponreplace, string, NONE)          /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, weaponstartoverride, float, NONE)          /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, weaponstart, float, NONE)          /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, weaponthrowable, float, NONE) 	 /*qc2rust::param_begin::END*/END /*qc2rust::param_end::END*/() /*qc2rust::macro_end::X*/
     W_PROPS(X, Hook, hook)
 #undef X
 

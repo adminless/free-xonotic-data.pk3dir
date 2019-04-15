@@ -30,7 +30,8 @@ float T_Config_Queue_Compare(float root, float child, entity pass)
 
 void Dump_Turret_Settings()
 {
-	#define TUR_CONFIG_WRITETOFILE(str) write_String_To_File(tur_config_file, str, tur_config_alsoprint)
+/*qc2rust::define::TUR_CONFIG_WRITETOFILE*/
+#define TUR_CONFIG_WRITETOFILE(str) /*qc2rust::macro_begin::TUR_CONFIG_WRITETOFILE*/write_String_To_File(tur_config_file,  /*qc2rust::param_begin::str*/str /*qc2rust::param_end::str*/, tur_config_alsoprint) /*qc2rust::macro_end::TUR_CONFIG_WRITETOFILE*/
 	int totalsettings = 0;
 	FOREACH(Turrets, it != TUR_Null, {
 		// step 1: clear the queue

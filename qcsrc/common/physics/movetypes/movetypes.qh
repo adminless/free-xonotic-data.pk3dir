@@ -6,52 +6,82 @@ const int WATERLEVEL_WETFEET = 1;
 const int WATERLEVEL_SWIMMING = 2;
 const int WATERLEVEL_SUBMERGED = 3;
 
-#define IS_ONGROUND(s)                      boolean((s).flags & FL_ONGROUND)
-#define SET_ONGROUND(s)                     ((s).flags |= FL_ONGROUND)
-#define UNSET_ONGROUND(s)                   ((s).flags &= ~FL_ONGROUND)
-#define IS_ONSLICK(s)						boolean((s).flags & FL_ONSLICK)
-#define SET_ONSLICK(s)						((s).flags |= FL_ONSLICK)
-#define UNSET_ONSLICK(s)					((s).flags &= ~FL_ONSLICK)
+/*qc2rust::define::IS_ONGROUND*/
+#define IS_ONGROUND(s) /*qc2rust::macro_begin::IS_ONGROUND*/boolean(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags & FL_ONGROUND) /*qc2rust::macro_end::IS_ONGROUND*/
+/*qc2rust::define::SET_ONGROUND*/
+#define SET_ONGROUND(s) /*qc2rust::macro_begin::SET_ONGROUND*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags |= FL_ONGROUND) /*qc2rust::macro_end::SET_ONGROUND*/
+/*qc2rust::define::UNSET_ONGROUND*/
+#define UNSET_ONGROUND(s) /*qc2rust::macro_begin::UNSET_ONGROUND*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags &= ~FL_ONGROUND) /*qc2rust::macro_end::UNSET_ONGROUND*/
+/*qc2rust::define::IS_ONSLICK*/
+#define IS_ONSLICK(s) /*qc2rust::macro_begin::IS_ONSLICK*/boolean(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags & FL_ONSLICK) /*qc2rust::macro_end::IS_ONSLICK*/
+/*qc2rust::define::SET_ONSLICK*/
+#define SET_ONSLICK(s) /*qc2rust::macro_begin::SET_ONSLICK*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags |= FL_ONSLICK) /*qc2rust::macro_end::SET_ONSLICK*/
+/*qc2rust::define::UNSET_ONSLICK*/
+#define UNSET_ONSLICK(s) /*qc2rust::macro_begin::UNSET_ONSLICK*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).flags &= ~FL_ONSLICK) /*qc2rust::macro_end::UNSET_ONSLICK*/
 
-#define GAMEPLAYFIX_DOWNTRACEONGROUND(s)    STAT(GAMEPLAYFIX_DOWNTRACEONGROUND)
-#define GAMEPLAYFIX_EASIERWATERJUMP(s)      STAT(GAMEPLAYFIX_EASIERWATERJUMP)
-#define GAMEPLAYFIX_STEPDOWN(s)             STAT(GAMEPLAYFIX_STEPDOWN)
-#define GAMEPLAYFIX_STEPMULTIPLETIMES(s)    STAT(GAMEPLAYFIX_STEPMULTIPLETIMES)
-#define GAMEPLAYFIX_UNSTICKPLAYERS(s)       STAT(GAMEPLAYFIX_UNSTICKPLAYERS)
-#define GAMEPLAYFIX_WATERTRANSITION(s) 		STAT(GAMEPLAYFIX_WATERTRANSITION)
-#define UPWARD_VELOCITY_CLEARS_ONGROUND(s)  STAT(GAMEPLAYFIX_UPVELOCITYCLEARSONGROUND)
+/*qc2rust::define::GAMEPLAYFIX_DOWNTRACEONGROUND*/
+#define GAMEPLAYFIX_DOWNTRACEONGROUND(s) /*qc2rust::macro_begin::GAMEPLAYFIX_DOWNTRACEONGROUND*/STAT(GAMEPLAYFIX_DOWNTRACEONGROUND) /*qc2rust::macro_end::GAMEPLAYFIX_DOWNTRACEONGROUND*/
+/*qc2rust::define::GAMEPLAYFIX_EASIERWATERJUMP*/
+#define GAMEPLAYFIX_EASIERWATERJUMP(s) /*qc2rust::macro_begin::GAMEPLAYFIX_EASIERWATERJUMP*/STAT(GAMEPLAYFIX_EASIERWATERJUMP) /*qc2rust::macro_end::GAMEPLAYFIX_EASIERWATERJUMP*/
+/*qc2rust::define::GAMEPLAYFIX_STEPDOWN*/
+#define GAMEPLAYFIX_STEPDOWN(s) /*qc2rust::macro_begin::GAMEPLAYFIX_STEPDOWN*/STAT(GAMEPLAYFIX_STEPDOWN) /*qc2rust::macro_end::GAMEPLAYFIX_STEPDOWN*/
+/*qc2rust::define::GAMEPLAYFIX_STEPMULTIPLETIMES*/
+#define GAMEPLAYFIX_STEPMULTIPLETIMES(s) /*qc2rust::macro_begin::GAMEPLAYFIX_STEPMULTIPLETIMES*/STAT(GAMEPLAYFIX_STEPMULTIPLETIMES) /*qc2rust::macro_end::GAMEPLAYFIX_STEPMULTIPLETIMES*/
+/*qc2rust::define::GAMEPLAYFIX_UNSTICKPLAYERS*/
+#define GAMEPLAYFIX_UNSTICKPLAYERS(s) /*qc2rust::macro_begin::GAMEPLAYFIX_UNSTICKPLAYERS*/STAT(GAMEPLAYFIX_UNSTICKPLAYERS) /*qc2rust::macro_end::GAMEPLAYFIX_UNSTICKPLAYERS*/
+/*qc2rust::define::GAMEPLAYFIX_WATERTRANSITION*/
+#define GAMEPLAYFIX_WATERTRANSITION(s) /*qc2rust::macro_begin::GAMEPLAYFIX_WATERTRANSITION*/STAT(GAMEPLAYFIX_WATERTRANSITION) /*qc2rust::macro_end::GAMEPLAYFIX_WATERTRANSITION*/
+/*qc2rust::define::UPWARD_VELOCITY_CLEARS_ONGROUND*/
+#define UPWARD_VELOCITY_CLEARS_ONGROUND(s) /*qc2rust::macro_begin::UPWARD_VELOCITY_CLEARS_ONGROUND*/STAT(GAMEPLAYFIX_UPVELOCITYCLEARSONGROUND) /*qc2rust::macro_end::UPWARD_VELOCITY_CLEARS_ONGROUND*/
 
-#define PHYS_STEPHEIGHT(s)                  STAT(MOVEVARS_STEPHEIGHT)
-#define PHYS_NOSTEP(s)                      STAT(NOSTEP)
-#define PHYS_JUMPSTEP(s)                    STAT(MOVEVARS_JUMPSTEP)
-#define PHYS_WALLFRICTION(s)                STAT(MOVEVARS_WALLFRICTION)
+/*qc2rust::define::PHYS_STEPHEIGHT*/
+#define PHYS_STEPHEIGHT(s) /*qc2rust::macro_begin::PHYS_STEPHEIGHT*/STAT(MOVEVARS_STEPHEIGHT) /*qc2rust::macro_end::PHYS_STEPHEIGHT*/
+/*qc2rust::define::PHYS_NOSTEP*/
+#define PHYS_NOSTEP(s) /*qc2rust::macro_begin::PHYS_NOSTEP*/STAT(NOSTEP) /*qc2rust::macro_end::PHYS_NOSTEP*/
+/*qc2rust::define::PHYS_JUMPSTEP*/
+#define PHYS_JUMPSTEP(s) /*qc2rust::macro_begin::PHYS_JUMPSTEP*/STAT(MOVEVARS_JUMPSTEP) /*qc2rust::macro_end::PHYS_JUMPSTEP*/
+/*qc2rust::define::PHYS_WALLFRICTION*/
+#define PHYS_WALLFRICTION(s) /*qc2rust::macro_begin::PHYS_WALLFRICTION*/STAT(MOVEVARS_WALLFRICTION) /*qc2rust::macro_end::PHYS_WALLFRICTION*/
 
-#define PHYS_WALLCLIP(s)					STAT(MOVEVARS_WALLCLIP)
+/*qc2rust::define::PHYS_WALLCLIP*/
+#define PHYS_WALLCLIP(s) /*qc2rust::macro_begin::PHYS_WALLCLIP*/STAT(MOVEVARS_WALLCLIP) /*qc2rust::macro_end::PHYS_WALLCLIP*/
 
 #ifdef CSQC
 .float bouncestop;
 .float bouncefactor;
 
-	#define GAMEPLAYFIX_GRAVITYUNAFFECTEDBYTICRATE  (boolean(moveflags & MOVEFLAG_GRAVITYUNAFFECTEDBYTICRATE))
-	#define GAMEPLAYFIX_NOGRAVITYONGROUND           (boolean(moveflags & MOVEFLAG_NOGRAVITYONGROUND))
-	#define GAMEPLAYFIX_Q2AIRACCELERATE             (boolean(moveflags & MOVEFLAG_Q2AIRACCELERATE))
+/*qc2rust::define::GAMEPLAYFIX_GRAVITYUNAFFECTEDBYTICRATE*/
+#define GAMEPLAYFIX_GRAVITYUNAFFECTEDBYTICRATE /*qc2rust::macro_begin::GAMEPLAYFIX_GRAVITYUNAFFECTEDBYTICRATE*/(boolean(moveflags & MOVEFLAG_GRAVITYUNAFFECTEDBYTICRATE)) /*qc2rust::macro_end::GAMEPLAYFIX_GRAVITYUNAFFECTEDBYTICRATE*/
+/*qc2rust::define::GAMEPLAYFIX_NOGRAVITYONGROUND*/
+#define GAMEPLAYFIX_NOGRAVITYONGROUND /*qc2rust::macro_begin::GAMEPLAYFIX_NOGRAVITYONGROUND*/(boolean(moveflags & MOVEFLAG_NOGRAVITYONGROUND)) /*qc2rust::macro_end::GAMEPLAYFIX_NOGRAVITYONGROUND*/
+/*qc2rust::define::GAMEPLAYFIX_Q2AIRACCELERATE*/
+#define GAMEPLAYFIX_Q2AIRACCELERATE /*qc2rust::macro_begin::GAMEPLAYFIX_Q2AIRACCELERATE*/(boolean(moveflags & MOVEFLAG_Q2AIRACCELERATE)) /*qc2rust::macro_end::GAMEPLAYFIX_Q2AIRACCELERATE*/
 
-	#define PHYS_GRAVITY(s)                     STAT(MOVEVARS_GRAVITY, s)
+/*qc2rust::define::PHYS_GRAVITY*/
+#define PHYS_GRAVITY(s) /*qc2rust::macro_begin::PHYS_GRAVITY*/STAT(MOVEVARS_GRAVITY,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_GRAVITY*/
 	// FIXME: 0 doesn't mean zero gravity
-	#define PHYS_ENTGRAVITY(s)                  STAT(MOVEVARS_ENTGRAVITY, s)
+/*qc2rust::define::PHYS_ENTGRAVITY*/
+#define PHYS_ENTGRAVITY(s) /*qc2rust::macro_begin::PHYS_ENTGRAVITY*/STAT(MOVEVARS_ENTGRAVITY,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_ENTGRAVITY*/
 
-	#define TICRATE                             ticrate
+/*qc2rust::define::TICRATE*/
+#define TICRATE /*qc2rust::macro_begin::TICRATE*/ticrate /*qc2rust::macro_end::TICRATE*/
 
 #elif defined(SVQC)
 
-	#define GAMEPLAYFIX_GRAVITYUNAFFECTEDBYTICRATE  autocvar_sv_gameplayfix_gravityunaffectedbyticrate
-	#define GAMEPLAYFIX_NOGRAVITYONGROUND           autocvar_sv_gameplayfix_nogravityonground
-	#define GAMEPLAYFIX_Q2AIRACCELERATE             autocvar_sv_gameplayfix_q2airaccelerate
+/*qc2rust::define::GAMEPLAYFIX_GRAVITYUNAFFECTEDBYTICRATE*/
+#define GAMEPLAYFIX_GRAVITYUNAFFECTEDBYTICRATE /*qc2rust::macro_begin::GAMEPLAYFIX_GRAVITYUNAFFECTEDBYTICRATE*/autocvar_sv_gameplayfix_gravityunaffectedbyticrate /*qc2rust::macro_end::GAMEPLAYFIX_GRAVITYUNAFFECTEDBYTICRATE*/
+/*qc2rust::define::GAMEPLAYFIX_NOGRAVITYONGROUND*/
+#define GAMEPLAYFIX_NOGRAVITYONGROUND /*qc2rust::macro_begin::GAMEPLAYFIX_NOGRAVITYONGROUND*/autocvar_sv_gameplayfix_nogravityonground /*qc2rust::macro_end::GAMEPLAYFIX_NOGRAVITYONGROUND*/
+/*qc2rust::define::GAMEPLAYFIX_Q2AIRACCELERATE*/
+#define GAMEPLAYFIX_Q2AIRACCELERATE /*qc2rust::macro_begin::GAMEPLAYFIX_Q2AIRACCELERATE*/autocvar_sv_gameplayfix_q2airaccelerate /*qc2rust::macro_end::GAMEPLAYFIX_Q2AIRACCELERATE*/
 
-	#define PHYS_GRAVITY(s)                     autocvar_sv_gravity
-	#define PHYS_ENTGRAVITY(s)                  ((s).gravity)
+/*qc2rust::define::PHYS_GRAVITY*/
+#define PHYS_GRAVITY(s) /*qc2rust::macro_begin::PHYS_GRAVITY*/autocvar_sv_gravity /*qc2rust::macro_end::PHYS_GRAVITY*/
+/*qc2rust::define::PHYS_ENTGRAVITY*/
+#define PHYS_ENTGRAVITY(s) /*qc2rust::macro_begin::PHYS_ENTGRAVITY*/(( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).gravity) /*qc2rust::macro_end::PHYS_ENTGRAVITY*/
 
-	#define TICRATE sys_frametime
+/*qc2rust::define::TICRATE*/
+#define TICRATE /*qc2rust::macro_begin::TICRATE*/sys_frametime /*qc2rust::macro_end::TICRATE*/
 
 #endif
 
@@ -144,5 +174,6 @@ const int MOVEFLAG_NOGRAVITYONGROUND = BIT(1);
 const int MOVEFLAG_GRAVITYUNAFFECTEDBYTICRATE = BIT(2);
 
 #ifdef CSQC
-#define moveflags STAT(MOVEFLAGS)
+/*qc2rust::define::moveflags*/
+#define moveflags /*qc2rust::macro_begin::moveflags*/STAT(MOVEFLAGS) /*qc2rust::macro_end::moveflags*/
 #endif

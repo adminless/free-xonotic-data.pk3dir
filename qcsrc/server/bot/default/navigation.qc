@@ -47,7 +47,8 @@ bool navigation_goalrating_timeout(entity this)
 	return this.bot_strategytime < time;
 }
 
-#define MAX_CHASE_DISTANCE 700
+/*qc2rust::define::MAX_CHASE_DISTANCE*/
+#define MAX_CHASE_DISTANCE /*qc2rust::macro_begin::MAX_CHASE_DISTANCE*/700 /*qc2rust::macro_end::MAX_CHASE_DISTANCE*/
 bool navigation_goalrating_timeout_can_be_anticipated(entity this)
 {
 	vector gco = (this.goalentity.absmin + this.goalentity.absmax) * 0.5;
@@ -253,11 +254,15 @@ vector resurface_limited(vector org, float lim, vector m1)
 	}
 	return org;
 }
-#define RESURFACE_LIMITED(org, lim) org = resurface_limited(org, lim, m1)
+/*qc2rust::define::RESURFACE_LIMITED*/
+#define RESURFACE_LIMITED(org,lim) /*qc2rust::macro_begin::RESURFACE_LIMITED*/ /*qc2rust::param_begin::org*/org /*qc2rust::param_end::org*/ = resurface_limited( /*qc2rust::param_begin::org*/org /*qc2rust::param_end::org*/,  /*qc2rust::param_begin::lim*/lim /*qc2rust::param_end::lim*/, m1) /*qc2rust::macro_end::RESURFACE_LIMITED*/
 
-#define NAV_WALK 0
-#define NAV_SWIM_ONWATER 1
-#define NAV_SWIM_UNDERWATER 2
+/*qc2rust::define::NAV_WALK*/
+#define NAV_WALK /*qc2rust::macro_begin::NAV_WALK*/0 /*qc2rust::macro_end::NAV_WALK*/
+/*qc2rust::define::NAV_SWIM_ONWATER*/
+#define NAV_SWIM_ONWATER /*qc2rust::macro_begin::NAV_SWIM_ONWATER*/1 /*qc2rust::macro_end::NAV_SWIM_ONWATER*/
+/*qc2rust::define::NAV_SWIM_UNDERWATER*/
+#define NAV_SWIM_UNDERWATER /*qc2rust::macro_begin::NAV_SWIM_UNDERWATER*/2 /*qc2rust::macro_end::NAV_SWIM_UNDERWATER*/
 
 // rough simulation of walking from one point to another to test if a path
 // can be traveled, used for waypoint linking and havocbot

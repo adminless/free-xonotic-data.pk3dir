@@ -1,20 +1,30 @@
 #pragma once
 
 #ifdef __STDC__
-	#define EVAL(...) EVAL1(EVAL1(EVAL1(__VA_ARGS__)))
-	#define EVAL1(...) EVAL2(EVAL2(EVAL2(__VA_ARGS__)))
-	#define EVAL2(...) EVAL3(EVAL3(EVAL3(__VA_ARGS__)))
-	#define EVAL3(...) EVAL4(EVAL4(EVAL4(__VA_ARGS__)))
-	#define EVAL4(...) EVAL5(EVAL5(EVAL5(__VA_ARGS__)))
-	#define EVAL5(...) __VA_ARGS__
+/*qc2rust::define::EVAL*/
+#define EVAL(...) /*qc2rust::macro_begin::EVAL*/EVAL1(EVAL1(EVAL1( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/))) /*qc2rust::macro_end::EVAL*/
+/*qc2rust::define::EVAL1*/
+#define EVAL1(...) /*qc2rust::macro_begin::EVAL1*/EVAL2(EVAL2(EVAL2( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/))) /*qc2rust::macro_end::EVAL1*/
+/*qc2rust::define::EVAL2*/
+#define EVAL2(...) /*qc2rust::macro_begin::EVAL2*/EVAL3(EVAL3(EVAL3( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/))) /*qc2rust::macro_end::EVAL2*/
+/*qc2rust::define::EVAL3*/
+#define EVAL3(...) /*qc2rust::macro_begin::EVAL3*/EVAL4(EVAL4(EVAL4( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/))) /*qc2rust::macro_end::EVAL3*/
+/*qc2rust::define::EVAL4*/
+#define EVAL4(...) /*qc2rust::macro_begin::EVAL4*/EVAL5(EVAL5(EVAL5( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/))) /*qc2rust::macro_end::EVAL4*/
+/*qc2rust::define::EVAL5*/
+#define EVAL5(...) /*qc2rust::macro_begin::EVAL5*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL5*/
 
 	#include "p99.qh"
-	#define OVERLOAD(F, ...) P99_IF_EMPTY(__VA_ARGS__)(P99_PASTE2(F, _00)())(P99_PASTE3(F, _, P00_NARG(__VA_ARGS__))(__VA_ARGS__))
+/*qc2rust::define::OVERLOAD*/
+#define OVERLOAD(F,...) /*qc2rust::macro_begin::OVERLOAD*/P99_IF_EMPTY( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)(P99_PASTE2( /*qc2rust::param_begin::F*/F /*qc2rust::param_end::F*/, _00)())(P99_PASTE3( /*qc2rust::param_begin::F*/F /*qc2rust::param_end::F*/, _, P00_NARG( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/))( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::OVERLOAD*/
 	/** for use within macros */
-	#define OVERLOAD_(F, ...) P99_IF_EMPTY(__VA_ARGS__)(P99_PASTE2(F, _00)())(P99_PASTE3(F, _, P00_NARG(__VA_ARGS__))(__VA_ARGS__))
-	#define OVERLOAD__(F, ...) P99_IF_EMPTY(__VA_ARGS__)(P99_PASTE2(F, _00)())(P99_PASTE3(F, _, P00_NARG(__VA_ARGS__))(__VA_ARGS__))
+/*qc2rust::define::OVERLOAD_*/
+#define OVERLOAD_(F,...) /*qc2rust::macro_begin::OVERLOAD_*/P99_IF_EMPTY( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)(P99_PASTE2( /*qc2rust::param_begin::F*/F /*qc2rust::param_end::F*/, _00)())(P99_PASTE3( /*qc2rust::param_begin::F*/F /*qc2rust::param_end::F*/, _, P00_NARG( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/))( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::OVERLOAD_*/
+/*qc2rust::define::OVERLOAD__*/
+#define OVERLOAD__(F,...) /*qc2rust::macro_begin::OVERLOAD__*/P99_IF_EMPTY( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)(P99_PASTE2( /*qc2rust::param_begin::F*/F /*qc2rust::param_end::F*/, _00)())(P99_PASTE3( /*qc2rust::param_begin::F*/F /*qc2rust::param_end::F*/, _, P00_NARG( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/))( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::OVERLOAD__*/
 #else
-	#define EVAL(...) __VA_ARGS__
+/*qc2rust::define::EVAL*/
+#define EVAL(...) /*qc2rust::macro_begin::EVAL*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL*/
 
 	#define OVERLOAD(F, ...) F##_##__VA_COUNT__(__VA_ARGS__)
 	#define OVERLOAD_(F, ...) F##_##__VA_COUNT__(__VA_ARGS__)
@@ -22,25 +32,27 @@
 #endif
 
 #if defined(CSQC)
-	#define etof(e) num_for_edict(e)
-	#define ftoe(i) entitybyindex(i)
+/*qc2rust::define::etof*/
+#define etof(e) /*qc2rust::macro_begin::etof*/num_for_edict( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::etof*/
+/*qc2rust::define::ftoe*/
+#define ftoe(i) /*qc2rust::macro_begin::ftoe*/entitybyindex( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/) /*qc2rust::macro_end::ftoe*/
 #elif defined(SVQC)
-	#define etof(e) num_for_edict(e)
-	#define ftoe(i) edict_num(i)
+/*qc2rust::define::etof*/
+#define etof(e) /*qc2rust::macro_begin::etof*/num_for_edict( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::etof*/
+/*qc2rust::define::ftoe*/
+#define ftoe(i) /*qc2rust::macro_begin::ftoe*/edict_num( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/) /*qc2rust::macro_end::ftoe*/
 #elif defined(MENUQC)
 	// already defined
 #endif
 
 #define GET(name) name##get
-#define GETTER(type, name) type GET(name)() { return name; }
-#define PROPERTY(type, name) type name; GETTER(type, name)
-#define LAMBDA(...) { __VA_ARGS__; }
+/*qc2rust::define::GETTER*/
+#define GETTER(type,name) /*qc2rust::macro_begin::GETTER*/ /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/ GET( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/)() { return  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/; } /*qc2rust::macro_end::GETTER*/
+/*qc2rust::define::PROPERTY*/
+#define PROPERTY(type,name) /*qc2rust::macro_begin::PROPERTY*/ /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/; GETTER( /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/,  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/) /*qc2rust::macro_end::PROPERTY*/
+/*qc2rust::define::LAMBDA*/
+#define LAMBDA(...) /*qc2rust::macro_begin::LAMBDA*/{  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/; } /*qc2rust::macro_end::LAMBDA*/
 
 // With block may not contain continue or break
-#define WITH(type, name, value, block) \
-	MACRO_BEGIN \
-		type __with_save = (name); \
-		name = (value); \
-		LAMBDA(block) \
-		name = __with_save; \
-	MACRO_END
+/*qc2rust::define::WITH*/
+#define WITH(type,name,value,block) /*qc2rust::macro_begin::WITH*/MACRO_BEGIN 		 /*qc2rust::param_begin::type*/type /*qc2rust::param_end::type*/ __with_save = ( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/); 		 /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ = ( /*qc2rust::param_begin::value*/value /*qc2rust::param_end::value*/); 		LAMBDA( /*qc2rust::param_begin::block*/block /*qc2rust::param_end::block*/) 		 /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ = __with_save; 	MACRO_END /*qc2rust::macro_end::WITH*/

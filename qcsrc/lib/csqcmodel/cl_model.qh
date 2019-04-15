@@ -23,11 +23,14 @@
 
 #include "common.qh"
 
-#define CSQCMODEL_IF(cond)
-#define CSQCMODEL_ENDIF
-#define CSQCMODEL_PROPERTY(flag,t,r,w,f) \
-	.t f;
-#define CSQCMODEL_PROPERTY_SCALED(flag,t,r,w,f,s,mi,ma) CSQCMODEL_PROPERTY(flag,t,r,w,f)
+/*qc2rust::define::CSQCMODEL_IF*/
+#define CSQCMODEL_IF(cond) /*qc2rust::macro_begin::CSQCMODEL_IF*/ /*qc2rust::macro_end::CSQCMODEL_IF*/
+/*qc2rust::define::CSQCMODEL_ENDIF*/
+#define CSQCMODEL_ENDIF /*qc2rust::macro_begin::CSQCMODEL_ENDIF*/ /*qc2rust::macro_end::CSQCMODEL_ENDIF*/
+/*qc2rust::define::CSQCMODEL_PROPERTY*/
+#define CSQCMODEL_PROPERTY(flag,t,r,w,f) /*qc2rust::macro_begin::CSQCMODEL_PROPERTY*/. /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/  /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/; /*qc2rust::macro_end::CSQCMODEL_PROPERTY*/
+/*qc2rust::define::CSQCMODEL_PROPERTY_SCALED*/
+#define CSQCMODEL_PROPERTY_SCALED(flag,t,r,w,f,s,mi,ma) /*qc2rust::macro_begin::CSQCMODEL_PROPERTY_SCALED*/CSQCMODEL_PROPERTY( /*qc2rust::param_begin::flag*/flag /*qc2rust::param_end::flag*/, /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/, /*qc2rust::param_begin::r*/r /*qc2rust::param_end::r*/, /*qc2rust::param_begin::w*/w /*qc2rust::param_end::w*/, /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) /*qc2rust::macro_end::CSQCMODEL_PROPERTY_SCALED*/
 	ALLPROPERTIES
 #undef CSQCMODEL_PROPERTY_SCALED
 #undef CSQCMODEL_PROPERTY

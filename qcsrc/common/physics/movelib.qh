@@ -33,11 +33,11 @@ void movelib_move_simple(vector newdir,float velo,float blendrate)
     this.velocity = this.velocity * (1 - blendrate) + (newdir * blendrate) * velo;
 }
 */
-#define movelib_move_simple(e,newdir,velo,blendrate) \
-    e.velocity = e.velocity * (1 - blendrate) + (newdir * blendrate) * velo
+/*qc2rust::define::movelib_move_simple*/
+#define movelib_move_simple(e,newdir,velo,blendrate) /*qc2rust::macro_begin::movelib_move_simple*/ /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/.velocity =  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/.velocity * (1 -  /*qc2rust::param_begin::blendrate*/blendrate /*qc2rust::param_end::blendrate*/) + ( /*qc2rust::param_begin::newdir*/newdir /*qc2rust::param_end::newdir*/ *  /*qc2rust::param_begin::blendrate*/blendrate /*qc2rust::param_end::blendrate*/) *  /*qc2rust::param_begin::velo*/velo /*qc2rust::param_end::velo*/ /*qc2rust::macro_end::movelib_move_simple*/
 
-#define movelib_move_simple_gravity(e,newdir,velo,blendrate) \
-    if(IS_ONGROUND(e)) movelib_move_simple(e,newdir,velo,blendrate)
+/*qc2rust::define::movelib_move_simple_gravity*/
+#define movelib_move_simple_gravity(e,newdir,velo,blendrate) /*qc2rust::macro_begin::movelib_move_simple_gravity*/if(IS_ONGROUND( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/)) movelib_move_simple( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/, /*qc2rust::param_begin::newdir*/newdir /*qc2rust::param_end::newdir*/, /*qc2rust::param_begin::velo*/velo /*qc2rust::param_end::velo*/, /*qc2rust::param_begin::blendrate*/blendrate /*qc2rust::param_end::blendrate*/) /*qc2rust::macro_end::movelib_move_simple_gravity*/
 
 void movelib_brake_simple(entity this, float force);
 

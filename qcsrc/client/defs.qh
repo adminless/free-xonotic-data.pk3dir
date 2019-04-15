@@ -124,4 +124,5 @@ float intermission_time;
 
 .bool csqcmodel_isdead; // used by shownames and miscfunctions (entcs_IsDead) to know when a player is dead
 
-#define player_currententnum (spectatee_status > 0 ? spectatee_status : player_localnum + 1)
+/*qc2rust::define::player_currententnum*/
+#define player_currententnum /*qc2rust::macro_begin::player_currententnum*/(spectatee_status > 0 ? spectatee_status : player_localnum + 1) /*qc2rust::macro_end::player_currententnum*/

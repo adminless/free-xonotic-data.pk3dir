@@ -11,65 +11,42 @@
 
 // a hack for Xonotic
 #ifdef CSQC
-# define TAG_ENTITY_NAME tag_networkentity
-# define TAG_ENTITY_TYPE float
+/*qc2rust::define::TAG_ENTITY_NAME*/
+#define TAG_ENTITY_NAME /*qc2rust::macro_begin::TAG_ENTITY_NAME*/tag_networkentity /*qc2rust::macro_end::TAG_ENTITY_NAME*/
+/*qc2rust::define::TAG_ENTITY_TYPE*/
+#define TAG_ENTITY_TYPE /*qc2rust::macro_begin::TAG_ENTITY_TYPE*/float /*qc2rust::macro_end::TAG_ENTITY_TYPE*/
 .float tag_networkentity;
 
-# define TAG_VIEWLOC_NAME tag_networkviewloc
-# define TAG_VIEWLOC_TYPE int
+/*qc2rust::define::TAG_VIEWLOC_NAME*/
+#define TAG_VIEWLOC_NAME /*qc2rust::macro_begin::TAG_VIEWLOC_NAME*/tag_networkviewloc /*qc2rust::macro_end::TAG_VIEWLOC_NAME*/
+/*qc2rust::define::TAG_VIEWLOC_TYPE*/
+#define TAG_VIEWLOC_TYPE /*qc2rust::macro_begin::TAG_VIEWLOC_TYPE*/int /*qc2rust::macro_end::TAG_VIEWLOC_TYPE*/
 .float tag_networkviewloc;
 #else
-# define TAG_ENTITY_NAME tag_entity
-# define TAG_ENTITY_TYPE entity
+/*qc2rust::define::TAG_ENTITY_NAME*/
+#define TAG_ENTITY_NAME /*qc2rust::macro_begin::TAG_ENTITY_NAME*/tag_entity /*qc2rust::macro_end::TAG_ENTITY_NAME*/
+/*qc2rust::define::TAG_ENTITY_TYPE*/
+#define TAG_ENTITY_TYPE /*qc2rust::macro_begin::TAG_ENTITY_TYPE*/entity /*qc2rust::macro_end::TAG_ENTITY_TYPE*/
 
-# define TAG_VIEWLOC_NAME viewloc
-# define TAG_VIEWLOC_TYPE entity
+/*qc2rust::define::TAG_VIEWLOC_NAME*/
+#define TAG_VIEWLOC_NAME /*qc2rust::macro_begin::TAG_VIEWLOC_NAME*/viewloc /*qc2rust::macro_end::TAG_VIEWLOC_NAME*/
+/*qc2rust::define::TAG_VIEWLOC_TYPE*/
+#define TAG_VIEWLOC_TYPE /*qc2rust::macro_begin::TAG_VIEWLOC_TYPE*/entity /*qc2rust::macro_end::TAG_VIEWLOC_TYPE*/
 #endif
 
 // add properties you want networked to CSQC here
-#define CSQCMODEL_EXTRAPROPERTIES \
-	CSQCMODEL_PROPERTY(BIT(0), int, ReadShort, WriteShort, colormap) \
-	CSQCMODEL_PROPERTY(BIT(1), int, ReadInt24_t, WriteInt24_t, effects) \
-	CSQCMODEL_PROPERTY(BIT(2), int, ReadByte, WriteByte, modelflags) \
-	CSQCMODEL_PROPERTY_SCALED(BIT(3), float, ReadByte, WriteByte, alpha, 254, -1, 254) \
-	CSQCMODEL_PROPERTY(BIT(4), int, ReadByte, WriteByte, skin) \
-	CSQCMODEL_PROPERTY(BIT(5), float, ReadApproxPastTime, WriteApproxPastTime, death_time) \
-	CSQCMODEL_PROPERTY(BIT(6), float, ReadByte, WriteByte, solid) \
-	CSQCMODEL_IF(!isplayer) \
-		CSQCMODEL_PROPERTY(BIT(7), TAG_ENTITY_TYPE, ReadShort, WriteEntity, TAG_ENTITY_NAME) \
-		CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, glowmod_x, 254, -1, 254) \
-		CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, glowmod_y, 254, -1, 254) \
-		CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, glowmod_z, 254, -1, 254) \
-	CSQCMODEL_ENDIF \
-	CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, colormod_x, 16, 0, 255) \
-	CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, colormod_y, 16, 0, 255) \
-	CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, colormod_z, 16, 0, 255) \
-	CSQCMODEL_IF(isplayer) \
-		CSQCMODEL_PROPERTY(BIT(7), int, ReadByte, WriteByte, anim_state) \
-		CSQCMODEL_PROPERTY(BIT(7), float, ReadApproxPastTime, WriteApproxPastTime, anim_time) \
-		CSQCMODEL_IF(!islocalplayer) \
-			CSQCMODEL_PROPERTY(BIT(8), float, ReadChar, WriteChar, anim_lower_action) \
-			CSQCMODEL_PROPERTY(BIT(8), float, ReadApproxPastTime, WriteApproxPastTime, anim_lower_time) \
-		CSQCMODEL_ENDIF \
-		CSQCMODEL_PROPERTY(BIT(9), float, ReadChar, WriteChar, anim_upper_action) \
-		CSQCMODEL_PROPERTY(BIT(9), float, ReadApproxPastTime, WriteApproxPastTime, anim_upper_time) \
-	CSQCMODEL_ENDIF \
-	CSQCMODEL_PROPERTY(BIT(10), float, ReadAngle, WriteAngle, v_angle_x) \
-	CSQCMODEL_PROPERTY(BIT(11), int, ReadByte, WriteByte, traileffect) \
-	CSQCMODEL_PROPERTY(BIT(12), float, ReadCoord, WriteCoord, scale) \
-	CSQCMODEL_PROPERTY(BIT(13), int, ReadInt24_t, WriteInt24_t, dphitcontentsmask) \
-	CSQCMODEL_PROPERTY(BIT(14), TAG_VIEWLOC_TYPE, ReadShort, WriteEntity, TAG_VIEWLOC_NAME) \
-	CSQCMODEL_PROPERTY(BIT(16), int, ReadByte, WriteByte, multijump_count) \
-	CSQCMODEL_PROPERTY(BIT(16), int, ReadByte, WriteByte, move_movetype)
+/*qc2rust::define::CSQCMODEL_EXTRAPROPERTIES*/
+#define CSQCMODEL_EXTRAPROPERTIES /*qc2rust::macro_begin::CSQCMODEL_EXTRAPROPERTIES*/CSQCMODEL_PROPERTY(BIT(0), int, ReadShort, WriteShort, colormap) 	CSQCMODEL_PROPERTY(BIT(1), int, ReadInt24_t, WriteInt24_t, effects) 	CSQCMODEL_PROPERTY(BIT(2), int, ReadByte, WriteByte, modelflags) 	CSQCMODEL_PROPERTY_SCALED(BIT(3), float, ReadByte, WriteByte, alpha, 254, -1, 254) 	CSQCMODEL_PROPERTY(BIT(4), int, ReadByte, WriteByte, skin) 	CSQCMODEL_PROPERTY(BIT(5), float, ReadApproxPastTime, WriteApproxPastTime, death_time) 	CSQCMODEL_PROPERTY(BIT(6), float, ReadByte, WriteByte, solid) 	CSQCMODEL_IF(!isplayer) 		CSQCMODEL_PROPERTY(BIT(7), TAG_ENTITY_TYPE, ReadShort, WriteEntity, TAG_ENTITY_NAME) 		CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, glowmod_x, 254, -1, 254) 		CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, glowmod_y, 254, -1, 254) 		CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, glowmod_z, 254, -1, 254) 	CSQCMODEL_ENDIF 	CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, colormod_x, 16, 0, 255) 	CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, colormod_y, 16, 0, 255) 	CSQCMODEL_PROPERTY_SCALED(BIT(8), float, ReadByte, WriteByte, colormod_z, 16, 0, 255) 	CSQCMODEL_IF(isplayer) 		CSQCMODEL_PROPERTY(BIT(7), int, ReadByte, WriteByte, anim_state) 		CSQCMODEL_PROPERTY(BIT(7), float, ReadApproxPastTime, WriteApproxPastTime, anim_time) 		CSQCMODEL_IF(!islocalplayer) 			CSQCMODEL_PROPERTY(BIT(8), float, ReadChar, WriteChar, anim_lower_action) 			CSQCMODEL_PROPERTY(BIT(8), float, ReadApproxPastTime, WriteApproxPastTime, anim_lower_time) 		CSQCMODEL_ENDIF 		CSQCMODEL_PROPERTY(BIT(9), float, ReadChar, WriteChar, anim_upper_action) 		CSQCMODEL_PROPERTY(BIT(9), float, ReadApproxPastTime, WriteApproxPastTime, anim_upper_time) 	CSQCMODEL_ENDIF 	CSQCMODEL_PROPERTY(BIT(10), float, ReadAngle, WriteAngle, v_angle_x) 	CSQCMODEL_PROPERTY(BIT(11), int, ReadByte, WriteByte, traileffect) 	CSQCMODEL_PROPERTY(BIT(12), float, ReadCoord, WriteCoord, scale) 	CSQCMODEL_PROPERTY(BIT(13), int, ReadInt24_t, WriteInt24_t, dphitcontentsmask) 	CSQCMODEL_PROPERTY(BIT(14), TAG_VIEWLOC_TYPE, ReadShort, WriteEntity, TAG_VIEWLOC_NAME) 	CSQCMODEL_PROPERTY(BIT(16), int, ReadByte, WriteByte, multijump_count) 	CSQCMODEL_PROPERTY(BIT(16), int, ReadByte, WriteByte, move_movetype) /*qc2rust::macro_end::CSQCMODEL_EXTRAPROPERTIES*/
 // TODO get rid of colormod/glowmod here; also get rid of some useless properties on non-players that only exist for CopyBody
 
 // add hook function calls here
-#define CSQCPLAYER_HOOK_POSTCAMERASETUP() \
-	viewloc_SetViewLocation()
+/*qc2rust::define::CSQCPLAYER_HOOK_POSTCAMERASETUP*/
+#define CSQCPLAYER_HOOK_POSTCAMERASETUP() /*qc2rust::macro_begin::CSQCPLAYER_HOOK_POSTCAMERASETUP*/viewloc_SetViewLocation() /*qc2rust::macro_end::CSQCPLAYER_HOOK_POSTCAMERASETUP*/
 
 // force updates of player entities this frequently (per second) even if unchanged
 #ifndef CSQCPLAYER_FORCE_UPDATES
-#define CSQCPLAYER_FORCE_UPDATES 4
+/*qc2rust::define::CSQCPLAYER_FORCE_UPDATES*/
+#define CSQCPLAYER_FORCE_UPDATES /*qc2rust::macro_begin::CSQCPLAYER_FORCE_UPDATES*/4 /*qc2rust::macro_end::CSQCPLAYER_FORCE_UPDATES*/
 #endif
 
 // mod must define:
@@ -81,8 +58,11 @@
 //vector PL_CROUCH_VIEW_OFS  = ...;
 
 #ifdef SVQC
-# define CSQCMODEL_AUTOINIT(e) CSQCModel_LinkEntity(e)
-# define CSQCMODEL_AUTOUPDATE(e) CSQCModel_CheckUpdate(e)
+/*qc2rust::define::CSQCMODEL_AUTOINIT*/
+#define CSQCMODEL_AUTOINIT(e) /*qc2rust::macro_begin::CSQCMODEL_AUTOINIT*/CSQCModel_LinkEntity( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::CSQCMODEL_AUTOINIT*/
+/*qc2rust::define::CSQCMODEL_AUTOUPDATE*/
+#define CSQCMODEL_AUTOUPDATE(e) /*qc2rust::macro_begin::CSQCMODEL_AUTOUPDATE*/CSQCModel_CheckUpdate( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::CSQCMODEL_AUTOUPDATE*/
 #endif
 
-#define CSQCMODEL_EF_RESPAWNGHOST EF_SELECTABLE
+/*qc2rust::define::CSQCMODEL_EF_RESPAWNGHOST*/
+#define CSQCMODEL_EF_RESPAWNGHOST /*qc2rust::macro_begin::CSQCMODEL_EF_RESPAWNGHOST*/EF_SELECTABLE /*qc2rust::macro_end::CSQCMODEL_EF_RESPAWNGHOST*/

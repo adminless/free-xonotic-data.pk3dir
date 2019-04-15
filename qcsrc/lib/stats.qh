@@ -10,79 +10,73 @@ USING(vectori, vector);
 
 const int STATS_ENGINE_RESERVE = 32;
 // must be listed in ascending order
-#define MAGIC_STATS(_, x) \
-	_(x, MOVEVARS_TIMESCALE, 241) \
-	/**/
+/*qc2rust::define::MAGIC_STATS*/
+#define MAGIC_STATS(_,x) /*qc2rust::macro_begin::MAGIC_STATS*/ /*qc2rust::param_begin::_*/_ /*qc2rust::param_end::_*/( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/, MOVEVARS_TIMESCALE, 241) 	/**/ /*qc2rust::macro_end::MAGIC_STATS*/
 
 int g_magic_stats_hole = 0;
 
-#define MAGIC_STATS_FIX_MANUAL(it, var, id) \
-	if (it.registered_id == "STAT_" #var) { --g_magic_stats_hole; it.m_id = id; } else
+/*qc2rust::define::MAGIC_STATS_FIX_MANUAL*/
+#define MAGIC_STATS_FIX_MANUAL(it,var,id) /*qc2rust::macro_begin::MAGIC_STATS_FIX_MANUAL*/if ( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/.registered_id == "STAT_"  /*qc2rust::stringify_begin::var*/#var /*qc2rust::stringify_end::var*/) { --g_magic_stats_hole;  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/.m_id =  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/; } else /*qc2rust::macro_end::MAGIC_STATS_FIX_MANUAL*/
 
-#define MAGIC_STATS_FIX_AUTO(it, var, id) \
-	if (it.m_id == id) { ++g_magic_stats_hole; ++it.m_id; }
+/*qc2rust::define::MAGIC_STATS_FIX_AUTO*/
+#define MAGIC_STATS_FIX_AUTO(it,var,id) /*qc2rust::macro_begin::MAGIC_STATS_FIX_AUTO*/if ( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/.m_id ==  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/) { ++g_magic_stats_hole; ++ /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/.m_id; } /*qc2rust::macro_end::MAGIC_STATS_FIX_AUTO*/
 
-#define MAGIC_STATS_FIX(it) \
-	it.m_id += g_magic_stats_hole; \
-	MAGIC_STATS(MAGIC_STATS_FIX_MANUAL, it) { MAGIC_STATS(MAGIC_STATS_FIX_AUTO, it) }
+/*qc2rust::define::MAGIC_STATS_FIX*/
+#define MAGIC_STATS_FIX(it) /*qc2rust::macro_begin::MAGIC_STATS_FIX*/ /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/.m_id += g_magic_stats_hole; 	MAGIC_STATS(MAGIC_STATS_FIX_MANUAL,  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) { MAGIC_STATS(MAGIC_STATS_FIX_AUTO,  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) } /*qc2rust::macro_end::MAGIC_STATS_FIX*/
 
-#define REGISTER_STAT(...) EVAL_REGISTER_STAT(OVERLOAD(REGISTER_STAT, __VA_ARGS__))
-#define EVAL_REGISTER_STAT(...) __VA_ARGS__
+/*qc2rust::define::REGISTER_STAT*/
+#define REGISTER_STAT(...) /*qc2rust::macro_begin::REGISTER_STAT*/EVAL_REGISTER_STAT(OVERLOAD(REGISTER_STAT,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::REGISTER_STAT*/
+/*qc2rust::define::EVAL_REGISTER_STAT*/
+#define EVAL_REGISTER_STAT(...) /*qc2rust::macro_begin::EVAL_REGISTER_STAT*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_REGISTER_STAT*/
 #if defined(CSQC)
 	/** Get all stats and store them as globals, access with `STAT(ID)` */
 	void stats_get() {}
-	#define STAT(...) EVAL_STAT(OVERLOAD(STAT, __VA_ARGS__))
-	#define EVAL_STAT(...) __VA_ARGS__
-    #define STAT_1(id) (RVALUE, _STAT(id))
-	#define STAT_2(id, cl) STAT_1(id)
+/*qc2rust::define::STAT*/
+#define STAT(...) /*qc2rust::macro_begin::STAT*/EVAL_STAT(OVERLOAD(STAT,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::STAT*/
+/*qc2rust::define::EVAL_STAT*/
+#define EVAL_STAT(...) /*qc2rust::macro_begin::EVAL_STAT*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_STAT*/
+/*qc2rust::define::STAT_1*/
+#define STAT_1(id) /*qc2rust::macro_begin::STAT_1*/(RVALUE, _STAT( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/)) /*qc2rust::macro_end::STAT_1*/
+/*qc2rust::define::STAT_2*/
+#define STAT_2(id,cl) /*qc2rust::macro_begin::STAT_2*/STAT_1( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/) /*qc2rust::macro_end::STAT_2*/
 
-	#define getstat_int(id) getstati(id, 0, 24)
-	#define getstat_bool(id) boolean(getstati(id))
-	#define getstat_float(id) getstatf(id)
-	#define getstat_vector(id) vec3(getstat_float(id + 0), getstat_float(id + 1), getstat_float(id + 2))
-	#define getstat_vectori(id) vec3(getstat_int(id + 0), getstat_int(id + 1), getstat_int(id + 2))
+/*qc2rust::define::getstat_int*/
+#define getstat_int(id) /*qc2rust::macro_begin::getstat_int*/getstati( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, 0, 24) /*qc2rust::macro_end::getstat_int*/
+/*qc2rust::define::getstat_bool*/
+#define getstat_bool(id) /*qc2rust::macro_begin::getstat_bool*/boolean(getstati( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/)) /*qc2rust::macro_end::getstat_bool*/
+/*qc2rust::define::getstat_float*/
+#define getstat_float(id) /*qc2rust::macro_begin::getstat_float*/getstatf( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/) /*qc2rust::macro_end::getstat_float*/
+/*qc2rust::define::getstat_vector*/
+#define getstat_vector(id) /*qc2rust::macro_begin::getstat_vector*/vec3(getstat_float( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/ + 0), getstat_float( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/ + 1), getstat_float( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/ + 2)) /*qc2rust::macro_end::getstat_vector*/
+/*qc2rust::define::getstat_vectori*/
+#define getstat_vectori(id) /*qc2rust::macro_begin::getstat_vectori*/vec3(getstat_int( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/ + 0), getstat_int( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/ + 1), getstat_int( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/ + 2)) /*qc2rust::macro_end::getstat_vectori*/
 
 	#define _STAT(id) g_stat_##id
-	#define REGISTER_STAT_2(id, T) \
-		T _STAT(id); \
-		/* T CAT(_STAT(id), _prev); */ \
-		REGISTER(Stats, STAT_##id, m_id, new_pure(stat)) \
-		{ \
-			if (#T == "vector" || #T == "vectori") { \
-				REGISTRY_RESERVE(Stats, m_id, STAT_##id, y); \
-				REGISTRY_RESERVE(Stats, m_id, STAT_##id, z); \
-			} \
-		} \
-		ACCUMULATE void stats_get() \
-		{ \
-			T it = getstat_##T(STAT_##id.m_id); \
-			/* if (it != CAT(_STAT(id), _prev)) \
-				CAT(_STAT(id), _prev) = */ _STAT(id) = it; \
-		}
-	#define REGISTER_STAT_3(x, T, expr) REGISTER_STAT_2(x, T)
+	#define REGISTER_STAT_2(id, T) 		T _STAT(id); 		/* T CAT(_STAT(id), _prev); */ 		REGISTER(Stats, STAT_##id, m_id, new_pure(stat)) 		{ 			if (#T == "vector" || #T == "vectori") { 				REGISTRY_RESERVE(Stats, m_id, STAT_##id, y); 				REGISTRY_RESERVE(Stats, m_id, STAT_##id, z); 			} 		} 		ACCUMULATE void stats_get() 		{ 			T it = getstat_##T(STAT_##id.m_id); 			/* if (it != CAT(_STAT(id), _prev)) 				CAT(_STAT(id), _prev) = */ _STAT(id) = it; 		}
+/*qc2rust::define::REGISTER_STAT_3*/
+#define REGISTER_STAT_3(x,T,expr) /*qc2rust::macro_begin::REGISTER_STAT_3*/REGISTER_STAT_2( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/) /*qc2rust::macro_end::REGISTER_STAT_3*/
 #elif defined(SVQC)
     /** Internal use only */
     entity STATS;
 	/** Add all registered stats, access with `STAT(ID, player)` or `.type stat = _STAT(ID); player.stat` */
 	void stats_add() {}
-	#define STAT(...) EVAL_STAT(OVERLOAD_(STAT, __VA_ARGS__))
-    #define EVAL_STAT(...) __VA_ARGS__
-    #define STAT_1(id) (RVALUE, STAT_2(id, STATS))
-	#define STAT_2(id, cl) (cl)._STAT(id)
+/*qc2rust::define::STAT*/
+#define STAT(...) /*qc2rust::macro_begin::STAT*/EVAL_STAT(OVERLOAD_(STAT,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::STAT*/
+/*qc2rust::define::EVAL_STAT*/
+#define EVAL_STAT(...) /*qc2rust::macro_begin::EVAL_STAT*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_STAT*/
+/*qc2rust::define::STAT_1*/
+#define STAT_1(id) /*qc2rust::macro_begin::STAT_1*/(RVALUE, STAT_2( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, STATS)) /*qc2rust::macro_end::STAT_1*/
+/*qc2rust::define::STAT_2*/
+#define STAT_2(id,cl) /*qc2rust::macro_begin::STAT_2*/( /*qc2rust::param_begin::cl*/cl /*qc2rust::param_end::cl*/)._STAT( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/) /*qc2rust::macro_end::STAT_2*/
 
-	#define addstat_int(id, fld) addstat(id, AS_INT, fld)
-	#define addstat_bool(id, fld) addstat(id, AS_INT, fld)
-	#define addstat_float(id, fld) addstat(id, AS_FLOAT, fld)
-	#define addstat_vector(id, fld) MACRO_BEGIN \
-		addstat_float(id + 0, fld##_x); \
-		addstat_float(id + 1, fld##_y); \
-		addstat_float(id + 2, fld##_z); \
-	MACRO_END
-	#define addstat_vectori(id, fld) MACRO_BEGIN \
-		addstat_int(id + 0, fld##_x); \
-		addstat_int(id + 1, fld##_y); \
-		addstat_int(id + 2, fld##_z); \
-	MACRO_END
+/*qc2rust::define::addstat_int*/
+#define addstat_int(id,fld) /*qc2rust::macro_begin::addstat_int*/addstat( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, AS_INT,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/) /*qc2rust::macro_end::addstat_int*/
+/*qc2rust::define::addstat_bool*/
+#define addstat_bool(id,fld) /*qc2rust::macro_begin::addstat_bool*/addstat( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, AS_INT,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/) /*qc2rust::macro_end::addstat_bool*/
+/*qc2rust::define::addstat_float*/
+#define addstat_float(id,fld) /*qc2rust::macro_begin::addstat_float*/addstat( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, AS_FLOAT,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/) /*qc2rust::macro_end::addstat_float*/
+	#define addstat_vector(id, fld) MACRO_BEGIN 		addstat_float(id + 0, fld##_x); 		addstat_float(id + 1, fld##_y); 		addstat_float(id + 2, fld##_z); 	MACRO_END
+	#define addstat_vectori(id, fld) MACRO_BEGIN 		addstat_int(id + 0, fld##_x); 		addstat_int(id + 1, fld##_y); 		addstat_int(id + 2, fld##_z); 	MACRO_END
 	const int AS_STRING = 1;
 	const int AS_INT = 2;
 	const int AS_FLOAT = 8;
@@ -94,7 +88,8 @@ int g_magic_stats_hole = 0;
 	    // Prevent engine stats being sent
 		int r = STATS_ENGINE_RESERVE;
 		for (int i = 0, n = 256 - r; i < n; ++i) {
-			#define X(_, name, id) if (i == id) continue;
+/*qc2rust::define::X*/
+#define X(_,name,id) /*qc2rust::macro_begin::X*/if (i ==  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/) continue; /*qc2rust::macro_end::X*/
 			MAGIC_STATS(X, );
 			#undef X
 			addstat(r + i, AS_INT, __stat_null);
@@ -102,29 +97,15 @@ int g_magic_stats_hole = 0;
 	}
 
 	#define _STAT(id) stat_##id
-	#define REGISTER_STAT_2(id, T) \
-		.T _STAT(id); \
-		REGISTER(Stats, STAT_##id, m_id, new_pure(stat)) \
-		{ \
-			if (#T == "vector" || #T == "vectori") { \
-				REGISTRY_RESERVE(Stats, m_id, STAT_##id, y); \
-				REGISTRY_RESERVE(Stats, m_id, STAT_##id, z); \
-			} \
-		} \
-		ACCUMULATE void stats_add() \
-		{ \
-			.T fld = _STAT(id); \
-			addstat_##T(STAT_##id.m_id, fld); \
-		}
+	#define REGISTER_STAT_2(id, T) 		.T _STAT(id); 		REGISTER(Stats, STAT_##id, m_id, new_pure(stat)) 		{ 			if (#T == "vector" || #T == "vectori") { 				REGISTRY_RESERVE(Stats, m_id, STAT_##id, y); 				REGISTRY_RESERVE(Stats, m_id, STAT_##id, z); 			} 		} 		ACCUMULATE void stats_add() 		{ 			.T fld = _STAT(id); 			addstat_##T(STAT_##id.m_id, fld); 		}
 	void GlobalStats_update(entity this) {}
     /** TODO: do we want the global copy to update? */
-    #define REGISTER_STAT_3(id, T, expr) \
-    	REGISTER_STAT_2(id, T); \
-    	ACCUMULATE void GlobalStats_update(entity this) { STAT(id, this) = (expr); } \
-    	STATIC_INIT(worldstat_##id) { entity this = STATS; STAT(id, this) = (expr); }
+    #define REGISTER_STAT_3(id, T, expr)     	REGISTER_STAT_2(id, T);     	ACCUMULATE void GlobalStats_update(entity this) { STAT(id, this) = (expr); }     	STATIC_INIT(worldstat_##id) { entity this = STATS; STAT(id, this) = (expr); }
 #else
-	#define REGISTER_STAT_2(id, type)
-    #define REGISTER_STAT_3(id, T, expr)
+/*qc2rust::define::REGISTER_STAT_2*/
+#define REGISTER_STAT_2(id,type) /*qc2rust::macro_begin::REGISTER_STAT_2*/ /*qc2rust::macro_end::REGISTER_STAT_2*/
+/*qc2rust::define::REGISTER_STAT_3*/
+#define REGISTER_STAT_3(id,T,expr) /*qc2rust::macro_begin::REGISTER_STAT_3*/ /*qc2rust::macro_end::REGISTER_STAT_3*/
 #endif
 
 REGISTRY(Stats, 256 - STATS_ENGINE_RESERVE)

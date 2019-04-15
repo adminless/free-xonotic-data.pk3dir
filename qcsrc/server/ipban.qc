@@ -29,7 +29,8 @@
  *     server IP that registered the ban
  */
 
-#define MAX_IPBAN_URIS (URI_GET_IPBAN_END - URI_GET_IPBAN + 1)
+/*qc2rust::define::MAX_IPBAN_URIS*/
+#define MAX_IPBAN_URIS /*qc2rust::macro_begin::MAX_IPBAN_URIS*/(URI_GET_IPBAN_END - URI_GET_IPBAN + 1) /*qc2rust::macro_end::MAX_IPBAN_URIS*/
 
 void OnlineBanList_SendBan(string ip, float bantime, string reason)
 {

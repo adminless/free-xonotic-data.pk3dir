@@ -7,19 +7,21 @@ REGISTER_MUTATOR(walljump, true);
 REGISTER_MUTATOR(walljump, autocvar_g_walljump);
 #endif
 
-#define PHYS_WALLJUMP(s) 						STAT(WALLJUMP, s)
-#define PHYS_WALLJUMP_VELOCITY_Z_FACTOR(s) 		STAT(WALLJUMP_VELOCITY_Z_FACTOR, s)
-#define PHYS_WALLJUMP_VELOCITY_XY_FACTOR(s) 	STAT(WALLJUMP_VELOCITY_XY_FACTOR, s)
-#define PHYS_WALLJUMP_DELAY(s) 					STAT(WALLJUMP_DELAY, s)
-#define PHYS_WALLJUMP_FORCE(s) 					STAT(WALLJUMP_FORCE, s)
+/*qc2rust::define::PHYS_WALLJUMP*/
+#define PHYS_WALLJUMP(s) /*qc2rust::macro_begin::PHYS_WALLJUMP*/STAT(WALLJUMP,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_WALLJUMP*/
+/*qc2rust::define::PHYS_WALLJUMP_VELOCITY_Z_FACTOR*/
+#define PHYS_WALLJUMP_VELOCITY_Z_FACTOR(s) /*qc2rust::macro_begin::PHYS_WALLJUMP_VELOCITY_Z_FACTOR*/STAT(WALLJUMP_VELOCITY_Z_FACTOR,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_WALLJUMP_VELOCITY_Z_FACTOR*/
+/*qc2rust::define::PHYS_WALLJUMP_VELOCITY_XY_FACTOR*/
+#define PHYS_WALLJUMP_VELOCITY_XY_FACTOR(s) /*qc2rust::macro_begin::PHYS_WALLJUMP_VELOCITY_XY_FACTOR*/STAT(WALLJUMP_VELOCITY_XY_FACTOR,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_WALLJUMP_VELOCITY_XY_FACTOR*/
+/*qc2rust::define::PHYS_WALLJUMP_DELAY*/
+#define PHYS_WALLJUMP_DELAY(s) /*qc2rust::macro_begin::PHYS_WALLJUMP_DELAY*/STAT(WALLJUMP_DELAY,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_WALLJUMP_DELAY*/
+/*qc2rust::define::PHYS_WALLJUMP_FORCE*/
+#define PHYS_WALLJUMP_FORCE(s) /*qc2rust::macro_begin::PHYS_WALLJUMP_FORCE*/STAT(WALLJUMP_FORCE,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::PHYS_WALLJUMP_FORCE*/
 
 vector PlayerTouchWall(entity this)
 {
-#define TRACE(newvec) \
-	tracebox (start, this.mins, this.maxs, (newvec), true, this); \
-	if (trace_fraction < 1 && vdist(this.origin - trace_endpos, <, dist) && trace_plane_normal_z < max_normal) \
-	if (!(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)) \
-		return trace_plane_normal;
+/*qc2rust::define::TRACE*/
+#define TRACE(newvec) /*qc2rust::macro_begin::TRACE*/tracebox (start, this.mins, this.maxs, ( /*qc2rust::param_begin::newvec*/newvec /*qc2rust::param_end::newvec*/), true, this); 	if (trace_fraction < 1 && vdist(this.origin - trace_endpos, <, dist) && trace_plane_normal_z < max_normal) 	if (!(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)) 		return trace_plane_normal; /*qc2rust::macro_end::TRACE*/
 
 	float dist = 10, max_normal = 0.2, scaler = 100;
 	vector start = this.origin;

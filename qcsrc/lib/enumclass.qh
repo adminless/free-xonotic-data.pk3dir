@@ -8,11 +8,15 @@
 
 // zero overhead mode, use this for releases
 
-#define ENUMCLASS(id) USING(id, int); enum { CASE(id, Null)
+/*qc2rust::define::ENUMCLASS*/
+#define ENUMCLASS(id) /*qc2rust::macro_begin::ENUMCLASS*/USING( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, int); enum { CASE( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, Null) /*qc2rust::macro_end::ENUMCLASS*/
 #define CASE(class, id) class##_##id,
-#define ENUMCLASS_END(id) };
-#define ORDINAL(it) (it)
-#define ENUMCAST(T, it) (it)
+/*qc2rust::define::ENUMCLASS_END*/
+#define ENUMCLASS_END(id) /*qc2rust::macro_begin::ENUMCLASS_END*/}; /*qc2rust::macro_end::ENUMCLASS_END*/
+/*qc2rust::define::ORDINAL*/
+#define ORDINAL(it) /*qc2rust::macro_begin::ORDINAL*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) /*qc2rust::macro_end::ORDINAL*/
+/*qc2rust::define::ENUMCAST*/
+#define ENUMCAST(T,it) /*qc2rust::macro_begin::ENUMCAST*/( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) /*qc2rust::macro_end::ENUMCAST*/
 
 #else
 
@@ -21,8 +25,10 @@
 .int enum_ordinal;
 #define ENUMCLASS(id) CLASS(id, Object) int id##_count; const noref entity id##_Null = nil; CASE(id, Null__)
 #define CASE(class, id) class class##_##id; STATIC_INIT(class##_##id) { entity e = class##_##id = NEW(class); e.enum_ordinal = class##_count++; }
-#define ENUMCLASS_END(id) ENDCLASS(id)
-#define ORDINAL(it) ((it).enum_ordinal)
+/*qc2rust::define::ENUMCLASS_END*/
+#define ENUMCLASS_END(id) /*qc2rust::macro_begin::ENUMCLASS_END*/ENDCLASS( /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/) /*qc2rust::macro_end::ENUMCLASS_END*/
+/*qc2rust::define::ORDINAL*/
+#define ORDINAL(it) /*qc2rust::macro_begin::ORDINAL*/(( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/).enum_ordinal) /*qc2rust::macro_end::ORDINAL*/
 #define ENUMCAST(T, it) ftoe(etof(T##_Null__) + (it))
 
 #endif

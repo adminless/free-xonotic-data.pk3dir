@@ -452,10 +452,12 @@ void CheckWaterJump(entity this)
 
 
 #ifdef SVQC
-	#define JETPACK_JUMP(s)	CS(s).cvar_cl_jetpack_jump
+/*qc2rust::define::JETPACK_JUMP*/
+#define JETPACK_JUMP(s) /*qc2rust::macro_begin::JETPACK_JUMP*/CS( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/).cvar_cl_jetpack_jump /*qc2rust::macro_end::JETPACK_JUMP*/
 #elif defined(CSQC)
 	float autocvar_cl_jetpack_jump;
-	#define JETPACK_JUMP(s)	autocvar_cl_jetpack_jump
+/*qc2rust::define::JETPACK_JUMP*/
+#define JETPACK_JUMP(s) /*qc2rust::macro_begin::JETPACK_JUMP*/autocvar_cl_jetpack_jump /*qc2rust::macro_end::JETPACK_JUMP*/
 #endif
 .float jetpack_stopped;
 void CheckPlayerJump(entity this)

@@ -33,13 +33,19 @@ string QuickMenu_CurrentSubMenu;
 float QuickMenu_TimeOut;
 
 // QuickMenu_Buffer are labeled with these tags
-#define QM_TAG_TITLE "T"
-#define QM_TAG_SUBMENU "S"
-#define QM_TAG_COMMAND "C"
-#define QM_TAG_PLCOMMAND "P"
+/*qc2rust::define::QM_TAG_TITLE*/
+#define QM_TAG_TITLE /*qc2rust::macro_begin::QM_TAG_TITLE*/"T" /*qc2rust::macro_end::QM_TAG_TITLE*/
+/*qc2rust::define::QM_TAG_SUBMENU*/
+#define QM_TAG_SUBMENU /*qc2rust::macro_begin::QM_TAG_SUBMENU*/"S" /*qc2rust::macro_end::QM_TAG_SUBMENU*/
+/*qc2rust::define::QM_TAG_COMMAND*/
+#define QM_TAG_COMMAND /*qc2rust::macro_begin::QM_TAG_COMMAND*/"C" /*qc2rust::macro_end::QM_TAG_COMMAND*/
+/*qc2rust::define::QM_TAG_PLCOMMAND*/
+#define QM_TAG_PLCOMMAND /*qc2rust::macro_begin::QM_TAG_PLCOMMAND*/"P" /*qc2rust::macro_end::QM_TAG_PLCOMMAND*/
 
-#define QuickMenu_Buffer_Set(tag, string) bufstr_set(QuickMenu_Buffer, QuickMenu_Buffer_Size, strcat(tag, string))
-#define QuickMenu_Buffer_Get() bufstr_get(QuickMenu_Buffer, QuickMenu_Buffer_Index)
+/*qc2rust::define::QuickMenu_Buffer_Set*/
+#define QuickMenu_Buffer_Set(tag,string) /*qc2rust::macro_begin::QuickMenu_Buffer_Set*/bufstr_set(QuickMenu_Buffer, QuickMenu_Buffer_Size, strcat( /*qc2rust::param_begin::tag*/tag /*qc2rust::param_end::tag*/,  /*qc2rust::param_begin::string*/string /*qc2rust::param_end::string*/)) /*qc2rust::macro_end::QuickMenu_Buffer_Set*/
+/*qc2rust::define::QuickMenu_Buffer_Get*/
+#define QuickMenu_Buffer_Get() /*qc2rust::macro_begin::QuickMenu_Buffer_Get*/bufstr_get(QuickMenu_Buffer, QuickMenu_Buffer_Index) /*qc2rust::macro_end::QuickMenu_Buffer_Get*/
 
 // if s1 is not empty s will be displayed as command otherwise as submenu
 void QuickMenu_Page_LoadEntry(int i, string s, string s1)
@@ -690,57 +696,20 @@ void HUD_QuickMenu()
 }
 
 
-#define QUICKMENU_SMENU(submenu,eng_submenu) { \
-	if(target_submenu == eng_submenu && target_submenu_found) \
-		return; /* target_submenu entries are now loaded, exit */ \
-	if(QuickMenu_Buffer_Size < QUICKMENU_BUFFER_MAXENTRIES) \
-		QuickMenu_Buffer_Set(QM_TAG_SUBMENU, submenu); \
-	++QuickMenu_Buffer_Size; \
-	if(target_submenu == eng_submenu && !target_submenu_found) { \
-		QuickMenu_Buffer_Size = 0; /* enable load of next entries */ \
-		target_submenu_found = true; \
-	} \
-}
+/*qc2rust::define::QUICKMENU_SMENU*/
+#define QUICKMENU_SMENU(submenu,eng_submenu) /*qc2rust::macro_begin::QUICKMENU_SMENU*/{ 	if(target_submenu ==  /*qc2rust::param_begin::eng_submenu*/eng_submenu /*qc2rust::param_end::eng_submenu*/ && target_submenu_found) 		return; /* target_submenu entries are now loaded, exit */ 	if(QuickMenu_Buffer_Size < QUICKMENU_BUFFER_MAXENTRIES) 		QuickMenu_Buffer_Set(QM_TAG_SUBMENU,  /*qc2rust::param_begin::submenu*/submenu /*qc2rust::param_end::submenu*/); 	++QuickMenu_Buffer_Size; 	if(target_submenu ==  /*qc2rust::param_begin::eng_submenu*/eng_submenu /*qc2rust::param_end::eng_submenu*/ && !target_submenu_found) { 		QuickMenu_Buffer_Size = 0; /* enable load of next entries */ 		target_submenu_found = true; 	} } /*qc2rust::macro_end::QUICKMENU_SMENU*/
 
-#define QUICKMENU_ENTRY(title,command) { \
-	if(QuickMenu_Buffer_Size + 1 < QUICKMENU_BUFFER_MAXENTRIES) \
-	{ \
-		QuickMenu_Buffer_Set(QM_TAG_TITLE, title); \
-		++QuickMenu_Buffer_Size; \
-		QuickMenu_Buffer_Set(QM_TAG_COMMAND, command); \
-	} \
-	++QuickMenu_Buffer_Size; \
-}
+/*qc2rust::define::QUICKMENU_ENTRY*/
+#define QUICKMENU_ENTRY(title,command) /*qc2rust::macro_begin::QUICKMENU_ENTRY*/{ 	if(QuickMenu_Buffer_Size + 1 < QUICKMENU_BUFFER_MAXENTRIES) 	{ 		QuickMenu_Buffer_Set(QM_TAG_TITLE,  /*qc2rust::param_begin::title*/title /*qc2rust::param_end::title*/); 		++QuickMenu_Buffer_Size; 		QuickMenu_Buffer_Set(QM_TAG_COMMAND,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/); 	} 	++QuickMenu_Buffer_Size; } /*qc2rust::macro_end::QUICKMENU_ENTRY*/
 
-#define QUICKMENU_SMENU_PL(submenu,eng_submenu,command,teamplayers,without_me) { \
-	if(QuickMenu_Buffer_Size + 3 < QUICKMENU_BUFFER_MAXENTRIES) {\
-		QUICKMENU_SMENU(submenu,eng_submenu) \
-		QuickMenu_Buffer_Set(QM_TAG_TITLE, strcat(ftos(teamplayers), ftos(without_me))); \
-		++QuickMenu_Buffer_Size; \
-		QuickMenu_Buffer_Set(QM_TAG_PLCOMMAND, command); \
-		++QuickMenu_Buffer_Size; \
-		QUICKMENU_SMENU(submenu,eng_submenu) \
-	} \
-}
+/*qc2rust::define::QUICKMENU_SMENU_PL*/
+#define QUICKMENU_SMENU_PL(submenu,eng_submenu,command,teamplayers,without_me) /*qc2rust::macro_begin::QUICKMENU_SMENU_PL*/{ 	if(QuickMenu_Buffer_Size + 3 < QUICKMENU_BUFFER_MAXENTRIES) {		QUICKMENU_SMENU( /*qc2rust::param_begin::submenu*/submenu /*qc2rust::param_end::submenu*/, /*qc2rust::param_begin::eng_submenu*/eng_submenu /*qc2rust::param_end::eng_submenu*/) 		QuickMenu_Buffer_Set(QM_TAG_TITLE, strcat(ftos( /*qc2rust::param_begin::teamplayers*/teamplayers /*qc2rust::param_end::teamplayers*/), ftos( /*qc2rust::param_begin::without_me*/without_me /*qc2rust::param_end::without_me*/))); 		++QuickMenu_Buffer_Size; 		QuickMenu_Buffer_Set(QM_TAG_PLCOMMAND,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/); 		++QuickMenu_Buffer_Size; 		QUICKMENU_SMENU( /*qc2rust::param_begin::submenu*/submenu /*qc2rust::param_end::submenu*/, /*qc2rust::param_begin::eng_submenu*/eng_submenu /*qc2rust::param_end::eng_submenu*/) 	} } /*qc2rust::macro_end::QUICKMENU_SMENU_PL*/
 
 
 
 // useful to Translate a string inside the Command
-#define QUICKMENU_ENTRY_TC(title,command,text,translated_text) {\
-	if(prvm_language == "en") { \
-		tc_title = title; \
-		tc_cmd = sprintf(command, text); \
-	} \
-	else if(!autocvar_hud_panel_quickmenu_translatecommands || translated_text == text) { \
-		tc_title = strcat("(en)", title); \
-		tc_cmd = sprintf(command, text); \
-	} \
-	else { \
-		tc_title = strcat("(", prvm_language, ")", title); \
-		tc_cmd = sprintf(command, translated_text); \
-	} \
-	QUICKMENU_ENTRY(tc_title, tc_cmd) \
-}
+/*qc2rust::define::QUICKMENU_ENTRY_TC*/
+#define QUICKMENU_ENTRY_TC(title,command,text,translated_text) /*qc2rust::macro_begin::QUICKMENU_ENTRY_TC*/{	if(prvm_language == "en") { 		tc_title =  /*qc2rust::param_begin::title*/title /*qc2rust::param_end::title*/; 		tc_cmd = sprintf( /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/,  /*qc2rust::param_begin::text*/text /*qc2rust::param_end::text*/); 	} 	else if(!autocvar_hud_panel_quickmenu_translatecommands ||  /*qc2rust::param_begin::translated_text*/translated_text /*qc2rust::param_end::translated_text*/ ==  /*qc2rust::param_begin::text*/text /*qc2rust::param_end::text*/) { 		tc_title = strcat("(en)",  /*qc2rust::param_begin::title*/title /*qc2rust::param_end::title*/); 		tc_cmd = sprintf( /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/,  /*qc2rust::param_begin::text*/text /*qc2rust::param_end::text*/); 	} 	else { 		tc_title = strcat("(", prvm_language, ")",  /*qc2rust::param_begin::title*/title /*qc2rust::param_end::title*/); 		tc_cmd = sprintf( /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/,  /*qc2rust::param_begin::translated_text*/translated_text /*qc2rust::param_end::translated_text*/); 	} 	QUICKMENU_ENTRY(tc_title, tc_cmd) } /*qc2rust::macro_end::QUICKMENU_ENTRY_TC*/
 
 void HUD_Quickmenu_PlayerListEntries(string cmd, int teamplayers, bool without_me)
 {

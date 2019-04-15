@@ -89,22 +89,17 @@
 
 // default value for annce notification cvars (notification_ANNCE_*):
 // 0: off, 1: announce only if gentle mode is off, 2: announce always
-#define N___NEVER 0
-#define N_GNTLOFF 1
-#define N__ALWAYS 2
+/*qc2rust::define::N___NEVER*/
+#define N___NEVER /*qc2rust::macro_begin::N___NEVER*/0 /*qc2rust::macro_end::N___NEVER*/
+/*qc2rust::define::N_GNTLOFF*/
+#define N_GNTLOFF /*qc2rust::macro_begin::N_GNTLOFF*/1 /*qc2rust::macro_end::N_GNTLOFF*/
+/*qc2rust::define::N__ALWAYS*/
+#define N__ALWAYS /*qc2rust::macro_begin::N__ALWAYS*/2 /*qc2rust::macro_end::N__ALWAYS*/
 
-#define MULTITEAM_ANNCE2(prefix, default, sound, channel, volume, position) \
-    MSG_ANNCE_NOTIF_TEAM(NUM_TEAM_1, prefix##_RED, prefix, default, sprintf(sound, strtolower(STATIC_NAME_TEAM_1)), channel, volume, position) \
-    MSG_ANNCE_NOTIF_TEAM(NUM_TEAM_2, prefix##_BLUE, prefix, default, sprintf(sound, strtolower(STATIC_NAME_TEAM_2)), channel, volume, position)
-#define MULTITEAM_ANNCE3(prefix, default, sound, channel, volume, position) \
-    MULTITEAM_ANNCE2(prefix, default, sound, channel, volume, position) \
-    MSG_ANNCE_NOTIF_TEAM(NUM_TEAM_3, prefix##_YELLOW, prefix, default, sprintf(sound, strtolower(STATIC_NAME_TEAM_3)), channel, volume, position)
-#define MULTITEAM_ANNCE4(prefix, default, sound, channel, volume, position) \
-    MULTITEAM_ANNCE3(prefix, default, sound, channel, volume, position) \
-    MSG_ANNCE_NOTIF_TEAM(NUM_TEAM_4, prefix##_PINK, prefix, default, sprintf(sound, strtolower(STATIC_NAME_TEAM_4)), channel, volume, position)
-#define MULTITEAM_ANNCE(prefix, teams, default, sound, channel, volume, position) \
-    NOTIF_ADD_AUTOCVAR(ANNCE_##prefix, default) \
-    MULTITEAM_ANNCE##teams(prefix, default, sound, channel, volume, position)
+#define MULTITEAM_ANNCE2(prefix, default, sound, channel, volume, position)     MSG_ANNCE_NOTIF_TEAM(NUM_TEAM_1, prefix##_RED, prefix, default, sprintf(sound, strtolower(STATIC_NAME_TEAM_1)), channel, volume, position)     MSG_ANNCE_NOTIF_TEAM(NUM_TEAM_2, prefix##_BLUE, prefix, default, sprintf(sound, strtolower(STATIC_NAME_TEAM_2)), channel, volume, position)
+#define MULTITEAM_ANNCE3(prefix, default, sound, channel, volume, position)     MULTITEAM_ANNCE2(prefix, default, sound, channel, volume, position)     MSG_ANNCE_NOTIF_TEAM(NUM_TEAM_3, prefix##_YELLOW, prefix, default, sprintf(sound, strtolower(STATIC_NAME_TEAM_3)), channel, volume, position)
+#define MULTITEAM_ANNCE4(prefix, default, sound, channel, volume, position)     MULTITEAM_ANNCE3(prefix, default, sound, channel, volume, position)     MSG_ANNCE_NOTIF_TEAM(NUM_TEAM_4, prefix##_PINK, prefix, default, sprintf(sound, strtolower(STATIC_NAME_TEAM_4)), channel, volume, position)
+#define MULTITEAM_ANNCE(prefix, teams, default, sound, channel, volume, position)     NOTIF_ADD_AUTOCVAR(ANNCE_##prefix, default)     MULTITEAM_ANNCE##teams(prefix, default, sound, channel, volume, position)
 
 // MSG_ANNCE_NOTIFICATIONS
     MSG_ANNCE_NOTIF(ACHIEVEMENT_AIRSHOT,        N_GNTLOFF, "airshot",           CH_INFO, VOL_BASEVOICE, ATTEN_NONE)
@@ -218,22 +213,17 @@
 
 // default value for info notification cvars (notification_INFO_*):
 // 0: off, 1: display in console, 2: display in chatbox and console
-#define N_DISABLE 0
-#define N_CONSOLE 1
-#define N_CHATCON 2
+/*qc2rust::define::N_DISABLE*/
+#define N_DISABLE /*qc2rust::macro_begin::N_DISABLE*/0 /*qc2rust::macro_end::N_DISABLE*/
+/*qc2rust::define::N_CONSOLE*/
+#define N_CONSOLE /*qc2rust::macro_begin::N_CONSOLE*/1 /*qc2rust::macro_end::N_CONSOLE*/
+/*qc2rust::define::N_CHATCON*/
+#define N_CHATCON /*qc2rust::macro_begin::N_CHATCON*/2 /*qc2rust::macro_end::N_CHATCON*/
 
-#define MULTITEAM_INFO2(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type) \
-    MSG_INFO_NOTIF_TEAM(NUM_TEAM_1, prefix##_RED, prefix, default, strnum, flnum, args, hudargs, sprintf(icon, strtolower(STATIC_NAME_TEAM_1)), TCR(normal, type, 1), TCR(gentle, type, 1)) \
-    MSG_INFO_NOTIF_TEAM(NUM_TEAM_2, prefix##_BLUE, prefix, default, strnum, flnum, args, hudargs, sprintf(icon, strtolower(STATIC_NAME_TEAM_2)), TCR(normal, type, 2), TCR(gentle, type, 2))
-#define MULTITEAM_INFO3(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type) \
-    MULTITEAM_INFO2(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type) \
-    MSG_INFO_NOTIF_TEAM(NUM_TEAM_3, prefix##_YELLOW, prefix, default, strnum, flnum, args, hudargs, sprintf(icon, strtolower(STATIC_NAME_TEAM_3)), TCR(normal, type, 3), TCR(gentle, type, 3))
-#define MULTITEAM_INFO4(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type) \
-    MULTITEAM_INFO3(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type) \
-    MSG_INFO_NOTIF_TEAM(NUM_TEAM_4, prefix##_PINK, prefix, default, strnum, flnum, args, hudargs, sprintf(icon, strtolower(STATIC_NAME_TEAM_4)), TCR(normal, type, 4), TCR(gentle, type, 4))
-#define MULTITEAM_INFO(prefix, teams, default, strnum, flnum, args, hudargs, icon, normal, gentle, type) \
-    NOTIF_ADD_AUTOCVAR(INFO_##prefix, default) \
-    MULTITEAM_INFO##teams(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type)
+#define MULTITEAM_INFO2(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type)     MSG_INFO_NOTIF_TEAM(NUM_TEAM_1, prefix##_RED, prefix, default, strnum, flnum, args, hudargs, sprintf(icon, strtolower(STATIC_NAME_TEAM_1)), TCR(normal, type, 1), TCR(gentle, type, 1))     MSG_INFO_NOTIF_TEAM(NUM_TEAM_2, prefix##_BLUE, prefix, default, strnum, flnum, args, hudargs, sprintf(icon, strtolower(STATIC_NAME_TEAM_2)), TCR(normal, type, 2), TCR(gentle, type, 2))
+#define MULTITEAM_INFO3(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type)     MULTITEAM_INFO2(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type)     MSG_INFO_NOTIF_TEAM(NUM_TEAM_3, prefix##_YELLOW, prefix, default, strnum, flnum, args, hudargs, sprintf(icon, strtolower(STATIC_NAME_TEAM_3)), TCR(normal, type, 3), TCR(gentle, type, 3))
+#define MULTITEAM_INFO4(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type)     MULTITEAM_INFO3(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type)     MSG_INFO_NOTIF_TEAM(NUM_TEAM_4, prefix##_PINK, prefix, default, strnum, flnum, args, hudargs, sprintf(icon, strtolower(STATIC_NAME_TEAM_4)), TCR(normal, type, 4), TCR(gentle, type, 4))
+#define MULTITEAM_INFO(prefix, teams, default, strnum, flnum, args, hudargs, icon, normal, gentle, type)     NOTIF_ADD_AUTOCVAR(INFO_##prefix, default)     MULTITEAM_INFO##teams(prefix, default, strnum, flnum, args, hudargs, icon, normal, gentle, type)
 
 // MSG_INFO_NOTIFICATIONS
     MSG_INFO_NOTIF(CHAT_NOSPECTATORS,                       N_CHATCON,  0, 0, "", "",       "",     _("^F4NOTE: ^BGSpectator chat is not sent to players during the match"), "")
@@ -521,21 +511,15 @@
 
 // default value for centerprint notification cvars (notification_CENTER_*):
 // 0: off, 1: centerprint
-#define N_DISABL 0
-#define N_ENABLE 1
+/*qc2rust::define::N_DISABL*/
+#define N_DISABL /*qc2rust::macro_begin::N_DISABL*/0 /*qc2rust::macro_end::N_DISABL*/
+/*qc2rust::define::N_ENABLE*/
+#define N_ENABLE /*qc2rust::macro_begin::N_ENABLE*/1 /*qc2rust::macro_end::N_ENABLE*/
 
-#define MULTITEAM_CENTER2(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type) \
-    MSG_CENTER_NOTIF_TEAM(NUM_TEAM_1, prefix##_RED, prefix, default, strnum, flnum, args, cpid, durcnt, TCR(normal, type, 1), TCR(gentle, type, 1)) \
-    MSG_CENTER_NOTIF_TEAM(NUM_TEAM_2, prefix##_BLUE, prefix, default, strnum, flnum, args, cpid, durcnt, TCR(normal, type, 2), TCR(gentle, type, 2))
-#define MULTITEAM_CENTER3(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type) \
-    MULTITEAM_CENTER2(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type) \
-    MSG_CENTER_NOTIF_TEAM(NUM_TEAM_3, prefix##_YELLOW, prefix, default, strnum, flnum, args, cpid, durcnt, TCR(normal, type, 3), TCR(gentle, type, 3))
-#define MULTITEAM_CENTER4(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type) \
-    MULTITEAM_CENTER3(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type) \
-    MSG_CENTER_NOTIF_TEAM(NUM_TEAM_4, prefix##_PINK, prefix, default, strnum, flnum, args, cpid, durcnt, TCR(normal, type, 4), TCR(gentle, type, 4))
-#define MULTITEAM_CENTER(prefix, teams, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type) \
-    NOTIF_ADD_AUTOCVAR(CENTER_##prefix, default) \
-    MULTITEAM_CENTER##teams(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type)
+#define MULTITEAM_CENTER2(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type)     MSG_CENTER_NOTIF_TEAM(NUM_TEAM_1, prefix##_RED, prefix, default, strnum, flnum, args, cpid, durcnt, TCR(normal, type, 1), TCR(gentle, type, 1))     MSG_CENTER_NOTIF_TEAM(NUM_TEAM_2, prefix##_BLUE, prefix, default, strnum, flnum, args, cpid, durcnt, TCR(normal, type, 2), TCR(gentle, type, 2))
+#define MULTITEAM_CENTER3(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type)     MULTITEAM_CENTER2(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type)     MSG_CENTER_NOTIF_TEAM(NUM_TEAM_3, prefix##_YELLOW, prefix, default, strnum, flnum, args, cpid, durcnt, TCR(normal, type, 3), TCR(gentle, type, 3))
+#define MULTITEAM_CENTER4(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type)     MULTITEAM_CENTER3(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type)     MSG_CENTER_NOTIF_TEAM(NUM_TEAM_4, prefix##_PINK, prefix, default, strnum, flnum, args, cpid, durcnt, TCR(normal, type, 4), TCR(gentle, type, 4))
+#define MULTITEAM_CENTER(prefix, teams, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type)     NOTIF_ADD_AUTOCVAR(CENTER_##prefix, default)     MULTITEAM_CENTER##teams(prefix, default, strnum, flnum, args, cpid, durcnt, normal, gentle, type)
 
 // MSG_CENTER_NOTIFICATIONS
     MSG_CENTER_NOTIF(ALONE,                             N_ENABLE,    0, 0, "",               CPID_Null,              "0 0",  _("^F4You are now alone!"), "")
@@ -591,37 +575,53 @@
 
     #define VERBOSE_MURDER(type) strcat(MURDER_##type, "^BG%s")
 
-    #define MURDER_FRAG             _("^K3%sYou fragged ^BG%s")
-    #define MURDER_FRAG2            _("^K3%sYou scored against ^BG%s")
-    #define MURDER_FRAGGED          _("^K1%sYou were fragged by ^BG%s")
-    #define MURDER_FRAGGED2         _("^K1%sYou were scored against by ^BG%s")
+/*qc2rust::define::MURDER_FRAG*/
+#define MURDER_FRAG /*qc2rust::macro_begin::MURDER_FRAG*/_("^K3%sYou fragged ^BG%s") /*qc2rust::macro_end::MURDER_FRAG*/
+/*qc2rust::define::MURDER_FRAG2*/
+#define MURDER_FRAG2 /*qc2rust::macro_begin::MURDER_FRAG2*/_("^K3%sYou scored against ^BG%s") /*qc2rust::macro_end::MURDER_FRAG2*/
+/*qc2rust::define::MURDER_FRAGGED*/
+#define MURDER_FRAGGED /*qc2rust::macro_begin::MURDER_FRAGGED*/_("^K1%sYou were fragged by ^BG%s") /*qc2rust::macro_end::MURDER_FRAGGED*/
+/*qc2rust::define::MURDER_FRAGGED2*/
+#define MURDER_FRAGGED2 /*qc2rust::macro_begin::MURDER_FRAGGED2*/_("^K1%sYou were scored against by ^BG%s") /*qc2rust::macro_end::MURDER_FRAGGED2*/
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAG,                   N_ENABLE,  1, 1, "spree_cen s1",               CPID_Null,  "0 0",  MURDER_FRAG,                    MURDER_FRAG2                   )
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAGGED,                N_ENABLE,  1, 1, "spree_cen s1",               CPID_Null,  "0 0",  MURDER_FRAGGED,                 MURDER_FRAGGED2                )
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAGGED_VERBOSE,        N_ENABLE,  1, 4, "spree_cen s1 frag_stats",    CPID_Null,  "0 0",  VERBOSE_MURDER(FRAGGED),        VERBOSE_MURDER(FRAGGED2)       )
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAG_VERBOSE,           N_ENABLE,  1, 2, "spree_cen s1 frag_ping",     CPID_Null,  "0 0",  VERBOSE_MURDER(FRAG),           VERBOSE_MURDER(FRAG2)          )
 
-    #define MURDER_FRAG_FIRE        _("^K3%sYou burned ^BG%s")
-    #define MURDER_FRAG_FIRE2       _("^K3%sYou scored against ^BG%s")
-    #define MURDER_FRAGGED_FIRE     _("^K1%sYou were burned by ^BG%s")
-    #define MURDER_FRAGGED_FIRE2    _("^K1%sYou were scored against by ^BG%s")
+/*qc2rust::define::MURDER_FRAG_FIRE*/
+#define MURDER_FRAG_FIRE /*qc2rust::macro_begin::MURDER_FRAG_FIRE*/_("^K3%sYou burned ^BG%s") /*qc2rust::macro_end::MURDER_FRAG_FIRE*/
+/*qc2rust::define::MURDER_FRAG_FIRE2*/
+#define MURDER_FRAG_FIRE2 /*qc2rust::macro_begin::MURDER_FRAG_FIRE2*/_("^K3%sYou scored against ^BG%s") /*qc2rust::macro_end::MURDER_FRAG_FIRE2*/
+/*qc2rust::define::MURDER_FRAGGED_FIRE*/
+#define MURDER_FRAGGED_FIRE /*qc2rust::macro_begin::MURDER_FRAGGED_FIRE*/_("^K1%sYou were burned by ^BG%s") /*qc2rust::macro_end::MURDER_FRAGGED_FIRE*/
+/*qc2rust::define::MURDER_FRAGGED_FIRE2*/
+#define MURDER_FRAGGED_FIRE2 /*qc2rust::macro_begin::MURDER_FRAGGED_FIRE2*/_("^K1%sYou were scored against by ^BG%s") /*qc2rust::macro_end::MURDER_FRAGGED_FIRE2*/
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAG_FIRE,              N_ENABLE,  1, 1, "spree_cen s1",               CPID_Null,  "0 0",  MURDER_FRAG_FIRE,               MURDER_FRAG_FIRE2              )
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAGGED_FIRE,           N_ENABLE,  1, 1, "spree_cen s1",               CPID_Null,  "0 0",  MURDER_FRAGGED_FIRE,            MURDER_FRAGGED_FIRE2           )
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAGGED_FIRE_VERBOSE,   N_ENABLE,  1, 4, "spree_cen s1 frag_stats",    CPID_Null,  "0 0",  VERBOSE_MURDER(FRAGGED_FIRE),   VERBOSE_MURDER(FRAGGED_FIRE2)  )
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAG_FIRE_VERBOSE,      N_ENABLE,  1, 2, "spree_cen s1 frag_ping",     CPID_Null,  "0 0",  VERBOSE_MURDER(FRAG_FIRE),      VERBOSE_MURDER(FRAG_FIRE2)     )
 
-    #define MURDER_FRAG_FREEZE      _("^K3%sYou froze ^BG%s")
-    #define MURDER_FRAG_FREEZE2     _("^K3%sYou scored against ^BG%s")
-    #define MURDER_FRAGGED_FREEZE   _("^K1%sYou were frozen by ^BG%s")
-    #define MURDER_FRAGGED_FREEZE2  _("^K1%sYou were scored against by ^BG%s")
+/*qc2rust::define::MURDER_FRAG_FREEZE*/
+#define MURDER_FRAG_FREEZE /*qc2rust::macro_begin::MURDER_FRAG_FREEZE*/_("^K3%sYou froze ^BG%s") /*qc2rust::macro_end::MURDER_FRAG_FREEZE*/
+/*qc2rust::define::MURDER_FRAG_FREEZE2*/
+#define MURDER_FRAG_FREEZE2 /*qc2rust::macro_begin::MURDER_FRAG_FREEZE2*/_("^K3%sYou scored against ^BG%s") /*qc2rust::macro_end::MURDER_FRAG_FREEZE2*/
+/*qc2rust::define::MURDER_FRAGGED_FREEZE*/
+#define MURDER_FRAGGED_FREEZE /*qc2rust::macro_begin::MURDER_FRAGGED_FREEZE*/_("^K1%sYou were frozen by ^BG%s") /*qc2rust::macro_end::MURDER_FRAGGED_FREEZE*/
+/*qc2rust::define::MURDER_FRAGGED_FREEZE2*/
+#define MURDER_FRAGGED_FREEZE2 /*qc2rust::macro_begin::MURDER_FRAGGED_FREEZE2*/_("^K1%sYou were scored against by ^BG%s") /*qc2rust::macro_end::MURDER_FRAGGED_FREEZE2*/
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAG_FREEZE,            N_ENABLE,  1, 1, "spree_cen s1",               CPID_Null,  "0 0",  MURDER_FRAG_FREEZE,             MURDER_FRAG_FREEZE2            )
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAGGED_FREEZE,         N_ENABLE,  1, 1, "spree_cen s1",               CPID_Null,  "0 0",  MURDER_FRAGGED_FREEZE,          MURDER_FRAGGED_FREEZE2         )
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAGGED_FREEZE_VERBOSE, N_ENABLE,  1, 4, "spree_cen s1 frag_stats",    CPID_Null,  "0 0",  VERBOSE_MURDER(FRAGGED_FREEZE), VERBOSE_MURDER(FRAGGED_FREEZE2))
     MSG_CENTER_NOTIF(DEATH_MURDER_FRAG_FREEZE_VERBOSE,    N_ENABLE,  1, 2, "spree_cen s1 frag_ping",     CPID_Null,  "0 0",  VERBOSE_MURDER(FRAG_FREEZE),    VERBOSE_MURDER(FRAG_FREEZE2)   )
 
-    #define MURDER_TYPEFRAG         _("^K1%sYou typefragged ^BG%s")
-    #define MURDER_TYPEFRAG2        _("^K1%sYou scored against ^BG%s^K1 while they were typing")
-    #define MURDER_TYPEFRAGGED      _("^K1%sYou were typefragged by ^BG%s")
-    #define MURDER_TYPEFRAGGED2     _("^K1%sYou were scored against by ^BG%s^K1 while typing")
+/*qc2rust::define::MURDER_TYPEFRAG*/
+#define MURDER_TYPEFRAG /*qc2rust::macro_begin::MURDER_TYPEFRAG*/_("^K1%sYou typefragged ^BG%s") /*qc2rust::macro_end::MURDER_TYPEFRAG*/
+/*qc2rust::define::MURDER_TYPEFRAG2*/
+#define MURDER_TYPEFRAG2 /*qc2rust::macro_begin::MURDER_TYPEFRAG2*/_("^K1%sYou scored against ^BG%s^K1 while they were typing") /*qc2rust::macro_end::MURDER_TYPEFRAG2*/
+/*qc2rust::define::MURDER_TYPEFRAGGED*/
+#define MURDER_TYPEFRAGGED /*qc2rust::macro_begin::MURDER_TYPEFRAGGED*/_("^K1%sYou were typefragged by ^BG%s") /*qc2rust::macro_end::MURDER_TYPEFRAGGED*/
+/*qc2rust::define::MURDER_TYPEFRAGGED2*/
+#define MURDER_TYPEFRAGGED2 /*qc2rust::macro_begin::MURDER_TYPEFRAGGED2*/_("^K1%sYou were scored against by ^BG%s^K1 while typing") /*qc2rust::macro_end::MURDER_TYPEFRAGGED2*/
     MSG_CENTER_NOTIF(DEATH_MURDER_TYPEFRAG,               N_ENABLE,  1, 1, "spree_cen s1",               CPID_Null,  "0 0",  MURDER_TYPEFRAG,                MURDER_TYPEFRAG2               )
     MSG_CENTER_NOTIF(DEATH_MURDER_TYPEFRAGGED,            N_ENABLE,  1, 1, "spree_cen s1",               CPID_Null,  "0 0",  MURDER_TYPEFRAGGED,             MURDER_TYPEFRAGGED2            )
     MSG_CENTER_NOTIF(DEATH_MURDER_TYPEFRAGGED_VERBOSE,    N_ENABLE,  1, 4, "spree_cen s1 frag_stats",    CPID_Null,  "0 0",  VERBOSE_MURDER(TYPEFRAGGED),    VERBOSE_MURDER(TYPEFRAGGED2)   )
@@ -798,20 +798,15 @@
 
 // default value for multi notification cvars:
 // 0: off, 1: enable this multiple notification
-#define N_DISABL 0
-#define N_ENABLE 1
+/*qc2rust::define::N_DISABL*/
+#define N_DISABL /*qc2rust::macro_begin::N_DISABL*/0 /*qc2rust::macro_end::N_DISABL*/
+/*qc2rust::define::N_ENABLE*/
+#define N_ENABLE /*qc2rust::macro_begin::N_ENABLE*/1 /*qc2rust::macro_end::N_ENABLE*/
 
-#define MULTITEAM_MULTI2(prefix, default, anncepre, infopre, centerpre) \
-    MSG_MULTI_NOTIF(prefix##_RED, default, anncepre##_RED, infopre##_RED, centerpre##_RED) \
-    MSG_MULTI_NOTIF(prefix##_BLUE, default, anncepre##_BLUE, infopre##_BLUE, centerpre##_BLUE)
-#define MULTITEAM_MULTI3(prefix, default, anncepre, infopre, centerpre) \
-    MULTITEAM_MULTI2(prefix, default, anncepre, infopre, centerpre) \
-    MSG_MULTI_NOTIF(prefix##_YELLOW, default, anncepre##YELLOW, infopre##YELLOW, centerpre##YELLOW)
-#define MULTITEAM_MULTI4(prefix, default, anncepre, infopre, centerpre) \
-    MULTITEAM_MULTI3(prefix, default, anncepre, infopre, centerpre) \
-    MSG_MULTI_NOTIF(prefix##_PINK, default, anncepre##PINK, infopre##PINK, centerpre##PINK)
-#define MULTITEAM_MULTI(prefix, teams, default, anncepre, infopre, centerpre) \
-    MULTITEAM_MULTI##teams(prefix, default, anncepre, infopre, centerpre)
+#define MULTITEAM_MULTI2(prefix, default, anncepre, infopre, centerpre)     MSG_MULTI_NOTIF(prefix##_RED, default, anncepre##_RED, infopre##_RED, centerpre##_RED)     MSG_MULTI_NOTIF(prefix##_BLUE, default, anncepre##_BLUE, infopre##_BLUE, centerpre##_BLUE)
+#define MULTITEAM_MULTI3(prefix, default, anncepre, infopre, centerpre)     MULTITEAM_MULTI2(prefix, default, anncepre, infopre, centerpre)     MSG_MULTI_NOTIF(prefix##_YELLOW, default, anncepre##YELLOW, infopre##YELLOW, centerpre##YELLOW)
+#define MULTITEAM_MULTI4(prefix, default, anncepre, infopre, centerpre)     MULTITEAM_MULTI3(prefix, default, anncepre, infopre, centerpre)     MSG_MULTI_NOTIF(prefix##_PINK, default, anncepre##PINK, infopre##PINK, centerpre##PINK)
+#define MULTITEAM_MULTI(prefix, teams, default, anncepre, infopre, centerpre)     MULTITEAM_MULTI##teams(prefix, default, anncepre, infopre, centerpre)
 
 // MSG_MULTI_NOTIFICATIONS
     MSG_MULTI_NOTIF(DEATH_MURDER_BUFF,                  N_ENABLE,  NULL,           INFO_DEATH_MURDER_BUFF,                 NULL)
@@ -975,34 +970,31 @@
     MSG_MULTI_NOTIF(WEAPON_VAPORIZER_MURDER,            N_ENABLE,  NULL,           INFO_WEAPON_VAPORIZER_MURDER,           NULL)
     MSG_MULTI_NOTIF(WEAPON_VORTEX_MURDER,               N_ENABLE,  NULL,           INFO_WEAPON_VORTEX_MURDER,              NULL)
 
-#define MULTITEAM_CHOICE2(prefix, default, challow, chtype, optiona, optionb) \
-    MSG_CHOICE_NOTIF_TEAM(NUM_TEAM_1, prefix##_RED, prefix, default, challow, chtype, optiona##_RED, optionb##_RED) \
-    MSG_CHOICE_NOTIF_TEAM(NUM_TEAM_2, prefix##_BLUE, prefix, default, challow, chtype, optiona##_BLUE, optionb##_BLUE)
-#define MULTITEAM_CHOICE3(prefix, default, challow, chtype, optiona, optionb) \
-    MULTITEAM_CHOICE2(prefix, default, challow, chtype, optiona, optionb) \
-    MSG_CHOICE_NOTIF_TEAM(NUM_TEAM_3, prefix##_YELLOW, prefix, default, challow, chtype, optiona##_YELLOW, optionb##_YELLOW)
-#define MULTITEAM_CHOICE4(prefix, default, challow, chtype, optiona, optionb) \
-    MULTITEAM_CHOICE3(prefix, default, challow, chtype, optiona, optionb) \
-    MSG_CHOICE_NOTIF_TEAM(NUM_TEAM_4, prefix##_PINK, prefix, default, challow, chtype, optiona##_PINK, optionb##_PINK)
-#define MULTITEAM_CHOICE(prefix, teams, default, challow, chtype, optiona, optionb) \
-    NOTIF_ADD_AUTOCVAR(CHOICE_##prefix, default) \
-    NOTIF_ADD_AUTOCVAR(CHOICE_##prefix##_ALLOWED, challow) \
-    MULTITEAM_CHOICE##teams(prefix, default, challow, chtype, optiona, optionb)
+#define MULTITEAM_CHOICE2(prefix, default, challow, chtype, optiona, optionb)     MSG_CHOICE_NOTIF_TEAM(NUM_TEAM_1, prefix##_RED, prefix, default, challow, chtype, optiona##_RED, optionb##_RED)     MSG_CHOICE_NOTIF_TEAM(NUM_TEAM_2, prefix##_BLUE, prefix, default, challow, chtype, optiona##_BLUE, optionb##_BLUE)
+#define MULTITEAM_CHOICE3(prefix, default, challow, chtype, optiona, optionb)     MULTITEAM_CHOICE2(prefix, default, challow, chtype, optiona, optionb)     MSG_CHOICE_NOTIF_TEAM(NUM_TEAM_3, prefix##_YELLOW, prefix, default, challow, chtype, optiona##_YELLOW, optionb##_YELLOW)
+#define MULTITEAM_CHOICE4(prefix, default, challow, chtype, optiona, optionb)     MULTITEAM_CHOICE3(prefix, default, challow, chtype, optiona, optionb)     MSG_CHOICE_NOTIF_TEAM(NUM_TEAM_4, prefix##_PINK, prefix, default, challow, chtype, optiona##_PINK, optionb##_PINK)
+#define MULTITEAM_CHOICE(prefix, teams, default, challow, chtype, optiona, optionb)     NOTIF_ADD_AUTOCVAR(CHOICE_##prefix, default)     NOTIF_ADD_AUTOCVAR(CHOICE_##prefix##_ALLOWED, challow)     MULTITEAM_CHOICE##teams(prefix, default, challow, chtype, optiona, optionb)
 
 #undef N_DISABL
 #undef N_ENABLE
 
 // default value for choice notification cvars (notification_CHOICE_*):
 // 0: off, 1: display default message, 2: display verbose message
-#define N_DISABLE 0
-#define N__NORMAL 1
-#define N_VERBOSE 2
+/*qc2rust::define::N_DISABLE*/
+#define N_DISABLE /*qc2rust::macro_begin::N_DISABLE*/0 /*qc2rust::macro_end::N_DISABLE*/
+/*qc2rust::define::N__NORMAL*/
+#define N__NORMAL /*qc2rust::macro_begin::N__NORMAL*/1 /*qc2rust::macro_end::N__NORMAL*/
+/*qc2rust::define::N_VERBOSE*/
+#define N_VERBOSE /*qc2rust::macro_begin::N_VERBOSE*/2 /*qc2rust::macro_end::N_VERBOSE*/
 
 // default value for allowed choice notification cvars (notification_CHOICE_*_ALLOWED):
 // 0: never allowed, 1: allowed in warmup, 2: always allowed
-#define A__NEVER 0
-#define A_WARMUP 1
-#define A_ALWAYS 2
+/*qc2rust::define::A__NEVER*/
+#define A__NEVER /*qc2rust::macro_begin::A__NEVER*/0 /*qc2rust::macro_end::A__NEVER*/
+/*qc2rust::define::A_WARMUP*/
+#define A_WARMUP /*qc2rust::macro_begin::A_WARMUP*/1 /*qc2rust::macro_end::A_WARMUP*/
+/*qc2rust::define::A_ALWAYS*/
+#define A_ALWAYS /*qc2rust::macro_begin::A_ALWAYS*/2 /*qc2rust::macro_end::A_ALWAYS*/
 
 // MSG_CHOICE_NOTIFICATIONS
     MULTITEAM_CHOICE(CTF_CAPTURE_BROKEN, 4,     N_VERBOSE, A_ALWAYS,  MSG_INFO,   INFO_CTF_CAPTURE,                   INFO_CTF_CAPTURE_BROKEN)

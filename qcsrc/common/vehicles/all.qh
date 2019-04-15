@@ -3,14 +3,17 @@
 #include "vehicle.qh"
 
 REGISTRY(Vehicles, BITS(4))
-#define Vehicles_from(i) _Vehicles_from(i, VEH_Null)
+/*qc2rust::define::Vehicles_from*/
+#define Vehicles_from(i) /*qc2rust::macro_begin::Vehicles_from*/_Vehicles_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, VEH_Null) /*qc2rust::macro_end::Vehicles_from*/
 REGISTER_REGISTRY(Vehicles)
 REGISTRY_CHECK(Vehicles)
 
 const int VEH_FIRST = 1;
-#define VEH_LAST (Vehicles_COUNT - 1)
+/*qc2rust::define::VEH_LAST*/
+#define VEH_LAST /*qc2rust::macro_begin::VEH_LAST*/(Vehicles_COUNT - 1) /*qc2rust::macro_end::VEH_LAST*/
 
-#define REGISTER_VEHICLE(id, inst) REGISTER(Vehicles, VEH, id, vehicleid, inst)
+/*qc2rust::define::REGISTER_VEHICLE*/
+#define REGISTER_VEHICLE(id,inst) /*qc2rust::macro_begin::REGISTER_VEHICLE*/REGISTER(Vehicles, VEH,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, vehicleid,  /*qc2rust::param_begin::inst*/inst /*qc2rust::param_end::inst*/) /*qc2rust::macro_end::REGISTER_VEHICLE*/
 
 #if defined(SVQC)
 	#include "sv_vehicles.qh"

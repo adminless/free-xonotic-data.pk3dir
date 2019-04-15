@@ -46,15 +46,8 @@ entity minigame_sessions;
 bool minigame_SendEntity(entity this, entity to, int sf);
 
 REGISTRY(Minigames, BITS(4))
-#define Minigames_from(i) _Minigames_from(i, NULL)
+/*qc2rust::define::Minigames_from*/
+#define Minigames_from(i) /*qc2rust::macro_begin::Minigames_from*/_Minigames_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, NULL) /*qc2rust::macro_end::Minigames_from*/
 REGISTER_REGISTRY(Minigames)
 REGISTRY_CHECK(Minigames)
-#define REGISTER_MINIGAME(name,nicename) \
-    REGISTER(Minigames, MINIGAME_##name, m_id, new_pure(minigame_descriptor)); \
-    int name##_server_event(entity, string, ...); \
-    REGISTER_INIT(MINIGAME_##name) { \
-        this.netname = strzone(strtolower(#name)); \
-        this.message = nicename; \
-		this.minigame_event = name##_server_event; \
-    } \
-    REGISTER_INIT(MINIGAME_##name)
+#define REGISTER_MINIGAME(name,nicename)     REGISTER(Minigames, MINIGAME_##name, m_id, new_pure(minigame_descriptor));     int name##_server_event(entity, string, ...);     REGISTER_INIT(MINIGAME_##name) {         this.netname = strzone(strtolower(#name));         this.message = nicename; 		this.minigame_event = name##_server_event;     }     REGISTER_INIT(MINIGAME_##name)

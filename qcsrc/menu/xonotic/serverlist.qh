@@ -82,23 +82,8 @@ void ServerList_Favorite_Click(entity btn, entity me);
 void ServerList_Info_Click(entity btn, entity me);
 
 // server cache fields
-#define SLIST_FIELDS \
-	SLIST_FIELD(CNAME,       "cname") \
-	SLIST_FIELD(PING,        "ping") \
-	SLIST_FIELD(GAME,        "game") \
-	SLIST_FIELD(MOD,         "mod") \
-	SLIST_FIELD(MAP,         "map") \
-	SLIST_FIELD(NAME,        "name") \
-	SLIST_FIELD(MAXPLAYERS,  "maxplayers") \
-	SLIST_FIELD(NUMPLAYERS,  "numplayers") \
-	SLIST_FIELD(NUMHUMANS,   "numhumans") \
-	SLIST_FIELD(NUMBOTS,     "numbots") \
-	SLIST_FIELD(PROTOCOL,    "protocol") \
-	SLIST_FIELD(FREESLOTS,   "freeslots") \
-	SLIST_FIELD(PLAYERS,     "players") \
-	SLIST_FIELD(QCSTATUS,    "qcstatus") \
-	SLIST_FIELD(CATEGORY,    "category") \
-	SLIST_FIELD(ISFAVORITE,  "isfavorite")
+/*qc2rust::define::SLIST_FIELDS*/
+#define SLIST_FIELDS /*qc2rust::macro_begin::SLIST_FIELDS*/SLIST_FIELD(CNAME,       "cname") 	SLIST_FIELD(PING,        "ping") 	SLIST_FIELD(GAME,        "game") 	SLIST_FIELD(MOD,         "mod") 	SLIST_FIELD(MAP,         "map") 	SLIST_FIELD(NAME,        "name") 	SLIST_FIELD(MAXPLAYERS,  "maxplayers") 	SLIST_FIELD(NUMPLAYERS,  "numplayers") 	SLIST_FIELD(NUMHUMANS,   "numhumans") 	SLIST_FIELD(NUMBOTS,     "numbots") 	SLIST_FIELD(PROTOCOL,    "protocol") 	SLIST_FIELD(FREESLOTS,   "freeslots") 	SLIST_FIELD(PLAYERS,     "players") 	SLIST_FIELD(QCSTATUS,    "qcstatus") 	SLIST_FIELD(CATEGORY,    "category") 	SLIST_FIELD(ISFAVORITE,  "isfavorite") /*qc2rust::macro_end::SLIST_FIELDS*/
 
 #define SLIST_FIELD(suffix,name) float SLIST_FIELD_##suffix;
 SLIST_FIELDS
@@ -121,9 +106,12 @@ const float REFRESHSERVERLIST_RESET = 3;     // ..., also clear the list first
 
 // function declarations
 float IsServerInList(string list, string srv);
-#define IsFavorite(srv) IsServerInList(cvar_string("net_slist_favorites"), srv)
-#define IsPromoted(srv) IsServerInList(_Nex_ExtResponseSystem_PromotedServers, srv)
-#define IsRecommended(srv) IsServerInList(_Nex_ExtResponseSystem_RecommendedServers, srv)
+/*qc2rust::define::IsFavorite*/
+#define IsFavorite(srv) /*qc2rust::macro_begin::IsFavorite*/IsServerInList(cvar_string("net_slist_favorites"),  /*qc2rust::param_begin::srv*/srv /*qc2rust::param_end::srv*/) /*qc2rust::macro_end::IsFavorite*/
+/*qc2rust::define::IsPromoted*/
+#define IsPromoted(srv) /*qc2rust::macro_begin::IsPromoted*/IsServerInList(_Nex_ExtResponseSystem_PromotedServers,  /*qc2rust::param_begin::srv*/srv /*qc2rust::param_end::srv*/) /*qc2rust::macro_end::IsPromoted*/
+/*qc2rust::define::IsRecommended*/
+#define IsRecommended(srv) /*qc2rust::macro_begin::IsRecommended*/IsServerInList(_Nex_ExtResponseSystem_RecommendedServers,  /*qc2rust::param_begin::srv*/srv /*qc2rust::param_end::srv*/) /*qc2rust::macro_end::IsRecommended*/
 
 entity RetrieveCategoryEnt(float catnum);
 
@@ -148,20 +136,11 @@ int category_name[MAX_CATEGORIES];
 int category_item[MAX_CATEGORIES];
 int category_draw_count;
 
-#define SLIST_CATEGORIES \
-	SLIST_CATEGORY(CAT_FAVORITED,    "",            "",             CTX(_("SLCAT^Favorites"))) \
-	SLIST_CATEGORY(CAT_RECOMMENDED,  "",            "",             CTX(_("SLCAT^Recommended"))) \
-	SLIST_CATEGORY(CAT_NORMAL,       "",            "CAT_SERVERS",  CTX(_("SLCAT^Normal Servers"))) \
-	SLIST_CATEGORY(CAT_SERVERS,      "CAT_NORMAL",  "CAT_SERVERS",  CTX(_("SLCAT^Servers"))) \
-	SLIST_CATEGORY(CAT_XPM,          "CAT_NORMAL",  "CAT_SERVERS",  CTX(_("SLCAT^Competitive Mode"))) \
-	SLIST_CATEGORY(CAT_MODIFIED,     "",            "CAT_SERVERS",  CTX(_("SLCAT^Modified Servers"))) \
-	SLIST_CATEGORY(CAT_OVERKILL,     "",            "CAT_SERVERS",  CTX(_("SLCAT^Overkill"))) \
-	SLIST_CATEGORY(CAT_INSTAGIB,     "",            "CAT_SERVERS",  CTX(_("SLCAT^InstaGib"))) \
-	SLIST_CATEGORY(CAT_DEFRAG,       "",            "CAT_SERVERS",  CTX(_("SLCAT^Defrag Mode")))
+/*qc2rust::define::SLIST_CATEGORIES*/
+#define SLIST_CATEGORIES /*qc2rust::macro_begin::SLIST_CATEGORIES*/SLIST_CATEGORY(CAT_FAVORITED,    "",            "",             CTX(_("SLCAT^Favorites"))) 	SLIST_CATEGORY(CAT_RECOMMENDED,  "",            "",             CTX(_("SLCAT^Recommended"))) 	SLIST_CATEGORY(CAT_NORMAL,       "",            "CAT_SERVERS",  CTX(_("SLCAT^Normal Servers"))) 	SLIST_CATEGORY(CAT_SERVERS,      "CAT_NORMAL",  "CAT_SERVERS",  CTX(_("SLCAT^Servers"))) 	SLIST_CATEGORY(CAT_XPM,          "CAT_NORMAL",  "CAT_SERVERS",  CTX(_("SLCAT^Competitive Mode"))) 	SLIST_CATEGORY(CAT_MODIFIED,     "",            "CAT_SERVERS",  CTX(_("SLCAT^Modified Servers"))) 	SLIST_CATEGORY(CAT_OVERKILL,     "",            "CAT_SERVERS",  CTX(_("SLCAT^Overkill"))) 	SLIST_CATEGORY(CAT_INSTAGIB,     "",            "CAT_SERVERS",  CTX(_("SLCAT^InstaGib"))) 	SLIST_CATEGORY(CAT_DEFRAG,       "",            "CAT_SERVERS",  CTX(_("SLCAT^Defrag Mode"))) /*qc2rust::macro_end::SLIST_CATEGORIES*/
 
 #define SLIST_CATEGORY_AUTOCVAR(name) autocvar_menu_slist_categories_##name##_override
-#define SLIST_CATEGORY(name,enoverride,dioverride,str) \
-	int name; \
-	string SLIST_CATEGORY_AUTOCVAR(name) = enoverride;
+/*qc2rust::define::SLIST_CATEGORY*/
+#define SLIST_CATEGORY(name,enoverride,dioverride,str) /*qc2rust::macro_begin::SLIST_CATEGORY*/int  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/; 	string SLIST_CATEGORY_AUTOCVAR( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/) =  /*qc2rust::param_begin::enoverride*/enoverride /*qc2rust::param_end::enoverride*/; /*qc2rust::macro_end::SLIST_CATEGORY*/
 SLIST_CATEGORIES
 #undef SLIST_CATEGORY

@@ -6,24 +6,31 @@
 
 // Step 1: auto oldself
 #if 1
-    #define SELFPARAM() noref const entity this = self
+/*qc2rust::define::SELFPARAM*/
+#define SELFPARAM() /*qc2rust::macro_begin::SELFPARAM*/noref const entity this = self /*qc2rust::macro_end::SELFPARAM*/
 #endif
 
 // Step 2: const self
 #if 1
-    #define self (RVALUE, self)
+/*qc2rust::define::self*/
+#define self /*qc2rust::macro_begin::self*/(RVALUE, self) /*qc2rust::macro_end::self*/
     ALIAS("self") entity __self;
-    #define setself(s) (__self = s)
-    #define WITHSELF(value, block) WITH(entity, __self, value, (RVALUE, block))
+/*qc2rust::define::setself*/
+#define setself(s) /*qc2rust::macro_begin::setself*/(__self =  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/) /*qc2rust::macro_end::setself*/
+/*qc2rust::define::WITHSELF*/
+#define WITHSELF(value,block) /*qc2rust::macro_begin::WITHSELF*/WITH(entity, __self,  /*qc2rust::param_begin::value*/value /*qc2rust::param_end::value*/, (RVALUE,  /*qc2rust::param_begin::block*/block /*qc2rust::param_end::block*/)) /*qc2rust::macro_end::WITHSELF*/
 #endif
 
 // Step 3: propagate SELFPARAM()
 #if 1
     #undef self
-    #define self (this, self)
+/*qc2rust::define::self*/
+#define self /*qc2rust::macro_begin::self*/(this, self) /*qc2rust::macro_end::self*/
     #undef SELFPARAM
-    #define SELFPARAM() const entity this = __self
-    #define ENGINE_EVENT() const entity this = __self
+/*qc2rust::define::SELFPARAM*/
+#define SELFPARAM() /*qc2rust::macro_begin::SELFPARAM*/const entity this = __self /*qc2rust::macro_end::SELFPARAM*/
+/*qc2rust::define::ENGINE_EVENT*/
+#define ENGINE_EVENT() /*qc2rust::macro_begin::ENGINE_EVENT*/const entity this = __self /*qc2rust::macro_end::ENGINE_EVENT*/
 #endif
 
 // Step 4: kill unstructured setself
@@ -34,7 +41,8 @@
 // Step 5: this should work
 #if 1
     #undef self
-    #define self (RVALUE, this)
+/*qc2rust::define::self*/
+#define self /*qc2rust::macro_begin::self*/(RVALUE, this) /*qc2rust::macro_end::self*/
 #endif
 
 // Step 6: remove SELFPARAM, add parameters
@@ -45,66 +53,77 @@
 // Step 7: remove WITHSELF, no replacement
 #if 0
     #undef WITHSELF
-    #define WITHSELF(value, block) block
+/*qc2rust::define::WITHSELF*/
+#define WITHSELF(value,block) /*qc2rust::macro_begin::WITHSELF*/ /*qc2rust::param_begin::block*/block /*qc2rust::param_end::block*/ /*qc2rust::macro_end::WITHSELF*/
 #endif
 
-#define SELFWRAP(T, R, oldargs, args, forward) \
-    .R oldargs T; \
-    noref .R oldargs __##T = T; \
-    .R args self##T; \
-    R T##_self oldargs { ENGINE_EVENT(); return this.self##T forward; }
+#define SELFWRAP(T, R, oldargs, args, forward)     .R oldargs T;     noref .R oldargs __##T = T;     .R args self##T;     R T##_self oldargs { ENGINE_EVENT(); return this.self##T forward; }
 
 noref entity _selftemp;
-#define SELFWRAP_SET(T, e, f) \
-    (_selftemp = (e), _selftemp.__##T = ((f) ? T##_self : func_null), _selftemp.self##T = (f))
-#define SELFWRAP_GET(T, e) \
-    (RVALUE, (e).self##T)
-#define _SELFWRAP_SET(T, e, f) \
-    ((e).__##T = (f))
-#define _SELFWRAP_GET(T, e) \
-    (RVALUE, (e).__##T)
+#define SELFWRAP_SET(T, e, f)     (_selftemp = (e), _selftemp.__##T = ((f) ? T##_self : func_null), _selftemp.self##T = (f))
+#define SELFWRAP_GET(T, e)     (RVALUE, (e).self##T)
+#define _SELFWRAP_SET(T, e, f)     ((e).__##T = (f))
+#define _SELFWRAP_GET(T, e)     (RVALUE, (e).__##T)
 
 SELFWRAP(think, void, (), (entity this), (this))
-#define setthink(e, f) SELFWRAP_SET(think, e, f)
-#define getthink(e) SELFWRAP_GET(think, e)
+/*qc2rust::define::setthink*/
+#define setthink(e,f) /*qc2rust::macro_begin::setthink*/SELFWRAP_SET(think,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/,  /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) /*qc2rust::macro_end::setthink*/
+/*qc2rust::define::getthink*/
+#define getthink(e) /*qc2rust::macro_begin::getthink*/SELFWRAP_GET(think,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::getthink*/
 
 #ifdef GAMEQC
 SELFWRAP(touch, void, (), (entity this, entity toucher), (this, other))
-#define settouch(e, f) SELFWRAP_SET(touch, e, f)
-#define gettouch(e) SELFWRAP_GET(touch, e)
+/*qc2rust::define::settouch*/
+#define settouch(e,f) /*qc2rust::macro_begin::settouch*/SELFWRAP_SET(touch,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/,  /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) /*qc2rust::macro_end::settouch*/
+/*qc2rust::define::gettouch*/
+#define gettouch(e) /*qc2rust::macro_begin::gettouch*/SELFWRAP_GET(touch,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::gettouch*/
 #endif
 
 #ifdef GAMEQC
 SELFWRAP(blocked, void, (), (entity this, entity blocker), (this, other))
-#define setblocked(e, f) SELFWRAP_SET(blocked, e, f)
-#define blocked stopusingthis
+/*qc2rust::define::setblocked*/
+#define setblocked(e,f) /*qc2rust::macro_begin::setblocked*/SELFWRAP_SET(blocked,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/,  /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) /*qc2rust::macro_end::setblocked*/
+/*qc2rust::define::blocked*/
+#define blocked /*qc2rust::macro_begin::blocked*/stopusingthis /*qc2rust::macro_end::blocked*/
 #endif
 
 SELFWRAP(predraw, void, (), (entity this), (this))
-#define setpredraw(e, f) SELFWRAP_SET(predraw, e, f)
+/*qc2rust::define::setpredraw*/
+#define setpredraw(e,f) /*qc2rust::macro_begin::setpredraw*/SELFWRAP_SET(predraw,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/,  /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) /*qc2rust::macro_end::setpredraw*/
 
 #ifdef GAMEQC
 SELFWRAP(customizeentityforclient, bool, (), (entity this, entity client), (this, other))
-#define setcefc(e, f) SELFWRAP_SET(customizeentityforclient, e, f)
-#define getcefc(e) SELFWRAP_GET(customizeentityforclient, e)
+/*qc2rust::define::setcefc*/
+#define setcefc(e,f) /*qc2rust::macro_begin::setcefc*/SELFWRAP_SET(customizeentityforclient,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/,  /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) /*qc2rust::macro_end::setcefc*/
+/*qc2rust::define::getcefc*/
+#define getcefc(e) /*qc2rust::macro_begin::getcefc*/SELFWRAP_GET(customizeentityforclient,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::getcefc*/
 #endif
 
 SELFWRAP(camera_transform, vector, (vector org, vector ang), (entity this, vector org, vector ang), (this, org, ang))
-#define setcamera_transform(e, f) SELFWRAP_SET(camera_transform, e, f)
+/*qc2rust::define::setcamera_transform*/
+#define setcamera_transform(e,f) /*qc2rust::macro_begin::setcamera_transform*/SELFWRAP_SET(camera_transform,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/,  /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) /*qc2rust::macro_end::setcamera_transform*/
 
 /** return false to remove from the client */
 SELFWRAP(SendEntity, bool, (entity to, int sendflags), (entity this, entity to, int sendflags), (this, to, sendflags))
-#define setSendEntity(e, f) SELFWRAP_SET(SendEntity, e, f)
-#define getSendEntity(e) SELFWRAP_GET(SendEntity, e)
+/*qc2rust::define::setSendEntity*/
+#define setSendEntity(e,f) /*qc2rust::macro_begin::setSendEntity*/SELFWRAP_SET(SendEntity,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/,  /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/) /*qc2rust::macro_end::setSendEntity*/
+/*qc2rust::define::getSendEntity*/
+#define getSendEntity(e) /*qc2rust::macro_begin::getSendEntity*/SELFWRAP_GET(SendEntity,  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::getSendEntity*/
 
-#define ChangeYaw(e, ...) (__self = (e), builtin_ChangeYaw(__VA_ARGS__))
-#define checkclient(e, ...) (__self = (e), builtin_checkclient(__VA_ARGS__))
+/*qc2rust::define::ChangeYaw*/
+#define ChangeYaw(e,...) /*qc2rust::macro_begin::ChangeYaw*/(__self = ( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/), builtin_ChangeYaw( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::ChangeYaw*/
+/*qc2rust::define::checkclient*/
+#define checkclient(e,...) /*qc2rust::macro_begin::checkclient*/(__self = ( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/), builtin_checkclient( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::checkclient*/
 #ifndef SVQC
-    #define droptofloor(e, ...) (__self = (e), builtin_droptofloor(__VA_ARGS__))
+/*qc2rust::define::droptofloor*/
+#define droptofloor(e,...) /*qc2rust::macro_begin::droptofloor*/(__self = ( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/), builtin_droptofloor( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::droptofloor*/
 #endif
-#define error(...) (__self = (NULL), builtin_error(__VA_ARGS__))
-#define movetogoal(e, ...) (__self = (e), builtin_movetogoal(__VA_ARGS__))
-#define walkmove(e, ...) (__self = (e), builtin_walkmove(__VA_ARGS__))
+/*qc2rust::define::error*/
+#define error(...) /*qc2rust::macro_begin::error*/(__self = (NULL), builtin_error( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::error*/
+/*qc2rust::define::movetogoal*/
+#define movetogoal(e,...) /*qc2rust::macro_begin::movetogoal*/(__self = ( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/), builtin_movetogoal( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::movetogoal*/
+/*qc2rust::define::walkmove*/
+#define walkmove(e,...) /*qc2rust::macro_begin::walkmove*/(__self = ( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/), builtin_walkmove( /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::walkmove*/
 
 #ifdef GAMEQC
 void adaptor_think2use(entity this) { if (this.use) this.use(this, NULL, NULL); }

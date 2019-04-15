@@ -1283,9 +1283,8 @@ void ctf_FlagSetup(int teamnumber, entity flag) // called when spawning a flag e
 	if (flag.capeffect == "") 	{ flag.capeffect = EFFECT_CAP(teamnumber).eent_eff_name; }
 
 	// sounds
-#define X(s,b) \
-		if(flag.s == "") flag.s = b; \
-		precache_sound(flag.s);
+/*qc2rust::define::X*/
+#define X(s,b) /*qc2rust::macro_begin::X*/if(flag. /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/ == "") flag. /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/ =  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/; 		precache_sound(flag. /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/); /*qc2rust::macro_end::X*/
 
 	X(snd_flag_taken, 		strzone(SND(CTF_TAKEN(teamnumber))))
 	X(snd_flag_returned, 	strzone(SND(CTF_RETURNED(teamnumber))))

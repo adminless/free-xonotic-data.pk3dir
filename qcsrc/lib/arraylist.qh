@@ -4,27 +4,17 @@ USING(ArrayList, entity);
 .int al_buf;
 .int al_len;
 
-#define AL_NEW(this, n, default, T) \
-	MACRO_BEGIN \
-		ArrayList _al = this = new_pure(ArrayList); \
-		_al.al_buf = buf_create(); \
-		for (int i = 0, _n = _al.al_len = n; i < _n; ++i) \
-		{ \
-			const _AL_type__##T() it = default; \
-			AL_set##T(this, i, it); \
-		} \
-	MACRO_END
+#define AL_NEW(this, n, default, T) 	MACRO_BEGIN 		ArrayList _al = this = new_pure(ArrayList); 		_al.al_buf = buf_create(); 		for (int i = 0, _n = _al.al_len = n; i < _n; ++i) 		{ 			const _AL_type__##T() it = default; 			AL_set##T(this, i, it); 		} 	MACRO_END
 
-#define AL_DELETE(this) \
-	MACRO_BEGIN \
-		buf_del(this.al_buf); \
-		delete(this); \
-		this = NULL; \
-	MACRO_END
+/*qc2rust::define::AL_DELETE*/
+#define AL_DELETE(this) /*qc2rust::macro_begin::AL_DELETE*/MACRO_BEGIN 		buf_del( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/.al_buf); 		delete( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/); 		 /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/ = NULL; 	MACRO_END /*qc2rust::macro_end::AL_DELETE*/
 
-#define _AL_type__s() string
-#define AL_gets(this, idx) bufstr_get(this.al_buf, idx)
-#define AL_sets(this, idx, val) bufstr_set(this.al_buf, idx, val)
+/*qc2rust::define::_AL_type__s*/
+#define _AL_type__s() /*qc2rust::macro_begin::_AL_type__s*/string /*qc2rust::macro_end::_AL_type__s*/
+/*qc2rust::define::AL_gets*/
+#define AL_gets(this,idx) /*qc2rust::macro_begin::AL_gets*/bufstr_get( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/.al_buf,  /*qc2rust::param_begin::idx*/idx /*qc2rust::param_end::idx*/) /*qc2rust::macro_end::AL_gets*/
+/*qc2rust::define::AL_sets*/
+#define AL_sets(this,idx,val) /*qc2rust::macro_begin::AL_sets*/bufstr_set( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/.al_buf,  /*qc2rust::param_begin::idx*/idx /*qc2rust::param_end::idx*/,  /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/) /*qc2rust::macro_end::AL_sets*/
 
 #if defined(CSQC)
 string al_ftos(float f) = #26;
@@ -37,9 +27,12 @@ string al_ftos(float f) = #17;
 float al_stof(string s) = #21;
 #endif
 
-#define _AL_type__f() float
-#define AL_getf(this, idx) al_stof(AL_gets(this, idx))
-#define AL_setf(this, idx, val) AL_sets(this, idx, al_ftos(val))
+/*qc2rust::define::_AL_type__f*/
+#define _AL_type__f() /*qc2rust::macro_begin::_AL_type__f*/float /*qc2rust::macro_end::_AL_type__f*/
+/*qc2rust::define::AL_getf*/
+#define AL_getf(this,idx) /*qc2rust::macro_begin::AL_getf*/al_stof(AL_gets( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/,  /*qc2rust::param_begin::idx*/idx /*qc2rust::param_end::idx*/)) /*qc2rust::macro_end::AL_getf*/
+/*qc2rust::define::AL_setf*/
+#define AL_setf(this,idx,val) /*qc2rust::macro_begin::AL_setf*/AL_sets( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/,  /*qc2rust::param_begin::idx*/idx /*qc2rust::param_end::idx*/, al_ftos( /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/)) /*qc2rust::macro_end::AL_setf*/
 
 #if defined(CSQC)
 int al_etof(entity e) = #512;
@@ -52,16 +45,11 @@ int al_etof(entity e) = #79;
 entity al_ftoe(int i) = #80;
 #endif
 
-#define _AL_type__e() entity
-#define AL_gete(this, idx) al_ftoe(AL_getf(this, idx))
-#define AL_sete(this, idx, val) AL_setf(this, idx, al_etof(val))
+/*qc2rust::define::_AL_type__e*/
+#define _AL_type__e() /*qc2rust::macro_begin::_AL_type__e*/entity /*qc2rust::macro_end::_AL_type__e*/
+/*qc2rust::define::AL_gete*/
+#define AL_gete(this,idx) /*qc2rust::macro_begin::AL_gete*/al_ftoe(AL_getf( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/,  /*qc2rust::param_begin::idx*/idx /*qc2rust::param_end::idx*/)) /*qc2rust::macro_end::AL_gete*/
+/*qc2rust::define::AL_sete*/
+#define AL_sete(this,idx,val) /*qc2rust::macro_begin::AL_sete*/AL_setf( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/,  /*qc2rust::param_begin::idx*/idx /*qc2rust::param_end::idx*/, al_etof( /*qc2rust::param_begin::val*/val /*qc2rust::param_end::val*/)) /*qc2rust::macro_end::AL_sete*/
 
-#define AL_EACH(this, T, cond, body) \
-	MACRO_BEGIN \
-		const noref ArrayList _al = this; \
-		for (int i = 0, n = _al.al_len; i < n; ++i) \
-		{ \
-			const noref _AL_type__##T() it = AL_get##T(_al, i); \
-			if (cond) { body } \
-		} \
-	MACRO_END
+#define AL_EACH(this, T, cond, body) 	MACRO_BEGIN 		const noref ArrayList _al = this; 		for (int i = 0, n = _al.al_len; i < n; ++i) 		{ 			const noref _AL_type__##T() it = AL_get##T(_al, i); 			if (cond) { body } 		} 	MACRO_END

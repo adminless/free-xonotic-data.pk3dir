@@ -39,16 +39,14 @@ const float VOL_MUFFLED = 0.35;
 // Play all sounds via sound7, for access to the extra channels.
 // Otherwise, channels 8 to 15 would be blocked for a weird QW feature.
 #ifdef SVQC
-	#define _sound(e, c, s, v, a) \
-		MACRO_BEGIN \
-			entity __e = e; \
-			if (sound_allowed(MSG_BROADCAST, __e)) \
-				sound7(__e, c, s, v, a, 0, 0); \
-		MACRO_END
+/*qc2rust::define::_sound*/
+#define _sound(e,c,s,v,a) /*qc2rust::macro_begin::_sound*/MACRO_BEGIN 			entity __e =  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/; 			if (sound_allowed(MSG_BROADCAST, __e)) 				sound7(__e,  /*qc2rust::param_begin::c*/c /*qc2rust::param_end::c*/,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/,  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/,  /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/, 0, 0); 		MACRO_END /*qc2rust::macro_end::_sound*/
 #else
-	#define _sound(e, c, s, v, a) sound7(e, c, s, v, a, 0, 0)
+/*qc2rust::define::_sound*/
+#define _sound(e,c,s,v,a) /*qc2rust::macro_begin::_sound*/sound7( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/,  /*qc2rust::param_begin::c*/c /*qc2rust::param_end::c*/,  /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/,  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/,  /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/, 0, 0) /*qc2rust::macro_end::_sound*/
 #endif
-#define sound(e, c, s, v, a) _sound(e, c, Sound_fixpath(s), v, a)
+/*qc2rust::define::sound*/
+#define sound(e,c,s,v,a) /*qc2rust::macro_begin::sound*/_sound( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/,  /*qc2rust::param_begin::c*/c /*qc2rust::param_end::c*/, Sound_fixpath( /*qc2rust::param_begin::s*/s /*qc2rust::param_end::s*/),  /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/,  /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) /*qc2rust::macro_end::sound*/
 
 /**
  * because sound7 didn't have origin
@@ -62,33 +60,8 @@ const float VOL_MUFFLED = 0.35;
  * @param speed
  * @param sf
  */
-#define sound8(e, o, chan, samp, vol, atten, speed, sf) \
-	MACRO_BEGIN \
-		entity __e; \
-		int __chan = chan; \
-		string __samp = samp; \
-		bool auto = false; \
-		if (__chan > 0) __e = e; \
-		else \
-		{ \
-			auto = true; \
-			__chan = fabs(__chan); \
-			entity tmp = __e = new(csqc_autochannel); \
-			setthink(tmp, SUB_Remove); \
-			tmp.nextthink = time + soundlength(__samp); \
-		} \
-		vector old_origin = __e.origin; \
-		vector old_mins = __e.mins; \
-		vector old_maxs = __e.maxs; \
-		setorigin(__e, o); \
-		setsize(__e, '0 0 0', '0 0 0'); \
-		sound7(__e, __chan, __samp, vol, atten, speed, sf); \
-		if (!auto) \
-		{ \
-			setorigin(__e, old_origin); \
-			setsize(__e, old_mins, old_maxs); \
-		} \
-	MACRO_END
+/*qc2rust::define::sound8*/
+#define sound8(e,o,chan,samp,vol,atten,speed,sf) /*qc2rust::macro_begin::sound8*/MACRO_BEGIN 		entity __e; 		int __chan =  /*qc2rust::param_begin::chan*/chan /*qc2rust::param_end::chan*/; 		string __samp =  /*qc2rust::param_begin::samp*/samp /*qc2rust::param_end::samp*/; 		bool auto = false; 		if (__chan > 0) __e =  /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/; 		else 		{ 			auto = true; 			__chan = fabs(__chan); 			entity tmp = __e = new(csqc_autochannel); 			setthink(tmp, SUB_Remove); 			tmp.nextthink = time + soundlength(__samp); 		} 		vector old_origin = __e.origin; 		vector old_mins = __e.mins; 		vector old_maxs = __e.maxs; 		setorigin(__e,  /*qc2rust::param_begin::o*/o /*qc2rust::param_end::o*/); 		setsize(__e, '0 0 0', '0 0 0'); 		sound7(__e, __chan, __samp,  /*qc2rust::param_begin::vol*/vol /*qc2rust::param_end::vol*/,  /*qc2rust::param_begin::atten*/atten /*qc2rust::param_end::atten*/,  /*qc2rust::param_begin::speed*/speed /*qc2rust::param_end::speed*/,  /*qc2rust::param_begin::sf*/sf /*qc2rust::param_end::sf*/); 		if (!auto) 		{ 			setorigin(__e, old_origin); 			setsize(__e, old_mins, old_maxs); 		} 	MACRO_END /*qc2rust::macro_end::sound8*/
 
 string _Sound_fixpath(string base)
 {
@@ -96,17 +69,10 @@ string _Sound_fixpath(string base)
 #ifdef SVQC
 	return strcat(base, ".wav");  // let the client engine decide
 #else
-#define extensions(x) \
-	x(wav) \
-	x(ogg) \
-	x(flac) \
-	/**/
-#define tryext(ext) { \
-		string s = strcat(base, "." #ext); \
-		if (fexists(strcat("sound/", s))) { \
-			return s; \
-		} \
-	}
+/*qc2rust::define::extensions*/
+#define extensions(x) /*qc2rust::macro_begin::extensions*/ /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/(wav) 	 /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/(ogg) 	 /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/(flac) 	/**/ /*qc2rust::macro_end::extensions*/
+/*qc2rust::define::tryext*/
+#define tryext(ext) /*qc2rust::macro_begin::tryext*/{ 		string s = strcat(base, "."  /*qc2rust::stringify_begin::ext*/#ext /*qc2rust::stringify_end::ext*/); 		if (fexists(strcat("sound/", s))) { 			return s; 		} 	} /*qc2rust::macro_end::tryext*/
 	extensions(tryext);
 	LOG_WARNF("Missing sound: \"%s\"", strcat("sound/", base));
 #undef tryext
@@ -137,8 +103,5 @@ ENDCLASS(Sound)
 
 entity _Sound_fixpath_this;
 string _Sound_fixpath_cached;
-#define Sound_fixpath(this) ( \
-	_Sound_fixpath_this = (this), \
-	_Sound_fixpath_cached = _Sound_fixpath_this.sound_str_, \
-	_Sound_fixpath_cached ? _Sound_fixpath_cached : _Sound_fixpath(_Sound_fixpath_this.sound_str()) \
-)
+/*qc2rust::define::Sound_fixpath*/
+#define Sound_fixpath(this) /*qc2rust::macro_begin::Sound_fixpath*/( 	_Sound_fixpath_this = ( /*qc2rust::param_begin::this*/this /*qc2rust::param_end::this*/), 	_Sound_fixpath_cached = _Sound_fixpath_this.sound_str_, 	_Sound_fixpath_cached ? _Sound_fixpath_cached : _Sound_fixpath(_Sound_fixpath_this.sound_str()) ) /*qc2rust::macro_end::Sound_fixpath*/

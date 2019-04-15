@@ -11,7 +11,9 @@ entity makeXonoticCommandButton_T(string theText, vector theColor, string theCom
 entity makeXonoticCommandButton(string theText, vector theColor, string theCommand, float closesMenu);
 
 #ifndef COMMANDBUTTON_CLOSE
-# define COMMANDBUTTON_CLOSE 1
-# define COMMANDBUTTON_APPLY 2
+/*qc2rust::define::COMMANDBUTTON_CLOSE*/
+#define COMMANDBUTTON_CLOSE /*qc2rust::macro_begin::COMMANDBUTTON_CLOSE*/1 /*qc2rust::macro_end::COMMANDBUTTON_CLOSE*/
+/*qc2rust::define::COMMANDBUTTON_APPLY*/
+#define COMMANDBUTTON_APPLY /*qc2rust::macro_begin::COMMANDBUTTON_APPLY*/2 /*qc2rust::macro_end::COMMANDBUTTON_APPLY*/
 //# define COMMANDBUTTON_REVERT 4
 #endif

@@ -3,21 +3,31 @@
 // NOTE: spaces removed from these often used macros to reduce size when expanded
 #if 1
     void voidfunc() { }
-    #define MACRO_BEGIN if(1){
-    #define MACRO_END }else voidfunc()
+/*qc2rust::define::MACRO_BEGIN*/
+#define MACRO_BEGIN /*qc2rust::macro_begin::MACRO_BEGIN*/if(1){ /*qc2rust::macro_end::MACRO_BEGIN*/
+/*qc2rust::define::MACRO_END*/
+#define MACRO_END /*qc2rust::macro_begin::MACRO_END*/}else voidfunc() /*qc2rust::macro_end::MACRO_END*/
 #else
-    #define MACRO_BEGIN do{
-    #define MACRO_END }while(0)
+/*qc2rust::define::MACRO_BEGIN*/
+#define MACRO_BEGIN /*qc2rust::macro_begin::MACRO_BEGIN*/do{ /*qc2rust::macro_end::MACRO_BEGIN*/
+/*qc2rust::define::MACRO_END*/
+#define MACRO_END /*qc2rust::macro_begin::MACRO_END*/}while(0) /*qc2rust::macro_end::MACRO_END*/
 #endif
 
 /** Marker for use in (RVALUE, (expr)) */
-#define RVALUE 0
+/*qc2rust::define::RVALUE*/
+#define RVALUE /*qc2rust::macro_begin::RVALUE*/0 /*qc2rust::macro_end::RVALUE*/
 
 #define _CAT(a, b) a ## b
-#define CAT(a, b) _CAT(a, b)
+/*qc2rust::define::CAT*/
+#define CAT(a,b) /*qc2rust::macro_begin::CAT*/_CAT( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/,  /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/) /*qc2rust::macro_end::CAT*/
 
-#define _STR(it) #it
-#define STR(it) _STR(it)
+/*qc2rust::define::_STR*/
+#define _STR(it) /*qc2rust::macro_begin::_STR*/ /*qc2rust::stringify_begin::it*/#it /*qc2rust::stringify_end::it*/ /*qc2rust::macro_end::_STR*/
+/*qc2rust::define::STR*/
+#define STR(it) /*qc2rust::macro_begin::STR*/_STR( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/) /*qc2rust::macro_end::STR*/
 
-#define EMPTY()
-#define DEFER(id) id EMPTY()
+/*qc2rust::define::EMPTY*/
+#define EMPTY() /*qc2rust::macro_begin::EMPTY*/ /*qc2rust::macro_end::EMPTY*/
+/*qc2rust::define::DEFER*/
+#define DEFER(id) /*qc2rust::macro_begin::DEFER*/ /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/ EMPTY() /*qc2rust::macro_end::DEFER*/

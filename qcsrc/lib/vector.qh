@@ -1,29 +1,31 @@
 #pragma once
 
 noref vector _vlen2;
-#define vlen2(v) (_vlen2 = (v), dotproduct(_vlen2, _vlen2))
+/*qc2rust::define::vlen2*/
+#define vlen2(v) /*qc2rust::macro_begin::vlen2*/(_vlen2 = ( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/), dotproduct(_vlen2, _vlen2)) /*qc2rust::macro_end::vlen2*/
 
 #if 1
 noref float _vdist_f;
 /** Vector distance comparison, avoids sqrt() */
-#define vdist(v, cmp, f) (vlen2(v) cmp (_vdist_f = (f), _vdist_f * _vdist_f))
+/*qc2rust::define::vdist*/
+#define vdist(v,cmp,f) /*qc2rust::macro_begin::vdist*/(vlen2( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/)  /*qc2rust::param_begin::cmp*/cmp /*qc2rust::param_end::cmp*/ (_vdist_f = ( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/), _vdist_f * _vdist_f)) /*qc2rust::macro_end::vdist*/
 #else
-#define vdist(v, cmp, f) (vlen(v) cmp (f))
+/*qc2rust::define::vdist*/
+#define vdist(v,cmp,f) /*qc2rust::macro_begin::vdist*/(vlen( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/)  /*qc2rust::param_begin::cmp*/cmp /*qc2rust::param_end::cmp*/ ( /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/)) /*qc2rust::macro_end::vdist*/
 #endif
 
 #if 1
-#define dotproduct(a, b) ((a) * (b))
+/*qc2rust::define::dotproduct*/
+#define dotproduct(a,b) /*qc2rust::macro_begin::dotproduct*/(( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) * ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)) /*qc2rust::macro_end::dotproduct*/
 #else
 noref vector _dotproduct_a, _dotproduct_b;
-#define dotproduct(a, b) \
-	(_dotproduct_a = (a), _dotproduct_b = (b), \
-	  _dotproduct_a.x * _dotproduct_b.x \
-	+ _dotproduct_a.y * _dotproduct_b.y \
-	+ _dotproduct_a.z * _dotproduct_b.z)
+/*qc2rust::define::dotproduct*/
+#define dotproduct(a,b) /*qc2rust::macro_begin::dotproduct*/(_dotproduct_a = ( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/), _dotproduct_b = ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/), 	  _dotproduct_a.x * _dotproduct_b.x 	+ _dotproduct_a.y * _dotproduct_b.y 	+ _dotproduct_a.z * _dotproduct_b.z) /*qc2rust::macro_end::dotproduct*/
 #endif
 
 #if 1
-#define cross(a, b) ((a) >< (b))
+/*qc2rust::define::cross*/
+#define cross(a,b) /*qc2rust::macro_begin::cross*/(( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) >< ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)) /*qc2rust::macro_end::cross*/
 #else
 ERASEABLE
 vector cross(vector a, vector b)
@@ -36,11 +38,8 @@ vector cross(vector a, vector b)
 #endif
 
 noref vector _vmul_a, _vmul_b;
-#define vmul(a, b) \
-    (_vmul_a = (a), _vmul_b = (b), \
-	  '1 0 0' * (_vmul_a.x * _vmul_b.x) \
-	+ '0 1 0' * (_vmul_a.y * _vmul_b.y) \
-	+ '0 0 1' * (_vmul_a.z * _vmul_b.z))
+/*qc2rust::define::vmul*/
+#define vmul(a,b) /*qc2rust::macro_begin::vmul*/(_vmul_a = ( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/), _vmul_b = ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/), 	  '1 0 0' * (_vmul_a.x * _vmul_b.x) 	+ '0 1 0' * (_vmul_a.y * _vmul_b.y) 	+ '0 0 1' * (_vmul_a.z * _vmul_b.z)) /*qc2rust::macro_end::vmul*/
 
 const vector eX = '1 0 0';
 const vector eY = '0 1 0';
@@ -89,28 +88,31 @@ float boxesoverlap(vector m1, vector m2, vector m3, vector m4) { return m2_x >= 
 ERASEABLE
 float boxinsidebox(vector smins, vector smaxs, vector bmins, vector bmaxs) { return smins.x >= bmins.x && smaxs.x <= bmaxs.x && smins.y >= bmins.y && smaxs.y <= bmaxs.y && smins.z >= bmins.z && smaxs.z <= bmaxs.z; }
 
-#define PITCH(v) ((v).x)
-#define YAW(v) ((v).y)
-#define ROLL(v) ((v).z)
+/*qc2rust::define::PITCH*/
+#define PITCH(v) /*qc2rust::macro_begin::PITCH*/(( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/).x) /*qc2rust::macro_end::PITCH*/
+/*qc2rust::define::YAW*/
+#define YAW(v) /*qc2rust::macro_begin::YAW*/(( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/).y) /*qc2rust::macro_end::YAW*/
+/*qc2rust::define::ROLL*/
+#define ROLL(v) /*qc2rust::macro_begin::ROLL*/(( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/).z) /*qc2rust::macro_end::ROLL*/
 
-#define MAKEVECTORS(f, angles, forward, right, up) MACRO_BEGIN \
-	f(angles); \
-	forward = v_forward; \
-	right = v_right; \
-	up = v_up; \
-MACRO_END
+/*qc2rust::define::MAKEVECTORS*/
+#define MAKEVECTORS(f,angles,forward,right,up) /*qc2rust::macro_begin::MAKEVECTORS*/MACRO_BEGIN 	 /*qc2rust::param_begin::f*/f /*qc2rust::param_end::f*/( /*qc2rust::param_begin::angles*/angles /*qc2rust::param_end::angles*/); 	 /*qc2rust::param_begin::forward*/forward /*qc2rust::param_end::forward*/ = v_forward; 	 /*qc2rust::param_begin::right*/right /*qc2rust::param_end::right*/ = v_right; 	 /*qc2rust::param_begin::up*/up /*qc2rust::param_end::up*/ = v_up; MACRO_END /*qc2rust::macro_end::MAKEVECTORS*/
 
 //pseudo prototypes:
 // vector vec2(vector v); // returns a vector with just the x and y components of the given vector
 // vector vec2(float x, float y); // returns a vector with the given x and y components
 
 noref vector _vec2;
-#define vec2(...) EVAL(OVERLOAD(vec2, __VA_ARGS__))
-#define vec2_1(v) (_vec2 = (v), _vec2.z = 0, _vec2)
-#define vec2_2(x, y) (_vec2_x = (x), _vec2_y = (y), _vec2)
+/*qc2rust::define::vec2*/
+#define vec2(...) /*qc2rust::macro_begin::vec2*/EVAL(OVERLOAD(vec2,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::vec2*/
+/*qc2rust::define::vec2_1*/
+#define vec2_1(v) /*qc2rust::macro_begin::vec2_1*/(_vec2 = ( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/), _vec2.z = 0, _vec2) /*qc2rust::macro_end::vec2_1*/
+/*qc2rust::define::vec2_2*/
+#define vec2_2(x,y) /*qc2rust::macro_begin::vec2_2*/(_vec2_x = ( /*qc2rust::param_begin::x*/x /*qc2rust::param_end::x*/), _vec2_y = ( /*qc2rust::param_begin::y*/y /*qc2rust::param_end::y*/), _vec2) /*qc2rust::macro_end::vec2_2*/
 
 noref vector _vec3;
-#define vec3(_x, _y, _z) (_vec3.x = (_x), _vec3.y = (_y), _vec3.z = (_z), _vec3)
+/*qc2rust::define::vec3*/
+#define vec3(_x,_y,_z) /*qc2rust::macro_begin::vec3*/(_vec3.x = ( /*qc2rust::param_begin::_x*/_x /*qc2rust::param_end::_x*/), _vec3.y = ( /*qc2rust::param_begin::_y*/_y /*qc2rust::param_end::_y*/), _vec3.z = ( /*qc2rust::param_begin::_z*/_z /*qc2rust::param_end::_z*/), _vec3) /*qc2rust::macro_end::vec3*/
 
 ERASEABLE
 vector Rotate(vector v, float a)
@@ -120,7 +122,8 @@ vector Rotate(vector v, float a)
 }
 
 noref vector _yinvert;
-#define yinvert(v) (_yinvert = (v), _yinvert.y = 1 - _yinvert.y, _yinvert)
+/*qc2rust::define::yinvert*/
+#define yinvert(v) /*qc2rust::macro_begin::yinvert*/(_yinvert = ( /*qc2rust::param_begin::v*/v /*qc2rust::param_end::v*/), _yinvert.y = 1 - _yinvert.y, _yinvert) /*qc2rust::macro_end::yinvert*/
 
 /**
  * @param dir the directional vector
@@ -151,8 +154,8 @@ vector vec_epsilon(vector this, float eps)
 	return this;
 }
 
-#define ClipVelocity(in, normal, out, overbounce) \
-	(out = vec_epsilon(vec_reflect(in, normal, (overbounce) - 1), 0.1))
+/*qc2rust::define::ClipVelocity*/
+#define ClipVelocity(in,normal,out,overbounce) /*qc2rust::macro_begin::ClipVelocity*/( /*qc2rust::param_begin::out*/out /*qc2rust::param_end::out*/ = vec_epsilon(vec_reflect( /*qc2rust::param_begin::in*/in /*qc2rust::param_end::in*/,  /*qc2rust::param_begin::normal*/normal /*qc2rust::param_end::normal*/, ( /*qc2rust::param_begin::overbounce*/overbounce /*qc2rust::param_end::overbounce*/) - 1), 0.1)) /*qc2rust::macro_end::ClipVelocity*/
 
 #ifdef GAMEQC
 	ERASEABLE

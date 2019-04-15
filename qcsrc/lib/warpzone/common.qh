@@ -30,7 +30,8 @@ entity WarpZone_Find(vector mi, vector ma);
 void WarpZone_MakeAllSolid();
 void WarpZone_MakeAllOther();
 
-#define MOVE_NOTHING -1
+/*qc2rust::define::MOVE_NOTHING*/
+#define MOVE_NOTHING /*qc2rust::macro_begin::MOVE_NOTHING*/-1 /*qc2rust::macro_end::MOVE_NOTHING*/
 entity WarpZone_trace_forent; // temp, callback is allowed to change it
 USING(WarpZone_trace_callback_t, void(vector start, vector hit, vector end)); // called on every elementary trace
 var WarpZone_trace_callback_t WarpZone_trace_callback_t_null;
@@ -89,29 +90,38 @@ void WarpZone_RefSys_Copy(entity me, entity from); // to.R := from.R
 entity WarpZone_RefSys_SpawnSameRefSys(entity me); // spawn().R = me.R
 
 #ifndef BITCLR
-# define BITCLR(a,b) ((a) - ((a) & (b)))
+/*qc2rust::define::BITCLR*/
+#define BITCLR(a,b) /*qc2rust::macro_begin::BITCLR*/(( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) - (( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) & ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/))) /*qc2rust::macro_end::BITCLR*/
 #endif
 #ifndef BITSET
-# define BITSET(a,b) ((a) | (b))
+/*qc2rust::define::BITSET*/
+#define BITSET(a,b) /*qc2rust::macro_begin::BITSET*/(( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) | ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)) /*qc2rust::macro_end::BITSET*/
 #endif
 #ifndef BITXOR
-# define BITXOR(a,b) (((a) | (b)) - ((a) & (b)))
+/*qc2rust::define::BITXOR*/
+#define BITXOR(a,b) /*qc2rust::macro_begin::BITXOR*/((( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) | ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)) - (( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) & ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/))) /*qc2rust::macro_end::BITXOR*/
 #endif
 #ifndef BITCLR_ASSIGN
-# define BITCLR_ASSIGN(a,b) ((a) = (a) - ((a) & (b)))
+/*qc2rust::define::BITCLR_ASSIGN*/
+#define BITCLR_ASSIGN(a,b) /*qc2rust::macro_begin::BITCLR_ASSIGN*/(( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) = ( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) - (( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) & ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/))) /*qc2rust::macro_end::BITCLR_ASSIGN*/
 #endif
 #ifndef BITSET_ASSIGN
-# define BITSET_ASSIGN(a,b) ((a) |= (b))
+/*qc2rust::define::BITSET_ASSIGN*/
+#define BITSET_ASSIGN(a,b) /*qc2rust::macro_begin::BITSET_ASSIGN*/(( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) |= ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)) /*qc2rust::macro_end::BITSET_ASSIGN*/
 #endif
 #ifndef BITXOR_ASSIGN
-# define BITXOR_ASSIGN(a,b) ((a) = ((a) | (b)) - ((a) & (b)))
+/*qc2rust::define::BITXOR_ASSIGN*/
+#define BITXOR_ASSIGN(a,b) /*qc2rust::macro_begin::BITXOR_ASSIGN*/(( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) = (( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) | ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/)) - (( /*qc2rust::param_begin::a*/a /*qc2rust::param_end::a*/) & ( /*qc2rust::param_begin::b*/b /*qc2rust::param_end::b*/))) /*qc2rust::macro_end::BITXOR_ASSIGN*/
 #endif
 bool WarpZoneLib_MoveOutOfSolid(entity e);
-#define move_out_of_solid(e) WarpZoneLib_MoveOutOfSolid(e)
+/*qc2rust::define::move_out_of_solid*/
+#define move_out_of_solid(e) /*qc2rust::macro_begin::move_out_of_solid*/WarpZoneLib_MoveOutOfSolid( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/) /*qc2rust::macro_end::move_out_of_solid*/
 
 bool WarpZoneLib_ExactTrigger_Touch(entity this, entity toucher);
 void WarpZoneLib_ExactTrigger_Init(entity this);
 
 // WARNING: this kills the trace globals
-#define EXACTTRIGGER_TOUCH(e,t) if(WarpZoneLib_ExactTrigger_Touch((e), (t))) return
-#define EXACTTRIGGER_INIT  WarpZoneLib_ExactTrigger_Init(this)
+/*qc2rust::define::EXACTTRIGGER_TOUCH*/
+#define EXACTTRIGGER_TOUCH(e,t) /*qc2rust::macro_begin::EXACTTRIGGER_TOUCH*/if(WarpZoneLib_ExactTrigger_Touch(( /*qc2rust::param_begin::e*/e /*qc2rust::param_end::e*/), ( /*qc2rust::param_begin::t*/t /*qc2rust::param_end::t*/))) return /*qc2rust::macro_end::EXACTTRIGGER_TOUCH*/
+/*qc2rust::define::EXACTTRIGGER_INIT*/
+#define EXACTTRIGGER_INIT /*qc2rust::macro_begin::EXACTTRIGGER_INIT*/WarpZoneLib_ExactTrigger_Init(this) /*qc2rust::macro_end::EXACTTRIGGER_INIT*/

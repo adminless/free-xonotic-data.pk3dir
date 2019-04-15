@@ -201,7 +201,8 @@ void VoteSpam(float notvoters, float mincount, string result)
 	}
 }
 
-#define spectators_allowed (!autocvar_sv_vote_nospectators || (autocvar_sv_vote_nospectators == 1 && (warmup_stage || intermission_running)))
+/*qc2rust::define::spectators_allowed*/
+#define spectators_allowed /*qc2rust::macro_begin::spectators_allowed*/(!autocvar_sv_vote_nospectators || (autocvar_sv_vote_nospectators == 1 && (warmup_stage || intermission_running))) /*qc2rust::macro_end::spectators_allowed*/
 
 void VoteCount(float first_count)
 {
@@ -1120,16 +1121,8 @@ void VoteCommand_(int request)
 // ================================
 
 // Do not hard code aliases for these, instead create them in commands.cfg... also: keep in alphabetical order, please ;)
-#define VOTE_COMMANDS(request, caller, arguments, command) \
-	VOTE_COMMAND("abstain", VoteCommand_abstain(request, caller), "Abstain your vote in current vote", VC_ASGNMNT_CLIENTONLY) \
-	VOTE_COMMAND("call", VoteCommand_call(request, caller, arguments, command), "Create a new vote for players to decide on", VC_ASGNMNT_BOTH) \
-	VOTE_COMMAND("help", VoteCommand_macro_help(caller, arguments), "Shows this information", VC_ASGNMNT_BOTH) \
-	VOTE_COMMAND("master", VoteCommand_master(request, caller, arguments, command), "Full control over all voting and vote commands", VC_ASGNMNT_CLIENTONLY) \
-	VOTE_COMMAND("no", VoteCommand_no(request, caller), "Select no in current vote", VC_ASGNMNT_CLIENTONLY) \
-	VOTE_COMMAND("status", VoteCommand_status(request, caller), "Prints information about current vote", VC_ASGNMNT_BOTH) \
-	VOTE_COMMAND("stop", VoteCommand_stop(request, caller), "Immediately end a vote", VC_ASGNMNT_BOTH) \
-	VOTE_COMMAND("yes", VoteCommand_yes(request, caller), "Select yes in current vote", VC_ASGNMNT_CLIENTONLY) \
-	/* nothing */
+/*qc2rust::define::VOTE_COMMANDS*/
+#define VOTE_COMMANDS(request,caller,arguments,command) /*qc2rust::macro_begin::VOTE_COMMANDS*/VOTE_COMMAND("abstain", VoteCommand_abstain( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::caller*/caller /*qc2rust::param_end::caller*/), "Abstain your vote in current vote", VC_ASGNMNT_CLIENTONLY) 	VOTE_COMMAND("call", VoteCommand_call( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::caller*/caller /*qc2rust::param_end::caller*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Create a new vote for players to decide on", VC_ASGNMNT_BOTH) 	VOTE_COMMAND("help", VoteCommand_macro_help( /*qc2rust::param_begin::caller*/caller /*qc2rust::param_end::caller*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/), "Shows this information", VC_ASGNMNT_BOTH) 	VOTE_COMMAND("master", VoteCommand_master( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::caller*/caller /*qc2rust::param_end::caller*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Full control over all voting and vote commands", VC_ASGNMNT_CLIENTONLY) 	VOTE_COMMAND("no", VoteCommand_no( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::caller*/caller /*qc2rust::param_end::caller*/), "Select no in current vote", VC_ASGNMNT_CLIENTONLY) 	VOTE_COMMAND("status", VoteCommand_status( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::caller*/caller /*qc2rust::param_end::caller*/), "Prints information about current vote", VC_ASGNMNT_BOTH) 	VOTE_COMMAND("stop", VoteCommand_stop( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::caller*/caller /*qc2rust::param_end::caller*/), "Immediately end a vote", VC_ASGNMNT_BOTH) 	VOTE_COMMAND("yes", VoteCommand_yes( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::caller*/caller /*qc2rust::param_end::caller*/), "Select yes in current vote", VC_ASGNMNT_CLIENTONLY) 	/* nothing */ /*qc2rust::macro_end::VOTE_COMMANDS*/
 
 void VoteCommand_macro_help(entity caller, int argc)
 {
@@ -1138,8 +1131,8 @@ void VoteCommand_macro_help(entity caller, int argc)
 	if (argc == 2 || argv(2) == "help")  // help display listing all commands
 	{
 		print_to(caller, "\nVoting commands:\n");
-		#define VOTE_COMMAND(name, function, description, assignment) \
-			{ if (Votecommand_check_assignment(caller, assignment)) { print_to(caller, strcat("  ^2", name, "^7: ", description)); } }
+/*qc2rust::define::VOTE_COMMAND*/
+#define VOTE_COMMAND(name,function,description,assignment) /*qc2rust::macro_begin::VOTE_COMMAND*/{ if (Votecommand_check_assignment(caller,  /*qc2rust::param_begin::assignment*/assignment /*qc2rust::param_end::assignment*/)) { print_to(caller, strcat("  ^2",  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/, "^7: ",  /*qc2rust::param_begin::description*/description /*qc2rust::param_end::description*/)); } } /*qc2rust::macro_end::VOTE_COMMAND*/
 
 		VOTE_COMMANDS(0, caller, 0, "");
 #undef VOTE_COMMAND
@@ -1150,8 +1143,8 @@ void VoteCommand_macro_help(entity caller, int argc)
 	}
 	else  // usage for individual command
 	{
-		#define VOTE_COMMAND(name, function, description, assignment) \
-			{ if (Votecommand_check_assignment(caller, assignment)) { if (name == strtolower(argv(2))) { function; return; } } }
+/*qc2rust::define::VOTE_COMMAND*/
+#define VOTE_COMMAND(name,function,description,assignment) /*qc2rust::macro_begin::VOTE_COMMAND*/{ if (Votecommand_check_assignment(caller,  /*qc2rust::param_begin::assignment*/assignment /*qc2rust::param_end::assignment*/)) { if ( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ == strtolower(argv(2))) {  /*qc2rust::param_begin::function*/function /*qc2rust::param_end::function*/; return; } } } /*qc2rust::macro_end::VOTE_COMMAND*/
 
 		VOTE_COMMANDS(CMD_REQUEST_USAGE, caller, argc, "");
 #undef VOTE_COMMAND
@@ -1166,8 +1159,8 @@ void VoteCommand_macro_help(entity caller, int argc)
 
 float VoteCommand_macro_command(entity caller, int argc, string vote_command)
 {
-	#define VOTE_COMMAND(name, function, description, assignment) \
-		{ if (Votecommand_check_assignment(caller, assignment)) { if (name == strtolower(argv(1))) { function; return true; } } }
+/*qc2rust::define::VOTE_COMMAND*/
+#define VOTE_COMMAND(name,function,description,assignment) /*qc2rust::macro_begin::VOTE_COMMAND*/{ if (Votecommand_check_assignment(caller,  /*qc2rust::param_begin::assignment*/assignment /*qc2rust::param_end::assignment*/)) { if ( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ == strtolower(argv(1))) {  /*qc2rust::param_begin::function*/function /*qc2rust::param_end::function*/; return true; } } } /*qc2rust::macro_end::VOTE_COMMAND*/
 
 	VOTE_COMMANDS(CMD_REQUEST_COMMAND, caller, argc, vote_command);
 #undef VOTE_COMMAND

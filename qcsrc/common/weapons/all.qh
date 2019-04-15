@@ -25,7 +25,8 @@ WepSet ReadWepSet();
 #include <common/util.qh>
 
 REGISTRY(Weapons, 72) // Increase as needed. Can be up to 72.
-#define Weapons_from(i) _Weapons_from(i, WEP_Null)
+/*qc2rust::define::Weapons_from*/
+#define Weapons_from(i) /*qc2rust::macro_begin::Weapons_from*/_Weapons_from( /*qc2rust::param_begin::i*/i /*qc2rust::param_end::i*/, WEP_Null) /*qc2rust::macro_end::Weapons_from*/
 REGISTER_REGISTRY(Weapons)
 STATIC_INIT(WeaponPickup) { FOREACH(Weapons, true, it.m_pickup = NEW(WeaponPickup, it)); }
 
@@ -35,7 +36,8 @@ STATIC_INIT(WeaponPickup) { FOREACH(Weapons, true, it.m_pickup = NEW(WeaponPicku
 
 .WepSet m_wepset;
 #define WEPSET(id) (WEP_##id.m_wepset)
-#define WepSet_FromWeapon(it) ((it).m_wepset)
+/*qc2rust::define::WepSet_FromWeapon*/
+#define WepSet_FromWeapon(it) /*qc2rust::macro_begin::WepSet_FromWeapon*/(( /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/).m_wepset) /*qc2rust::macro_end::WepSet_FromWeapon*/
 WepSet _WepSet_FromWeapon(int i);
 
 GENERIC_COMMAND(dumpweapons, "Dump all weapons into weapons_dump.txt") // WEAPONTODO: make this work with other progs than just server
@@ -117,13 +119,14 @@ STATIC_INIT_LATE(W_PROP_reloader)
 }
 #endif
 
-#define REGISTER_WEAPON(...) EVAL_REGISTER_WEAPON(OVERLOAD(REGISTER_WEAPON, __VA_ARGS__))
-#define EVAL_REGISTER_WEAPON(...) __VA_ARGS__
-#define REGISTER_WEAPON_2(id, inst) REGISTER(Weapons, WEP, id, m_id, inst)
+/*qc2rust::define::REGISTER_WEAPON*/
+#define REGISTER_WEAPON(...) /*qc2rust::macro_begin::REGISTER_WEAPON*/EVAL_REGISTER_WEAPON(OVERLOAD(REGISTER_WEAPON,  /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/)) /*qc2rust::macro_end::REGISTER_WEAPON*/
+/*qc2rust::define::EVAL_REGISTER_WEAPON*/
+#define EVAL_REGISTER_WEAPON(...) /*qc2rust::macro_begin::EVAL_REGISTER_WEAPON*/ /*qc2rust::param_begin::__VA_ARGS__*/__VA_ARGS__ /*qc2rust::param_end::__VA_ARGS__*/ /*qc2rust::macro_end::EVAL_REGISTER_WEAPON*/
+/*qc2rust::define::REGISTER_WEAPON_2*/
+#define REGISTER_WEAPON_2(id,inst) /*qc2rust::macro_begin::REGISTER_WEAPON_2*/REGISTER(Weapons, WEP,  /*qc2rust::param_begin::id*/id /*qc2rust::param_end::id*/, m_id,  /*qc2rust::param_begin::inst*/inst /*qc2rust::param_end::inst*/) /*qc2rust::macro_end::REGISTER_WEAPON_2*/
 /** TODO: deprecated - remove */
-#define REGISTER_WEAPON_3(id, sname, inst) \
-    REGISTER_WEAPON_2(id, inst); \
-    [[alias("WEP_" #id)]] Weapon _wep_##sname
+#define REGISTER_WEAPON_3(id, sname, inst)     REGISTER_WEAPON_2(id, inst);     [[alias("WEP_" #id)]] Weapon _wep_##sname
 
 REGISTER_WEAPON(Null, NEW(Weapon));
 
@@ -152,90 +155,77 @@ const .float reloading_time = reload_time;
 
 
 
-#define W_PROPS(L, class, prefix) \
-    L(W_PROP_BEGIN, W_PROP, W_PROP_END, class, prefix) \
-    L(W_CONFIG_BEGIN, W_CONFIG, W_CONFIG_END, class, prefix) \
-    L(W_UPDATE_BEGIN, W_UPDATE, W_UPDATE_END, class, prefix) \
-    L(W_NET_BEGIN, W_NET, W_NET_END, class, prefix) \
-    /**/ \
-
+/*qc2rust::define::W_PROPS*/
+#define W_PROPS(L,class,prefix) /*qc2rust::macro_begin::W_PROPS*/ /*qc2rust::param_begin::L*/L /*qc2rust::param_end::L*/(W_PROP_BEGIN, W_PROP, W_PROP_END,  /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/)      /*qc2rust::param_begin::L*/L /*qc2rust::param_end::L*/(W_CONFIG_BEGIN, W_CONFIG, W_CONFIG_END,  /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/)      /*qc2rust::param_begin::L*/L /*qc2rust::param_end::L*/(W_UPDATE_BEGIN, W_UPDATE, W_UPDATE_END,  /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/)      /*qc2rust::param_begin::L*/L /*qc2rust::param_end::L*/(W_NET_BEGIN, W_NET, W_NET_END,  /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/)     /**/  /*qc2rust::macro_end::W_PROPS*/
 
     #define W_PROP(class, wepname, fld, T, m)       W_PROP_##m(class, fld, T, wepname)
-    #define W_PROP_NONE(class, fld, T, wepname)     _W_PROP(class, fld, T, wepname)
+/*qc2rust::define::W_PROP_NONE*/
+#define W_PROP_NONE(class,fld,T,wepname) /*qc2rust::macro_begin::W_PROP_NONE*/_W_PROP( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/) /*qc2rust::macro_end::W_PROP_NONE*/
     #define W_PROP_PRI(class, fld, T, wepname)      _W_PROP(class, primary_##fld, T, wepname)
     #define W_PROP_SEC(class, fld, T, wepname)      _W_PROP(class, secondary_##fld, T, wepname)
-    #define W_PROP_BOTH(class, fld, T, wepname) \
-            W_PROP_PRI(class, fld, T, wepname) \
-            W_PROP_SEC(class, fld, T, wepname)
-    #define W_PROP_BEGIN(class)
-        #define _W_PROP(class, fld, T, wepname) \
-            /* static */ T _W_PROP_CVAR(wepname, fld); \
-            ATTRIB(class, wepvar_##fld, T, _W_PROP_CVAR(wepname, fld));
+/*qc2rust::define::W_PROP_BOTH*/
+#define W_PROP_BOTH(class,fld,T,wepname) /*qc2rust::macro_begin::W_PROP_BOTH*/W_PROP_PRI( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/)             W_PROP_SEC( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/) /*qc2rust::macro_end::W_PROP_BOTH*/
+/*qc2rust::define::W_PROP_BEGIN*/
+#define W_PROP_BEGIN(class) /*qc2rust::macro_begin::W_PROP_BEGIN*/ /*qc2rust::macro_end::W_PROP_BEGIN*/
+        #define _W_PROP(class, fld, T, wepname)             /* static */ T _W_PROP_CVAR(wepname, fld);             ATTRIB(class, wepvar_##fld, T, _W_PROP_CVAR(wepname, fld));
         #define _W_PROP_CVAR(wepname, fld) autocvar_g_balance_##wepname##_##fld
-    #define W_PROP_END()
+/*qc2rust::define::W_PROP_END*/
+#define W_PROP_END() /*qc2rust::macro_begin::W_PROP_END*/ /*qc2rust::macro_end::W_PROP_END*/
 
 
 
     #define W_CONFIG(class, wepname, fld, T, m)     W_CONFIG_##m(class, fld, T, wepname)
-    #define W_CONFIG_NONE(class, fld, T, wepname)   _W_CONFIG(class, fld, T, wepname)
+/*qc2rust::define::W_CONFIG_NONE*/
+#define W_CONFIG_NONE(class,fld,T,wepname) /*qc2rust::macro_begin::W_CONFIG_NONE*/_W_CONFIG( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/) /*qc2rust::macro_end::W_CONFIG_NONE*/
     #define W_CONFIG_PRI(class, fld, T, wepname)    _W_CONFIG(class, primary_##fld, T, wepname)
     #define W_CONFIG_SEC(class, fld, T, wepname)    _W_CONFIG(class, secondary_##fld, T, wepname)
-    #define W_CONFIG_BOTH(class, fld, T, wepname) \
-            W_CONFIG_PRI(class, fld, T, wepname) \
-            W_CONFIG_SEC(class, fld, T, wepname)
-    #define W_CONFIG_BEGIN(class) METHOD(class, wr_config, void(class this)) {
+/*qc2rust::define::W_CONFIG_BOTH*/
+#define W_CONFIG_BOTH(class,fld,T,wepname) /*qc2rust::macro_begin::W_CONFIG_BOTH*/W_CONFIG_PRI( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/)             W_CONFIG_SEC( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/) /*qc2rust::macro_end::W_CONFIG_BOTH*/
+/*qc2rust::define::W_CONFIG_BEGIN*/
+#define W_CONFIG_BEGIN(class) /*qc2rust::macro_begin::W_CONFIG_BEGIN*/METHOD( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/, wr_config, void( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/ this)) { /*qc2rust::macro_end::W_CONFIG_BEGIN*/
         #ifdef SVQC
-            #define _W_CONFIG(class, fld, T, wepname) if (#wepname == this.netname) WEP_CONFIG_WRITE_CVARS(wepname, fld, T);
+/*qc2rust::define::_W_CONFIG*/
+#define _W_CONFIG(class,fld,T,wepname) /*qc2rust::macro_begin::_W_CONFIG*/if ( /*qc2rust::stringify_begin::wepname*/#wepname /*qc2rust::stringify_end::wepname*/ == this.netname) WEP_CONFIG_WRITE_CVARS( /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/); /*qc2rust::macro_end::_W_CONFIG*/
         #else
-            #define _W_CONFIG(class, fld, T, wepname)
+/*qc2rust::define::_W_CONFIG*/
+#define _W_CONFIG(class,fld,T,wepname) /*qc2rust::macro_begin::_W_CONFIG*/ /*qc2rust::macro_end::_W_CONFIG*/
         #endif
-    #define W_CONFIG_END() }
+/*qc2rust::define::W_CONFIG_END*/
+#define W_CONFIG_END() /*qc2rust::macro_begin::W_CONFIG_END*/} /*qc2rust::macro_end::W_CONFIG_END*/
 
 
     #define W_UPDATE(class, wepname, fld, T, m)     W_UPDATE_##m(class, fld, T, wepname)
-    #define W_UPDATE_NONE(class, fld, T, wepname)   _W_UPDATE(class, fld, T, wepname)
+/*qc2rust::define::W_UPDATE_NONE*/
+#define W_UPDATE_NONE(class,fld,T,wepname) /*qc2rust::macro_begin::W_UPDATE_NONE*/_W_UPDATE( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/) /*qc2rust::macro_end::W_UPDATE_NONE*/
     #define W_UPDATE_PRI(class, fld, T, wepname)    _W_UPDATE(class, primary_##fld, T, wepname)
     #define W_UPDATE_SEC(class, fld, T, wepname)    _W_UPDATE(class, secondary_##fld, T, wepname)
-    #define W_UPDATE_BOTH(class, fld, T, wepname) \
-            W_UPDATE_PRI(class, fld, T, wepname) \
-            W_UPDATE_SEC(class, fld, T, wepname)
+/*qc2rust::define::W_UPDATE_BOTH*/
+#define W_UPDATE_BOTH(class,fld,T,wepname) /*qc2rust::macro_begin::W_UPDATE_BOTH*/W_UPDATE_PRI( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/)             W_UPDATE_SEC( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/) /*qc2rust::macro_end::W_UPDATE_BOTH*/
     .entity baseline, baseline_target;
-    #define W_UPDATE_BEGIN(class) \
-        METHOD(class, wr_update, void(class this)) \
-        { \
-            noref entity b = this.baseline; \
-            if (!b) \
-            { \
-                b = this.baseline = new_pure(baseline); \
-                b.baseline_target = this; \
-            }
+/*qc2rust::define::W_UPDATE_BEGIN*/
+#define W_UPDATE_BEGIN(class) /*qc2rust::macro_begin::W_UPDATE_BEGIN*/METHOD( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/, wr_update, void( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/ this))         {             noref entity b = this.baseline;             if (!b)             {                 b = this.baseline = new_pure(baseline);                 b.baseline_target = this;             } /*qc2rust::macro_end::W_UPDATE_BEGIN*/
         #ifdef SVQC
-            #define _W_UPDATE(class, fld, T, wepname) \
-                { \
-                    T it = _W_PROP_CVAR(wepname, fld); \
-                    b.wepvar_##fld = this.wepvar_##fld; \
-                    this.wepvar_##fld = it; \
-                }
+            #define _W_UPDATE(class, fld, T, wepname)                 {                     T it = _W_PROP_CVAR(wepname, fld);                     b.wepvar_##fld = this.wepvar_##fld;                     this.wepvar_##fld = it;                 }
         #else
-            #define _W_UPDATE(class, fld, T, wepname)
+/*qc2rust::define::_W_UPDATE*/
+#define _W_UPDATE(class,fld,T,wepname) /*qc2rust::macro_begin::_W_UPDATE*/ /*qc2rust::macro_end::_W_UPDATE*/
         #endif
-    #define W_UPDATE_END() }
+/*qc2rust::define::W_UPDATE_END*/
+#define W_UPDATE_END() /*qc2rust::macro_begin::W_UPDATE_END*/} /*qc2rust::macro_end::W_UPDATE_END*/
 
 
     #define W_NET(class, wepname, fld, T, m)     W_NET_##m(class, fld, T, wepname)
-    #define W_NET_NONE(class, fld, T, wepname)   _W_NET(class, fld, T, wepname)
+/*qc2rust::define::W_NET_NONE*/
+#define W_NET_NONE(class,fld,T,wepname) /*qc2rust::macro_begin::W_NET_NONE*/_W_NET( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/) /*qc2rust::macro_end::W_NET_NONE*/
     #define W_NET_PRI(class, fld, T, wepname)    _W_NET(class, primary_##fld, T, wepname)
     #define W_NET_SEC(class, fld, T, wepname)    _W_NET(class, secondary_##fld, T, wepname)
-    #define W_NET_BOTH(class, fld, T, wepname) \
-            W_NET_PRI(class, fld, T, wepname) \
-            W_NET_SEC(class, fld, T, wepname)
+/*qc2rust::define::W_NET_BOTH*/
+#define W_NET_BOTH(class,fld,T,wepname) /*qc2rust::macro_begin::W_NET_BOTH*/W_NET_PRI( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/)             W_NET_SEC( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::fld*/fld /*qc2rust::param_end::fld*/,  /*qc2rust::param_begin::T*/T /*qc2rust::param_end::T*/,  /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/) /*qc2rust::macro_end::W_NET_BOTH*/
     REGISTER_NET_TEMP(WeaponUpdate)
     #if defined(CSQC)
-        #define W_NET_BEGIN(class) METHOD(class, wr_net, void(class this, int i)) { int n = 0;
-            #define _W_NET(class, fld, T, wepname) \
-            { \
-                if (++n == i) this.wepvar_##fld = Read_##T(); \
-            }
+/*qc2rust::define::W_NET_BEGIN*/
+#define W_NET_BEGIN(class) /*qc2rust::macro_begin::W_NET_BEGIN*/METHOD( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/, wr_net, void( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/ this, int i)) { int n = 0; /*qc2rust::macro_end::W_NET_BEGIN*/
+            #define _W_NET(class, fld, T, wepname)             {                 if (++n == i) this.wepvar_##fld = Read_##T();             }
             .void(Weapon this, int i) wr_net;
             NET_HANDLE(WeaponUpdate, bool isnew)
             {
@@ -246,30 +236,21 @@ const .float reloading_time = reload_time;
                 }
                 return true;
             }
-        #define W_NET_END() }
+/*qc2rust::define::W_NET_END*/
+#define W_NET_END() /*qc2rust::macro_begin::W_NET_END*/} /*qc2rust::macro_end::W_NET_END*/
     #elif defined(SVQC)
-        #define W_NET_BEGIN(class) \
-            METHOD(class, wr_net, void(class this, int chan)) \
-            { \
-                bool commit = false; \
-                int i = 0;
-    #define _W_NET(class, fld, T, wepname) \
-                { \
-                    ++i; \
-                    T it = this.wepvar_##fld; \
-                    if (chan == MSG_ONE || it != this.baseline.wepvar_##fld) \
-                    { \
-                        if (!commit) { commit = true; WriteHeader(chan, WeaponUpdate); WriteByte(chan, this.m_id); } \
-                        WriteByte(chan, i); Write_##T(chan, it); \
-                    } \
-                }
-    #define W_NET_END() \
-                if (commit) WriteByte(chan, 0); \
-            }
+/*qc2rust::define::W_NET_BEGIN*/
+#define W_NET_BEGIN(class) /*qc2rust::macro_begin::W_NET_BEGIN*/METHOD( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/, wr_net, void( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/ this, int chan))             {                 bool commit = false;                 int i = 0; /*qc2rust::macro_end::W_NET_BEGIN*/
+    #define _W_NET(class, fld, T, wepname)                 {                     ++i;                     T it = this.wepvar_##fld;                     if (chan == MSG_ONE || it != this.baseline.wepvar_##fld)                     {                         if (!commit) { commit = true; WriteHeader(chan, WeaponUpdate); WriteByte(chan, this.m_id); }                         WriteByte(chan, i); Write_##T(chan, it);                     }                 }
+/*qc2rust::define::W_NET_END*/
+#define W_NET_END() /*qc2rust::macro_begin::W_NET_END*/if (commit) WriteByte(chan, 0);             } /*qc2rust::macro_end::W_NET_END*/
     #else
-        #define W_NET_BEGIN(class)
-            #define _W_NET(class, fld, T, wepname)
-        #define W_NET_END()
+/*qc2rust::define::W_NET_BEGIN*/
+#define W_NET_BEGIN(class) /*qc2rust::macro_begin::W_NET_BEGIN*/ /*qc2rust::macro_end::W_NET_BEGIN*/
+/*qc2rust::define::_W_NET*/
+#define _W_NET(class,fld,T,wepname) /*qc2rust::macro_begin::_W_NET*/ /*qc2rust::macro_end::_W_NET*/
+/*qc2rust::define::W_NET_END*/
+#define W_NET_END() /*qc2rust::macro_begin::W_NET_END*/ /*qc2rust::macro_end::W_NET_END*/
     #endif
 
 
@@ -278,21 +259,26 @@ const .float reloading_time = reload_time;
 #define WEP_CVAR(wepname, name) (_wep_##wepname.wepvar_##name)
 #define WEP_CVAR_PRI(wepname, name) WEP_CVAR(wepname, primary_##name)
 #define WEP_CVAR_SEC(wepname, name) WEP_CVAR(wepname, secondary_##name)
-#define WEP_CVAR_BOTH(wepname, isprimary, name) ((isprimary) ? WEP_CVAR_PRI(wepname, name) : WEP_CVAR_SEC(wepname, name))
+/*qc2rust::define::WEP_CVAR_BOTH*/
+#define WEP_CVAR_BOTH(wepname,isprimary,name) /*qc2rust::macro_begin::WEP_CVAR_BOTH*/(( /*qc2rust::param_begin::isprimary*/isprimary /*qc2rust::param_end::isprimary*/) ? WEP_CVAR_PRI( /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/,  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/) : WEP_CVAR_SEC( /*qc2rust::param_begin::wepname*/wepname /*qc2rust::param_end::wepname*/,  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/)) /*qc2rust::macro_end::WEP_CVAR_BOTH*/
 
 const int WEP_FIRST = 1;
-#define WEP_LAST (Weapons_COUNT - 1)
+/*qc2rust::define::WEP_LAST*/
+#define WEP_LAST /*qc2rust::macro_begin::WEP_LAST*/(Weapons_COUNT - 1) /*qc2rust::macro_end::WEP_LAST*/
 WepSet WEPSET_ALL;
 WepSet WEPSET_SUPERWEAPONS;
 
 #include "all.inc"
 
 // TODO: remove after 0.8.2. Retains impulse number compatibility because 0.8.1 clients don't reload the weapons.cfg
-#define WEP_HARDCODED_IMPULSES 20
+/*qc2rust::define::WEP_HARDCODED_IMPULSES*/
+#define WEP_HARDCODED_IMPULSES /*qc2rust::macro_begin::WEP_HARDCODED_IMPULSES*/20 /*qc2rust::macro_end::WEP_HARDCODED_IMPULSES*/
 
 // TODO: invert after 0.8.2. Will require moving 'best weapon' impulses
-#define WEP_IMPULSE_BEGIN 230
-#define WEP_IMPULSE_END bound(WEP_IMPULSE_BEGIN, WEP_IMPULSE_BEGIN + (Weapons_COUNT - 1) - 1, 253)
+/*qc2rust::define::WEP_IMPULSE_BEGIN*/
+#define WEP_IMPULSE_BEGIN /*qc2rust::macro_begin::WEP_IMPULSE_BEGIN*/230 /*qc2rust::macro_end::WEP_IMPULSE_BEGIN*/
+/*qc2rust::define::WEP_IMPULSE_END*/
+#define WEP_IMPULSE_END /*qc2rust::macro_begin::WEP_IMPULSE_END*/bound(WEP_IMPULSE_BEGIN, WEP_IMPULSE_BEGIN + (Weapons_COUNT - 1) - 1, 253) /*qc2rust::macro_end::WEP_IMPULSE_END*/
 
 REGISTRY_SORT(Weapons, WEP_HARDCODED_IMPULSES + 1)
 REGISTRY_CHECK(Weapons)
@@ -359,10 +345,12 @@ ENUMCLASS_END(WFRAME)
 .WFRAME wframe;
 
 #ifdef SVQC
-    #define G_SHOOTFROMFIXEDORIGIN autocvar_g_shootfromfixedorigin
+/*qc2rust::define::G_SHOOTFROMFIXEDORIGIN*/
+#define G_SHOOTFROMFIXEDORIGIN /*qc2rust::macro_begin::G_SHOOTFROMFIXEDORIGIN*/autocvar_g_shootfromfixedorigin /*qc2rust::macro_end::G_SHOOTFROMFIXEDORIGIN*/
 #elif defined(CSQC)
     string autocvar_cl_shootfromfixedorigin;
-    #define G_SHOOTFROMFIXEDORIGIN autocvar_cl_shootfromfixedorigin
+/*qc2rust::define::G_SHOOTFROMFIXEDORIGIN*/
+#define G_SHOOTFROMFIXEDORIGIN /*qc2rust::macro_begin::G_SHOOTFROMFIXEDORIGIN*/autocvar_cl_shootfromfixedorigin /*qc2rust::macro_end::G_SHOOTFROMFIXEDORIGIN*/
 #endif
 
 vector shotorg_adjust_values(vector vecs, bool y_is_right, bool visual, int algn);

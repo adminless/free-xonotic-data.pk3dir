@@ -17,20 +17,8 @@ CLASS(PortoLaunch, Weapon)
 /* refname   */ ATTRIB(PortoLaunch, netname, string, "porto");
 /* wepname   */ ATTRIB(PortoLaunch, m_name, string, _("Port-O-Launch"));
 
-#define X(BEGIN, P, END, class, prefix) \
-	BEGIN(class) \
-		P(class, prefix, animtime, float, BOTH) \
-		P(class, prefix, lifetime, float, BOTH) \
-		P(class, prefix, refire, float, BOTH) \
-		P(class, prefix, secondary, float, NONE) \
-		P(class, prefix, speed, float, BOTH) \
-        P(class, prefix, switchdelay_drop, float, NONE) \
-		P(class, prefix, switchdelay_raise, float, NONE) \
-        P(class, prefix, weaponreplace, string,NONE) \
-        P(class, prefix, weaponstartoverride, float, NONE) \
-        P(class, prefix, weaponstart, float, NONE) \
-        P(class, prefix, weaponthrowable, float, NONE) \
-	END()
+/*qc2rust::define::X*/
+#define X(BEGIN,P,END,class,prefix) /*qc2rust::macro_begin::X*/ /*qc2rust::param_begin::BEGIN*/BEGIN /*qc2rust::param_end::BEGIN*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, animtime, float, BOTH) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, lifetime, float, BOTH) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, refire, float, BOTH) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, secondary, float, NONE) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, speed, float, BOTH)          /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, switchdelay_drop, float, NONE) 		 /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, switchdelay_raise, float, NONE)          /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, weaponreplace, string,NONE)          /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, weaponstartoverride, float, NONE)          /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, weaponstart, float, NONE)          /*qc2rust::param_begin::P*/P /*qc2rust::param_end::P*/( /*qc2rust::param_begin::class*/class /*qc2rust::param_end::class*/,  /*qc2rust::param_begin::prefix*/prefix /*qc2rust::param_end::prefix*/, weaponthrowable, float, NONE) 	 /*qc2rust::param_begin::END*/END /*qc2rust::param_end::END*/() /*qc2rust::macro_end::X*/
     W_PROPS(X, PortoLaunch, porto)
 #undef X
 ENDCLASS(PortoLaunch)

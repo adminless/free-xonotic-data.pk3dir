@@ -676,33 +676,18 @@ float updateCompression()
 }
 
 // note: include only those that should be in the menu!
-#define GAMETYPES \
-	GAMETYPE(MAPINFO_TYPE_DEATHMATCH) \
-	GAMETYPE(MAPINFO_TYPE_TEAM_DEATHMATCH) \
-	GAMETYPE(MAPINFO_TYPE_CTF) \
-	GAMETYPE(MAPINFO_TYPE_CA) \
-	GAMETYPE(MAPINFO_TYPE_FREEZETAG) \
-	GAMETYPE(MAPINFO_TYPE_KEEPAWAY) \
-	GAMETYPE(MAPINFO_TYPE_KEYHUNT) \
-	GAMETYPE(MAPINFO_TYPE_LMS) \
-	GAMETYPE(MAPINFO_TYPE_DOMINATION) \
-	GAMETYPE(MAPINFO_TYPE_NEXBALL) \
-	GAMETYPE(MAPINFO_TYPE_ONSLAUGHT) \
-	GAMETYPE(MAPINFO_TYPE_ASSAULT) \
-	/* GAMETYPE(MAPINFO_TYPE_DUEL) */ \
-	/* GAMETYPE(MAPINFO_TYPE_INVASION) */ \
-	/**/
+/*qc2rust::define::GAMETYPES*/
+#define GAMETYPES /*qc2rust::macro_begin::GAMETYPES*/GAMETYPE(MAPINFO_TYPE_DEATHMATCH) 	GAMETYPE(MAPINFO_TYPE_TEAM_DEATHMATCH) 	GAMETYPE(MAPINFO_TYPE_CTF) 	GAMETYPE(MAPINFO_TYPE_CA) 	GAMETYPE(MAPINFO_TYPE_FREEZETAG) 	GAMETYPE(MAPINFO_TYPE_KEEPAWAY) 	GAMETYPE(MAPINFO_TYPE_KEYHUNT) 	GAMETYPE(MAPINFO_TYPE_LMS) 	GAMETYPE(MAPINFO_TYPE_DOMINATION) 	GAMETYPE(MAPINFO_TYPE_NEXBALL) 	GAMETYPE(MAPINFO_TYPE_ONSLAUGHT) 	GAMETYPE(MAPINFO_TYPE_ASSAULT) 	/* GAMETYPE(MAPINFO_TYPE_DUEL) */ 	/* GAMETYPE(MAPINFO_TYPE_INVASION) */ 	/**/ /*qc2rust::macro_end::GAMETYPES*/
 
 // hidden gametypes come last so indexing always works correctly
-#define HIDDEN_GAMETYPES \
-	GAMETYPE(MAPINFO_TYPE_RACE) \
-	GAMETYPE(MAPINFO_TYPE_CTS) \
-	/**/
+/*qc2rust::define::HIDDEN_GAMETYPES*/
+#define HIDDEN_GAMETYPES /*qc2rust::macro_begin::HIDDEN_GAMETYPES*/GAMETYPE(MAPINFO_TYPE_RACE) 	GAMETYPE(MAPINFO_TYPE_CTS) 	/**/ /*qc2rust::macro_end::HIDDEN_GAMETYPES*/
 
 Gametype GameType_GetID(int cnt)
 {
 	int i = 0;
-	#define GAMETYPE(it) { if (i++ == cnt) return it; }
+/*qc2rust::define::GAMETYPE*/
+#define GAMETYPE(it) /*qc2rust::macro_begin::GAMETYPE*/{ if (i++ == cnt) return  /*qc2rust::param_begin::it*/it /*qc2rust::param_end::it*/; } /*qc2rust::macro_end::GAMETYPE*/
 	GAMETYPES
 	HIDDEN_GAMETYPES
 	#undef GAMETYPE
@@ -713,10 +698,12 @@ int GameType_GetCount()
 {
 	int i = 0;
 	int dev = cvar("developer");
-	#define GAMETYPE(id) ++i;
+/*qc2rust::define::GAMETYPE*/
+#define GAMETYPE(id) /*qc2rust::macro_begin::GAMETYPE*/++i; /*qc2rust::macro_end::GAMETYPE*/
 	GAMETYPES
 	#undef GAMETYPE
-	#define GAMETYPE(it) { if (dev) ++i; }
+/*qc2rust::define::GAMETYPE*/
+#define GAMETYPE(it) /*qc2rust::macro_begin::GAMETYPE*/{ if (dev) ++i; } /*qc2rust::macro_end::GAMETYPE*/
 	HIDDEN_GAMETYPES
 	#undef GAMETYPE
 	return i;
@@ -725,7 +712,8 @@ int GameType_GetCount()
 int GameType_GetTotalCount()
 {
 	int i = 0;
-	#define GAMETYPE(id) ++i;
+/*qc2rust::define::GAMETYPE*/
+#define GAMETYPE(id) /*qc2rust::macro_begin::GAMETYPE*/++i; /*qc2rust::macro_end::GAMETYPE*/
 	GAMETYPES
 	HIDDEN_GAMETYPES
 	#undef GAMETYPE

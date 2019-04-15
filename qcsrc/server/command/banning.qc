@@ -267,19 +267,13 @@ void BanCommand_(int request)
 // ==================================
 
 // Do not hard code aliases for these, instead create them in commands.cfg... also: keep in alphabetical order, please ;)
-#define BAN_COMMANDS(request, arguments, command) \
-	BAN_COMMAND("ban", BanCommand_ban(request, arguments, command), "Ban an IP address or a range of addresses (like 1.2.3)") \
-	BAN_COMMAND("banlist", BanCommand_banlist(request), "List all existing bans") \
-	BAN_COMMAND("kickban", BanCommand_kickban(request, arguments, command), "Disconnect a client and ban it at the same time") \
-	BAN_COMMAND("mute", BanCommand_mute(request, arguments, command), "Disallow a client from talking by muting them") \
-	BAN_COMMAND("unban", BanCommand_unban(request, arguments), "Remove an existing ban") \
-	BAN_COMMAND("unmute", BanCommand_unmute(request, arguments), "Unmute a client") \
-	/* nothing */
+/*qc2rust::define::BAN_COMMANDS*/
+#define BAN_COMMANDS(request,arguments,command) /*qc2rust::macro_begin::BAN_COMMANDS*/BAN_COMMAND("ban", BanCommand_ban( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Ban an IP address or a range of addresses (like 1.2.3)") 	BAN_COMMAND("banlist", BanCommand_banlist( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/), "List all existing bans") 	BAN_COMMAND("kickban", BanCommand_kickban( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Disconnect a client and ban it at the same time") 	BAN_COMMAND("mute", BanCommand_mute( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/,  /*qc2rust::param_begin::command*/command /*qc2rust::param_end::command*/), "Disallow a client from talking by muting them") 	BAN_COMMAND("unban", BanCommand_unban( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/), "Remove an existing ban") 	BAN_COMMAND("unmute", BanCommand_unmute( /*qc2rust::param_begin::request*/request /*qc2rust::param_end::request*/,  /*qc2rust::param_begin::arguments*/arguments /*qc2rust::param_end::arguments*/), "Unmute a client") 	/* nothing */ /*qc2rust::macro_end::BAN_COMMANDS*/
 
 void BanCommand_macro_help()
 {
-	#define BAN_COMMAND(name, function, description) \
-		{ if (strtolower(description) != "") { LOG_INFO("  ^2", name, "^7: ", description); } }
+/*qc2rust::define::BAN_COMMAND*/
+#define BAN_COMMAND(name,function,description) /*qc2rust::macro_begin::BAN_COMMAND*/{ if (strtolower( /*qc2rust::param_begin::description*/description /*qc2rust::param_end::description*/) != "") { LOG_INFO("  ^2",  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/, "^7: ",  /*qc2rust::param_begin::description*/description /*qc2rust::param_end::description*/); } } /*qc2rust::macro_end::BAN_COMMAND*/
 
 	BAN_COMMANDS(0, 0, "");
 #undef BAN_COMMAND
@@ -287,8 +281,8 @@ void BanCommand_macro_help()
 
 float BanCommand_macro_command(int argc, string command)
 {
-	#define BAN_COMMAND(name, function, description) \
-		{ if (name == strtolower(argv(0))) { function; return true; } }
+/*qc2rust::define::BAN_COMMAND*/
+#define BAN_COMMAND(name,function,description) /*qc2rust::macro_begin::BAN_COMMAND*/{ if ( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ == strtolower(argv(0))) {  /*qc2rust::param_begin::function*/function /*qc2rust::param_end::function*/; return true; } } /*qc2rust::macro_end::BAN_COMMAND*/
 
 	BAN_COMMANDS(CMD_REQUEST_COMMAND, argc, command);
 #undef BAN_COMMAND
@@ -298,8 +292,8 @@ float BanCommand_macro_command(int argc, string command)
 
 float BanCommand_macro_usage(int argc)
 {
-	#define BAN_COMMAND(name, function, description) \
-		{ if (name == strtolower(argv(1))) { function; return true; } }
+/*qc2rust::define::BAN_COMMAND*/
+#define BAN_COMMAND(name,function,description) /*qc2rust::macro_begin::BAN_COMMAND*/{ if ( /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/ == strtolower(argv(1))) {  /*qc2rust::param_begin::function*/function /*qc2rust::param_end::function*/; return true; } } /*qc2rust::macro_end::BAN_COMMAND*/
 
 	BAN_COMMANDS(CMD_REQUEST_USAGE, argc, "");
 #undef BAN_COMMAND
@@ -309,8 +303,8 @@ float BanCommand_macro_usage(int argc)
 
 void BanCommand_macro_write_aliases(float fh)
 {
-	#define BAN_COMMAND(name, function, description) \
-		{ if (strtolower(description) != "") { CMD_Write_Alias("qc_cmd_sv", name, description); } }
+/*qc2rust::define::BAN_COMMAND*/
+#define BAN_COMMAND(name,function,description) /*qc2rust::macro_begin::BAN_COMMAND*/{ if (strtolower( /*qc2rust::param_begin::description*/description /*qc2rust::param_end::description*/) != "") { CMD_Write_Alias("qc_cmd_sv",  /*qc2rust::param_begin::name*/name /*qc2rust::param_end::name*/,  /*qc2rust::param_begin::description*/description /*qc2rust::param_end::description*/); } } /*qc2rust::macro_end::BAN_COMMAND*/
 
 	BAN_COMMANDS(0, 0, "");
 #undef BAN_COMMAND

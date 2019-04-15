@@ -1,14 +1,16 @@
 #pragma once
 
 #ifndef DEBUGPATHING
-	#define DEBUGPATHING 0
+/*qc2rust::define::DEBUGPATHING*/
+#define DEBUGPATHING /*qc2rust::macro_begin::DEBUGPATHING*/0 /*qc2rust::macro_end::DEBUGPATHING*/
 #endif
 
 .entity pathlib_list;
 .entity path_next;
 .entity path_prev;
 
-#define inwater(point) (pointcontents(point) == CONTENT_WATER)
+/*qc2rust::define::inwater*/
+#define inwater(point) /*qc2rust::macro_begin::inwater*/(pointcontents( /*qc2rust::param_begin::point*/point /*qc2rust::param_end::point*/) == CONTENT_WATER) /*qc2rust::macro_end::inwater*/
 
 const vector PLIB_FORWARD = '0 1 0';
 //#define PLIB_BACK    '0 -1 0'

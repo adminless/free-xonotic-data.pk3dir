@@ -78,10 +78,14 @@ float botframe_nextdangertime;
 float bot_cvar_nextthink;
 
 int _content_type;
-#define IN_LAVA(pos) (_content_type = pointcontents(pos), (_content_type == CONTENT_LAVA || _content_type == CONTENT_SLIME))
-#define IN_LIQUID(pos) (_content_type = pointcontents(pos), (_content_type == CONTENT_WATER || _content_type == CONTENT_LAVA || _content_type == CONTENT_SLIME))
-#define SUBMERGED(pos) IN_LIQUID(pos + autocvar_sv_player_viewoffset)
-#define WETFEET(pos) IN_LIQUID(pos + eZ * (m1.z + 1))
+/*qc2rust::define::IN_LAVA*/
+#define IN_LAVA(pos) /*qc2rust::macro_begin::IN_LAVA*/(_content_type = pointcontents( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/), (_content_type == CONTENT_LAVA || _content_type == CONTENT_SLIME)) /*qc2rust::macro_end::IN_LAVA*/
+/*qc2rust::define::IN_LIQUID*/
+#define IN_LIQUID(pos) /*qc2rust::macro_begin::IN_LIQUID*/(_content_type = pointcontents( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/), (_content_type == CONTENT_WATER || _content_type == CONTENT_LAVA || _content_type == CONTENT_SLIME)) /*qc2rust::macro_end::IN_LIQUID*/
+/*qc2rust::define::SUBMERGED*/
+#define SUBMERGED(pos) /*qc2rust::macro_begin::SUBMERGED*/IN_LIQUID( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/ + autocvar_sv_player_viewoffset) /*qc2rust::macro_end::SUBMERGED*/
+/*qc2rust::define::WETFEET*/
+#define WETFEET(pos) /*qc2rust::macro_begin::WETFEET*/IN_LIQUID( /*qc2rust::param_begin::pos*/pos /*qc2rust::param_end::pos*/ + eZ * (m1.z + 1)) /*qc2rust::macro_end::WETFEET*/
 
 /*
  * Functions
