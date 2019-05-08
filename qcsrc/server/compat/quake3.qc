@@ -175,7 +175,6 @@ void target_give_init(entity this)
 		else if (it.classname == "item_health_mega")
 			SetResourceExplicit(this, RES_HEALTH, 200);
                 else if (it.classname == "item_buff") {
-                  this.netname = cons(this.netname, "Speed");
                   entity buff = buff_FirstFromFlags(STAT(BUFFS, it));
                   this.netname = cons(this.netname, buff.m_name);
                   this.count = it.count;
