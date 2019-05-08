@@ -200,6 +200,7 @@ void buff_Touch(entity this, entity toucher)
 	Send_Effect(EFFECT_ITEM_PICKUP, CENTER_OR_VIEWOFS(this), '0 0 0', 1);
 	sound(toucher, CH_TRIGGER, SND_SHIELD_RESPAWN, VOL_BASE, ATTN_NORM);
 	STAT(BUFFS, toucher) |= (STAT(BUFFS, this));
+        STAT(BUFF_TIME_OVERRIDE, toucher) = this.count;
 }
 
 float buff_Available(entity buff)
@@ -562,8 +563,9 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerSpawn)
 {
 	entity player = M_ARGV(0, entity);
 
-	STAT(BUFFS, player) = 0;
-	STAT(BUFF_TIME, player) = 0;
+        // This will remove buffs given by spawn triggers. Do we need it? buffs are removed in the Dies hook 
+	// STAT(BUFFS, player) = 0;
+	// STAT(BUFF_TIME, player) = 0;
 	PS(player).buff_shield = time + 0.5; // prevent picking up buffs immediately
 	// reset timers here to prevent them continuing after re-spawn
 	player.buff_disability_time = 0;
@@ -611,6 +613,9 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerDies)
 		int buffid = buff_FirstFromFlags(STAT(BUFFS, frag_target)).m_id;
 		Send_Notification(NOTIF_ALL_EXCEPT, frag_target, MSG_INFO, INFO_ITEM_BUFF_LOST, frag_target.netname, buffid);
 		STAT(BUFFS, frag_target) = 0;
+                STAT(BUFF_TIME_OVERRIDE, frag_target) = 0;
+                STAT(BUFF_TIME, frag_target) = 0;
+                frag_target.oldbuffs = 0;
 
 		if(frag_target.buff_model)
 		{
@@ -897,7 +902,13 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerPreThink)
 	if(STAT(BUFFS, player) != player.oldbuffs)
 	{
 		entity buff = buff_FirstFromFlags(STAT(BUFFS, player));
-		float bufftime = buff != BUFF_Null ? buff.m_time(buff) : 0;
+                float bufftime;
+                if (STAT(BUFF_TIME_OVERRIDE, player)) {
+                    bufftime = STAT(BUFF_TIME_OVERRIDE, player);
+                  } else {
+                  bufftime = buff != BUFF_Null ? buff.m_time(buff) : 0;
+                }
+
 		STAT(BUFF_TIME, player) = (bufftime) ? time + bufftime : 0;
 
 		BUFF_ONADD(BUFF_AMMO)

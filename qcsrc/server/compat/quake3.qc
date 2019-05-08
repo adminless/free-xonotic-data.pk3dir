@@ -119,7 +119,12 @@ void target_init_use(entity this, entity actor, entity trigger)
 	{
 		actor.strength_finished = 0;
 		actor.invincible_finished = 0;
-		STAT(BUFFS, actor) = 0;
+                if (STAT(BUFFS, actor)) {
+                  entity buff = buff_FirstFromFlags(STAT(BUFFS, actor));
+                  STAT(BUFFS, actor) = 0;
+                  Send_Notification(NOTIF_ALL, NULL, MSG_INFO, INFO_ITEM_BUFF_LOST, actor.netname, buff.m_id);
+                }
+
 	}
 
 	if (!(this.spawnflags & 16))
@@ -169,6 +174,12 @@ void target_give_init(entity this)
 			SetResourceExplicit(this, RES_ARMOR, 100);
 		else if (it.classname == "item_health_mega")
 			SetResourceExplicit(this, RES_HEALTH, 200);
+                else if (it.classname == "item_buff") {
+                  this.netname = cons(this.netname, "Speed");
+                  entity buff = buff_FirstFromFlags(STAT(BUFFS, it));
+                  this.netname = cons(this.netname, buff.m_name);
+                  this.count = it.count;
+                }
 		//remove(it); // removing ents in init functions causes havoc, workaround:
         setthink(it, SUB_Remove);
         it.nextthink = time;

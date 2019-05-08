@@ -1463,7 +1463,7 @@ void target_items_use(entity this, entity actor, entity trigger)
 		delete(it);
 	});
 
-	if(GiveItems(actor, 0, tokenize_console(this.netname)))
+	if(GiveItems(actor, this, 0, tokenize_console(this.netname)))
 		centerprint(actor, this.message);
 }
 
@@ -1611,21 +1611,25 @@ float GiveWeapon(entity e, float wpn, float op, float val)
 	return (v0 != v1);
 }
 
-bool GiveBuff(entity e, Buff thebuff, int op, int val)
+bool GiveBuff(entity e, entity giver, Buff thebuff, int op, int val)
 {
 	bool had_buff = (STAT(BUFFS, e) & thebuff.m_itemid);
 	switch(op)
 	{
 		case OP_SET:
-			if(val > 0)
-				STAT(BUFFS, e) |= thebuff.m_itemid;
+			if(val > 0) {
+                          STAT(BUFFS, e) |= thebuff.m_itemid;
+                          STAT(BUFF_TIME_OVERRIDE, e) = giver.count;
+                        }
 			else
 				STAT(BUFFS, e) &= ~thebuff.m_itemid;
 			break;
 		case OP_MIN:
 		case OP_PLUS:
-			if(val > 0)
-				STAT(BUFFS, e) |= thebuff.m_itemid;
+			if(val > 0) {
+                            STAT(BUFFS, e) |= thebuff.m_itemid;
+                            STAT(BUFF_TIME_OVERRIDE, e) = giver.count;
+                          }
 			break;
 		case OP_MAX:
 			if(val <= 0)
@@ -1679,7 +1683,7 @@ bool GiveResourceValue(entity e, int res_type, int op, int val)
 	return v0 != v1;
 }
 
-float GiveItems(entity e, float beginarg, float endarg)
+float GiveItems(entity e, entity giver, float beginarg, float endarg)
 {
 	float got, i, val, op;
 	string cmd;
@@ -1821,7 +1825,7 @@ float GiveItems(entity e, float beginarg, float endarg)
 			default:
 				FOREACH(Buffs, it != BUFF_Null && Buff_UndeprecateName(cmd) == it.m_name,
 				{
-					got += GiveBuff(e, it, op, val);
+                                        got += GiveBuff(e, giver, it, op, val);
 					break;
 				});
 				FOREACH(Weapons, it != WEP_Null && W_UndeprecateName(cmd) == it.netname, {

@@ -673,7 +673,8 @@ float CheatCommand(entity this, int argc)
 			break;
 		case "give":
 			IS_CHEAT(this, 0, argc, 0);
-			if(GiveItems(this, 1, argc))
+                        entity nothing = new();
+			if(GiveItems(this, nothing, 1, argc))
 				DID_CHEAT();
 			break;
 		case "usetarget":

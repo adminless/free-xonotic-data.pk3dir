@@ -135,5 +135,5 @@ spawnfunc(target_items);
 #define POSTGIVE_VALUE(e,f,t,snd_incr,snd_decr) GiveSound((e), save_##f, (e).f, t, snd_incr, snd_decr)
 #define POSTGIVE_VALUE_ROT(e,f,t,rotfield,rottime,regenfield,regentime,snd_incr,snd_decr) GiveRot((e), save_##f, (e).f, rotfield, rottime, regenfield, regentime); GiveSound((e), save_##f, (e).f, t, snd_incr, snd_decr)
 
-float GiveItems(entity e, float beginarg, float endarg);
+float GiveItems(entity e, entity giver, float beginarg, float endarg);
 #endif
