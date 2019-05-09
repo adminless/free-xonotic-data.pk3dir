@@ -9,6 +9,7 @@
 #include <common/mapobjects/trigger/counter.qh>
 #include <common/weapons/_all.qh>
 #include <common/mutators/mutator/buffs/buffs.qh>
+#include <common/notifications/all.qh>
 
 //***********************
 //QUAKE 3 ENTITIES - So people can play quake3 maps with the xonotic weapons
