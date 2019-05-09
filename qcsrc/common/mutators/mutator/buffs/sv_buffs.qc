@@ -2,6 +2,7 @@
 
 #include <common/mapobjects/target/music.qh>
 #include <common/gamemodes/_mod.qh>
+#include <common/mapinfo.qh>
 
 void buffs_DelayedInit(entity this);
 
@@ -182,7 +183,11 @@ void buff_Touch(entity this, entity toucher)
 		{
 			int buffid = buff_FirstFromFlags(STAT(BUFFS, toucher)).m_id;
 			//Send_Notification(NOTIF_ONE, toucher, MSG_MULTI, ITEM_BUFF_DROP, STAT(BUFFS, toucher));
-			Send_Notification(NOTIF_ALL, NULL, MSG_INFO, INFO_ITEM_BUFF_LOST, toucher.netname, buffid);
+                        if(!g_race && !g_cts) {
+                          Send_Notification(NOTIF_ALL, NULL, MSG_INFO, INFO_ITEM_BUFF_LOST, toucher.netname, buffid);
+                        } else {
+                          Send_Notification(NOTIF_ONE, toucher, MSG_MULTI, ITEM_BUFF_DROP, STAT(BUFFS, toucher));
+                        }
 
 			STAT(BUFFS, toucher) = 0;
 			//sound(toucher, CH_TRIGGER, SND_BUFF_LOST, VOL_BASE, ATTN_NORM);
@@ -195,7 +200,9 @@ void buff_Touch(entity this, entity toucher)
 	this.lifetime = 0;
 	int buffid = buff_FirstFromFlags(STAT(BUFFS, this)).m_id;
 	Send_Notification(NOTIF_ONE, toucher, MSG_MULTI, ITEM_BUFF_GOT, buffid);
-	Send_Notification(NOTIF_ALL_EXCEPT, toucher, MSG_INFO, INFO_ITEM_BUFF, toucher.netname, buffid);
+        if(!g_race && !g_cts) {
+          Send_Notification(NOTIF_ALL_EXCEPT, toucher, MSG_INFO, INFO_ITEM_BUFF, toucher.netname, buffid);
+        }
 
 	Send_Effect(EFFECT_ITEM_PICKUP, CENTER_OR_VIEWOFS(this), '0 0 0', 1);
 	sound(toucher, CH_TRIGGER, SND_SHIELD_RESPAWN, VOL_BASE, ATTN_NORM);
@@ -616,7 +623,9 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerDies)
 	if(STAT(BUFFS, frag_target))
 	{
 		int buffid = buff_FirstFromFlags(STAT(BUFFS, frag_target)).m_id;
-		Send_Notification(NOTIF_ALL_EXCEPT, frag_target, MSG_INFO, INFO_ITEM_BUFF_LOST, frag_target.netname, buffid);
+                if(!g_race && !g_cts) {
+                  Send_Notification(NOTIF_ALL_EXCEPT, frag_target, MSG_INFO, INFO_ITEM_BUFF_LOST, frag_target.netname, buffid);
+                }
 		STAT(BUFFS, frag_target) = 0;
                 STAT(BUFF_TIME_OVERRIDE, frag_target) = 0;
                 STAT(BUFF_TIME, frag_target) = 0;
@@ -640,9 +649,12 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerUseKey, CBC_ORDER_FIRST)
 	{
 		int buffid = buff_FirstFromFlags(STAT(BUFFS, player)).m_id;
 		Send_Notification(NOTIF_ONE, player, MSG_MULTI, ITEM_BUFF_DROP, buffid);
-		Send_Notification(NOTIF_ALL_EXCEPT, player, MSG_INFO, INFO_ITEM_BUFF_LOST, player.netname, buffid);
+                if(!g_race && !g_cts) {
+                  Send_Notification(NOTIF_ALL_EXCEPT, player, MSG_INFO, INFO_ITEM_BUFF_LOST, player.netname, buffid);
+                }
 
 		STAT(BUFFS, player) = 0;
+                STAT(BUFF_TIME_OVERRIDE, player) = 0;
 		PS(player).buff_shield = time + max(0, autocvar_g_buffs_pickup_delay);
 		//STAT(BUFF_TIME, player) = 0; // already notified
 		sound(player, CH_TRIGGER, SND_BUFF_LOST, VOL_BASE, ATTN_NORM);

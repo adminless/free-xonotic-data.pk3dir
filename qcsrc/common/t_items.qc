@@ -21,6 +21,7 @@
     #include <common/monsters/_mod.qh>
 
     #include <common/weapons/_all.qh>
+    #include <common/mapinfo.qh>
 
     #include <common/mutators/mutator/buffs/buffs.qh>
 
@@ -1643,6 +1644,13 @@ bool GiveBuff(entity e, entity giver, Buff thebuff, int op, int val)
 			break;
 	}
 	bool have_buff = (STAT(BUFFS, e) & thebuff.m_itemid);
+        if ((had_buff != have_buff) && have_buff) {
+          if(!g_race && !g_cts) {
+            Send_Notification(NOTIF_ALL_EXCEPT, e, MSG_INFO, INFO_ITEM_BUFF, e.netname, thebuff.m_id);
+          }
+          Send_Notification(NOTIF_ONE, e, MSG_MULTI, ITEM_BUFF_GOT, thebuff.m_id);
+          sound(e, CH_TRIGGER, SND_SHIELD_RESPAWN, VOL_BASE, ATTN_NORM);
+        }
 	return (had_buff != have_buff);
 }
 
