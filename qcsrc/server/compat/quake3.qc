@@ -124,6 +124,7 @@ void target_init_use(entity this, entity actor, entity trigger)
                 if (STAT(BUFFS, actor)) {
                   entity buff = buff_FirstFromFlags(STAT(BUFFS, actor));
                   STAT(BUFFS, actor) = 0;
+                  STAT(BUFF_GIVEN_BY_TRIGGER, actor) = 0;
                   Send_Notification(NOTIF_ALL, NULL, MSG_INFO, INFO_ITEM_BUFF_LOST, actor.netname, buff.m_id);
                 }
 
