@@ -566,7 +566,7 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerSpawn)
         // This will remove buffs given by spawn triggers. Do we need it? buffs are removed in the Dies hook 
 	// STAT(BUFFS, player) = 0;
 	// STAT(BUFF_TIME, player) = 0;
-	PS(player).buff_shield = time + 0.5; // prevent picking up buffs immediately
+	PS(player).buff_shield = time + autocvar_g_buffs_spawn_shield; // prevent picking up buffs immediately
 	// reset timers here to prevent them continuing after re-spawn
 	player.buff_disability_time = 0;
 	player.buff_disability_effect_time = 0;
