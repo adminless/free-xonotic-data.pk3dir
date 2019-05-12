@@ -3,7 +3,7 @@
 //REGISTER_STAT(WEP_CVAR_vortex_charge, bool, WEP_CVAR(vortex, charge))
 //REGISTER_STAT(WEP_CVAR_vortex_charge_animlimit, float, WEP_CVAR(vortex, charge_animlimit))
 
-#if defined(GAMEQC)
+#ifdef CSQC
 float autocvar_g_weapon_charge_colormod_red_full;
 float autocvar_g_weapon_charge_colormod_red_half;
 float autocvar_g_weapon_charge_colormod_green_full;

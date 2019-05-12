@@ -5,8 +5,7 @@
 .float oknex_lasthit;
 #endif
 
-#if defined(GAMEQC)
-
+#ifdef CSQC
 METHOD(OverkillNex, wr_glow, vector(OverkillNex this, entity actor, entity wepent))
 {
 	if (!WEP_CVAR(oknex, charge)) return '0 0 0';
