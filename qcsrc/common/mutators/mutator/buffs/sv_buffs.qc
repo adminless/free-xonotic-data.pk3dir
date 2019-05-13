@@ -208,7 +208,6 @@ void buff_Touch(entity this, entity toucher)
 	sound(toucher, CH_TRIGGER, SND_SHIELD_RESPAWN, VOL_BASE, ATTN_NORM);
 	STAT(BUFFS, toucher) |= (STAT(BUFFS, this));
         STAT(BUFF_TIME_OVERRIDE, toucher) = this.count;
-        STAT(BUFF_GIVEN_BY_TRIGGER, toucher) = 0;
 }
 
 float buff_Available(entity buff)
@@ -574,9 +573,11 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerSpawn)
         // Remove all buffs unless given by a trigger (which may happen just before this hook is called)
         // This is needed to clear buffs which could've been copied while the player was spectating
         // someone else with a buff
-        if (!STAT(BUFF_GIVEN_BY_TRIGGER, player)) {
+        if (STAT(BUFF_SPECTATOR, player)) {
           STAT(BUFFS, player) = 0;
           STAT(BUFF_TIME, player) = 0;
+          STAT(BUFF_SPECTATOR, player) = 0;
+          player.oldbuffs = 0;
         }
 	PS(player).buff_shield = time + autocvar_g_buffs_spawn_shield; // prevent picking up buffs immediately
 	// reset timers here to prevent them continuing after re-spawn
@@ -871,7 +872,6 @@ MUTATOR_HOOKFUNCTION(buffs, PlayerPreThink)
 			else
 				Send_Notification(NOTIF_ALL_EXCEPT, player, MSG_INFO, INFO_ITEM_BUFF_LOST, player.netname, buffid);
 			STAT(BUFFS, player) = 0;
-                        STAT(BUFF_GIVEN_BY_TRIGGER, player) = 0;
 			PS(player).buff_shield = time + max(0, autocvar_g_buffs_pickup_delay); // always put in a delay, even if small
 		}
 	}
@@ -1034,6 +1034,7 @@ MUTATOR_HOOKFUNCTION(buffs, SpectateCopy)
 
 	STAT(BUFFS, client) = STAT(BUFFS, spectatee);
 	STAT(BUFF_TIME, client) = STAT(BUFF_TIME, spectatee);
+        STAT(BUFF_SPECTATOR, client) = 1;
 }
 
 MUTATOR_HOOKFUNCTION(buffs, PlayerRegen)

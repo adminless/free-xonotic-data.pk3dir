@@ -1621,7 +1621,6 @@ bool GiveBuff(entity e, entity giver, Buff thebuff, int op, int val)
 			if(val > 0) {
                           STAT(BUFFS, e) |= thebuff.m_itemid;
                           STAT(BUFF_TIME_OVERRIDE, e) = giver.count;
-                          STAT(BUFF_GIVEN_BY_TRIGGER, e) = 1;
                         }
 			else
 				STAT(BUFFS, e) &= ~thebuff.m_itemid;
@@ -1631,7 +1630,6 @@ bool GiveBuff(entity e, entity giver, Buff thebuff, int op, int val)
 			if(val > 0) {
                             STAT(BUFFS, e) |= thebuff.m_itemid;
                             STAT(BUFF_TIME_OVERRIDE, e) = giver.count;
-                            STAT(BUFF_GIVEN_BY_TRIGGER, e) = 1;
                           }
 			break;
 		case OP_MAX:
