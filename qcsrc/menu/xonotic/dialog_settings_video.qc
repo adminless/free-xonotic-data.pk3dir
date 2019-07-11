@@ -35,7 +35,8 @@ void XonoticVideoSettingsTab_fill(entity me)
 			e.applyButton = videoApplyButton;
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeXonoticTextLabel(0, _("Font/UI size:")));
-		me.TD(me, 1, 2, e = makeXonoticTextSlider("menu_vid_scale"));
+		me.TD(me, 1, 2, e = makeXonoticTextSlider_T("menu_vid_scale",
+			_("How much scaling should be applied to the UI")));
 			e.addValue(e, ZCTX(_("SZ^Unreadable")), "-1");
 			e.addValue(e, ZCTX(_("SZ^Tiny")), "-0.75");
 			e.addValue(e, ZCTX(_("SZ^Little")), "-0.5");
