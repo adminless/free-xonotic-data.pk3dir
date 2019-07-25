@@ -283,6 +283,9 @@ void FireRailgunBullet (entity this, .entity weaponentity, vector start, vector 
 		FOREACH_CLIENT(IS_REAL_CLIENT(it) && it != this, {
 			if (!it.railgunhit && !(IS_SPEC(it) && it.enemy == this))
 			{
+				if (vdist(it.origin - trace_endpos, <, 512))
+					continue;
+
 				// nearest point on the beam
 				vector beampos = start + dir * bound(0, (it.origin - start) * dir, length);
 
