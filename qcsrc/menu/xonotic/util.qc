@@ -386,7 +386,7 @@ void UpdateNotification_URI_Get_Callback(float id, float status, string data)
 			}
 			case "B":
 			{
-				APPEND_TO_STRING(un_bannedservers, " ", s);
+				//APPEND_TO_STRING(un_bannedservers, " ", s);
 				break;
 			}
 			case "E":
@@ -397,12 +397,12 @@ void UpdateNotification_URI_Get_Callback(float id, float status, string data)
 			}
 			case "P":
 			{
-				APPEND_TO_STRING(un_promoted, " ", s);
+				//APPEND_TO_STRING(un_promoted, " ", s);
 				break;
 			}
 			case "R":
 			{
-				APPEND_TO_STRING(un_recommended, " ", s);
+				//APPEND_TO_STRING(un_recommended, " ", s);
 				break;
 			}
 		}
